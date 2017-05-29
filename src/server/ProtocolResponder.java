@@ -1,7 +1,10 @@
 package server;
 
+import constants.ConstProtocol;
+
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -28,6 +31,8 @@ public class ProtocolResponder extends Thread{
 
     @Override
     public void run(){
+        boolean started = false;
+
         String name = null;
         try{
             name = in.readUTF();
@@ -37,7 +42,12 @@ public class ProtocolResponder extends Thread{
 
             while(in != null){
                 String msg = in.readUTF();
-                sendToAll(msg);
+                String res = "";
+
+                if(Arrays.equals(msg.substring(0, 2).getBytes(), ConstProtocol.STX.getBytes())) res = "STX";
+
+                sendToSpecificOne("Specific Response for [" + msg + "] => " + res, name);
+                sendToAll("Message sent from [" + name + "] :: " + msg);
             }
 
             System.out.println("Conn");
@@ -47,6 +57,16 @@ public class ProtocolResponder extends Thread{
         }finally {
             System.out.println("Connection Finished");
             clients.remove(name);
+        }
+    }
+
+    private void sendToSpecificOne(String msg, String key){
+        System.out.println("Sending :: " + msg);
+        try {
+            DataOutputStream out = (DataOutputStream) clients.get(key);
+            out.writeUTF(msg);
+        }catch(IOException e){
+            e.printStackTrace();
         }
     }
 

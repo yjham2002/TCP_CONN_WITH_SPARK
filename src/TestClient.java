@@ -49,7 +49,6 @@ class ClientSender extends Thread {
                 System.out.println("Connected");
             }
             while(out != null){
-                System.out.print("Message : ");
                 out.writeUTF(scan.nextLine());
             }//server로 문자를 보내는 메소드
         } catch (IOException e){

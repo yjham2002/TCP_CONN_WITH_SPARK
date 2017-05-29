@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class ServerConfig {
 
-    public static final int SOCEKET_PORT = 8000;
+    public static final int SOCKET_PORT = 8000;
     public static final boolean DEBUG_MODE = true;
 
     public static final PrintStream stream = System.out;
