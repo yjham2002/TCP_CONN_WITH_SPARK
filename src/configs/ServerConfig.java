@@ -5,7 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by a on 2017-05-25.
+ * @author 함의진
+ * 서버 인스턴스의 속성을 정의하는 슈퍼클래스로 임시 설계 상태
  */
 public class ServerConfig {
 
