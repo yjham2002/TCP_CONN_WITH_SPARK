@@ -1,6 +1,7 @@
 package models;
 
 import constants.ConstProtocol;
+import utils.HexUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public class ByteSerial{
 
-    public static final int POOL_SIZE = 16384; // 스트림 수신 버퍼 사이즈
+    public static final int POOL_SIZE = 512; // 스트림 수신 버퍼 사이즈
 
     public static final int TYPE_NONE = 0; // 미결정 타입 혹은 손상된 타입 (수신)
     public static final int TYPE_INIT = 10; // 전원 인가 시 접속되는 프로토콜 (수신)
@@ -36,8 +37,14 @@ public class ByteSerial{
      * @param type
      */
     public ByteSerial(byte[] bytes, int type){
+
+        bytes[bytes.length - 3] = HexUtil.checkSum(Arrays.copyOf(bytes, bytes.length - 3));
+
+        System.out.println(Arrays.toString(bytes));
+
         this.processed = bytes.clone();
         this.original = bytes.clone();
+        this.type = type;
 
     }
 

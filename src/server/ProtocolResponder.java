@@ -2,6 +2,8 @@ package server;
 
 import constants.ConstProtocol;
 import models.ByteSerial;
+import utils.HexUtil;
+import utils.SohaProtocolUtil;
 
 import java.io.*;
 import java.net.Socket;
@@ -36,27 +38,27 @@ public class ProtocolResponder extends Thread{
     public void run(){
         boolean started = false;
 
-        String name = null;
+        String uniqueKey = null;
+
         try{
             byte[] buffer = new byte[ByteSerial.POOL_SIZE];
 
             while ((in.read(buffer, 0, buffer.length)) != -1) {
                 in.read(buffer);
-                new ByteSerial(buffer);
-            }
+                ByteSerial byteSerial = new ByteSerial(buffer);
 
-//            name = in.readByte();
-//            clients.put(name, out);
+                buffer = byteSerial.getProcessed();
 
-            System.out.println("Responder :: [" + name + "] Totally " + clients.size() + " connection established");
+                if(!started && HexUtil.isCheckSumSound(buffer)){
+                    started = true;
 
-            while(in != null){
-                String msg = in.readUTF();
-                String res = "";
+                    uniqueKey = SohaProtocolUtil.getUniqueKeyByInit(buffer);
 
+                    clients.put(uniqueKey, out);
 
-                //sendToSpecificOne("Specific Response for [" + msg + "] => " + res, name);
-                sendToAll(new ByteSerial(new byte[]{83, 84, 48, 48, 55, 56, 0, 0, 0, 0, 1, 0, 0, 13, 10}, ByteSerial.TYPE_SET));
+                    sendToSpecificOne(new ByteSerial(SohaProtocolUtil.getInitProtocol(buffer, 0, 0, 0, 0, 0, 2), ByteSerial.TYPE_SET), uniqueKey);
+                    System.out.println("Responder :: [" + uniqueKey + "] :: Totally " + clients.size() + " connections are being maintained");
+                }
             }
 
             System.out.println("Conn");
@@ -65,7 +67,7 @@ public class ProtocolResponder extends Thread{
             // Ignore
         }finally {
             System.out.println("Connection Finished");
-            clients.remove(name);
+            clients.remove(uniqueKey);
         }
     }
 
@@ -74,6 +76,16 @@ public class ProtocolResponder extends Thread{
         try {
             DataOutputStream out = (DataOutputStream) clients.get(key);
             out.writeUTF(msg);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void sendToSpecificOne(ByteSerial msg, String key){
+        System.out.println("Sending :: " + msg);
+        try {
+            DataOutputStream out = (DataOutputStream) clients.get(key);
+            out.write(msg.getProcessed());
         }catch(IOException e){
             e.printStackTrace();
         }
