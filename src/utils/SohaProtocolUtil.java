@@ -28,12 +28,36 @@ public class SohaProtocolUtil {
 
     /**
      * 이니셜 프로토콜로부터 농장코드를 추출하는 메소드
-     * @param bytes
-     * @return
+     * @param bytes 버퍼 바이트
+     * @return 농장 코드
      */
     public static byte[] getFarmCodeByInit(byte[] bytes){
         byte[] ret = new byte[]{bytes[13], bytes[14], bytes[15], bytes[16]};
         return ret;
+    }
+
+    /**
+     * 일반 프로토콜로부터 농장코드를 추출하는 메소드
+     * @param bytes 버퍼 바이트
+     * @return 농장 코드
+     */
+    public static byte[] getFarmCodeByProtocol(byte[] bytes){
+        byte[] ret = new byte[]{bytes[2], bytes[3], bytes[4], bytes[5]};
+        return ret;
+    }
+
+    /**
+     * 일반 프로토콜로부터 재배동 코드를 추출하는 메소드
+     * @param bytes 버퍼 바이트
+     * @return 재배동 코드
+     */
+    public static byte[] getHarvCodeByProtocol(byte[] bytes){
+        byte[] ret = new byte[]{bytes[6], bytes[7]};
+        return ret;
+    }
+
+    public static byte[] getLocationCode(byte[] bytes){
+        return concat(getFarmCodeByProtocol(bytes), getHarvCodeByProtocol(bytes));
     }
 
     /**

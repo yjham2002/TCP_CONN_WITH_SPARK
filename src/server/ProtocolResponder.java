@@ -1,7 +1,11 @@
 package server;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import constants.ConstProtocol;
 import models.ByteSerial;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.HexUtil;
 import utils.SohaProtocolUtil;
 
@@ -18,6 +22,11 @@ import java.util.*;
  */
 public class ProtocolResponder extends Thread{
 
+    /**
+     * SLF4J 로거
+     */
+    Logger log;
+
     private Socket socket; // ServiceProvider로부터 accept된 단위 소켓
     private DataInputStream in; // 입력 스트림
     private DataOutputStream out; // 출력 스트림
@@ -30,6 +39,8 @@ public class ProtocolResponder extends Thread{
      */
     public ProtocolResponder(Socket socket, HashMap clients){
         super();
+
+        log = LoggerFactory.getLogger(this.getClass());
         this.socket = socket; // 멤버 세팅
         this.clients = clients; // 멤버 세팅
         try {
@@ -69,9 +80,11 @@ public class ProtocolResponder extends Thread{
                         clients.put(uniqueKey, this); // 클라이언트 해시맵에 상위에서 추출한 유니크키를 기준으로 삽입
 
                         // 클라이언트 셋에서 키로 참조하여 이니셜 프로토콜을 전송 - 바이트 시리얼의 수신용 생성자가 아닌 이하의 생성자를 사용하여 자동으로 모드버스로 변환
-                        sendToSpecificOne(new ByteSerial(SohaProtocolUtil.getInitProtocol(buffer, 0, 0, 0, 0, 1, 0), ByteSerial.TYPE_SET), uniqueKey);
-                        System.out.println("Responder :: [" + uniqueKey + "] :: Totally " + clients.size() + " connections are being maintained");
+                        sendToSpecificOne(new ByteSerial(SohaProtocolUtil.getInitProtocol(buffer, 0, 0, 0, 0, 0, 7), ByteSerial.TYPE_SET), uniqueKey);
+                        log.info("Responder :: [" + uniqueKey + "] :: Totally " + clients.size() + " connections are being maintained");
                         // 현재 연결된 클라이언트 소켓수와 유니크키를 디버깅을 위해 출력함
+                    }else{
+                        log.info("Farm Code :: " + Arrays.toString(SohaProtocolUtil.getFarmCodeByProtocol(buffer)) + " / HarvCode :: " + Arrays.toString(SohaProtocolUtil.getHarvCodeByProtocol(buffer)));
                     }
                 }
             }
@@ -79,7 +92,7 @@ public class ProtocolResponder extends Thread{
         }catch(IOException e){ // 소켓 연결 두절의 경우, 연결을 종료할 경우, 흔히 발생하므로 에러 핸들링을 별도로 하지 않음
             // Ignore
         }finally {
-            System.out.println("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
+            log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
             clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
         }
     }
@@ -91,7 +104,7 @@ public class ProtocolResponder extends Thread{
      */
     @Deprecated
     private void sendToSpecificOne(String msg, String key){
-        System.out.println("Sending :: " + msg);
+        log.info("Sending :: " + msg);
         try {
             DataOutputStream out = (DataOutputStream) clients.get(key).out;
             out.writeUTF(msg);
@@ -106,7 +119,7 @@ public class ProtocolResponder extends Thread{
      * @param key
      */
     private void sendToSpecificOne(ByteSerial msg, String key){
-        System.out.println("Sending :: " + Arrays.toString(msg.getProcessed()));
+        log.info("Sending :: " + Arrays.toString(msg.getProcessed()));
         try {
             DataOutputStream out = (DataOutputStream) clients.get(key).out;
             out.write(msg.getProcessed());
@@ -120,7 +133,7 @@ public class ProtocolResponder extends Thread{
      * @param msg
      */
     private void sendToAll(ByteSerial msg){
-        System.out.println("Sending :: " + msg);
+        log.info("Sending :: " + msg);
 
         Iterator it = clients.keySet().iterator();
         while(it.hasNext()){
@@ -135,7 +148,7 @@ public class ProtocolResponder extends Thread{
 
     @Deprecated
     private void sendToAll(byte[] msg){
-        System.out.println("Sending :: " + msg);
+        log.info("Sending :: " + msg);
 
         Iterator it = clients.keySet().iterator();
         while(it.hasNext()){
@@ -154,7 +167,7 @@ public class ProtocolResponder extends Thread{
      */
     @Deprecated
     private void sendToAll(String msg){
-        System.out.println("Sending :: " + msg);
+        log.info("Sending :: " + msg);
 
         Iterator it = clients.keySet().iterator();
         while(it.hasNext()){
@@ -167,26 +180,32 @@ public class ProtocolResponder extends Thread{
         }
     }
 
+    @NotNull
     public Socket getSocket() {
         return socket;
     }
 
+    @NotNull
     public void setSocket(Socket socket) {
         this.socket = socket;
     }
 
+    @NotNull
     public DataInputStream getIn() {
         return in;
     }
 
+    @NotNull
     public void setIn(DataInputStream in) {
         this.in = in;
     }
 
+    @NotNull
     public DataOutputStream getOut() {
         return out;
     }
 
+    @NotNull
     public void setOut(DataOutputStream out) {
         this.out = out;
     }

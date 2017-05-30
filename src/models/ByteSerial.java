@@ -1,6 +1,8 @@
 package models;
 
 import constants.ConstProtocol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.HexUtil;
 
 import java.util.ArrayList;
@@ -12,6 +14,11 @@ import java.util.List;
  * 송수신되는 바이트를 가공하고 인식하기 위한 캡슐화 클래스
  */
 public class ByteSerial{
+
+    /**
+     * SLF4J 로거
+     */
+    Logger log;
 
     public static final int POOL_SIZE = 512; // 스트림 수신 버퍼 사이즈
 
@@ -37,9 +44,10 @@ public class ByteSerial{
      * @param type
      */
     public ByteSerial(byte[] bytes, int type){
+        log = LoggerFactory.getLogger(this.getClass());
         bytes[bytes.length - 3] = HexUtil.checkSumByFull(bytes);
 
-        System.out.println(Arrays.toString(bytes));
+        log.info(Arrays.toString(bytes));
 
         this.processed = bytes.clone();
         this.original = bytes.clone();
@@ -52,7 +60,7 @@ public class ByteSerial{
      * @param bytes
      */
     public ByteSerial(byte[] bytes){
-
+        log = LoggerFactory.getLogger(this.getClass());
         int newLen = bytes.length - 1;
 
         this.original = bytes.clone();
@@ -66,16 +74,16 @@ public class ByteSerial{
         this.processed = Arrays.copyOf(bytes.clone(), newLen >= 0 ? newLen : 0);
         this.length = newLen;
 
-        System.out.println(Arrays.toString(processed));
-//        System.out.println(Arrays.toString(bytes));
+        log.info(Arrays.toString(processed));
+//        log.info(Arrays.toString(bytes));
 
         if(!HexUtil.isCheckSumSound(this.processed)) loss = true;
         if(bytes.length < 4) loss = true;
         if(!this.startsWith(ConstProtocol.STX)) loss = true;
         if(!this.endsWith(ConstProtocol.ETX)) loss = true;
 
-        if(loss) System.out.println("Packet-Loss Occured or is empty data - Ignoring");
-        else System.out.println("Packet has been arrived successfully");
+        if(loss) log.info("Packet-Loss Occured or is empty data - Ignoring");
+        else log.info("Packet has been arrived successfully");
 
         setTypeAutomatically();
     }

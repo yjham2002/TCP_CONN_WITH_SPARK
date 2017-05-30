@@ -1,13 +1,23 @@
 package server.engine;
 
 import configs.ServerConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ProtocolResponder;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+import spark.Spark;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+
+import static spark.route.HttpMethod.get;
 
 /**
  * @author 함의진
@@ -18,6 +28,10 @@ import java.util.HashMap;
  */
 public class ServiceProvider extends ServerConfig{
 
+    /**
+     * SLF4J 로거
+     */
+    Logger log;
     /**
      * 싱글턴 패턴을 사용하기 위한 인스턴스 레퍼런스
      */
@@ -51,6 +65,10 @@ public class ServiceProvider extends ServerConfig{
      */
     private ServiceProvider(int port){
 
+        log = LoggerFactory.getLogger(this.getClass());
+
+        log.info("Initiating Service Provider");
+
         try {
             socket = new ServerSocket(port); // 서버 소켓 인스턴스 생성
             clients = new HashMap<>(); // 클라이언트 해시맵 생성
@@ -67,10 +85,10 @@ public class ServiceProvider extends ServerConfig{
                 try {
                     Thread.sleep(BATCH_TIME);
                 } catch (InterruptedException e) {
-                    System.out.println("Batch Thread Interrupted");
+                    d("Batch Thread Interrupted");
                 }
 
-                System.out.println("Batch Executed");
+                d("Batch Executed");
 
             }
         });
@@ -119,11 +137,13 @@ public class ServiceProvider extends ServerConfig{
     }
 
     /**
-     * 개발시 디버깅을 위한 로깅 메소드로 이후, Log4j로 대체할 예정 (삭제 필요)
+     * 개발시 디버깅을 위한 로깅 메소드 단축
      * @param message
      */
     private void d(String message){
-        if(DEBUG_MODE) stream.println(getTime() + " " + message);
+        if(DEBUG_MODE) {
+            log.debug(getTime() + " " + message);
+        }
     }
 
 }
