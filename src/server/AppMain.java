@@ -2,10 +2,16 @@ package server;
 
 import configs.ServerConfig;
 import constants.ConstRest;
+import models.DataMap;
+import models.RestProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.engine.ServiceProvider;
 import spark.Spark;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Objects;
 
 import static spark.route.HttpMethod.get;
 
@@ -15,6 +21,7 @@ import static spark.route.HttpMethod.get;
 public class AppMain{
 
     private static Logger log;
+    private static ServiceProvider serviceProvider;
 
     /**
      * 정적으로 설정된 소켓 포트를 기반으로 싱글턴 패턴 서버 인스턴스를 할당 후 실행
@@ -30,7 +37,7 @@ public class AppMain{
         /**
          * 서비스 프로바이더 인스턴스 할당 및 시동
          */
-        ServiceProvider serviceProvider = ServiceProvider.getInstance(ServerConfig.SOCKET_PORT).start(); // 인스턴스 할당 및 시동
+        serviceProvider = ServiceProvider.getInstance(ServerConfig.SOCKET_PORT).start(); // 인스턴스 할당 및 시동
 
         /**
          * Spark Framework Implementation
@@ -38,10 +45,26 @@ public class AppMain{
          */
         Spark.port(ConstRest.REST_PORT);
 
-        Spark.get("/hello", (req, res) -> {
-            log.info("hello called");
-            return "hi";
+        Spark.get(ConstRest.REST_CONNECT_TEST, (req, res) -> {
+            DataMap map = RestProcessor.makeProcessData(req.raw());
+
+            for(String s : map.keySet()) System.out.println(s + " : " + map.get(s));
+
+            log.info(ConstRest.REST_CONNECT_TEST);
+
+            return RestProcessor.makeResultJson(0, "test", map);
         });
+
+        Spark.get(ConstRest.REST_READ_REQUEST, (req, res) -> {
+            log.info(ConstRest.REST_READ_REQUEST);
+            return "{\"json\":1}";
+        });
+
+        Spark.get(ConstRest.REST_WRITE_REQUEST, (req, res) -> {
+            log.info(ConstRest.REST_WRITE_REQUEST);
+            return "{\"json\":1}";
+        });
+
         /**
          * 스파크 프레임워크 REST 정의 종결
          */
