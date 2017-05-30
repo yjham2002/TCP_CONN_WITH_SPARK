@@ -1,6 +1,9 @@
 package utils;
 
-
+/**
+ * @author various
+ * 모드버스 프로토콜의 CRC16 무결성 코드를 추출하기 위한 메소드를 정의하는 클래스
+ */
 public class Modbus  {
 
     public Modbus()

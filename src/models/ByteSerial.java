@@ -37,8 +37,7 @@ public class ByteSerial{
      * @param type
      */
     public ByteSerial(byte[] bytes, int type){
-
-        bytes[bytes.length - 3] = HexUtil.checkSum(Arrays.copyOf(bytes, bytes.length - 3));
+        bytes[bytes.length - 3] = HexUtil.checkSumByFull(bytes);
 
         System.out.println(Arrays.toString(bytes));
 
@@ -54,25 +53,29 @@ public class ByteSerial{
      */
     public ByteSerial(byte[] bytes){
 
-        int newLen = 0;
+        int newLen = bytes.length - 1;
 
         this.original = bytes.clone();
-        for(newLen = 0; newLen < bytes.length; newLen++){
-            if(bytes[newLen] == 0) break;
+        for(; newLen >= 0; newLen--){
+            if(bytes[newLen] != 0) {
+                newLen += 1;
+                break;
+            }
         }
 
-        System.out.println(newLen);
-
-        this.processed = Arrays.copyOf(bytes.clone(), newLen);
+        this.processed = Arrays.copyOf(bytes.clone(), newLen >= 0 ? newLen : 0);
         this.length = newLen;
 
         System.out.println(Arrays.toString(processed));
+//        System.out.println(Arrays.toString(bytes));
 
+        if(!HexUtil.isCheckSumSound(this.processed)) loss = true;
         if(bytes.length < 4) loss = true;
         if(!this.startsWith(ConstProtocol.STX)) loss = true;
         if(!this.endsWith(ConstProtocol.ETX)) loss = true;
 
-        System.out.println(loss);
+        if(loss) System.out.println("Packet-Loss Occured or is empty data - Ignoring");
+        else System.out.println("Packet has been arrived successfully");
 
         setTypeAutomatically();
     }
@@ -93,6 +96,11 @@ public class ByteSerial{
         return TYPE_NONE;
     }
 
+    /**
+     * 바이트 시리얼의 종결 배열을 확인하기 위한 메소드
+     * @param bytes
+     * @return
+     */
     public boolean endsWith(byte[] bytes){
         if(this.processed.length < bytes.length) return false;
         else{
@@ -104,6 +112,11 @@ public class ByteSerial{
         }
     }
 
+    /**
+     * 바이트 시리얼의 초기 배열을 확인하기 위한 메소드
+     * @param bytes
+     * @return
+     */
     public boolean startsWith(byte[] bytes){
         if(this.processed.length < bytes.length) return false;
         else{
@@ -114,6 +127,10 @@ public class ByteSerial{
         }
     }
 
+    /**
+     * 패킷 손실 여부를 반환하기 위한 메소드이며, 수신용 생성자를 이용한 경우에만 유효한 메소드임
+     * @return
+     */
     public boolean isLoss() {
         return loss;
     }
@@ -156,6 +173,6 @@ public class ByteSerial{
 
     @Override
     public String toString(){
-        return "";
+        return Arrays.toString(this.processed);
     }
 }

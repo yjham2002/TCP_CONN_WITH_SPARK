@@ -2,22 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/utils/Htypecast.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/utils/Modbus.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/utils/SohaProtocolUtil.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/ClientReceiver.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/ClientSender.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/TestClient.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/utils/CRC16Modbus.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/configs/ServerConfig.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/configs/ServerConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/constants/ConstProtocol.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/constants/ConstProtocol.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/AppMain.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/AppMain.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/engine/ServiceProvider.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/engine/ServiceProvider.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/configs/ServerConfig.java" afterPath="$PROJECT_DIR$/src/configs/ServerConfig.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/constants/ConstProtocol.java" afterPath="$PROJECT_DIR$/src/constants/ConstProtocol.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/models/ByteSerial.java" afterPath="$PROJECT_DIR$/src/models/ByteSerial.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/AppMain.java" afterPath="$PROJECT_DIR$/src/server/AppMain.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ProtocolResponder.java" afterPath="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" afterPath="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/utils/HexUtil.java" afterPath="$PROJECT_DIR$/src/utils/HexUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/utils/Htypecast.java" afterPath="$PROJECT_DIR$/src/utils/Htypecast.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/utils/Modbus.java" afterPath="$PROJECT_DIR$/src/utils/Modbus.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -37,34 +35,9 @@
       <file leaf-file-name="ConstProtocol.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/constants/ConstProtocol.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="14" column="7" lean-forward="false" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
+            <state relative-caret-position="171">
+              <caret line="9" column="73" lean-forward="true" selection-start-line="9" selection-start-column="73" selection-end-line="9" selection-end-column="73" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HexUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/utils/HexUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="741">
-              <caret line="39" column="46" lean-forward="true" selection-start-line="39" selection-start-column="46" selection-end-line="39" selection-end-column="46" />
-              <folding>
-                <element signature="e#955#956#0" expanded="true" />
-                <element signature="e#1026#1027#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SohaProtocolUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/utils/SohaProtocolUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="19" column="44" lean-forward="false" selection-start-line="19" selection-start-column="44" selection-end-line="19" selection-end-column="44" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -72,8 +45,8 @@
       <file leaf-file-name="AppMain.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+            <state relative-caret-position="266">
+              <caret line="14" column="18" lean-forward="true" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -81,23 +54,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ServerConfig.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/configs/ServerConfig.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="8" column="36" lean-forward="false" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ServiceProvider.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ServiceProvider.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/engine/ServiceProvider.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="757">
-              <caret line="124" column="0" lean-forward="true" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+            <state relative-caret-position="309">
+              <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -105,13 +66,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="54" column="61" lean-forward="false" selection-start-line="54" selection-start-column="61" selection-end-line="54" selection-end-column="61" />
+            <state relative-caret-position="-109">
+              <caret line="44" column="7" lean-forward="true" selection-start-line="44" selection-start-column="7" selection-end-line="44" selection-end-column="7" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#5508#5509#0" expanded="true" />
+                <element signature="e#5537#5538#0" expanded="true" />
+                <element signature="e#5581#5582#0" expanded="true" />
+                <element signature="e#5617#5618#0" expanded="true" />
+                <element signature="e#5655#5656#0" expanded="true" />
+                <element signature="e#5680#5681#0" expanded="true" />
+                <element signature="e#5725#5726#0" expanded="true" />
+                <element signature="e#5753#5754#0" expanded="true" />
+                <element signature="e#5793#5794#0" expanded="true" />
+                <element signature="e#5819#5820#0" expanded="true" />
+                <element signature="e#5867#5868#0" expanded="true" />
+                <element signature="e#5897#5898#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -120,8 +93,8 @@
       <file leaf-file-name="ByteSerial.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/models/ByteSerial.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+            <state relative-caret-position="556">
+              <caret line="53" column="36" lean-forward="true" selection-start-line="53" selection-start-column="36" selection-end-line="53" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -137,6 +110,13 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>13</find>
+      <find>13, 10</find>
+      <find>83, 84</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -154,18 +134,18 @@
         <option value="$PROJECT_DIR$/src/ClientSender.java" />
         <option value="$PROJECT_DIR$/src/TestClient.java" />
         <option value="$PROJECT_DIR$/src/utils/ByteUtil.java" />
-        <option value="$PROJECT_DIR$/src/constants/ConstProtocol.java" />
+        <option value="$PROJECT_DIR$/src/utils/CRC16Modbus.java" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/src/utils/SohaProtocolUtil.java" />
+        <option value="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
+        <option value="$PROJECT_DIR$/src/models/ByteSerial.java" />
         <option value="$PROJECT_DIR$/src/configs/ServerConfig.java" />
         <option value="$PROJECT_DIR$/src/server/AppMain.java" />
-        <option value="$PROJECT_DIR$/src/utils/CRC16Modbus.java" />
         <option value="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" />
-        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/src/utils/HexUtil.java" />
         <option value="$PROJECT_DIR$/src/utils/Htypecast.java" />
         <option value="$PROJECT_DIR$/src/utils/Modbus.java" />
-        <option value="$PROJECT_DIR$/src/models/ByteSerial.java" />
-        <option value="$PROJECT_DIR$/src/utils/HexUtil.java" />
-        <option value="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
-        <option value="$PROJECT_DIR$/src/utils/SohaProtocolUtil.java" />
+        <option value="$PROJECT_DIR$/src/constants/ConstProtocol.java" />
       </list>
     </option>
   </component>
@@ -328,7 +308,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="Console" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunManager" selected="Application.AppMain">
@@ -340,21 +320,6 @@
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="server.AppMain" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="sohaTech_serial" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="false" name="TestClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="TestClient" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -415,6 +380,26 @@
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="utils.SohaProtocolUtil" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="sohaTech_serial" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ByteSerial" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="models.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="models.ByteSerial" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -649,18 +634,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Application.AppMain" />
-      <item index="1" class="java.lang.String" itemvalue="Application.TestClient" />
-      <item index="2" class="java.lang.String" itemvalue="Application.CRC16Modbus" />
-      <item index="3" class="java.lang.String" itemvalue="Application.HexUtil" />
-      <item index="4" class="java.lang.String" itemvalue="Application.SohaProtocolUtil" />
+      <item index="1" class="java.lang.String" itemvalue="Application.CRC16Modbus" />
+      <item index="2" class="java.lang.String" itemvalue="Application.HexUtil" />
+      <item index="3" class="java.lang.String" itemvalue="Application.SohaProtocolUtil" />
+      <item index="4" class="java.lang.String" itemvalue="Application.ByteSerial" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Application.AppMain" />
-        <item index="1" class="java.lang.String" itemvalue="Application.SohaProtocolUtil" />
-        <item index="2" class="java.lang.String" itemvalue="Application.HexUtil" />
-        <item index="3" class="java.lang.String" itemvalue="Application.CRC16Modbus" />
-        <item index="4" class="java.lang.String" itemvalue="Application.TestClient" />
+        <item index="1" class="java.lang.String" itemvalue="Application.HexUtil" />
+        <item index="2" class="java.lang.String" itemvalue="Application.ByteSerial" />
+        <item index="3" class="java.lang.String" itemvalue="Application.SohaProtocolUtil" />
+        <item index="4" class="java.lang.String" itemvalue="Application.CRC16Modbus" />
       </list>
     </recent_temporary>
   </component>
@@ -724,7 +709,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496048510947</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Protocol Generator added and Initial Code Sending Process established">
+      <created>1496112521808</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1496112521808</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -734,7 +726,7 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug Logs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46596858" sideWeight="0.2578125" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41780105" sideWeight="0.2578125" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Execute Anonymous" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -750,7 +742,7 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46596858" sideWeight="0.7421875" order="2" side_tool="false" content_ui="tabs" x="156" y="547" width="1398" height="359" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41780105" sideWeight="0.7421875" order="2" side_tool="false" content_ui="tabs" x="156" y="547" width="1398" height="359" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18177083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -770,7 +762,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />
     <MESSAGE value="Socket Connection Prototype established" />
-    <option name="LAST_COMMIT_MESSAGE" value="Socket Connection Prototype established" />
+    <MESSAGE value="Protocol Generator added and Initial Code Sending Process established" />
+    <option name="LAST_COMMIT_MESSAGE" value="Protocol Generator added and Initial Code Sending Process established" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -823,6 +816,18 @@
           <caret line="59" column="34" lean-forward="false" selection-start-line="59" selection-start-column="34" selection-end-line="59" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#5508#5509#0" expanded="true" />
+            <element signature="e#5537#5538#0" expanded="true" />
+            <element signature="e#5581#5582#0" expanded="true" />
+            <element signature="e#5617#5618#0" expanded="true" />
+            <element signature="e#5655#5656#0" expanded="true" />
+            <element signature="e#5680#5681#0" expanded="true" />
+            <element signature="e#5725#5726#0" expanded="true" />
+            <element signature="e#5753#5754#0" expanded="true" />
+            <element signature="e#5793#5794#0" expanded="true" />
+            <element signature="e#5819#5820#0" expanded="true" />
+            <element signature="e#5867#5868#0" expanded="true" />
+            <element signature="e#5897#5898#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -852,34 +857,6 @@
         <state relative-caret-position="57">
           <caret line="3" column="19" lean-forward="false" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_111/src.zip!/java/io/DataInputStream.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="98" column="21" lean-forward="false" selection-start-line="98" selection-start-column="21" selection-end-line="98" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/configs/ServerConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="8" column="36" lean-forward="false" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -916,65 +893,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utils/Htypecast.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_111/src.zip!/java/io/DataInputStream.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        <state relative-caret-position="175">
+          <caret line="98" column="21" lean-forward="false" selection-start-line="98" selection-start-column="21" selection-end-line="98" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utils/Modbus.java">
+    <entry file="file://$PROJECT_DIR$/src/configs/ServerConfig.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="152">
-          <caret line="11" column="4" lean-forward="true" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
-          <folding />
+          <caret line="8" column="36" lean-forward="true" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/constants/ConstProtocol.java">
+    <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
-          <caret line="14" column="7" lean-forward="false" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utils/HexUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="741">
-          <caret line="39" column="46" lean-forward="true" selection-start-line="39" selection-start-column="46" selection-end-line="39" selection-end-column="46" />
-          <folding>
-            <element signature="e#955#956#0" expanded="true" />
-            <element signature="e#1026#1027#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/models/ByteSerial.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="54" column="61" lean-forward="false" selection-start-line="54" selection-start-column="61" selection-end-line="54" selection-end-column="61" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utils/SohaProtocolUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="19" column="44" lean-forward="false" selection-start-line="19" selection-start-column="44" selection-end-line="19" selection-end-column="44" />
+          <caret line="14" column="18" lean-forward="true" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -983,10 +923,87 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/engine/ServiceProvider.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="757">
-          <caret line="124" column="0" lean-forward="true" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+        <state relative-caret-position="309">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils/HexUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1216">
+          <caret line="64" column="25" lean-forward="false" selection-start-line="64" selection-start-column="25" selection-end-line="64" selection-end-column="25" />
+          <folding>
+            <element signature="e#1473#1474#0" expanded="true" />
+            <element signature="e#1544#1545#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils/Htypecast.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="4" column="22" lean-forward="false" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils/Modbus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="461">
+          <caret line="77" column="29" lean-forward="true" selection-start-line="77" selection-start-column="29" selection-end-line="77" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils/SohaProtocolUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-565">
+          <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/constants/ConstProtocol.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="73" lean-forward="true" selection-start-line="9" selection-start-column="73" selection-end-line="9" selection-end-column="73" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/models/ByteSerial.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="556">
+          <caret line="53" column="36" lean-forward="true" selection-start-line="53" selection-start-column="36" selection-end-line="53" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-109">
+          <caret line="44" column="7" lean-forward="true" selection-start-line="44" selection-start-column="7" selection-end-line="44" selection-end-column="7" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#5508#5509#0" expanded="true" />
+            <element signature="e#5537#5538#0" expanded="true" />
+            <element signature="e#5581#5582#0" expanded="true" />
+            <element signature="e#5617#5618#0" expanded="true" />
+            <element signature="e#5655#5656#0" expanded="true" />
+            <element signature="e#5680#5681#0" expanded="true" />
+            <element signature="e#5725#5726#0" expanded="true" />
+            <element signature="e#5753#5754#0" expanded="true" />
+            <element signature="e#5793#5794#0" expanded="true" />
+            <element signature="e#5819#5820#0" expanded="true" />
+            <element signature="e#5867#5868#0" expanded="true" />
+            <element signature="e#5897#5898#0" expanded="true" />
           </folding>
         </state>
       </provider>

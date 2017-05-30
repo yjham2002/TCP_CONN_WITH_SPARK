@@ -1,9 +1,12 @@
 package utils;
 
-
+/**
+ * @author various
+ * 바이트와 정수형 변환을 위한 클래스
+ */
 public class Htypecast {
 	{
-		System.out.println("HtypeCast 인스턴스가 생성되었습니다.");
+		System.out.println("HtypeCast Instance constructed.");
 	}
 
 	short Value;

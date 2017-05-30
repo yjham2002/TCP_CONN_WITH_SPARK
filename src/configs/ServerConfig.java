@@ -10,11 +10,25 @@ import java.util.Date;
  */
 public class ServerConfig {
 
+    /**
+     * 서버 소켓 포트
+     */
     public static final int SOCKET_PORT = 8000;
+
+    /**
+     * 디버깅 모드 설정을 위한 정적 변수
+     */
     public static final boolean DEBUG_MODE = true;
 
+    /**
+     * 디버깅 출력 스트림
+     */
     public static final PrintStream stream = System.out;
 
+    /**
+     * 시간 출력을 위한 메소드
+     * @return 현재 날짜와 시간을 로컬 타임으로 반환
+     */
     public static String getTime(){
         SimpleDateFormat fmt = new SimpleDateFormat("[yyyy-MM-d hh:mm:ss]");
         return fmt.format(new Date());
