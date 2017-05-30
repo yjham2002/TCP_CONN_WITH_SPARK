@@ -52,12 +52,12 @@ public class ServiceProvider extends ServerConfig{
     private ServiceProvider(int port){
 
         try {
-            socket = new ServerSocket(port);
-            clients = new HashMap<>();
-            Collections.synchronizedMap(clients);
+            socket = new ServerSocket(port); // 서버 소켓 인스턴스 생성
+            clients = new HashMap<>(); // 클라이언트 해시맵 생성
+            Collections.synchronizedMap(clients); // 가변 스레드 환경에서 아토믹하게 해시맵을 이용하기 위한 동기화 명시 호출
         }catch(IOException e){
             e.printStackTrace();
-            d("Socket Creation failed");
+            d("Socket Creation failed - The port set in const is in use or internet connection is not established.");
         }
 
         batch = new Thread(() -> {
