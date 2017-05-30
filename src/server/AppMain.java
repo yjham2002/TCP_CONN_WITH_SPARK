@@ -23,6 +23,9 @@ public class AppMain{
      * @param args
      */
     public static void main(String... args){
+        /**
+         * 로거 초기화
+         */
         log = LoggerFactory.getLogger("TCP/IP ServerEngine App");
         /**
          * 서비스 프로바이더 인스턴스 할당 및 시동
