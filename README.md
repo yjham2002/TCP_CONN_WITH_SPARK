@@ -1,8 +1,7 @@
-![Richware](http://www.appg.co.kr/common/images/logo_foot_richware.gif)
 
-# 소하테크 TCP/IP 서버
+# TCP/IP 서버
 
-- 소하테크 Uni-farm TCP/IP 통신을 위한 소켓 서버
+- 경량 REST 프레임워크가 적용된 TCP/IP 통신을 위한 소켓 서버
 
 ## Class Description
 
