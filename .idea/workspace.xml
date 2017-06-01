@@ -5,12 +5,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/constants/ConstProtocol.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/constants/ConstProtocol.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/constants/ConstProtocol.java" afterPath="$PROJECT_DIR$/src/constants/ConstProtocol.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" afterPath="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redis/RedisManager.java" afterPath="$PROJECT_DIR$/src/redis/RedisManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redis/RedisTestMain.java" afterPath="$PROJECT_DIR$/src/redis/RedisTestMain.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redis/RedisWrapper.java" afterPath="$PROJECT_DIR$/src/redis/RedisWrapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ProtocolResponder.java" afterPath="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -940,7 +934,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496292154571</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Realtime Bean added">
+      <created>1496306660977</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1496306660977</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -992,7 +993,8 @@
     <MESSAGE value="SLF4J added And Spark Framework Added" />
     <MESSAGE value="Trademark removed" />
     <MESSAGE value="Redis Connected and JSON De/Encode established" />
-    <option name="LAST_COMMIT_MESSAGE" value="Redis Connected and JSON De/Encode established" />
+    <MESSAGE value="Realtime Bean added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Realtime Bean added" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
