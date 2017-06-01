@@ -10,4 +10,11 @@ public class ConstProtocol {
     public static final byte[] STX = new byte[]{83, 84}; // Start Of Text
     public static final byte[] ETX = new byte[]{13, 10}; // End Of Text
 
+    public static final int INIT_TERM_MIN10 = 0;
+    public static final int INIT_TERM_MIN = 0;
+    public static final int INIT_TERM_SEC10 = 0;
+    public static final int INIT_TERM_SEC = 5;
+
+    public static final int SOCKET_TIMEOUT_LIMIT = 3;
+
 }

@@ -37,7 +37,7 @@ public class AppMain{
         /**
          * 서비스 프로바이더 인스턴스 할당 및 시동
          */
-        serviceProvider = ServiceProvider.getInstance(ServerConfig.SOCKET_PORT).start(); // 인스턴스 할당 및 시동
+        serviceProvider = ServiceProvider.getInstance().start(); // 인스턴스 할당 및 시동
 
         /**
          * Spark Framework Implementation

@@ -6,7 +6,10 @@ import constants.ConstProtocol;
 import models.ByteSerial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pojo.RealtimePOJO;
+import redis.RedisManager;
 import utils.HexUtil;
+import utils.SerialUtil;
 import utils.SohaProtocolUtil;
 
 import java.io.*;
@@ -27,6 +30,7 @@ public class ProtocolResponder extends Thread{
      */
     Logger log;
 
+    private String uniqueKey = ""; // 유니크키 초기화 - 클라이언트 해시맵에서 유일성을 가지도록 관리하기 위한 문자열
     private Socket socket; // ServiceProvider로부터 accept된 단위 소켓
     private DataInputStream in; // 입력 스트림
     private DataOutputStream out; // 출력 스트림
@@ -58,8 +62,6 @@ public class ProtocolResponder extends Thread{
     public void run(){
         boolean started = false; // 이니셜 프로토콜이 전송되었는지의 여부를 갖는 로컬 변수
 
-        String uniqueKey = null; // 유니크키 초기화 - 클라이언트 해시맵에서 유일성을 가지도록 관리하기 위한 문자열
-
         try{
             byte[] buffer = new byte[ByteSerial.POOL_SIZE]; // 버퍼 사이즈 할당
 
@@ -69,7 +71,7 @@ public class ProtocolResponder extends Thread{
 
                 buffer = byteSerial.getProcessed(); // 처리된 트림 데이터 추출
 
-                if(buffer.length == 0) System.exit(10); // 디버깅을 위해 버퍼 사이즈가 없을 경우 앱을 종료함
+                if(buffer.length == 0) System.exit(122);
 
                 if(!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
                     if (!started) { // 이니셜 프로토콜에 따른 처리 여부를 확인하여 최초 연결일 경우, 본 로직을 수행
@@ -80,10 +82,34 @@ public class ProtocolResponder extends Thread{
                         clients.put(uniqueKey, this); // 클라이언트 해시맵에 상위에서 추출한 유니크키를 기준으로 삽입
 
                         // 클라이언트 셋에서 키로 참조하여 이니셜 프로토콜을 전송 - 바이트 시리얼의 수신용 생성자가 아닌 이하의 생성자를 사용하여 자동으로 모드버스로 변환
-                        sendToSpecificOne(new ByteSerial(SohaProtocolUtil.getInitProtocol(buffer, 0, 0, 0, 0, 0, 7), ByteSerial.TYPE_SET), uniqueKey);
+                        send(new ByteSerial
+                                (
+                                SohaProtocolUtil.getInitProtocol(
+                                    buffer,
+                                    0,
+                                    0,
+                                    ConstProtocol.INIT_TERM_MIN10,
+                                    ConstProtocol.INIT_TERM_MIN,
+                                    ConstProtocol.INIT_TERM_SEC10,
+                                    ConstProtocol.INIT_TERM_SEC
+                                ),
+                                ByteSerial.TYPE_SET
+                                )
+                        );
+
                         log.info("Responder :: [" + uniqueKey + "] :: Totally " + clients.size() + " connections are being maintained");
                         // 현재 연결된 클라이언트 소켓수와 유니크키를 디버깅을 위해 출력함
                     }else{
+                        RedisManager redisManager = RedisManager.getInstance();
+                        String farm = SohaProtocolUtil.getLocationCodeAsString(buffer);
+                        String key = farm + "@" + RedisManager.getMillis();
+
+                        RealtimePOJO realtimePOJO = new RealtimePOJO(byteSerial);
+
+                        boolean succ = redisManager.put(key, realtimePOJO);
+
+                        log.info("JEDIS REALTIME DATA PUT : " + succ);
+
                         log.info("Farm Code :: " + Arrays.toString(SohaProtocolUtil.getFarmCodeByProtocol(buffer)) + " / HarvCode :: " + Arrays.toString(SohaProtocolUtil.getHarvCodeByProtocol(buffer)));
                     }
                 }
@@ -98,85 +124,16 @@ public class ProtocolResponder extends Thread{
     }
 
     /**
-     * UTF8 기반의 메시지 전송을 위한 메소드로 본 프로젝트에서는 사용하지 못 함
-     * @param msg
-     * @param key
-     */
-    @Deprecated
-    private void sendToSpecificOne(String msg, String key){
-        log.info("Sending :: " + msg);
-        try {
-            DataOutputStream out = (DataOutputStream) clients.get(key).out;
-            out.writeUTF(msg);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * 바이트 시리얼로부터 처리 이후의 바이트 패킷을 추출하여 바이트 기반으로 전송
      * @param msg
-     * @param key
      */
-    private void sendToSpecificOne(ByteSerial msg, String key){
+    private void send(ByteSerial msg){
         log.info("Sending :: " + Arrays.toString(msg.getProcessed()));
         try {
-            DataOutputStream out = (DataOutputStream) clients.get(key).out;
+            DataOutputStream out = (DataOutputStream) clients.get(uniqueKey).out;
             out.write(msg.getProcessed());
         }catch(IOException e){
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * 바이트 시리얼로부터 처리 이후의 바이트 패킷을 추출하여 바이트 기반으로 전체 클라이언트에게 전송
-     * @param msg
-     */
-    private void sendToAll(ByteSerial msg){
-        log.info("Sending :: " + msg);
-
-        Iterator it = clients.keySet().iterator();
-        while(it.hasNext()){
-            try{
-                DataOutputStream out = (DataOutputStream)clients.get(it.next()).out;
-                out.write(msg.getProcessed());
-            }catch(IOException e){
-
-            }
-        }
-    }
-
-    @Deprecated
-    private void sendToAll(byte[] msg){
-        log.info("Sending :: " + msg);
-
-        Iterator it = clients.keySet().iterator();
-        while(it.hasNext()){
-            try{
-                DataOutputStream out = (DataOutputStream)clients.get(it.next()).out;
-                out.write(msg);
-            }catch(IOException e){
-
-            }
-        }
-    }
-
-    /**
-     * UTF8 기반의 메시지를 전체 클라이언트에게 전송하기 위한 메소드로 본 프로젝트에서는 사용할 수 없음
-     * @param msg
-     */
-    @Deprecated
-    private void sendToAll(String msg){
-        log.info("Sending :: " + msg);
-
-        Iterator it = clients.keySet().iterator();
-        while(it.hasNext()){
-            try{
-                DataOutputStream out = (DataOutputStream)clients.get(it.next()).out;
-                out.writeUTF(msg);
-            }catch(IOException e){
-
-            }
         }
     }
 

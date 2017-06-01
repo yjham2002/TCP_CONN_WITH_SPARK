@@ -60,6 +60,10 @@ public class SohaProtocolUtil {
         return concat(getFarmCodeByProtocol(bytes), getHarvCodeByProtocol(bytes));
     }
 
+    public static String getLocationCodeAsString(byte[] bytes){
+        return Arrays.toString(getLocationCode(bytes));
+    }
+
     /**
      * 이니셜 프로토콜과 재배동 번호, 데이터 업로드 주기를 통해 초기화 프로토콜을 생성한다.
      * 재배동 번호와 데이터 업로드 주기는 10진수로 입력받으며, 내부적으로 아스키로 변환한다.

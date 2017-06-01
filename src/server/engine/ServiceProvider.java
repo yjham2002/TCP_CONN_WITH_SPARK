@@ -1,6 +1,7 @@
 package server.engine;
 
 import configs.ServerConfig;
+import models.ByteSerial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.ProtocolResponder;
@@ -9,13 +10,11 @@ import spark.Response;
 import spark.Route;
 import spark.Spark;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static spark.route.HttpMethod.get;
 
@@ -57,7 +56,6 @@ public class ServiceProvider extends ServerConfig{
      * @deprecated
      */
     private Thread batch;
-    private static final int BATCH_TIME = 600 * 1000;
 
     /**
      * 포트를 매개변수로 입력받아 인스턴스를 생성하는 내부 접근 지정 생성자
@@ -126,6 +124,26 @@ public class ServiceProvider extends ServerConfig{
         return instance;
     }
 
+
+    /**
+     * 바이트 시리얼로부터 처리 이후의 바이트 패킷을 추출하여 전체 클라이언트에게 바이트 기반으로 전송
+     * @param msg
+     */
+    @Deprecated
+    private void sendToAll(ByteSerial msg){
+        log.info("Sending :: " + Arrays.toString(msg.getProcessed()));
+
+        Iterator it = clients.keySet().iterator();
+        while(it.hasNext()){
+            try{
+                DataOutputStream out = (DataOutputStream)clients.get(it.next()).getOut();
+                out.write(msg.getProcessed());
+            }catch(IOException e){
+
+            }
+        }
+    }
+
     /**
      * 싱글턴 패턴을 위한 인스턴스 레퍼런스 메소드
      * @param port
@@ -136,13 +154,17 @@ public class ServiceProvider extends ServerConfig{
         return instance;
     }
 
+    public static ServiceProvider getInstance(){
+        return getInstance(SOCKET_PORT);
+    }
+
     /**
      * 개발시 디버깅을 위한 로깅 메소드 단축
      * @param message
      */
     private void d(String message){
         if(DEBUG_MODE) {
-            log.debug(getTime() + " " + message);
+            log.info(getTime() + " " + message);
         }
     }
 

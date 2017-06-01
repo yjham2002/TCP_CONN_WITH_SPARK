@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.HexUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  * @author 함의진
  * 송수신되는 바이트를 가공하고 인식하기 위한 캡슐화 클래스
  */
-public class ByteSerial{
+public class ByteSerial implements Serializable{
 
     /**
      * SLF4J 로거
@@ -37,6 +38,9 @@ public class ByteSerial{
     private byte[] processed;
     private int length;
     private int type = TYPE_NONE;
+
+    @Deprecated
+    private ByteSerial(){}
 
     /**
      * 클라이언트로 전송하기 위한 시리얼을 가공하기 위한 생성자
