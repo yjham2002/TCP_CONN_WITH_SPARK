@@ -5,6 +5,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.util.JSONPObject;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * @author 함의진
@@ -25,6 +26,8 @@ public class RealtimePOJO extends BasePOJO{
      * Bit 연산이 요구되는 정보의 경우, 이를 각각 저장함과 동시에 이를 하나의 정수형으로 가지는 변수를 별도로 설정한다 - Postfix : aggr
      */
     private ByteSerial byteSerial;
+    private byte[] farmCode;
+    private byte[] harvCode;
 
     /**
      * Relay Data 시작
@@ -114,6 +117,14 @@ public class RealtimePOJO extends BasePOJO{
     private int option_changed_crop4;
     private int option_changed_crop5;
     private int option_changed_crop6;
+    private int option_changed_setting_a;
+    private int option_changed_timer_a;
+    private int option_changed_crop1_a;
+    private int option_changed_crop2_a;
+    private int option_changed_crop3_a;
+    private int option_changed_crop4_a;
+    private int option_changed_crop5_a;
+    private int option_changed_crop6_a;
     /**
      * 옵션 변화 데이터 종결
      */
@@ -121,6 +132,7 @@ public class RealtimePOJO extends BasePOJO{
     /**
      * 재배 진행 일자 데이터 시작
      */
+    private int growth_progress_aggr;
     private int growth_progress_dt;
     private int growth_progress_total;
     /**
@@ -144,9 +156,9 @@ public class RealtimePOJO extends BasePOJO{
     /**
      * 에러 상태 및 에러데이터 멤버 시작
      */
-    private int errstat_err0_start_md;
-    private int errstat_err0_start_time;
-    private int errstat_err0_progress_time;
+    private String errstat_err0_start_md;
+    private String errstat_err0_start_time;
+    private String errstat_err0_progress_time;
     private int errstat_err1_data;
     private int errstat_err2_data;
     private int errstat_err3_data;
@@ -171,6 +183,8 @@ public class RealtimePOJO extends BasePOJO{
     private int errdata_vent_relay;
     private int errdata_raisetemp_relay;
     private int errdata_raisecool_relay;
+    private int errdata_humidify_relay;
+    private int errdata_ilum_output;
     private int errdata_dehumidify_relay;
     private int errdata_crop_data;
     private int errdata_device_connection;
@@ -257,8 +271,8 @@ public class RealtimePOJO extends BasePOJO{
     private int dayage_high;
 
     private int real_sec;
-    private int real_hm;
-    private int real_md;
+    private String real_hm;
+    private String real_md;
 
     private int dymamic_output_mode;
     private int dymamic_output_inc;
@@ -267,8 +281,8 @@ public class RealtimePOJO extends BasePOJO{
     private int dymamic_output_valid;
 
     private int start_year;
-    private int start_md;
-    private int start_hm;
+    private String start_md;
+    private String start_hm;
 
     private int mcnctrl_mv510_aggr;
     private int mcnctrl_mv510_order_co2;
@@ -308,6 +322,8 @@ public class RealtimePOJO extends BasePOJO{
     public RealtimePOJO(ByteSerial byteSerial){
         this.byteSerial = byteSerial;
         this.classType = this.getClass();
+        this.farmCode = Arrays.copyOfRange(byteSerial.getProcessed(), 2, 6);
+        this.harvCode = Arrays.copyOfRange(byteSerial.getProcessed(), 6, 8);
 
         ellaborate();
     }
@@ -372,221 +388,229 @@ public class RealtimePOJO extends BasePOJO{
         this.humid_sr = getSumWith2Bytes(104);
         this.illum_sr = getSumWith2Bytes(106);
 
-//        /**
-//         * 릴레이 출력 데이터 시작
-//         */
-//        this.relay_output_aggr = ;
-//        this.relay_output_co2;
-//        this.relay_output_heater;
-//        this.relay_output_freezer;
-//        this.relay_output_humidity;
-//        this.relay_output_dehumidity;
-//        this.relay_output_ilum;
-//        this.relay_output_alarm;
-//        this.relay_output_reserve;
-//        /**
-//         * 릴레이 출력 데이터 종결
-//         */
-//
-//        /**
-//         * 옵션 변화 데이터 시작
-//         */
-//        this.option_changed_aggr;
-//        this.option_changed_setting;
-//        this.option_changed_timer;
-//        this.option_changed_crop1;
-//        this.option_changed_crop2;
-//        this.option_changed_crop3;
-//        this.option_changed_crop4;
-//        this.option_changed_crop5;
-//        this.option_changed_crop6;
-//        /**
-//         * 옵션 변화 데이터 종결
-//         */
-//
-//        /**
-//         * 재배 진행 일자 데이터 시작
-//         */
-//        this.growth_progress_dt;
-//        this.growth_progress_total;
-//        /**
-//         * 재배 진행 일자 데이터 종결
-//         */
-//
-//        /**
-//         * 실행 상태 데이터 시작
-//         */
-//        this.run_status_aggr;
-//        this.run_status_current;
-//        this.run_status_mode;
-//        this.run_status_prevdata;
-//        this.run_status_dry_enabled;
-//        this.run_status_dayage_count;
-//        this.run_status_dayage_progress;
-//        /**
-//         * 실행 상태 데이터 종결
-//         */
-//
-//        /**
-//         * 에러 상태 및 에러데이터 멤버 시작
-//         */
-//        this.errstat_err0_start_md;
-//        this.errstat_err0_start_time;
-//        this.errstat_err0_progress_time;
-//        this.errstat_err1_data;
-//        this.errstat_err2_data;
-//        this.errstat_err3_data;
-//        this.errstat_err4_data;
-//        this.errstat_err5_data;
-//        this.errstat_err6_data;
-//        this.errstat_err7_data;
-//        this.errstat_err8_data;
-//        this.errstat_err9_data;
-//        this.errstat_err10_data;
-//        this.errstat_err11_data;
-//        this.errstat_err12_data;
-//        this.errstat_err13_data;
-//        this.errstat_err14_data;
-//        this.errstat_err15_data;
-//
-//        this.errdata_aggr;
-//        this.errdata_internal_co2;
-//        this.errdata_internal_temp;
-//        this.errdata_internal_humid;
-//        this.errdata_internal_ilum;
-//        this.errdata_vent_relay;
-//        this.errdata_raisetemp_relay;
-//        this.errdata_raisecool_relay;
-//        this.errdata_dehumidify_relay;
-//        this.errdata_crop_data;
-//        this.errdata_device_connection;
-//        this.errdata_network1;
-//        this.errdata_network2;
-//        this.errdata_network3;
-//        this.errdata_network4;
-//        /**
-//         * 에러 상태 및 에러데이터 멤버 종결
-//         */
-//
-//        /**
-//         * 기타 멤버 시작
-//         */
-//
-//        this.sr_set1_co2;
-//        this.sr_set1_temp;
-//        this.sr_set1_humidity;
-//        this.sr_set1_ilum;
-//        this.sr_set2_co2;
-//        this.sr_set2_temp;
-//        this.sr_set2_humidity;
-//        this.sr_set2_ilum;
-//        this.sr_set3_co2;
-//        this.sr_set3_temp;
-//        this.sr_set3_humidity;
-//        this.sr_set3_ilum;
-//        this.sr_set4_co2;
-//        this.sr__set4_temp;
-//        this.sr_set4_humidity;
-//        this.sr_set4_ilum;
-//
-//        this.sr_val_co2;
-//        this.sr_val_temp;
-//        this.sr_val_humidity;
-//        this.sr_val_ilum;
-//
-//
-//        this.controlstat_aggr;
-//        this.controlstat_co2_type;
-//        this.controlstat_co2_ontype;
-//        this.controlstat_co2_offtype;
-//        this.controlstat_temp_type;
-//        this.controlstat_temp_ontype;
-//        this.controlstat_temp_offtype;
-//        this.controlstat_humidity_type;
-//        this.controlstat_humidity_ontype;
-//        this.controlstat_humidity_offtype;
-//        this.controlstat_ilum_type;
-//        this.controlstat_ilum_ontype;
-//        this.controlstat_ilum_offtype;
-//
-//        this.co2_value;
-//        this.temp_value;
-//        this.humidity_value;
-//        this.ilum_value;
-//
-//        this.vt515_version;
-//
-//        this.lcdorder_run;
-//        this.lcdorder_mode;
-//        this.lcdorder_dayage_start;
-//
-//        this.changetype_lcd_setting;
-//        this.changetype_lcd_timer;
-//        this.changetype_lcd_dayage1;
-//        this.changetype_lcd_dayage2;
-//        this.changetype_lcd_dayage3;
-//        this.changetype_lcd_dayage4;
-//        this.changetype_lcd_dayage5;
-//        this.changetype_lcd_dayage6;
-//        this.changetype_pc_setting;
-//        this.changetype_pc_timer;
-//        this.changetype_pc_dayage1;
-//        this.changetype_pc_dayage2;
-//        this.changetype_pc_dayage3;
-//        this.changetype_pc_dayage4;
-//        this.changetype_pc_dayage5;
-//        this.changetype_pc_dayage6;
-//
-//        this.networkerr_510to515;
-//
-//        this.dayage_low;
-//        this.dayage_high;
-//
-//        this.real_sec;
-//        this.real_hm;
-//        this.real_md;
-//
-//        this.dymamic_output_mode;
-//        this.dymamic_output_inc;
-//        this.dymamic_output_dec;
-//        this.dymamic_output_analog;
-//        this.dymamic_output_valid;
-//
-//        this.start_year;
-//        this.start_md;
-//        this.start_hm;
-//
-//        this.mcnctrl_mv510_aggr;
-//        this.mcnctrl_mv510_order_co2;
-//        this.mcnctrl_mv510_order_temp;
-//        this.mcnctrl_mv510_order_humidity;
-//        this.mcnctrl_mv510_order_ilum;
-//        this.mcnctrl_mv510_order_main1;
-//        this.mcnctrl_mv510_order_main2;
-//        this.mcnctrl_mv510_stat_fan;
-//        this.mcnctrl_mv510_stat_heater;
-//        this.mcnctrl_mv510_stat_freezer;
-//        this.mcnctrl_mv510_stat_humidifier;
-//        this.mcnctrl_mv510_stat_dehumidifier;
-//        this.mcnctrl_mv510_stat_ilum;
-//        this.mcnctrl_mv510_stat_alarm;
-//        this.mcnctrl_mv510_stat_reserve;
-//
-//        this.mcnctrl_web_aggr;
-//        this.mcnctrl_web_order_co2;
-//        this.mcnctrl_web_order_temp;
-//        this.mcnctrl_web_order_humidity;
-//        this.mcnctrl_web_order_ilum;
-//        this.mcnctrl_web_order_main1;
-//        this.mcnctrl_web_order_main2;
-//        this.mcnctrl_web_stat_fan;
-//        this.mcnctrl_web_stat_heater;
-//        this.mcnctrl_web_stat_freezer;
-//        this.mcnctrl_web_stat_humidifier;
-//        this.mcnctrl_web_stat_dehumidifier;
-//        this.mcnctrl_web_stat_ilum;
-//        this.mcnctrl_web_stat_alarm;
-//        this.mcnctrl_web_stat_reserve;
+        /**
+         * 릴레이 출력 데이터 시작
+         */
+        this.relay_output_aggr = getSingleByte(108);
+        this.relay_output_co2 = getBooleanValueFromByte(108, 0);
+        this.relay_output_heater = getBooleanValueFromByte(108, 1);
+        this.relay_output_freezer = getBooleanValueFromByte(108, 2);
+        this.relay_output_humidity = getBooleanValueFromByte(108, 3);
+        this.relay_output_dehumidity = getBooleanValueFromByte(108, 4);
+        this.relay_output_ilum = getBooleanValueFromByte(108, 5);
+        this.relay_output_alarm = getBooleanValueFromByte(108, 6);
+        this.relay_output_reserve = getBooleanValueFromByte(108, 7);
+        /**
+         * 릴레이 출력 데이터 종결
+         */
+
+        /**
+         * 옵션 변화 데이터 시작
+         */
+        this.option_changed_aggr = getSumWith2Bytes(110);
+        this.option_changed_setting = getBooleanValueFrom2Byte(110, 0);
+        this.option_changed_timer = getBooleanValueFrom2Byte(110, 1);
+        this.option_changed_crop1 = getBooleanValueFrom2Byte(110, 2);
+        this.option_changed_crop2 = getBooleanValueFrom2Byte(110, 3);
+        this.option_changed_crop3 = getBooleanValueFrom2Byte(110, 4);
+        this.option_changed_crop4 = getBooleanValueFrom2Byte(110, 5);
+        this.option_changed_crop5 = getBooleanValueFrom2Byte(110, 6);
+        this.option_changed_crop6 = getBooleanValueFrom2Byte(110, 7);
+        this.option_changed_setting_a = getBooleanValueFrom2Byte(110, 8);
+        this.option_changed_timer_a = getBooleanValueFrom2Byte(110, 9);
+        this.option_changed_crop1_a = getBooleanValueFrom2Byte(110, 10);
+        this.option_changed_crop2_a = getBooleanValueFrom2Byte(110, 11);
+        this.option_changed_crop3_a = getBooleanValueFrom2Byte(110, 12);
+        this.option_changed_crop4_a = getBooleanValueFrom2Byte(110, 13);
+        this.option_changed_crop5_a = getBooleanValueFrom2Byte(110, 14);
+        this.option_changed_crop6_a = getBooleanValueFrom2Byte(110, 15);
+        /**
+         * 옵션 변화 데이터 종결
+         */
+
+        /**
+         * 재배 진행 일자 데이터 시작
+         */
+        this.growth_progress_aggr = getSumWith2Bytes(112);
+        this.growth_progress_dt = getRhsFromDual(112); // ???
+        this.growth_progress_total = getLhsFromDual(112); // ???
+        /**
+         * 재배 진행 일자 데이터 종결
+         */
+
+        /**
+         * 실행 상태 데이터 시작
+         */
+        this.run_status_aggr = getSumWith2Bytes(114);
+        this.run_status_current = getBooleanValueFrom2Byte(114, 0);
+        this.run_status_mode = toDecimalFromBinaryValue(114, 1, 2);
+        this.run_status_prevdata = getBooleanValueFromByte(114, 5);
+        this.run_status_dry_enabled = getBooleanValueFromByte(114, 7);
+        this.run_status_dayage_count = toDecimalFromBinaryValue(114, 8, 2);
+        this.run_status_dayage_progress = getBooleanValueFrom2Byte(114, 15);
+        /**
+         * 실행 상태 데이터 종결
+         */
+
+        /**
+         * 에러 상태 및 에러데이터 멤버 시작
+         */
+        this.errstat_err0_start_md = getMDorHMWith2Bytes(116, "-");
+        this.errstat_err0_start_time = getMDorHMWith2Bytes(118, ":");
+        this.errstat_err0_progress_time = getMDorHMWith2Bytes(120, ":");
+        this.errstat_err1_data = getSumWith2Bytes(122);
+        this.errstat_err2_data = getSumWith2Bytes(124);
+        this.errstat_err3_data = getSumWith2Bytes(126);
+        this.errstat_err4_data = getSumWith2Bytes(128);
+        this.errstat_err5_data = getSumWith2Bytes(130);
+        this.errstat_err6_data = getSumWith2Bytes(132);
+        this.errstat_err7_data = getSumWith2Bytes(134);
+        this.errstat_err8_data = getSumWith2Bytes(136);
+        this.errstat_err9_data = getSumWith2Bytes(138);
+        this.errstat_err10_data = getSumWith2Bytes(140);
+        this.errstat_err11_data = getSumWith2Bytes(142);
+        this.errstat_err12_data = getSumWith2Bytes(144);
+        this.errstat_err13_data = getSumWith2Bytes(146);
+        this.errstat_err14_data = getSumWith2Bytes(148);
+        this.errstat_err15_data = getSumWith2Bytes(150);
+
+        this.errdata_aggr = getSumWith2Bytes(152);
+        this.errdata_internal_co2 = getBooleanValueFrom2Byte(152, 0);
+        this.errdata_internal_temp = getBooleanValueFrom2Byte(152, 1);
+        this.errdata_internal_humid = getBooleanValueFrom2Byte(152, 2);
+        this.errdata_internal_ilum = getBooleanValueFrom2Byte(152, 3);
+        this.errdata_vent_relay = getBooleanValueFrom2Byte(152, 4);
+        this.errdata_raisetemp_relay = getBooleanValueFrom2Byte(152, 5);
+        this.errdata_raisecool_relay = getBooleanValueFrom2Byte(152, 6);
+        this.errdata_humidify_relay = getBooleanValueFrom2Byte(152, 7);       //??? 추가됨
+        this.errdata_dehumidify_relay = getBooleanValueFrom2Byte(152, 8);
+        this.errdata_ilum_output = getBooleanValueFrom2Byte(152, 9);          //??? 추가됨
+        this.errdata_crop_data = getBooleanValueFrom2Byte(152, 10);
+        this.errdata_device_connection = getBooleanValueFrom2Byte(152, 11);
+        this.errdata_network1 = getBooleanValueFrom2Byte(152, 12);
+        this.errdata_network2 = getBooleanValueFrom2Byte(152, 13);
+        this.errdata_network3 = getBooleanValueFrom2Byte(152, 14);
+        this.errdata_network4 = getBooleanValueFrom2Byte(152, 15);
+        /**
+         * 에러 상태 및 에러데이터 멤버 종결
+         */
+
+        /**
+         * 기타 멤버 시작
+         */
+        this.sr_set1_co2 = getSumWith2Bytes(154);
+        this.sr_set1_temp = getSumWith2Bytes(156);
+        this.sr_set1_humidity = getSumWith2Bytes(158);
+        this.sr_set1_ilum = getSumWith2Bytes(160);
+        this.sr_set2_co2 = getSumWith2Bytes(162);
+        this.sr_set2_temp = getSumWith2Bytes(164);
+        this.sr_set2_humidity = getSumWith2Bytes(166);
+        this.sr_set2_ilum = getSumWith2Bytes(168);
+        this.sr_set3_co2 = getSumWith2Bytes(170);
+        this.sr_set3_temp = getSumWith2Bytes(172);
+        this.sr_set3_humidity = getSumWith2Bytes(174);
+        this.sr_set3_ilum = getSumWith2Bytes(176);
+        this.sr_set4_co2 = getSumWith2Bytes(178);
+        this.sr__set4_temp = getSumWith2Bytes(180);
+        this.sr_set4_humidity = getSumWith2Bytes(182);
+        this.sr_set4_ilum = getSumWith2Bytes(184);
+
+        this.sr_val_co2 = getSumWith2Bytes(178); // 주소 ㅡㅡ
+        this.sr_val_temp = getSumWith2Bytes(180);
+        this.sr_val_humidity = getSumWith2Bytes(182);
+        this.sr_val_ilum = getSumWith2Bytes(184);
+
+        this.controlstat_aggr = getSumWith2Bytes(186);
+        this.controlstat_co2_type = toDecimalFromBinaryValue(186, 0, 1);
+        this.controlstat_co2_ontype = getBooleanValueFrom2Byte(186, 2);
+        this.controlstat_co2_offtype = getBooleanValueFrom2Byte(186, 3);
+        this.controlstat_temp_type = toDecimalFromBinaryValue(186, 4, 2);
+        this.controlstat_temp_ontype = getBooleanValueFrom2Byte(186, 6);
+        this.controlstat_temp_offtype = getBooleanValueFrom2Byte(186, 7);
+        this.controlstat_humidity_type = toDecimalFromBinaryValue(186, 8, 2);
+        this.controlstat_humidity_ontype = getBooleanValueFrom2Byte(186, 10);
+        this.controlstat_humidity_offtype = getBooleanValueFrom2Byte(186, 11);
+        this.controlstat_ilum_type = toDecimalFromBinaryValue(186, 12, 2);
+        this.controlstat_ilum_ontype = getBooleanValueFrom2Byte(186, 14);
+        this.controlstat_ilum_offtype = getBooleanValueFrom2Byte(186, 15);
+
+        this.co2_value = getSumWith2Bytes(188);
+        this.temp_value = getSumWith2Bytes(190);
+        this.humidity_value = getSumWith2Bytes(192);
+        this.ilum_value = getSumWith2Bytes(194);
+
+        this.vt515_version = getSumWith2Bytes(196);
+
+        this.lcdorder_run = getBooleanValueFromByte(198, 0);
+        this.lcdorder_mode = toDecimalFromBinaryValue(198, 1, 2);
+        this.lcdorder_dayage_start = getBooleanValueFrom2Byte(198, 15);
+
+        this.changetype_lcd_setting = getBooleanValueFrom2Byte(200, 0);
+        this.changetype_lcd_timer = getBooleanValueFrom2Byte(200, 1);
+        this.changetype_lcd_dayage1 = getBooleanValueFrom2Byte(200, 2);
+        this.changetype_lcd_dayage2 = getBooleanValueFrom2Byte(200, 3);
+        this.changetype_lcd_dayage3 = getBooleanValueFrom2Byte(200, 4);
+        this.changetype_lcd_dayage4 = getBooleanValueFrom2Byte(200, 5);
+        this.changetype_lcd_dayage5 = getBooleanValueFrom2Byte(200, 6);
+        this.changetype_lcd_dayage6 = getBooleanValueFrom2Byte(200, 7);
+        this.changetype_pc_setting = getBooleanValueFrom2Byte(200, 8);
+        this.changetype_pc_timer = getBooleanValueFrom2Byte(200, 9);
+        this.changetype_pc_dayage1 = getBooleanValueFrom2Byte(200, 10);
+        this.changetype_pc_dayage2 = getBooleanValueFrom2Byte(200, 11);
+        this.changetype_pc_dayage3 = getBooleanValueFrom2Byte(200, 12);
+        this.changetype_pc_dayage4 = getBooleanValueFrom2Byte(200, 13);
+        this.changetype_pc_dayage5 = getBooleanValueFrom2Byte(200, 14);
+        this.changetype_pc_dayage6 = getBooleanValueFrom2Byte(200, 15);
+
+        this.networkerr_510to515 = getSumWith2Bytes(202);
+        this.dayage_low = getSumWith2Bytes(204);
+        this.dayage_high = getSumWith2Bytes(206);
+
+        this.real_sec = getSumWith2Bytes(208);
+        this.real_hm = getMDorHMWith2Bytes(210, ":");
+        this.real_md = getMDorHMWith2Bytes(212, "-");
+
+        this.dymamic_output_mode = toDecimalFromBinaryValue(214, 0, 2);
+        this.dymamic_output_inc = getBooleanValueFrom2Byte(214, 2);
+        this.dymamic_output_dec = getBooleanValueFrom2Byte(214, 3);
+        this.dymamic_output_analog = getBooleanValueFrom2Byte(214, 14);
+        this.dymamic_output_valid = getBooleanValueFrom2Byte(214, 15);
+
+        this.start_year = getSumWith2Bytes(216);
+        this.start_md = getMDorHMWith2Bytes(218, "-");
+        this.start_hm = getMDorHMWith2Bytes(220, ":");
+
+        this.mcnctrl_mv510_aggr = getSumWith2Bytes(222);
+        this.mcnctrl_mv510_order_co2 = getBooleanValueFrom2Byte(222, 0);
+        this.mcnctrl_mv510_order_temp = getBooleanValueFrom2Byte(222, 1);
+        this.mcnctrl_mv510_order_humidity = getBooleanValueFrom2Byte(222, 2);
+        this.mcnctrl_mv510_order_ilum = getBooleanValueFrom2Byte(222, 3);
+        this.mcnctrl_mv510_order_main1 = getBooleanValueFrom2Byte(222, 6);
+        this.mcnctrl_mv510_order_main2 = getBooleanValueFrom2Byte(222, 7);
+        this.mcnctrl_mv510_stat_fan = getBooleanValueFrom2Byte(222, 8);
+        this.mcnctrl_mv510_stat_heater = getBooleanValueFrom2Byte(222, 9);
+        this.mcnctrl_mv510_stat_freezer = getBooleanValueFrom2Byte(222, 10);
+        this.mcnctrl_mv510_stat_humidifier = getBooleanValueFrom2Byte(222, 11);
+        this.mcnctrl_mv510_stat_dehumidifier = getBooleanValueFrom2Byte(222, 12);
+        this.mcnctrl_mv510_stat_ilum = getBooleanValueFrom2Byte(222, 13);
+        this.mcnctrl_mv510_stat_alarm = getBooleanValueFrom2Byte(222, 14);
+        this.mcnctrl_mv510_stat_reserve = getBooleanValueFrom2Byte(222, 15);
+
+        this.mcnctrl_web_aggr = getSumWith2Bytes(224);
+        this.mcnctrl_web_order_co2 = getBooleanValueFrom2Byte(224, 0);
+        this.mcnctrl_web_order_temp = getBooleanValueFrom2Byte(224, 1);
+        this.mcnctrl_web_order_humidity = getBooleanValueFrom2Byte(224, 2);
+        this.mcnctrl_web_order_ilum = getBooleanValueFrom2Byte(224, 3);
+        this.mcnctrl_web_order_main1 = getBooleanValueFrom2Byte(224, 6);
+        this.mcnctrl_web_order_main2 = getBooleanValueFrom2Byte(224, 7);
+        this.mcnctrl_web_stat_fan = getBooleanValueFrom2Byte(224, 8);
+        this.mcnctrl_web_stat_heater = getBooleanValueFrom2Byte(224, 9);
+        this.mcnctrl_web_stat_freezer = getBooleanValueFrom2Byte(224, 10);
+        this.mcnctrl_web_stat_humidifier = getBooleanValueFrom2Byte(224, 11);
+        this.mcnctrl_web_stat_dehumidifier = getBooleanValueFrom2Byte(224, 12);
+        this.mcnctrl_web_stat_ilum  = getBooleanValueFrom2Byte(224, 13);
+        this.mcnctrl_web_stat_alarm = getBooleanValueFrom2Byte(224, 14);
+        this.mcnctrl_web_stat_reserve = getBooleanValueFrom2Byte(224, 15);
     }
 
     /**
@@ -601,6 +625,22 @@ public class RealtimePOJO extends BasePOJO{
         int footer = total - (header << 8);
 
         return String.format("%02d" + delimiter + "%02d", header, footer);
+    }
+
+    private int getLhsFromDual(int offset){
+        int total = getSumWith2Bytes(offset);
+        int header = total >> 8;
+        int footer = total - (header << 8);
+
+        return header;
+    }
+
+    private int getRhsFromDual(int offset){
+        int total = getSumWith2Bytes(offset);
+        int header = total >> 8;
+        int footer = total - (header << 8);
+
+        return footer;
     }
 
     /**
@@ -627,15 +667,11 @@ public class RealtimePOJO extends BasePOJO{
     }
 
     private int getBooleanValueFromByte(int offset, int bitIndex){
-        int value = getSingleByte(offset);
-        String binary = Integer.toBinaryString(value);
+        assert bitIndex < 8;
 
-        return 0;
-    }
-
-    public static void main(String... args){
         final String format = "00000000";
-        String bin = Integer.toBinaryString(32);
+        int value = getSingleByte(offset);
+        String bin = Integer.toBinaryString(value);
         String fmt = "";
         String retVal = "";
         if(bin.length() < 8){
@@ -645,7 +681,27 @@ public class RealtimePOJO extends BasePOJO{
 
         retVal = fmt + bin;
 
-        System.out.println(bin);
+        if(retVal.charAt(bitIndex) == '1') return 1;
+        else return 0;
+    }
+
+    private int toDecimalFromBinaryValue(int offset, int bitBeginIndex, int length){
+        String total = "";
+        for(int i = bitBeginIndex; i < bitBeginIndex + length; i++){
+            total += getBooleanValueFrom2Byte(offset, i);
+        }
+
+        return Integer.parseInt(total, 2);
+    }
+
+    private int getBooleanValueFrom2Byte(int offset, int bitIndex){
+        assert bitIndex < 16;
+
+        if(bitIndex >= 8){
+            return getBooleanValueFromByte(offset + 1, bitIndex - 8);
+        }else{
+            return getBooleanValueFromByte(offset, bitIndex);
+        }
     }
 
     public ByteSerial getByteSerial() {
@@ -1240,27 +1296,27 @@ public class RealtimePOJO extends BasePOJO{
         this.run_status_dayage_progress = run_status_dayage_progress;
     }
 
-    public int getErrstat_err0_start_md() {
+    public String getErrstat_err0_start_md() {
         return errstat_err0_start_md;
     }
 
-    public void setErrstat_err0_start_md(int errstat_err0_start_md) {
+    public void setErrstat_err0_start_md(String errstat_err0_start_md) {
         this.errstat_err0_start_md = errstat_err0_start_md;
     }
 
-    public int getErrstat_err0_start_time() {
+    public String getErrstat_err0_start_time() {
         return errstat_err0_start_time;
     }
 
-    public void setErrstat_err0_start_time(int errstat_err0_start_time) {
+    public void setErrstat_err0_start_time(String errstat_err0_start_time) {
         this.errstat_err0_start_time = errstat_err0_start_time;
     }
 
-    public int getErrstat_err0_progress_time() {
+    public String getErrstat_err0_progress_time() {
         return errstat_err0_progress_time;
     }
 
-    public void setErrstat_err0_progress_time(int errstat_err0_progress_time) {
+    public void setErrstat_err0_progress_time(String errstat_err0_progress_time) {
         this.errstat_err0_progress_time = errstat_err0_progress_time;
     }
 
@@ -1992,19 +2048,19 @@ public class RealtimePOJO extends BasePOJO{
         this.real_sec = real_sec;
     }
 
-    public int getReal_hm() {
+    public String getReal_hm() {
         return real_hm;
     }
 
-    public void setReal_hm(int real_hm) {
+    public void setReal_hm(String real_hm) {
         this.real_hm = real_hm;
     }
 
-    public int getReal_md() {
+    public String getReal_md() {
         return real_md;
     }
 
-    public void setReal_md(int real_md) {
+    public void setReal_md(String real_md) {
         this.real_md = real_md;
     }
 
@@ -2056,19 +2112,19 @@ public class RealtimePOJO extends BasePOJO{
         this.start_year = start_year;
     }
 
-    public int getStart_md() {
+    public String getStart_md() {
         return start_md;
     }
 
-    public void setStart_md(int start_md) {
+    public void setStart_md(String start_md) {
         this.start_md = start_md;
     }
 
-    public int getStart_hm() {
+    public String getStart_hm() {
         return start_hm;
     }
 
-    public void setStart_hm(int start_hm) {
+    public void setStart_hm(String start_hm) {
         this.start_hm = start_hm;
     }
 
@@ -2310,6 +2366,110 @@ public class RealtimePOJO extends BasePOJO{
 
     public void setMcnctrl_web_stat_reserve(int mcnctrl_web_stat_reserve) {
         this.mcnctrl_web_stat_reserve = mcnctrl_web_stat_reserve;
+    }
+
+    public int getOption_changed_setting_a() {
+        return option_changed_setting_a;
+    }
+
+    public void setOption_changed_setting_a(int option_changed_setting_a) {
+        this.option_changed_setting_a = option_changed_setting_a;
+    }
+
+    public int getOption_changed_timer_a() {
+        return option_changed_timer_a;
+    }
+
+    public void setOption_changed_timer_a(int option_changed_timer_a) {
+        this.option_changed_timer_a = option_changed_timer_a;
+    }
+
+    public int getOption_changed_crop1_a() {
+        return option_changed_crop1_a;
+    }
+
+    public void setOption_changed_crop1_a(int option_changed_crop1_a) {
+        this.option_changed_crop1_a = option_changed_crop1_a;
+    }
+
+    public int getOption_changed_crop2_a() {
+        return option_changed_crop2_a;
+    }
+
+    public void setOption_changed_crop2_a(int option_changed_crop2_a) {
+        this.option_changed_crop2_a = option_changed_crop2_a;
+    }
+
+    public int getOption_changed_crop3_a() {
+        return option_changed_crop3_a;
+    }
+
+    public void setOption_changed_crop3_a(int option_changed_crop3_a) {
+        this.option_changed_crop3_a = option_changed_crop3_a;
+    }
+
+    public int getOption_changed_crop4_a() {
+        return option_changed_crop4_a;
+    }
+
+    public void setOption_changed_crop4_a(int option_changed_crop4_a) {
+        this.option_changed_crop4_a = option_changed_crop4_a;
+    }
+
+    public int getOption_changed_crop5_a() {
+        return option_changed_crop5_a;
+    }
+
+    public void setOption_changed_crop5_a(int option_changed_crop5_a) {
+        this.option_changed_crop5_a = option_changed_crop5_a;
+    }
+
+    public int getOption_changed_crop6_a() {
+        return option_changed_crop6_a;
+    }
+
+    public void setOption_changed_crop6_a(int option_changed_crop6_a) {
+        this.option_changed_crop6_a = option_changed_crop6_a;
+    }
+
+    public byte[] getFarmCode() {
+        return farmCode;
+    }
+
+    public void setFarmCode(byte[] farmCode) {
+        this.farmCode = farmCode;
+    }
+
+    public byte[] getHarvCode() {
+        return harvCode;
+    }
+
+    public void setHarvCode(byte[] harvCode) {
+        this.harvCode = harvCode;
+    }
+
+    public int getGrowth_progress_aggr() {
+        return growth_progress_aggr;
+    }
+
+    public void setGrowth_progress_aggr(int growth_progress_aggr) {
+        this.growth_progress_aggr = growth_progress_aggr;
+    }
+
+    public int getErrdata_humidify_relay() {
+        return errdata_humidify_relay;
+    }
+
+    public void setErrdata_humidify_relay(int errdata_humidify_relay) {
+        this.errdata_humidify_relay = errdata_humidify_relay;
+    }
+
+    public int getErrdata_ilum_output() {
+        return errdata_ilum_output;
+    }
+
+    public void setErrdata_ilum_output(int errdata_ilum_output) {
+        this.errdata_ilum_output = errdata_ilum_output;
     }
 
     @Override

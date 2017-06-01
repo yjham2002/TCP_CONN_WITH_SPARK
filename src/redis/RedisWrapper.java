@@ -12,6 +12,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import utils.SerialUtil;
 
 import java.io.Serializable;
+import java.util.*;
 
 /**
  * @author 함의진
@@ -21,6 +22,9 @@ import java.io.Serializable;
  */
 public class RedisWrapper extends ServerConfig{
 
+    /**
+     * SLF4J 로거 인스턴스
+     */
     private Logger log;
 
     /**
@@ -33,7 +37,9 @@ public class RedisWrapper extends ServerConfig{
     private static JedisPool jedisPool;
     private static Jedis jedis;
 
-
+    /**
+     * 기본 내부 생성자로 직접 호출해서는 안 됨
+     */
     protected RedisWrapper(){
         log = LoggerFactory.getLogger(this.getClass());
         jedisPoolConfig = new JedisPoolConfig();
@@ -49,6 +55,13 @@ public class RedisWrapper extends ServerConfig{
         jedis = jedisPool.getResource();
     }
 
+    /**
+     * 레디스 데이터 삽입을 위한 메소드로 콜백을 포함한다
+     * @param key 레디스 유니크키
+     * @param object 삽입될 오브젝트
+     * @param postProcess 삽입 이후 실행할 콜백 인터페이스(선택)
+     * @return 정상 삽입 여부
+     */
     public boolean put(String key, Object object, ICallback postProcess){
 
         try {
@@ -73,10 +86,22 @@ public class RedisWrapper extends ServerConfig{
         return true;
     }
 
+    /**
+     * 레디스 내 데이터 삽입을 위한 메소드로 콜백이 없는 단축 메소드
+     * @param key 레디스 유니크키
+     * @param object 삽입된 오브젝트
+     * @return 정상 삽입 여부
+     */
     public boolean put(String key, Object object){
         return put(key, object, null);
     }
 
+    /**
+     * 레디스에 삽입된 자바 클래스를 입력된 키로 검출하여 오브젝트로 반환한다.
+     * @param key 레디스 유니크키
+     * @param type 오브젝트 캐스팅 데이터 타입
+     * @return 자바 오브젝트
+     */
     public Object get(String key, Class type){
 
         Object retVal = null;
@@ -91,6 +116,53 @@ public class RedisWrapper extends ServerConfig{
             if(object == null) return retVal;
 
             retVal = mapper.readValue(object, type);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            if(jedis != null) jedis.close();
+        }
+
+        return retVal;
+    }
+
+    /**
+     * 레디스 정규표현을 Verbatim하게 전환하기 위한 캐스터
+     * @param pattern 키 패턴
+     * @return 이스케이프된 키 패턴
+     */
+    private String replaceRedisRegex(String pattern){
+        return pattern.replaceAll("\\[", "\\\\[").replaceAll("\\]", "\\\\]").replaceAll("\\-", "\\\\-");
+    }
+
+    /**
+     * 패턴키로 해당 패턴을 가진 모든 키를 이터레이터로 이용하여 모든 밸류페어를 리스트로 반환한다.
+     * @param pattern 키 패턴
+     * @param type 리스트 오브젝트의 데이터타입
+     * @param <T> 묵시적 캐스트를 위한 시그니쳐 삽입(무의미)
+     * @return 오브젝트 리스트
+     */
+    public <T>List<T> getList(String pattern, Class type){
+        List<T> retVal = new ArrayList<T>();
+
+        pattern = replaceRedisRegex(pattern);
+
+        try {
+            jedis.connect();
+            log.info("[JEDIS] GET_LIST OPERATION INVOKED WITH [Pattern:" + pattern + "]");
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            Set<String> object = jedis.keys("*" + pattern + "*");
+            if(object == null || object.size() == 0) return retVal;
+
+            Iterator<String> iterator = object.iterator();
+
+            while(iterator.hasNext()) {
+                String key = iterator.next();
+                String json = jedis.get(key);
+                T unit = (T)mapper.readValue(json, type);
+                retVal.add(unit);
+            }
 
         }catch (Exception e){
             e.printStackTrace();

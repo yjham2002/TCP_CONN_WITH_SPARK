@@ -16,6 +16,9 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
+import static constants.ConstProtocol.INITIAL_PROTOCOL_START;
+import static constants.ConstProtocol.STX;
+
 /**
  * @author 함의진
  * 스레드 클래스를 상속하여 클라이언트에 따라 인스턴스를 가변적으로 증가시켜 각각에 대한 응답 기능을
@@ -69,13 +72,17 @@ public class ProtocolResponder extends Thread{
 
                 ByteSerial byteSerial = new ByteSerial(buffer); // 바이트 시리얼 객체로 트리밍과 분석을 위임하기 위한 인스턴스 생성
 
+                if(!byteSerial.isLoss() && !byteSerial.startsWith(SohaProtocolUtil.concat(STX, INITIAL_PROTOCOL_START))) started = true;
+
                 buffer = byteSerial.getProcessed(); // 처리된 트림 데이터 추출
 
-                if(buffer.length == 0) System.exit(122);
+                if(buffer.length == 0) System.exit(122);// TODO 디버깅용
 
                 if(!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
                     if (!started) { // 이니셜 프로토콜에 따른 처리 여부를 확인하여 최초 연결일 경우, 본 로직을 수행
                         started = true; // 이니셜 프로토콜 전송 여부 갱신
+
+                        System.out.println(Arrays.toString(buffer) + " :::::::::::::::::::::::::::::::::::::::::::::::::::");
 
                         uniqueKey = SohaProtocolUtil.getUniqueKeyByInit(buffer); // 유니크키를 농장코드로 설정하여 추출
 

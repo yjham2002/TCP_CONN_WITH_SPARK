@@ -5,6 +5,8 @@ import org.apache.commons.lang3.SerializationUtils;
 import pojo.RealtimePOJO;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by a on 2017-05-31.
@@ -35,17 +37,27 @@ public class RedisTestMain {
 //                }).start();
 //            }).start();
 
-            RealtimePOJO obj1 = (RealtimePOJO) RedisManager.getInstance().get("hello", RealtimePOJO.class);
-            RealtimePOJO obj2 = (RealtimePOJO) RedisManager.getInstance().get("hello2", RealtimePOJO.class);
-            RealtimePOJO obj3 = (RealtimePOJO) RedisManager.getInstance().get("hello3", RealtimePOJO.class);
-            RealtimePOJO obj4 = (RealtimePOJO) RedisManager.getInstance().get("hello4", RealtimePOJO.class);
-            RealtimePOJO obj5 = (RealtimePOJO) RedisManager.getInstance().get("hello5", RealtimePOJO.class);
+//            System.out.println("[]-".replaceAll("\\[", "\\\\[").replaceAll("\\]", "\\\\]").replaceAll("\\-", "\\\\-"));
 
-            System.out.println(Arrays.toString(obj1.getByteSerial().getProcessed()));
-            System.out.println(Arrays.toString(obj2.getByteSerial().getProcessed()));
-            System.out.println(Arrays.toString(obj3.getByteSerial().getProcessed()));
-            System.out.println(Arrays.toString(obj4.getByteSerial().getProcessed()));
-            System.out.println(Arrays.toString(obj5.getByteSerial().getProcessed()));
+            List<RealtimePOJO> set = RedisManager.getInstance().getList("[48", RealtimePOJO.class);
+
+            int cnt = 0;
+
+            for(RealtimePOJO r : set){
+                System.out.println(cnt++ + Arrays.toString(r.getByteSerial().getProcessed()));
+            }
+
+//            RealtimePOJO obj1 = (RealtimePOJO) RedisManager.getInstance().get("hello", RealtimePOJO.class);
+//            RealtimePOJO obj2 = (RealtimePOJO) RedisManager.getInstance().get("hello2", RealtimePOJO.class);
+//            RealtimePOJO obj3 = (RealtimePOJO) RedisManager.getInstance().get("hello3", RealtimePOJO.class);
+//            RealtimePOJO obj4 = (RealtimePOJO) RedisManager.getInstance().get("hello4", RealtimePOJO.class);
+//            RealtimePOJO obj5 = (RealtimePOJO) RedisManager.getInstance().get("hello5", RealtimePOJO.class);
+//
+//            System.out.println(Arrays.toString(obj1.getByteSerial().getProcessed()));
+//            System.out.println(Arrays.toString(obj2.getByteSerial().getProcessed()));
+//            System.out.println(Arrays.toString(obj3.getByteSerial().getProcessed()));
+//            System.out.println(Arrays.toString(obj4.getByteSerial().getProcessed()));
+//            System.out.println(Arrays.toString(obj5.getByteSerial().getProcessed()));
         }catch(Exception e){
             e.printStackTrace();
         }
