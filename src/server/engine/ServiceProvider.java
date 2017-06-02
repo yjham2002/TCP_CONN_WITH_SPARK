@@ -124,6 +124,17 @@ public class ServiceProvider extends ServerConfig{
         return instance;
     }
 
+    public boolean send(String client, ByteSerial msg){
+        try {
+            if(clients.containsKey(client)) clients.get(client).send(msg);
+            else{
+                log.info("Client just requested does not exist. [KEY : " + client + "]");
+            }
+        }catch(Exception e){
+            return false;
+        }
+        return true;
+    }
 
     /**
      * 바이트 시리얼로부터 처리 이후의 바이트 패킷을 추출하여 전체 클라이언트에게 바이트 기반으로 전송

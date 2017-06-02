@@ -64,6 +64,7 @@ public class ProtocolResponder extends Thread{
     @Override
     public void run(){
         boolean started = false; // 이니셜 프로토콜이 전송되었는지의 여부를 갖는 로컬 변수
+        boolean generated = false; // 유니크키 생성 여부
 
         try{
             byte[] buffer = new byte[ByteSerial.POOL_SIZE]; // 버퍼 사이즈 할당
@@ -78,13 +79,16 @@ public class ProtocolResponder extends Thread{
 
                 if(buffer.length == 0) System.exit(122);// TODO 디버깅용
 
+                if(!generated) {
+                    generated = true;
+                    uniqueKey = SohaProtocolUtil.getUniqueKeyByInit(buffer); // 유니크키를 농장코드로 설정하여 추출
+                }
+
                 if(!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
                     if (!started) { // 이니셜 프로토콜에 따른 처리 여부를 확인하여 최초 연결일 경우, 본 로직을 수행
                         started = true; // 이니셜 프로토콜 전송 여부 갱신
 
                         System.out.println(Arrays.toString(buffer) + " :::::::::::::::::::::::::::::::::::::::::::::::::::");
-
-                        uniqueKey = SohaProtocolUtil.getUniqueKeyByInit(buffer); // 유니크키를 농장코드로 설정하여 추출
 
                         clients.put(uniqueKey, this); // 클라이언트 해시맵에 상위에서 추출한 유니크키를 기준으로 삽입
 
@@ -107,6 +111,11 @@ public class ProtocolResponder extends Thread{
                         log.info("Responder :: [" + uniqueKey + "] :: Totally " + clients.size() + " connections are being maintained");
                         // 현재 연결된 클라이언트 소켓수와 유니크키를 디버깅을 위해 출력함
                     }else{
+                        if(!clients.containsKey(uniqueKey)) {
+                            log.info("Unique Key inserted : " + uniqueKey);
+                            clients.put(uniqueKey, this); // 클라이언트 해시맵에 상위에서 추출한 유니크키를 기준으로 삽입
+                        }
+
                         RedisManager redisManager = RedisManager.getInstance();
                         String farm = SohaProtocolUtil.getLocationCodeAsString(buffer);
                         String key = farm + "@" + RedisManager.getMillis();
@@ -134,7 +143,7 @@ public class ProtocolResponder extends Thread{
      * 바이트 시리얼로부터 처리 이후의 바이트 패킷을 추출하여 바이트 기반으로 전송
      * @param msg
      */
-    private void send(ByteSerial msg){
+    public void send(ByteSerial msg){
         log.info("Sending :: " + Arrays.toString(msg.getProcessed()));
         try {
             DataOutputStream out = (DataOutputStream) clients.get(uniqueKey).out;

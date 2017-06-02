@@ -2,6 +2,7 @@ package server;
 
 import configs.ServerConfig;
 import constants.ConstRest;
+import models.ByteSerial;
 import models.DataMap;
 import models.RestProcessor;
 import org.slf4j.Logger;
@@ -56,7 +57,9 @@ public class AppMain{
         });
 
         Spark.get(ConstRest.REST_READ_REQUEST, (req, res) -> {
+            DataMap map = RestProcessor.makeProcessData(req.raw());
             log.info(ConstRest.REST_READ_REQUEST);
+            serviceProvider.send(map.getString("cli"), new ByteSerial(new byte[]{0,0,0,0,0, 1}));
             return "{\"json\":1}";
         });
 

@@ -25,7 +25,6 @@ public class RealtimePOJO extends BasePOJO{
      * error status - errstat, error data - errdata, 온도 - temp, CO2 - co2, 환기 - vent
      * Bit 연산이 요구되는 정보의 경우, 이를 각각 저장함과 동시에 이를 하나의 정수형으로 가지는 변수를 별도로 설정한다 - Postfix : aggr
      */
-    private ByteSerial byteSerial;
     private byte[] farmCode;
     private byte[] harvCode;
 
@@ -611,105 +610,6 @@ public class RealtimePOJO extends BasePOJO{
         this.mcnctrl_web_stat_ilum  = getBooleanValueFrom2Byte(224, 13);
         this.mcnctrl_web_stat_alarm = getBooleanValueFrom2Byte(224, 14);
         this.mcnctrl_web_stat_reserve = getBooleanValueFrom2Byte(224, 15);
-    }
-
-    /**
-     * Calculating Date or Time by byte index offset and formatting as String with delimiter
-     * @param offset Byte array index
-     * @param delimiter String delimiter
-     * @return Formatted String
-     */
-    private String getMDorHMWith2Bytes(int offset, String delimiter){
-        int total = getSumWith2Bytes(offset);
-        int header = total >> 8;
-        int footer = total - (header << 8);
-
-        return String.format("%02d" + delimiter + "%02d", header, footer);
-    }
-
-    private int getLhsFromDual(int offset){
-        int total = getSumWith2Bytes(offset);
-        int header = total >> 8;
-        int footer = total - (header << 8);
-
-        return header;
-    }
-
-    private int getRhsFromDual(int offset){
-        int total = getSumWith2Bytes(offset);
-        int header = total >> 8;
-        int footer = total - (header << 8);
-
-        return footer;
-    }
-
-    /**
-     * Calculating the numerical summation in range of offset
-     * @param offset
-     * @return Numerical summation
-     *
-     * < Comment >
-     * '절대위치'를 이곳에서 계산하기에 다른 곳의 offset을 조정해서는 절대 안 됨
-     * 프로토콜 변경이 있을 경우, BasePOJO의 상수를 수정해야 함
-     */
-    private int getSumWith2Bytes(int offset){
-        int absolute = offset + ARRAY_START_RANGE;
-        int lhs = byteSerial.getProcessed()[absolute] << 8;
-        int rhs = byteSerial.getProcessed()[absolute + 1];
-        int total = lhs + rhs;
-
-        return total;
-    }
-
-    private int getSingleByte(int offset){
-        int absolute = offset + ARRAY_START_RANGE;
-        return byteSerial.getProcessed()[absolute];
-    }
-
-    private int getBooleanValueFromByte(int offset, int bitIndex){
-        assert bitIndex < 8;
-
-        final String format = "00000000";
-        int value = getSingleByte(offset);
-        String bin = Integer.toBinaryString(value);
-        String fmt = "";
-        String retVal = "";
-        if(bin.length() < 8){
-            int leak = 8 - bin.length();
-            fmt = format.substring(0, leak);
-        }
-
-        retVal = fmt + bin;
-
-        if(retVal.charAt(bitIndex) == '1') return 1;
-        else return 0;
-    }
-
-    private int toDecimalFromBinaryValue(int offset, int bitBeginIndex, int length){
-        String total = "";
-        for(int i = bitBeginIndex; i < bitBeginIndex + length; i++){
-            total += getBooleanValueFrom2Byte(offset, i);
-        }
-
-        return Integer.parseInt(total, 2);
-    }
-
-    private int getBooleanValueFrom2Byte(int offset, int bitIndex){
-        assert bitIndex < 16;
-
-        if(bitIndex >= 8){
-            return getBooleanValueFromByte(offset + 1, bitIndex - 8);
-        }else{
-            return getBooleanValueFromByte(offset, bitIndex);
-        }
-    }
-
-    public ByteSerial getByteSerial() {
-        return byteSerial;
-    }
-
-    public void setByteSerial(ByteSerial byteSerial) {
-        this.byteSerial = byteSerial;
     }
 
     public String getCo2_relay_on_start_md() {

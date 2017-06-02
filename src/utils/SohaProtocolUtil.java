@@ -46,6 +46,52 @@ public class SohaProtocolUtil {
         return ret;
     }
 
+    private static byte[] getHexLocation(int location){
+        String format = "0000";
+        String hex = Integer.toHexString(location);
+        String result = hex;
+        int len = 0;
+        if(hex.length() < 4){
+            len = 4 - hex.length();
+            result = format.substring(0, len) + hex;
+        }
+
+        System.out.println(result.substring(0, 2) + ":" + result.substring(2, 4));
+
+        int header = Integer.parseInt(result.substring(0, 2), 16);
+        int footer = Integer.parseInt(result.substring(2, 4), 16);
+
+        byte[] ret = new byte[]{(byte)header, (byte)footer};
+
+        return ret;
+    }
+
+    public byte[] makeWriteProtocol(int location, int length, int id, byte[] farmCode, byte[] harvCode, byte[] data){
+        Modbus modbus = new Modbus();
+        byte[] protocol;
+        byte[] loc = getHexLocation(location);
+        byte[] len = concat(new byte[]{0x00}, getHexLocation(length));
+        byte[] deviceId = new byte[]{(byte)id};
+        byte[] crc16 = modbus.fn_makeCRC16(concat(deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data));
+        byte[] checkSum = new byte[]{};
+        protocol = concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data, crc16, checkSum, ConstProtocol.ETX);
+
+        return protocol;
+    }
+
+    public byte[] makeReadProtocol(int location, int length, int id, byte[] farmCode, byte[] harvCode){
+        Modbus modbus = new Modbus();
+        byte[] protocol = null;
+        byte[] loc = getHexLocation(location);
+        byte[] len = getHexLocation(length);
+        byte[] deviceId = new byte[]{(byte)id};
+        byte[] crc16 = modbus.fn_makeCRC16(concat(deviceId, ConstProtocol.FUNCTION_READ, loc, len));
+        byte[] checkSum = new byte[]{};
+        protocol = concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_READ, loc, len, crc16, checkSum, ConstProtocol.ETX);
+
+        return protocol;
+    }
+
     /**
      * 일반 프로토콜로부터 재배동 코드를 추출하는 메소드
      * @param bytes 버퍼 바이트
