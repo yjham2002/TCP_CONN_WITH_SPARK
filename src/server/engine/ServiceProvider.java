@@ -4,6 +4,7 @@ import configs.ServerConfig;
 import models.ByteSerial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.ICallback;
 import server.ProtocolResponder;
 import spark.Request;
 import spark.Response;
@@ -36,6 +37,8 @@ public class ServiceProvider extends ServerConfig{
      */
     private static ServiceProvider instance;
 
+    private int customTime = -1;
+
     /**
      * 메인 서버 소켓 운영을 위한 스레드
      */
@@ -45,6 +48,8 @@ public class ServiceProvider extends ServerConfig{
      * 서버 소켓 인스턴스
      */
     private ServerSocket socket;
+
+    private List<ICallback> jobs;
 
     /**
      * 클라이언트 소켓 집합
@@ -62,6 +67,7 @@ public class ServiceProvider extends ServerConfig{
      * @param port
      */
     private ServiceProvider(int port){
+        jobs = new ArrayList<>();
 
         log = LoggerFactory.getLogger(this.getClass());
 
@@ -79,9 +85,13 @@ public class ServiceProvider extends ServerConfig{
         batch = new Thread(() -> {
             // Test
             while(true) {
-
                 try {
-                    Thread.sleep(BATCH_TIME);
+                    int time = BATCH_TIME;
+                    if(customTime != -1 && customTime > 0) time = customTime;
+                    Thread.sleep(time);
+                    for(ICallback callback : jobs){
+                        callback.postExecuted();
+                    }
                 } catch (InterruptedException e) {
                     d("Batch Thread Interrupted");
                 }
@@ -113,6 +123,10 @@ public class ServiceProvider extends ServerConfig{
 
     }
 
+    public void offer(ICallback callback){
+        this.jobs.add(callback);
+    }
+
     /**
      * 인스턴스 소켓 운영을 위한 스레드와 간이 배치 작업 스레드 호출
      * 명시적 호출이 필요함
@@ -124,16 +138,22 @@ public class ServiceProvider extends ServerConfig{
         return instance;
     }
 
-    public boolean send(String client, ByteSerial msg){
+    public ByteSerial send(String client, ByteSerial msg){
+        ByteSerial ret = null;
         try {
-            if(clients.containsKey(client)) clients.get(client).send(msg);
+            if(clients.containsKey(client)) ret = clients.get(client).send(msg);
             else{
                 log.info("Client just requested does not exist. [KEY : " + client + "]");
             }
         }catch(Exception e){
-            return false;
+            // DO NOTHING
+        }finally {
+            return ret;
         }
-        return true;
+    }
+
+    public ByteSerial send(String client, byte[] msg){
+        return send(client, new ByteSerial(msg, ByteSerial.TYPE_NONE));
     }
 
     /**
@@ -179,4 +199,11 @@ public class ServiceProvider extends ServerConfig{
         }
     }
 
+    /**
+     * 배치 작업 주기 시간을 커스텀 설정함함
+    * @param customTime
+     */
+    public void setCustomTime(int customTime) {
+        this.customTime = customTime;
+    }
 }

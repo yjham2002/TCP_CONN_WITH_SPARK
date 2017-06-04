@@ -8,7 +8,7 @@ public class Modbus  {
 
     public Modbus()
     {
-        System.out.println("Modbus 인스턴스가 생성되었습니다");
+        System.out.println("Modbus instanciated.");
     }
 
     Htypecast htype = new Htypecast() ;

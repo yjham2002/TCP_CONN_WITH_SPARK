@@ -33,6 +33,7 @@ public class ProtocolResponder extends Thread{
      */
     Logger log;
 
+    private byte[] buffer;
     private String uniqueKey = ""; // 유니크키 초기화 - 클라이언트 해시맵에서 유일성을 가지도록 관리하기 위한 문자열
     private Socket socket; // ServiceProvider로부터 accept된 단위 소켓
     private DataInputStream in; // 입력 스트림
@@ -67,7 +68,7 @@ public class ProtocolResponder extends Thread{
         boolean generated = false; // 유니크키 생성 여부
 
         try{
-            byte[] buffer = new byte[ByteSerial.POOL_SIZE]; // 버퍼 사이즈 할당
+            buffer = new byte[ByteSerial.POOL_SIZE]; // 버퍼 사이즈 할당
 
             while ((in.read(buffer)) != -1) { // 응답이 없을 때까지 입력 스트림으로부터 바이트 버퍼를 읽음
 
@@ -143,13 +144,23 @@ public class ProtocolResponder extends Thread{
      * 바이트 시리얼로부터 처리 이후의 바이트 패킷을 추출하여 바이트 기반으로 전송
      * @param msg
      */
-    public void send(ByteSerial msg){
+    public ByteSerial send(ByteSerial msg){
         log.info("Sending :: " + Arrays.toString(msg.getProcessed()));
+        ByteSerial byteSerial = null;
         try {
-            DataOutputStream out = (DataOutputStream) clients.get(uniqueKey).out;
+            DataOutputStream out = clients.get(uniqueKey).out;
             out.write(msg.getProcessed());
+
+            while ((in.read(buffer)) != -1){
+                log.info("Message Handler Overrode the response successfully");
+                byteSerial = new ByteSerial(buffer);
+                break;
+            }
+
         }catch(IOException e){
             e.printStackTrace();
+        }finally {
+            return byteSerial;
         }
     }
 

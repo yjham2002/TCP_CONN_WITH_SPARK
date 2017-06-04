@@ -1,19 +1,26 @@
 package server;
 
 import configs.ServerConfig;
+import constants.ConstProtocol;
 import constants.ConstRest;
 import models.ByteSerial;
 import models.DataMap;
 import models.RestProcessor;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pojo.TimerPOJO;
+import redis.ICallback;
 import server.engine.ServiceProvider;
 import spark.Spark;
+import utils.SohaProtocolUtil;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
 
+import static constants.ConstRest.RESPONSE_INVALID;
+import static constants.ConstRest.RESPONSE_NONE;
 import static spark.route.HttpMethod.get;
 
 /**
@@ -38,13 +45,27 @@ public class AppMain{
         /**
          * 서비스 프로바이더 인스턴스 할당 및 시동
          */
-        serviceProvider = ServiceProvider.getInstance().start(); // 인스턴스 할당 및 시동
+        serviceProvider = ServiceProvider.getInstance(); // 인스턴스 할당
+
+        /**
+         * 주기성 배치 작업 콜백 인터페이스 위임
+         */
+        serviceProvider.offer(() -> {
+            System.out.println("배치 작업 테스트");
+        });
+
+        serviceProvider.start(); // 인스턴스 시동
 
         /**
          * Spark Framework Implementation
          * 스파크 프레임워크를 이용하여 경량 REST를 이용함으로써 WAS와 연동하도록 함
          */
         Spark.port(ConstRest.REST_PORT);
+
+        Spark.post(ConstRest.REST_WRITE_REQUEST, (req, res) -> {
+            log.info(ConstRest.REST_WRITE_REQUEST);
+            return "{\"json\":1}";
+        });
 
         Spark.get(ConstRest.REST_CONNECT_TEST, (req, res) -> {
             DataMap map = RestProcessor.makeProcessData(req.raw());
@@ -59,8 +80,39 @@ public class AppMain{
         Spark.get(ConstRest.REST_READ_REQUEST, (req, res) -> {
             DataMap map = RestProcessor.makeProcessData(req.raw());
             log.info(ConstRest.REST_READ_REQUEST);
-            serviceProvider.send(map.getString("cli"), new ByteSerial(new byte[]{0,0,0,0,0, 1}));
-            return "{\"json\":1}";
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            int id = map.getInt("id");
+            String mode = map.getString("mode");
+            byte[] farmCode = map.getString("farm").getBytes();
+            byte[] harvCode = map.getString("harv").getBytes();
+
+            if(map.get("id") == null || map.get("mode") == null || map.get("farm") == null || map.get("harv") == null){
+                return RESPONSE_INVALID;
+            }
+
+            byte[] protocol = null;
+            String retVal = null;
+
+            switch(mode){
+                case ConstProtocol.MODE_READ_TIMER:
+                    protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.TIMER_RANGE.getHead(), ConstProtocol.TIMER_RANGE.getTail(), id, farmCode, harvCode);
+                    ByteSerial recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                    if(recv == null) return RESPONSE_NONE;
+                    TimerPOJO timerPOJO = new TimerPOJO(recv, ConstProtocol.RANGE_READ_START);
+                    retVal = objectMapper.writeValueAsString(timerPOJO);
+                    break;
+                default: protocol = null; break;
+            }
+
+            if(protocol == null || retVal == null){
+                log.info("Mode has not been designated - Do nothing");
+                return RESPONSE_NONE;
+            }else{
+                return retVal;
+            }
+
         });
 
         Spark.get(ConstRest.REST_WRITE_REQUEST, (req, res) -> {

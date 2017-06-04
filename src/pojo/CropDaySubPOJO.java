@@ -21,7 +21,6 @@ public class CropDaySubPOJO extends BasePOJO{
 
     private static final int DETAIL_LIMIT = 3;
 
-    private ByteSerial byteSerial;
     private int day = 0;
     private List<CropDayDetailPOJO> cropDayDetailPOJOs;
 

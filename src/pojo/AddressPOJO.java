@@ -15,6 +15,7 @@ import models.ByteSerial;
  * 전체 데이터맵 파싱 및 캡슐화를 위한 클래스로 실시간 데이터 POJO를 상속하여
  * 실시간 데이터 이외의 범위(EEPROM 방식으로 저장되는 메모리 범위)에 대한 맵핑을 수행한다.
  */
+@Deprecated
 public class AddressPOJO extends RealtimePOJO {
 
     private int device_id;

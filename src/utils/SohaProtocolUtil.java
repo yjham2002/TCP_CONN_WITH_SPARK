@@ -1,5 +1,6 @@
 package utils;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import constants.ConstProtocol;
 
 import java.util.Arrays;
@@ -21,9 +22,19 @@ public class SohaProtocolUtil {
     }
 
     public static String getUniqueKeyByFarmCode(byte[] farm){
-        String uKey = "HEADER_" + Arrays.toString(farm) + "_SOHAUNIFARM";
+        String uKey = "HEADER_" + getBytesConcatWithDeilmiter(farm, "_") + "_SOHAUNIFARM";
         System.out.println("Unique Key Constructed :: " + uKey);
         return uKey;
+    }
+
+    public static String getBytesConcatWithDeilmiter(byte[] bytes, String delimiter){
+        String ret = "";
+        for(int e = 0 ; e < bytes.length; e++){
+            ret += bytes[e];
+            if(e + 1 < bytes.length) ret += delimiter;
+        }
+
+        return ret;
     }
 
     /**
@@ -66,7 +77,7 @@ public class SohaProtocolUtil {
         return ret;
     }
 
-    public byte[] makeWriteProtocol(int location, int length, int id, byte[] farmCode, byte[] harvCode, byte[] data){
+    public static byte[] makeWriteProtocol(int location, int length, int id, byte[] farmCode, byte[] harvCode, byte[] data){
         Modbus modbus = new Modbus();
         byte[] protocol;
         byte[] loc = getHexLocation(location);
@@ -79,7 +90,7 @@ public class SohaProtocolUtil {
         return protocol;
     }
 
-    public byte[] makeReadProtocol(int location, int length, int id, byte[] farmCode, byte[] harvCode){
+    public static byte[] makeReadProtocol(int location, int length, int id, byte[] farmCode, byte[] harvCode){
         Modbus modbus = new Modbus();
         byte[] protocol = null;
         byte[] loc = getHexLocation(location);
@@ -90,6 +101,24 @@ public class SohaProtocolUtil {
         protocol = concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_READ, loc, len, crc16, checkSum, ConstProtocol.ETX);
 
         return protocol;
+    }
+
+    public static byte[][] makeReadProtocols(int location, int length, int id, byte[] farmCode, byte[] harvCode){
+
+        int start = location;
+        int ceil = (int)Math.ceil((double)length / (double)ConstProtocol.READ_LIMIT);
+
+        byte[][] bulk = new byte[ceil][];
+
+        for(int e = 1; e <= ceil; e++){
+            int jump = (ConstProtocol.READ_LIMIT * e) - 1;
+            if(e == ceil) jump = length - 1;
+            int newLen = (jump - start + 1);
+            bulk[e - 1] = makeReadProtocol(start, newLen, id, farmCode, harvCode);
+            start = jump + 1;
+        }
+
+        return bulk;
     }
 
     /**

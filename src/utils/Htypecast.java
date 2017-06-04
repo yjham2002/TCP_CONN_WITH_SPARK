@@ -6,7 +6,7 @@ package utils;
  */
 public class Htypecast {
 	{
-		System.out.println("HtypeCast Instance constructed.");
+		System.out.println("HtypeCast Instanciated.");
 	}
 
 	short Value;
