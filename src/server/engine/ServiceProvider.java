@@ -156,6 +156,13 @@ public class ServiceProvider extends ServerConfig{
         return send(client, new ByteSerial(msg, ByteSerial.TYPE_NONE));
     }
 
+    public List<ByteSerial> send(String client, byte[][] msgs){
+        List<ByteSerial> byteSerials = new ArrayList<>();
+        for(int e = 0; e < msgs.length; e++) byteSerials.add(send(client, new ByteSerial(msgs[e], ByteSerial.TYPE_NONE)));
+
+        return byteSerials;
+    }
+
     /**
      * 바이트 시리얼로부터 처리 이후의 바이트 패킷을 추출하여 전체 클라이언트에게 바이트 기반으로 전송
      * @param msg

@@ -31,23 +31,23 @@ public class CropDaySubPOJO extends BasePOJO{
         for(int i = 1; i <= DETAIL_LIMIT; i++){
             cropDayDetailPOJOs.add(new CropDayDetailPOJO(
                     i,
-                    getSumWith2Bytes(offset),
-                    getSumWith2Bytes(offset + 2),
-                    getSumWith2Bytes(offset + 4),
-                    getSumWith2Bytes(offset + 6), // 676
-                    getMDorHMWith2Bytes(offset + 8, ":"),
-                    toDecimalFromBinaryValue(offset + 10, 0, 2),
-                    getBooleanValueFrom2Byte(offset + 10, 2),
-                    getBooleanValueFrom2Byte(offset + 10, 3),
-                    toDecimalFromBinaryValue(offset + 10, 4, 2),
-                    getBooleanValueFrom2Byte(offset + 10, 6),
-                    getBooleanValueFrom2Byte(offset + 10, 7),
-                    toDecimalFromBinaryValue(offset + 10, 8, 2),
-                    getBooleanValueFrom2Byte(offset + 10, 10),
-                    getBooleanValueFrom2Byte(offset + 10, 11),
-                    toDecimalFromBinaryValue(offset + 10, 12, 2),
-                    getBooleanValueFrom2Byte(offset + 10, 14),
-                    getBooleanValueFrom2Byte(offset + 10, 15)
+                    getSumWith2BytesABS(offset),
+                    getSumWith2BytesABS(offset + 2),
+                    getSumWith2BytesABS(offset + 4),
+                    getSumWith2BytesABS(offset + 6), // 676
+                    getMDorHMWith2BytesABS(offset + 8, ":"),
+                    toDecimalFromBinaryValueABS(offset + 10, 0, 2),
+                    getBooleanValueFrom2ByteABS(offset + 10, 2),
+                    getBooleanValueFrom2ByteABS(offset + 10, 3),
+                    toDecimalFromBinaryValueABS(offset + 10, 4, 2),
+                    getBooleanValueFrom2ByteABS(offset + 10, 6),
+                    getBooleanValueFrom2ByteABS(offset + 10, 7),
+                    toDecimalFromBinaryValueABS(offset + 10, 8, 2),
+                    getBooleanValueFrom2ByteABS(offset + 10, 10),
+                    getBooleanValueFrom2ByteABS(offset + 10, 11),
+                    toDecimalFromBinaryValueABS(offset + 10, 12, 2),
+                    getBooleanValueFrom2ByteABS(offset + 10, 14),
+                    getBooleanValueFrom2ByteABS(offset + 10, 15)
             ));
         }
     }

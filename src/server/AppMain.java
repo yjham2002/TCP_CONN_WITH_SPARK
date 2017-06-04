@@ -5,10 +5,12 @@ import constants.ConstProtocol;
 import constants.ConstRest;
 import models.ByteSerial;
 import models.DataMap;
+import models.Pair;
 import models.RestProcessor;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pojo.CropWrappingPOJO;
 import pojo.TimerPOJO;
 import redis.ICallback;
 import server.engine.ServiceProvider;
@@ -17,6 +19,7 @@ import utils.SohaProtocolUtil;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 import static constants.ConstRest.RESPONSE_INVALID;
@@ -87,26 +90,47 @@ public class AppMain{
             String mode = map.getString("mode");
             byte[] farmCode = map.getString("farm").getBytes();
             byte[] harvCode = map.getString("harv").getBytes();
+            int order = map.getInt("order");
 
             if(map.get("id") == null || map.get("mode") == null || map.get("farm") == null || map.get("harv") == null){
                 return RESPONSE_INVALID;
             }
 
             byte[] protocol = null;
+            byte[][] protocols = null;
+            ByteSerial recv;
+            List<ByteSerial> recvs;
             String retVal = null;
 
             switch(mode){
-                case ConstProtocol.MODE_READ_TIMER:
-                    protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.TIMER_RANGE.getHead(), ConstProtocol.TIMER_RANGE.getTail(), id, farmCode, harvCode);
-                    ByteSerial recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                case ConstRest.MODE_READ_TIMER:
+                    protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), id, farmCode, harvCode);
+                    recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
                     if(recv == null) return RESPONSE_NONE;
                     TimerPOJO timerPOJO = new TimerPOJO(recv, ConstProtocol.RANGE_READ_START);
                     retVal = objectMapper.writeValueAsString(timerPOJO);
                     break;
-                default: protocol = null; break;
+                case ConstRest.MODE_READ_DAYAGE:
+                    Pair<Integer> range = ConstProtocol.RANGE_DAYAGE;
+                    switch (order){
+                        case 1: range = ConstProtocol.RANGE_DAYAGE_01; break;
+                        case 2: range = ConstProtocol.RANGE_DAYAGE_02; break;
+                        case 3: range = ConstProtocol.RANGE_DAYAGE_03; break;
+                        case 4: range = ConstProtocol.RANGE_DAYAGE_04; break;
+                        case 5: range = ConstProtocol.RANGE_DAYAGE_05; break;
+                        case 6: range = ConstProtocol.RANGE_DAYAGE_06; break;
+                        default: order = -1; break;
+                    }
+                    protocols = SohaProtocolUtil.makeReadProtocols(range.getHead(), range.getTail(), id, farmCode, harvCode);
+                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
+                    if(recvs == null) return RESPONSE_NONE;
+                    CropWrappingPOJO cropWrappingPOJO = new CropWrappingPOJO(recvs, order);
+                    retVal = objectMapper.writeValueAsString(cropWrappingPOJO);
+                    break;
+                default: protocols = null; break;
             }
 
-            if(protocol == null || retVal == null){
+            if((protocols == null && protocol == null) || retVal == null){
                 log.info("Mode has not been designated - Do nothing");
                 return RESPONSE_NONE;
             }else{

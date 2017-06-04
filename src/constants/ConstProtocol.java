@@ -13,7 +13,7 @@ public class ConstProtocol {
     public static final byte[] ETX = new byte[]{13, 10}; // End Of Text
     public static final byte[] INITIAL_PROTOCOL_START = new byte[]{83, 79, 72, 65, 85, 78, 73, 70, 65, 82, 77};
 
-    public static final int RANGE_READ_START = 14;
+    public static final int RANGE_READ_START = 15;
 
     public static final byte[] FUNCTION_READ = new byte[]{0x03};
     public static final byte[] FUNCTION_WRITE = new byte[]{0x10};
@@ -27,12 +27,13 @@ public class ConstProtocol {
 
     public static final int READ_LIMIT = 255;
 
-    public static final Pair<Integer> TIMER_RANGE = new Pair<>(448, 194);
-
-    /**
-     * API Parameters
-     */
-    public static final String MODE_READ_TIMER = "read_timer";
-    public static final String MODE_READ_DAYAGE = "read_dayage";
+    public static final Pair<Integer> RANGE_TIMER = new Pair<>(448, 194);
+    public static final Pair<Integer> RANGE_DAYAGE = new Pair<>(650, 12740);
+    public static final Pair<Integer> RANGE_DAYAGE_01 = new Pair<>(650, 1820);
+    public static final Pair<Integer> RANGE_DAYAGE_02 = new Pair<>(2470, 1820);
+    public static final Pair<Integer> RANGE_DAYAGE_03 = new Pair<>(4290, 1820);
+    public static final Pair<Integer> RANGE_DAYAGE_04 = new Pair<>(6110, 1820);
+    public static final Pair<Integer> RANGE_DAYAGE_05 = new Pair<>(7930, 1820);
+    public static final Pair<Integer> RANGE_DAYAGE_06 = new Pair<>(9750, 1820);
 
 }

@@ -13,4 +13,9 @@ public class ConstRest {
     public static final String RESPONSE_NONE = "{}";
     public static final String RESPONSE_INVALID = "{\"err\":Invalid Parameter}";
 
+    /**
+     * API Parameters
+     */
+    public static final String MODE_READ_TIMER = "read_timer";
+    public static final String MODE_READ_DAYAGE = "read_dayage";
 }

@@ -16,23 +16,29 @@ import java.util.List;
 public class CropSubPOJO extends BasePOJO{
 
     private static final int DAY_TERM = 36;
-    private static final int DAYAGE_START = 670;
 
     private String name;
+    private int order;
     private List<CropDaySubPOJO> cropDaySubPOJOs;
+    private int startIndex;
+
+    private static final int NAME_RANGE = 20;
 
     /**
      * 작물 데이터 범위를 한정하여 작물 정보를 추출하는 클래스 생성자
-     * AddressPOJO에 대해 한정적 Aggregation 관계를 가짐
+     * AddressPOJO와 CropWrappingPOJO에 대해 한정적 Aggregation 관계를 가짐
      * @param byteSerial
      */
-    public CropSubPOJO(ByteSerial byteSerial, int startIndex){
+    public CropSubPOJO(ByteSerial byteSerial, int startIndex, int order){
+        this.order = order;
+        this.byteSerial = byteSerial;
+        this.startIndex = startIndex;
+
         name = "";
         for(int e = 0; e <= 18; e += 2){
-            name += getHangleFrom2Byte(startIndex + e);
+            name += getHangleFrom2ByteABS(startIndex + e);
         }
 
-        this.byteSerial = byteSerial;
         init();
     }
 
@@ -41,7 +47,7 @@ public class CropSubPOJO extends BasePOJO{
 
         int term = 0;
         for(int e = 1; e <= 50; e++){
-            int start = ARRAY_START_RANGE + DAYAGE_START + term;
+            int start = NAME_RANGE + startIndex + term;
             CropDaySubPOJO cropDaySubPOJO = new CropDaySubPOJO(this.byteSerial, start, e);
             cropDaySubPOJOs.add(cropDaySubPOJO);
             term += DAY_TERM;

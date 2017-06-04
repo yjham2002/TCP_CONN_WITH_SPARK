@@ -44,11 +44,55 @@ public class BasePOJO implements Serializable{
         return retVal;
     }
 
+    /**
+     * 바이트 합으로부터 해당 자리수의 10진수 값을 반환한다
+     * @param offset 메모리 번지수
+     * @param square 10의 승수
+     * @return 바이트 합의 10의 승수번째 자리수
+     */
+    protected int getUnitNumberFrom2ByteABS(int offset, int square){
+        int sum = getSumWith2BytesABS(offset);
+        String strSum = Integer.toString(sum);
+        int len = strSum.length() - (square + 1);
+        if(strSum.length() <= len || len < 0) return 0;
+        char ascii = strSum.charAt(len);
+        int retVal = ascii - '0';
+
+        return retVal;
+    }
+
+    protected int getSumWith2BytesABS(int offset){
+        int absolute = offset;
+        int lhs = byteSerial.getProcessed()[absolute] << 8;
+        int rhs = byteSerial.getProcessed()[absolute + 1];
+        int total = lhs + rhs;
+
+        return total;
+    }
+
+    protected int getSingleByteABS(int offset){
+        int absolute = offset;
+        return byteSerial.getProcessed()[absolute];
+    }
+
+    protected char getHangleFrom2ByteABS(int offset){
+        int a = getSingleByteABS(offset) << 8;
+        int b = getSingleByteABS(offset + 1);
+        char c = (char)(a + b);
+        return c;
+    }
+
     protected char getHangleFrom2Byte(int offset){
         int a = getSingleByte(offset) << 8;
         int b = getSingleByte(offset + 1);
         char c = (char)(a + b);
         return c;
+    }
+
+    protected int getSumByArbitraryRangeBytesABS(int offset, int length){
+        int total = 0;
+        for(int i = offset; i < offset + length; i++) total += getSumWith2BytesABS(i);
+        return total;
     }
 
     protected int getSumByArbitraryRangeBytes(int offset, int length){
@@ -71,6 +115,14 @@ public class BasePOJO implements Serializable{
         return String.format("%02d" + delimiter + "%02d", header, footer);
     }
 
+    protected String getMDorHMWith2BytesABS(int offset, String delimiter){
+        int total = getSumWith2BytesABS(offset);
+        int header = total >> 8;
+        int footer = total - (header << 8);
+
+        return String.format("%02d" + delimiter + "%02d", header, footer);
+    }
+
     protected int getLhsFromDual(int offset){
         int total = getSumWith2Bytes(offset);
         int header = total >> 8;
@@ -81,6 +133,22 @@ public class BasePOJO implements Serializable{
 
     protected int getRhsFromDual(int offset){
         int total = getSumWith2Bytes(offset);
+        int header = total >> 8;
+        int footer = total - (header << 8);
+
+        return footer;
+    }
+
+    protected int getLhsFromDualABS(int offset){
+        int total = getSumWith2BytesABS(offset);
+        int header = total >> 8;
+        int footer = total - (header << 8);
+
+        return header;
+    }
+
+    protected int getRhsFromDualABS(int offset){
+        int total = getSumWith2BytesABS(offset);
         int header = total >> 8;
         int footer = total - (header << 8);
 
@@ -145,6 +213,46 @@ public class BasePOJO implements Serializable{
         String total = "";
         for(int i = bitBeginIndex; i < bitBeginIndex + length; i++){
             total += getBooleanValueFrom2Byte(offset, i);
+        }
+
+        return Integer.parseInt(total, 2);
+    }
+
+    protected int getBooleanValueFromByteABS(int offset, int bitIndex){
+        assert bitIndex < 8;
+
+        final String format = "00000000";
+        int value = getSingleByteABS(offset);
+        String bin = Integer.toBinaryString(value);
+        String fmt = "";
+        String retVal = "";
+        if(bin.length() < 8){
+            int leak = 8 - bin.length();
+            fmt = format.substring(0, leak);
+        }
+
+        retVal = fmt + bin;
+
+        int newIndex = retVal.length() - (bitIndex + 1);
+
+        if(retVal.charAt(newIndex) == '1') return 1;
+        else return 0;
+    }
+
+    protected int getBooleanValueFrom2ByteABS(int offset, int bitIndex){
+        assert bitIndex < 16;
+
+        if(bitIndex >= 8){
+            return getBooleanValueFromByteABS(offset + 1, bitIndex - 8);
+        }else{
+            return getBooleanValueFromByteABS(offset, bitIndex);
+        }
+    }
+
+    protected int toDecimalFromBinaryValueABS(int offset, int bitBeginIndex, int length){
+        String total = "";
+        for(int i = bitBeginIndex; i < bitBeginIndex + length; i++){
+            total += getBooleanValueFrom2ByteABS(offset, i);
         }
 
         return Integer.parseInt(total, 2);
