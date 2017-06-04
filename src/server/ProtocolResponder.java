@@ -14,9 +14,11 @@ import utils.SohaProtocolUtil;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.*;
 
 import static constants.ConstProtocol.INITIAL_PROTOCOL_START;
+import static constants.ConstProtocol.SOCKET_TIMEOUT_COUNT;
 import static constants.ConstProtocol.STX;
 
 /**
@@ -50,8 +52,10 @@ public class ProtocolResponder extends Thread{
 
         log = LoggerFactory.getLogger(this.getClass());
         this.socket = socket; // 멤버 세팅
+
         this.clients = clients; // 멤버 세팅
         try {
+            this.socket.setSoTimeout(ConstProtocol.SOCKET_TIMEOUT_LIMIT);
             in = new DataInputStream(socket.getInputStream()); // 소켓으로부터 입력 스트림 추출
             out = new DataOutputStream(socket.getOutputStream()); // 소켓으로부터 출력 스트림 추출
         }catch (IOException e){
@@ -151,10 +155,23 @@ public class ProtocolResponder extends Thread{
             DataOutputStream out = clients.get(uniqueKey).out;
             out.write(msg.getProcessed());
 
-            while ((in.read(buffer)) != -1){
-                log.info("Message Handler Overrode the response successfully");
-                byteSerial = new ByteSerial(buffer);
-                break;
+            int timeOutCount = 0;
+
+            while(timeOutCount < SOCKET_TIMEOUT_COUNT) {
+                try {
+                    while ((in.read(buffer)) != -1) {
+                        log.info("Message Handler Overrode the response successfully");
+                        byteSerial = new ByteSerial(buffer);
+                        timeOutCount = SOCKET_TIMEOUT_COUNT;
+                        break;
+                    }
+                } catch (SocketTimeoutException timeout) {
+                    timeOutCount++;
+                }finally {
+                    if(timeOutCount == SOCKET_TIMEOUT_COUNT){
+                        System.out.println("Timeout occured for 3 times :: Need to send alert message");
+                    }
+                }
             }
 
         }catch(IOException e){

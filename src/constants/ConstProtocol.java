@@ -23,7 +23,8 @@ public class ConstProtocol {
     public static final int INIT_TERM_SEC10 = 0;
     public static final int INIT_TERM_SEC = 5;
 
-    public static final int SOCKET_TIMEOUT_LIMIT = 3;
+    public static final int SOCKET_TIMEOUT_LIMIT = 3000;
+    public static final int SOCKET_TIMEOUT_COUNT = 3;
 
     public static final int READ_LIMIT = 255;
 

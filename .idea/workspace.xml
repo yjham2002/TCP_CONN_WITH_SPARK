@@ -2,18 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/pojo/CropWrappingPOJO.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/constants/ConstProtocol.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/constants/ConstProtocol.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/AppMain.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/AppMain.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/engine/ServiceProvider.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/engine/ServiceProvider.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/constants/ConstProtocol.java" afterPath="$PROJECT_DIR$/src/constants/ConstProtocol.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/constants/ConstRest.java" afterPath="$PROJECT_DIR$/src/constants/ConstRest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/BasePOJO.java" afterPath="$PROJECT_DIR$/src/pojo/BasePOJO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/CropDaySubPOJO.java" afterPath="$PROJECT_DIR$/src/pojo/CropDaySubPOJO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/CropSubPOJO.java" afterPath="$PROJECT_DIR$/src/pojo/CropSubPOJO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/models/ByteSerial.java" afterPath="$PROJECT_DIR$/src/models/ByteSerial.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/AppMain.java" afterPath="$PROJECT_DIR$/src/server/AppMain.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" afterPath="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ProtocolResponder.java" afterPath="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -33,8 +28,30 @@
       <file leaf-file-name="AppMain.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
-              <caret line="106" column="64" lean-forward="false" selection-start-line="106" selection-start-column="64" selection-end-line="106" selection-end-column="64" />
+            <state relative-caret-position="394">
+              <caret line="148" column="46" lean-forward="true" selection-start-line="148" selection-start-column="46" selection-end-line="148" selection-end-column="46" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SohaProtocolUtil.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/utils/SohaProtocolUtil.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="809">
+              <caret line="60" column="31" lean-forward="true" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="71">
+              <caret line="150" column="15" lean-forward="false" selection-start-line="150" selection-start-column="15" selection-end-line="150" selection-end-column="15" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -79,8 +96,8 @@
       <file leaf-file-name="ServiceProvider.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/engine/ServiceProvider.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="163">
-              <caret line="155" column="0" lean-forward="false" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
+            <state relative-caret-position="296">
+              <caret line="162" column="27" lean-forward="true" selection-start-line="162" selection-start-column="27" selection-end-line="162" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -89,8 +106,8 @@
       <file leaf-file-name="ByteSerial.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/models/ByteSerial.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="106">
-              <caret line="51" column="51" lean-forward="true" selection-start-line="51" selection-start-column="51" selection-end-line="51" selection-end-column="51" />
+            <state relative-caret-position="285">
+              <caret line="90" column="0" lean-forward="true" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -99,8 +116,8 @@
       <file leaf-file-name="ConstProtocol.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/constants/ConstProtocol.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="15" column="42" lean-forward="false" selection-start-line="15" selection-start-column="42" selection-end-line="15" selection-end-column="42" />
+            <state relative-caret-position="223">
+              <caret line="32" column="78" lean-forward="true" selection-start-line="32" selection-start-column="78" selection-end-line="32" selection-end-column="78" />
               <folding />
             </state>
           </provider>
@@ -198,18 +215,19 @@
         <option value="$PROJECT_DIR$/src/pojo/TimerPOJO.java" />
         <option value="$PROJECT_DIR$/src/models/Pair.java" />
         <option value="$PROJECT_DIR$/src/pojo/AddressPOJO.java" />
-        <option value="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
         <option value="$PROJECT_DIR$/src/utils/Modbus.java" />
         <option value="$PROJECT_DIR$/src/utils/Htypecast.java" />
         <option value="$PROJECT_DIR$/src/utils/SohaProtocolUtil.java" />
         <option value="$PROJECT_DIR$/src/constants/ConstRest.java" />
-        <option value="$PROJECT_DIR$/src/constants/ConstProtocol.java" />
-        <option value="$PROJECT_DIR$/src/models/ByteSerial.java" />
         <option value="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" />
         <option value="$PROJECT_DIR$/src/pojo/BasePOJO.java" />
         <option value="$PROJECT_DIR$/src/pojo/CropSubPOJO.java" />
         <option value="$PROJECT_DIR$/src/pojo/CropDaySubPOJO.java" />
         <option value="$PROJECT_DIR$/src/pojo/CropWrappingPOJO.java" />
+        <option value="$PROJECT_DIR$/src/server/func/Handler.java" />
+        <option value="$PROJECT_DIR$/src/constants/ConstProtocol.java" />
+        <option value="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
+        <option value="$PROJECT_DIR$/src/models/ByteSerial.java" />
         <option value="$PROJECT_DIR$/src/server/AppMain.java" />
       </list>
     </option>
@@ -921,7 +939,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496562808221</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Multi-Protocol established">
+      <created>1496571607757</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1496571607757</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -976,7 +1001,8 @@
     <MESSAGE value="Realtime Bean added" />
     <MESSAGE value="WAS default established and Protocol Generator added&#10;" />
     <MESSAGE value="Divided protocol added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Divided protocol added" />
+    <MESSAGE value="Multi-Protocol established" />
+    <option name="LAST_COMMIT_MESSAGE" value="Multi-Protocol established" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -989,16 +1015,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1064">
-          <caret line="59" column="34" lean-forward="false" selection-start-line="59" selection-start-column="34" selection-end-line="59" selection-end-column="34" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/TestClient.java" />
     <entry file="file://$PROJECT_DIR$/src/TestMain.java" />
     <entry file="file://$PROJECT_DIR$/src/constants/ConstServer.java" />
@@ -1012,6 +1028,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="175">
           <caret line="98" column="21" lean-forward="false" selection-start-line="98" selection-start-column="21" selection-end-line="98" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1252,16 +1269,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-8">
-          <caret line="146" column="22" lean-forward="false" selection-start-line="146" selection-start-column="22" selection-end-line="146" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/pojo/TimerPOJO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -1342,14 +1349,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utils/SohaProtocolUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="121" column="5" lean-forward="false" selection-start-line="121" selection-start-column="5" selection-end-line="121" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/constants/ConstRest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="361">
@@ -1372,14 +1371,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="223">
           <caret line="12" column="19" lean-forward="true" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/constants/ConstProtocol.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="15" column="42" lean-forward="false" selection-start-line="15" selection-start-column="42" selection-end-line="15" selection-end-column="42" />
           <folding />
         </state>
       </provider>
@@ -1431,26 +1422,60 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/func/Handler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="11" column="8" lean-forward="false" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="71">
+          <caret line="150" column="15" lean-forward="false" selection-start-line="150" selection-start-column="15" selection-end-line="150" selection-end-column="15" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/models/ByteSerial.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="106">
-          <caret line="51" column="51" lean-forward="true" selection-start-line="51" selection-start-column="51" selection-end-line="51" selection-end-column="51" />
+        <state relative-caret-position="285">
+          <caret line="90" column="0" lean-forward="true" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/engine/ServiceProvider.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="155" column="0" lean-forward="false" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
+        <state relative-caret-position="296">
+          <caret line="162" column="27" lean-forward="true" selection-start-line="162" selection-start-column="27" selection-end-line="162" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/constants/ConstProtocol.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="32" column="78" lean-forward="true" selection-start-line="32" selection-start-column="78" selection-end-line="32" selection-end-column="78" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils/SohaProtocolUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="809">
+          <caret line="60" column="31" lean-forward="true" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="106" column="64" lean-forward="false" selection-start-line="106" selection-start-column="64" selection-end-line="106" selection-end-column="64" />
+        <state relative-caret-position="394">
+          <caret line="148" column="46" lean-forward="true" selection-start-line="148" selection-start-column="46" selection-end-line="148" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -96,13 +96,12 @@ public class ByteSerial implements Serializable{
      * Byte 배열을 통한 생성 시 호출되며, 길이와 패킷 손실 여부에 따라 자동으로 프로토콜 타입을 판단한다.
      * @return
      */
+    @Deprecated
     private int setTypeAutomatically(){
         if(isLoss()) {
             this.type = TYPE_NONE;
             return TYPE_NONE;
         }
-
-
 
         this.type = TYPE_NONE;
         return TYPE_NONE;
