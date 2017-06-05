@@ -7,6 +7,7 @@ import models.ByteSerial;
 import models.DataMap;
 import models.Pair;
 import models.RestProcessor;
+import mysql.DBManager;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ public class AppMain{
 
     private static Logger log;
     private static ServiceProvider serviceProvider;
+    private static DBManager dbManager;
 
     /**
      * 정적으로 설정된 소켓 포트를 기반으로 싱글턴 패턴 서버 인스턴스를 할당 후 실행
@@ -45,6 +47,7 @@ public class AppMain{
          * 로거 초기화
          */
         log = LoggerFactory.getLogger("TCP/IP ServerEngine App");
+        dbManager = DBManager.getInstance();
         /**
          * 서비스 프로바이더 인스턴스 할당 및 시동
          */
@@ -91,13 +94,24 @@ public class AppMain{
 
             ObjectMapper objectMapper = new ObjectMapper();
 
-            int id = map.getInt("id");
             String mode = map.getString("mode");
-            byte[] farmCode = map.getString("farm").getBytes();
-            byte[] harvCode = map.getString("harv").getBytes();
+            String rawFarm = map.getString(ConstRest.FARM_CODE);
+            String rawHarv = map.getString(ConstRest.HARV_CODE);
+            int id = dbManager.getMachineNumber(rawFarm, rawHarv);
+
+            System.out.println(mode + "::" + map.getString("cli"));
+
+            if(id == 0){
+                System.out.println("No appropriate machine code for " + rawFarm + ":" + rawHarv);
+            }else{
+                System.out.println("Machine Code :: " + id);
+            }
+
+            byte[] farmCode = rawFarm.getBytes();
+            byte[] harvCode = rawHarv.getBytes();
             int order = map.getInt("order");
 
-            if(map.get("id") == null || map.get("mode") == null || map.get("farm") == null || map.get("harv") == null){
+            if(map.get("mode") == null || map.get(ConstRest.FARM_CODE) == null || map.get(ConstRest.HARV_CODE) == null){
                 return RESPONSE_INVALID;
             }
 
@@ -148,6 +162,12 @@ public class AppMain{
              * 쓰기 명령 프로토콜 생성 시 역방향 파싱이 필요
              * 타임아웃 에러 핸들링 코드에서 경보 문자 로직 작성
              * 기계 연결 - 저장 - 에러 이슈 별도 저장(MySQL) - 이후 필요 시 REST 요청에 응답
+             *
+             * [작업 진행 계획]
+             * 위 TCP/IP 프로토콜 통신 모두 완료
+             * 각 UI단에서 MySQL과 REST 중 데이터를 받을 곳을 확정해야 함
+             * REST 연결 및 소켓 연결 유니크키 테스트
+             * 유니크키 로직 공유
              */
 
             if((protocols == null && protocol == null) || retVal == null){

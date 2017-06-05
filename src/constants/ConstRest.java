@@ -14,6 +14,12 @@ public class ConstRest {
     public static final String RESPONSE_INVALID = "{\"err\":Invalid Parameter}";
 
     /**
+     * API Parameter names
+     */
+    public static final String FARM_CODE = "s_farm_code";
+    public static final String HARV_CODE = "s_dong_code";
+
+    /**
      * API Parameters
      */
     public static final String MODE_READ_TIMER = "read_timer";
