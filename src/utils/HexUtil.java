@@ -44,7 +44,10 @@ public class HexUtil {
      */
     public static byte checkSum(byte[] bytes){
         int checkSum = 0;
-        for(byte b : bytes) checkSum += b;
+        for(byte b : bytes) {
+            if(b < 0) checkSum += b & 0xff;
+            else checkSum += b;
+        }
 
         return (byte)checkSum;
     }
@@ -66,7 +69,58 @@ public class HexUtil {
      */
     public static boolean isCheckSumSound(byte[] bytes){
         if(bytes.length - 3 < 0) return false;
-        return checkSumByFull(bytes) == bytes[bytes.length - 3];
+        int chk = bytes[bytes.length - 3];
+        if(chk < 0) chk = chk & 0xff;
+        return checkSumByFull(bytes) == (byte)chk;
     }
+
+    //byte 배열을 string 배열로 교체후 Decimal값으로 전환
+    public String[] byteToStringDecimalArray(byte [] ValueData) {
+        String[] HexStrArray = null;
+        String[] DecimalArray = null;
+        try{
+            String Hexstr = hexbyteToStr(ValueData);
+            Hexstr.trim();
+            int start =0 ;
+            int end =4;
+            HexStrArray = new String [ValueData.length/2];
+            for (int count =0 ; count < Hexstr.length() / 4; count ++) {
+                HexStrArray[count] = Hexstr.substring(start,end);
+                start +=4;
+                end +=4;
+            }
+            DecimalArray = new String [HexStrArray.length];
+            for (int count =0; count < HexStrArray.length; count++) {
+                DecimalArray[count] = getHextoDec(HexStrArray[count]);
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return DecimalArray;
+    }
+
+    //16진수를 10진수로 변환
+    public String getHextoDec(String hex)
+    {
+        long value = Long.parseLong(hex,16);
+        return String.valueOf(value);
+    }
+
+    //byte배열을 String배열로 변환
+    public String hexbyteToStr(byte []data)
+    {
+        StringBuffer sb = new StringBuffer();
+        String HexaID;
+        for(int x = 0; x < data.length ; x++)
+        {
+            HexaID = "0" + Integer.toHexString(0xff & data[x]);
+            sb.append(HexaID.substring(HexaID.length()-2));
+        }
+        //System.out.println("변형 태스트 : "+sb);
+        return sb.toString();
+    }
+
 
 }

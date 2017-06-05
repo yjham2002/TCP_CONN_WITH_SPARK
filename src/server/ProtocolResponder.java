@@ -55,6 +55,7 @@ public class ProtocolResponder extends Thread{
 
         this.clients = clients; // 멤버 세팅
         try {
+            this.socket.setKeepAlive(true);
             this.socket.setSoTimeout(ConstProtocol.SOCKET_TIMEOUT_LIMIT);
             in = new DataInputStream(socket.getInputStream()); // 소켓으로부터 입력 스트림 추출
             out = new DataOutputStream(socket.getOutputStream()); // 소켓으로부터 출력 스트림 추출
@@ -87,6 +88,7 @@ public class ProtocolResponder extends Thread{
                 if(!generated) {
                     generated = true;
                     uniqueKey = SohaProtocolUtil.getUniqueKeyByInit(buffer); // 유니크키를 농장코드로 설정하여 추출
+                    if(uniqueKey.equals(SohaProtocolUtil.getMeaninglessUniqueKey())) uniqueKey = SohaProtocolUtil.getUniqueKeyByFarmCode(SohaProtocolUtil.getFarmCodeByProtocol(buffer));
                 }
 
                 if(!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
@@ -156,19 +158,22 @@ public class ProtocolResponder extends Thread{
             out.write(msg.getProcessed());
 
             int timeOutCount = 0;
+            boolean succ = false;
 
             while(timeOutCount < SOCKET_TIMEOUT_COUNT) {
                 try {
                     while ((in.read(buffer)) != -1) {
                         log.info("Message Handler Overrode the response successfully");
                         byteSerial = new ByteSerial(buffer);
-                        timeOutCount = SOCKET_TIMEOUT_COUNT;
+                        succ = true;
                         break;
                     }
                 } catch (SocketTimeoutException timeout) {
+                    System.out.println();
                     timeOutCount++;
                 }finally {
-                    if(timeOutCount == SOCKET_TIMEOUT_COUNT){
+                    if(succ) break;
+                    if(timeOutCount >= SOCKET_TIMEOUT_COUNT){
                         System.out.println("Timeout occured for 3 times :: Need to send alert message");
                     }
                 }

@@ -50,6 +50,8 @@ public class TimerPOJO extends BasePOJO{
 
     //TODO 인덱싱
     private void init(){
+        timerSubPOJOList = new ArrayList<>();
+
         this.timer_ctrl_aggr = getSumWith2Bytes(offset);
         this.timer_ctrl_co2_type = toDecimalFromBinaryValue(offset, 0, 2);
         this.timer_ctrl_co2_on = getBooleanValueFrom2Byte(offset, 2);
@@ -65,12 +67,12 @@ public class TimerPOJO extends BasePOJO{
         this.timer_ctrl_ilum_off = getBooleanValueFrom2Byte(offset, 15);
 
         for(int i = 1; i <= 24; i++){
-            timerSubPOJOList = new ArrayList<>();
-
-            TimerSubPOJO timerSubPOJO = new TimerSubPOJO(offset + 2 + ( (i - 1) * 8 ), i);
-
+            TimerSubPOJO timerSubPOJO = new TimerSubPOJO(byteSerial, offset + 2 + ( (i - 1) * 8 ), i);
+            timerSubPOJO.setByteSerial(null);
             timerSubPOJOList.add(timerSubPOJO);
         }
+
+        this.byteSerial = null;
     }
 
     public int getTimer_id() {
@@ -192,4 +194,6 @@ public class TimerPOJO extends BasePOJO{
     public void setTimer_ctrl_ilum_off(int timer_ctrl_ilum_off) {
         this.timer_ctrl_ilum_off = timer_ctrl_ilum_off;
     }
+
+
 }

@@ -1,8 +1,10 @@
 package pojo;
 
 import models.ByteSerial;
+import utils.SohaProtocolUtil;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * @author 함의진
@@ -63,8 +65,16 @@ public class BasePOJO implements Serializable{
 
     protected int getSumWith2BytesABS(int offset){
         int absolute = offset;
-        int lhs = byteSerial.getProcessed()[absolute] << 8;
-        int rhs = byteSerial.getProcessed()[absolute + 1];
+        int tempLeft = byteSerial.getProcessed()[absolute];
+        int tempRight = byteSerial.getProcessed()[absolute + 1];
+        if(tempLeft < 0) tempLeft = tempLeft & 0xff;
+        if(tempRight < 0) tempRight = tempRight & 0xff;
+        int lhs = tempLeft << 8;
+        int rhs = tempRight;
+
+        if(lhs < 0) lhs = lhs & 0xff;
+        if(rhs < 0) rhs = rhs & 0xff;
+
         int total = lhs + rhs;
 
         return total;
@@ -72,21 +82,24 @@ public class BasePOJO implements Serializable{
 
     protected int getSingleByteABS(int offset){
         int absolute = offset;
-        return byteSerial.getProcessed()[absolute];
+        int value = byteSerial.getProcessed()[absolute];
+        if(value < 0) value = value & 0xff;
+        return value;
     }
 
     protected char getHangleFrom2ByteABS(int offset){
         int a = getSingleByteABS(offset) << 8;
         int b = getSingleByteABS(offset + 1);
+
+        if(a < 0) a = a & 0xff;
+        if(b < 0) b = b & 0xff;
+
         char c = (char)(a + b);
         return c;
     }
 
     protected char getHangleFrom2Byte(int offset){
-        int a = getSingleByte(offset) << 8;
-        int b = getSingleByte(offset + 1);
-        char c = (char)(a + b);
-        return c;
+        return getHangleFrom2ByteABS(offset);
     }
 
     protected int getSumByArbitraryRangeBytesABS(int offset, int length){
@@ -139,6 +152,36 @@ public class BasePOJO implements Serializable{
         return footer;
     }
 
+    public static void main(String... args){
+        int a = -123 & 0xff;
+        int b = -127 & 0xff;
+        int c = a + b;
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(c);
+    }
+
+    public static byte[] getValuePairFromString(String str){
+        String head = str.substring(0, 2);
+        String tail = str.substring(3, 5);
+
+        int ihead, itail;
+
+        try{
+            ihead = Integer.parseInt(head);
+            itail = Integer.parseInt(tail);
+            if(ihead < 0) ihead = ihead & 0xff;
+            if(itail < 0) itail = itail & 0xff;
+        }catch (NumberFormatException e){
+            ihead = 0;
+            itail = 0;
+        }
+
+        byte[] ret = new byte[]{(byte)ihead, (byte)itail};
+
+        return ret;
+    }
+
     protected int getLhsFromDualABS(int offset){
         int total = getSumWith2BytesABS(offset);
         int header = total >> 8;
@@ -166,16 +209,23 @@ public class BasePOJO implements Serializable{
      */
     protected int getSumWith2Bytes(int offset){
         int absolute = offset + ARRAY_START_RANGE;
-        int lhs = byteSerial.getProcessed()[absolute] << 8;
-        int rhs = byteSerial.getProcessed()[absolute + 1];
+        int tempLeft = byteSerial.getProcessed()[absolute];
+        int tempRight = byteSerial.getProcessed()[absolute + 1];
+        if(tempLeft < 0) tempLeft = tempLeft & 0xff;
+        if(tempRight < 0) tempRight = tempRight & 0xff;
+        int lhs = tempLeft << 8;
+        int rhs = tempRight;
+
+        if(lhs < 0) lhs = lhs & 0xff;
+        if(rhs < 0) rhs = rhs & 0xff;
+
         int total = lhs + rhs;
 
         return total;
     }
 
     protected int getSingleByte(int offset){
-        int absolute = offset + ARRAY_START_RANGE;
-        return byteSerial.getProcessed()[absolute];
+        return getSingleByteABS(ARRAY_START_RANGE + offset);
     }
 
     protected int getBooleanValueFromByte(int offset, int bitIndex){

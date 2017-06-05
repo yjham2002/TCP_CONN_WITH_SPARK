@@ -3,6 +3,7 @@ package utils;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import constants.ConstProtocol;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 /**
@@ -21,9 +22,12 @@ public class SohaProtocolUtil {
         return getUniqueKeyByFarmCode(farm);
     }
 
+    public static String getMeaninglessUniqueKey(){
+        return getUniqueKeyByInit(new byte[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
+    }
+
     public static String getUniqueKeyByFarmCode(byte[] farm){
         String uKey = "HEADER_" + getBytesConcatWithDeilmiter(farm, "_") + "_SOHAUNIFARM";
-        System.out.println("Unique Key Constructed :: " + uKey);
         return uKey;
     }
 
@@ -57,7 +61,9 @@ public class SohaProtocolUtil {
         return ret;
     }
 
-    private static byte[] getHexLocation(int location){
+    public static byte[] getHexLocation(int location){
+        if(location < 0) location = location & 0xff;
+
         String format = "0000";
         String hex = Integer.toHexString(location);
         String result = hex;
@@ -67,14 +73,22 @@ public class SohaProtocolUtil {
             result = format.substring(0, len) + hex;
         }
 
-        System.out.println(result.substring(0, 2) + ":" + result.substring(2, 4));
-
         int header = Integer.parseInt(result.substring(0, 2), 16);
         int footer = Integer.parseInt(result.substring(2, 4), 16);
+
+        if(header < 0) header = header & 0xff;
+        if(footer < 0) footer = footer & 0xff;
 
         byte[] ret = new byte[]{(byte)header, (byte)footer};
 
         return ret;
+    }
+
+    public static byte[] getNBytes(int n){
+        byte[] arr = new byte[n];
+        Arrays.fill(arr, (byte)0);
+
+        return arr;
     }
 
     public static byte[] makeWriteProtocol(int location, int length, int id, byte[] farmCode, byte[] harvCode, byte[] data){
@@ -84,7 +98,7 @@ public class SohaProtocolUtil {
         byte[] len = concat(new byte[]{0x00}, getHexLocation(length));
         byte[] deviceId = new byte[]{(byte)id};
         byte[] crc16 = modbus.fn_makeCRC16(concat(deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data));
-        byte[] checkSum = new byte[]{};
+        byte[] checkSum = new byte[]{HexUtil.checkSum(concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data, crc16))};
         protocol = concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data, crc16, checkSum, ConstProtocol.ETX);
 
         return protocol;
@@ -97,7 +111,7 @@ public class SohaProtocolUtil {
         byte[] len = getHexLocation(length);
         byte[] deviceId = new byte[]{(byte)id};
         byte[] crc16 = modbus.fn_makeCRC16(concat(deviceId, ConstProtocol.FUNCTION_READ, loc, len));
-        byte[] checkSum = new byte[]{};
+        byte[] checkSum = new byte[]{HexUtil.checkSum(concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_READ, loc, len, crc16))};
         protocol = concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_READ, loc, len, crc16, checkSum, ConstProtocol.ETX);
 
         return protocol;

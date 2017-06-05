@@ -97,7 +97,9 @@ public class AppMain{
             String mode = map.getString("mode");
             String rawFarm = map.getString(ConstRest.FARM_CODE);
             String rawHarv = map.getString(ConstRest.HARV_CODE);
-            int id = dbManager.getMachineNumber(rawFarm, rawHarv);
+            int id = 0;
+            if(map.get("id") == null) id = dbManager.getMachineNumber(rawFarm, rawHarv);
+            else id = map.getInt("id");
 
             System.out.println(mode + "::" + map.getString("cli"));
 
@@ -124,6 +126,7 @@ public class AppMain{
             switch(mode){
                 case ConstRest.MODE_READ_TIMER:
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), id, farmCode, harvCode);
+                    System.out.println(Arrays.toString(protocol));
                     recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
                     if(recv == null) return RESPONSE_NONE;
                     TimerPOJO timerPOJO = new TimerPOJO(recv, ConstProtocol.RANGE_READ_START);

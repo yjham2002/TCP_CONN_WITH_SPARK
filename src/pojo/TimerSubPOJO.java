@@ -1,5 +1,7 @@
 package pojo;
 
+import models.ByteSerial;
+
 /**
  * Created by 전세호 on 2017-06-02.
  * 각 센서의 타이머 설정을 저장하는 클래스
@@ -21,7 +23,8 @@ public class TimerSubPOJO extends BasePOJO{
      * offset부터 각 on/off 값 맵핑
      * @param offset
      */
-    public TimerSubPOJO(int offset, int sr_no){
+    public TimerSubPOJO(ByteSerial byteSerial, int offset, int sr_no){
+        this.byteSerial = byteSerial;
         this.sensor_number = sr_no;
 
         this.timer_setting_co2_on = getLhsFromDual(offset);

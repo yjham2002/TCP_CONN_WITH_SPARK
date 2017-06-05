@@ -49,7 +49,7 @@ public class ByteSerial implements Serializable{
      */
     public ByteSerial(byte[] bytes, int type){
         log = LoggerFactory.getLogger(this.getClass());
-        bytes[bytes.length - 3] = HexUtil.checkSumByFull(bytes);
+        bytes[bytes.length - 3] = (byte)HexUtil.checkSumByFull(bytes);
 
         log.info(Arrays.toString(bytes));
 
