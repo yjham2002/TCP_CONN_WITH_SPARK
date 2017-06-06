@@ -109,12 +109,10 @@ public class HexUtil {
     }
 
     //byte배열을 String배열로 변환
-    public String hexbyteToStr(byte []data)
-    {
+    public String hexbyteToStr(byte[] data) {
         StringBuffer sb = new StringBuffer();
         String HexaID;
-        for(int x = 0; x < data.length ; x++)
-        {
+        for(int x = 0; x < data.length ; x++) {
             HexaID = "0" + Integer.toHexString(0xff & data[x]);
             sb.append(HexaID.substring(HexaID.length()-2));
         }

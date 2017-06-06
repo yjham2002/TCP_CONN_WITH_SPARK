@@ -85,6 +85,14 @@ public class TimerSubPOJO extends BasePOJO{
         this.timer_setting_humidity_off = timer_setting_humidity_off;
     }
 
+    public int getSensor_number() {
+        return sensor_number;
+    }
+
+    public void setSensor_number(int sensor_number) {
+        this.sensor_number = sensor_number;
+    }
+
     public int getTimer_setting_ilum_on() {
         return timer_setting_ilum_on;
     }

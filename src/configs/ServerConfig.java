@@ -54,4 +54,14 @@ public class ServerConfig {
         return Long.toString(Calendar.getInstance().getTimeInMillis());
     }
 
+    public static String getYYMMDDwithPostfix(String postfix){
+        Calendar calendar = Calendar.getInstance();
+        String yymmdd = (calendar.get(Calendar.YEAR) + "") + (String.format("%02d", calendar.get(Calendar.MONTH)) + 1 + "") + String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH)) + postfix;
+        return yymmdd;
+    }
+
+    public static String getTimestamp(){
+        return getYYMMDDwithPostfix("-") + getMillis();
+    }
+
 }

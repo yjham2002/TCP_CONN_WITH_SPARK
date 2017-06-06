@@ -49,7 +49,7 @@ public class ByteSerial implements Serializable{
      */
     public ByteSerial(byte[] bytes, int type){
         log = LoggerFactory.getLogger(this.getClass());
-        bytes[bytes.length - 3] = (byte)HexUtil.checkSumByFull(bytes);
+        //bytes[bytes.length - 3] = (byte)HexUtil.checkSumByFull(bytes);
 
         log.info(Arrays.toString(bytes));
 
@@ -78,15 +78,29 @@ public class ByteSerial implements Serializable{
         this.processed = Arrays.copyOf(bytes.clone(), newLen >= 0 ? newLen : 0);
         this.length = newLen;
 
+        String reason = "\n";
+
         log.info(Arrays.toString(processed));
 //        log.info(Arrays.toString(bytes));
 
-        if(!HexUtil.isCheckSumSound(this.processed)) loss = true;
-        if(bytes.length < 4) loss = true;
-        if(!this.startsWith(ConstProtocol.STX)) loss = true;
-        if(!this.endsWith(ConstProtocol.ETX)) loss = true;
+        if(!HexUtil.isCheckSumSound(this.processed) && this.processed[9] != 3) {
+            loss = true;
+            reason += "[Checksum does not match]\n";
+        }
+        if(bytes.length < 4) {
+            loss = true;
+            reason += "[byteSerial is too short]\n";
+        }
+        if(!this.startsWith(ConstProtocol.STX)) {
+            loss = true;
+            reason += "[no STX found]\n";
+        }
+        if(!this.endsWith(ConstProtocol.ETX)) {
+            loss = true;
+            reason += "[no ETX found]\n";
+        }
 
-        if(loss) log.info("Packet-Loss Occured or is empty data - Ignoring");
+        if(loss) log.info("Packet-Loss Occured or is empty data - Ignoring" + reason);
         else log.info("Packet has been arrived successfully");
 
         setTypeAutomatically();

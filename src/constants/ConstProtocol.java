@@ -2,6 +2,8 @@ package constants;
 
 import models.Pair;
 
+import java.util.Arrays;
+
 /**
  * @author 함의진
  * @version 1.0
@@ -20,7 +22,7 @@ public class ConstProtocol {
 
     public static final int INIT_TERM_MIN10 = 0;
     public static final int INIT_TERM_MIN = 0;
-    public static final int INIT_TERM_SEC10 = 1;
+    public static final int INIT_TERM_SEC10 = 3;
     public static final int INIT_TERM_SEC = 0;
 
     public static final int SOCKET_TIMEOUT_LIMIT = 60000;
@@ -28,7 +30,7 @@ public class ConstProtocol {
 
     public static final int READ_LIMIT = 255;
 
-    public static final Pair<Integer> RANGE_TIMER = new Pair<>(448, 194);
+    public static final Pair<Integer> RANGE_TIMER = new Pair<>(448, 93);
     public static final Pair<Integer> RANGE_DAYAGE = new Pair<>(650, 12740);
     public static final Pair<Integer> RANGE_DAYAGE_01 = new Pair<>(650, 1820);
     public static final Pair<Integer> RANGE_DAYAGE_02 = new Pair<>(2470, 1820);

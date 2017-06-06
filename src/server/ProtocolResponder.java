@@ -30,6 +30,8 @@ import static constants.ConstProtocol.STX;
  */
 public class ProtocolResponder extends Thread{
 
+    private boolean flag = false;
+
     /**
      * SLF4J 로거
      */
@@ -64,11 +66,14 @@ public class ProtocolResponder extends Thread{
         }
     }
 
+
+
     /**
      * 스레드 상속 클래스로서 본 메소드에 로직을 구현
      */
     @Override
     public void run(){
+
         boolean started = false; // 이니셜 프로토콜이 전송되었는지의 여부를 갖는 로컬 변수
         boolean generated = false; // 유니크키 생성 여부
 
@@ -79,19 +84,21 @@ public class ProtocolResponder extends Thread{
 
                 ByteSerial byteSerial = new ByteSerial(buffer); // 바이트 시리얼 객체로 트리밍과 분석을 위임하기 위한 인스턴스 생성
 
-                if(!byteSerial.isLoss() && !byteSerial.startsWith(SohaProtocolUtil.concat(STX, INITIAL_PROTOCOL_START))) started = true;
+                if (!byteSerial.isLoss() && !byteSerial.startsWith(SohaProtocolUtil.concat(STX, INITIAL_PROTOCOL_START)))
+                    started = true;
 
                 buffer = byteSerial.getProcessed(); // 처리된 트림 데이터 추출
 
-                if(buffer.length == 0) System.exit(122);// TODO 디버깅용
+//                if (buffer.length == 0) System.exit(122);// TODO 디버깅용
 
-                if(!generated) {
+                if (!generated) {
                     generated = true;
                     uniqueKey = SohaProtocolUtil.getUniqueKeyByInit(buffer); // 유니크키를 농장코드로 설정하여 추출
-                    if(uniqueKey.equals(SohaProtocolUtil.getMeaninglessUniqueKey())) uniqueKey = SohaProtocolUtil.getUniqueKeyByFarmCode(SohaProtocolUtil.getFarmCodeByProtocol(buffer));
+                    if (uniqueKey.equals(SohaProtocolUtil.getMeaninglessUniqueKey()))
+                        uniqueKey = SohaProtocolUtil.getUniqueKeyByFarmCode(SohaProtocolUtil.getFarmCodeByProtocol(buffer));
                 }
 
-                if(!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
+                if (!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
                     if (!started) { // 이니셜 프로토콜에 따른 처리 여부를 확인하여 최초 연결일 경우, 본 로직을 수행
                         started = true; // 이니셜 프로토콜 전송 여부 갱신
 
@@ -102,30 +109,30 @@ public class ProtocolResponder extends Thread{
                         // 클라이언트 셋에서 키로 참조하여 이니셜 프로토콜을 전송 - 바이트 시리얼의 수신용 생성자가 아닌 이하의 생성자를 사용하여 자동으로 모드버스로 변환
                         send(new ByteSerial
                                 (
-                                SohaProtocolUtil.getInitProtocol(
-                                    buffer,
-                                    0,
-                                    0,
-                                    ConstProtocol.INIT_TERM_MIN10,
-                                    ConstProtocol.INIT_TERM_MIN,
-                                    ConstProtocol.INIT_TERM_SEC10,
-                                    ConstProtocol.INIT_TERM_SEC
-                                ),
-                                ByteSerial.TYPE_SET
+                                        SohaProtocolUtil.getInitProtocol(
+                                                buffer,
+                                                0,
+                                                0,
+                                                ConstProtocol.INIT_TERM_MIN10,
+                                                ConstProtocol.INIT_TERM_MIN,
+                                                ConstProtocol.INIT_TERM_SEC10,
+                                                ConstProtocol.INIT_TERM_SEC
+                                        ),
+                                        ByteSerial.TYPE_SET
                                 )
                         );
 
                         log.info("Responder :: [" + uniqueKey + "] :: Totally " + clients.size() + " connections are being maintained");
                         // 현재 연결된 클라이언트 소켓수와 유니크키를 디버깅을 위해 출력함
-                    }else{
-                        if(!clients.containsKey(uniqueKey)) {
+                    } else {
+                        if (!clients.containsKey(uniqueKey)) {
                             log.info("Unique Key inserted : " + uniqueKey);
                             clients.put(uniqueKey, this); // 클라이언트 해시맵에 상위에서 추출한 유니크키를 기준으로 삽입
                         }
 
                         RedisManager redisManager = RedisManager.getInstance();
-                        String farm = SohaProtocolUtil.getLocationCodeAsString(buffer);
-                        String key = farm + "@" + RedisManager.getMillis();
+                        String farm = SohaProtocolUtil.getSimpleKey(SohaProtocolUtil.getFarmCodeByProtocol(buffer));
+                        String key = farm + "@" + RedisManager.getTimestamp();
 
                         RealtimePOJO realtimePOJO = new RealtimePOJO(byteSerial);
 
@@ -142,7 +149,7 @@ public class ProtocolResponder extends Thread{
             // Ignore
         }finally {
             log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
-            clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
+            if(!this.currentThread().isInterrupted()) clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
         }
     }
 
@@ -151,6 +158,7 @@ public class ProtocolResponder extends Thread{
      * @param msg
      */
     public ByteSerial send(ByteSerial msg){
+
         log.info("Sending :: " + Arrays.toString(msg.getProcessed()));
         ByteSerial byteSerial = null;
         try {
@@ -160,7 +168,7 @@ public class ProtocolResponder extends Thread{
             int timeOutCount = 0;
             boolean succ = false;
 
-            while(timeOutCount < SOCKET_TIMEOUT_COUNT) {
+            while (timeOutCount < SOCKET_TIMEOUT_COUNT) {
                 try {
                     while ((in.read(buffer)) != -1) {
                         log.info("Message Handler Overrode the response successfully");
@@ -171,19 +179,20 @@ public class ProtocolResponder extends Thread{
                 } catch (SocketTimeoutException timeout) {
                     System.out.println();
                     timeOutCount++;
-                }finally {
-                    if(succ) break;
-                    if(timeOutCount >= SOCKET_TIMEOUT_COUNT){
+                } finally {
+                    if (succ) break;
+                    if (timeOutCount >= SOCKET_TIMEOUT_COUNT) {
                         System.out.println("Timeout occured for 3 times :: Need to send alert message");
                     }
                 }
             }
 
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             return byteSerial;
         }
+
     }
 
     @NotNull

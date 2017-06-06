@@ -1,14 +1,17 @@
 package mysql;
 
+import pojo.RealtimePOJO;
+import redis.RedisManager;
+
 import java.sql.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author 함의진
  */
 public class DBManager extends DBConstManager {
 
-    private Connection connection = null;
-    private Statement st = null;
     public static DBManager instance;
 
     public static DBManager getInstance(){
@@ -66,6 +69,26 @@ public class DBManager extends DBConstManager {
         }
     }
 
+    public static void main(String... args){
+        DBManager.getInstance().migrateFromRedis();
+    }
+
+    public boolean migrateFromRedis(){
+        try {
+            String pattern = RedisManager.getYYMMDDwithPostfix("-");
+
+            List<RealtimePOJO> list = RedisManager.getInstance().getList(pattern, RealtimePOJO.class);
+            for (RealtimePOJO pojo : list) {
+                List<String> sqls = pojo.getInsertSQL(); // Extracting sub queries
+                for(String sql : sqls) execute(sql);
+            }
+        }catch(Exception e){
+            return false;
+        }
+
+        return true;
+    }
+
 //
 //    public String getDirectResponse(String msg){
 //        try {
@@ -116,6 +139,5 @@ public class DBManager extends DBConstManager {
 //        }
 //        return retVal;
 //    }
-
 
 }

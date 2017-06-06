@@ -14,7 +14,6 @@ import java.util.List;
  */
 public class TimerPOJO extends BasePOJO{
 
-    private int timer_id;
     private int offset;
 
     private List<TimerSubPOJO> timerSubPOJOList;
@@ -73,14 +72,6 @@ public class TimerPOJO extends BasePOJO{
         }
 
         this.byteSerial = null;
-    }
-
-    public int getTimer_id() {
-        return timer_id;
-    }
-
-    public void setTimer_id(int timer_id) {
-        this.timer_id = timer_id;
     }
 
     public List<TimerSubPOJO> getTimerSubPOJOList() {
