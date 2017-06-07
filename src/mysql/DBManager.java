@@ -68,6 +68,10 @@ public class DBManager extends DBConstManager {
             System.out.println("[Migrating DB Data from REDIS to MySQL] " + count++ + "/" + list.size() + " has newly inserted.");
         }catch(Exception e){
             return false;
+        }finally {
+            long delCount = getNumber("SELECT COUNT(*) AS num FROM tblRealTimeData WHERE (DATE_SUB(NOW(), INTERVAL 2 MONTH) > regDate)", "num");
+            execute("DELETE FROM tblRealTimeData WHERE (DATE_SUB(NOW(), INTERVAL 2 MONTH) > regDate)");
+            System.out.println("[Expiration Check] " + delCount + " items which is expired has deleted from MySQL DB");
         }
 
         return true;

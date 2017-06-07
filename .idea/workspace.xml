@@ -2,18 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/configs/ServerConfig.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/configs/ServerConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/AppMain.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/AppMain.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/configs/ServerConfig.java" afterPath="$PROJECT_DIR$/src/configs/ServerConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/mysql/DBConstManager.java" afterPath="$PROJECT_DIR$/src/mysql/DBConstManager.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/mysql/DBManager.java" afterPath="$PROJECT_DIR$/src/mysql/DBManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" afterPath="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redis/RedisManager.java" afterPath="$PROJECT_DIR$/src/redis/RedisManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/AppMain.java" afterPath="$PROJECT_DIR$/src/server/AppMain.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ProtocolResponder.java" afterPath="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" afterPath="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redis/RedisWrapper.java" afterPath="$PROJECT_DIR$/src/redis/RedisWrapper.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -34,7 +25,7 @@
         <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="346">
-              <caret line="61" column="43" lean-forward="true" selection-start-line="61" selection-start-column="43" selection-end-line="61" selection-end-column="43" />
+              <caret line="61" column="41" lean-forward="false" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -58,8 +49,8 @@
       <file leaf-file-name="DBManager.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/mysql/DBManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="413">
-              <caret line="67" column="127" lean-forward="false" selection-start-line="67" selection-start-column="127" selection-end-line="67" selection-end-column="127" />
+            <state relative-caret-position="451">
+              <caret line="69" column="25" lean-forward="true" selection-start-line="69" selection-start-column="25" selection-end-line="69" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -143,11 +134,9 @@
       <file leaf-file-name="RedisWrapper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/redis/RedisWrapper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1102">
-              <caret line="70" column="53" lean-forward="false" selection-start-line="70" selection-start-column="53" selection-end-line="70" selection-end-column="53" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+            <state relative-caret-position="348">
+              <caret line="164" column="37" lean-forward="true" selection-start-line="164" selection-start-column="37" selection-end-line="164" selection-end-column="37" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -244,7 +233,6 @@
         <option value="$PROJECT_DIR$/src/models/ICallback.java" />
         <option value="$PROJECT_DIR$/src/redis/ICallback.java" />
         <option value="$PROJECT_DIR$/src/redis/RedisTestMain.java" />
-        <option value="$PROJECT_DIR$/src/redis/RedisWrapper.java" />
         <option value="$PROJECT_DIR$/src/pojo/CropDayDetailPOJO.java" />
         <option value="$PROJECT_DIR$/src/batch/IJobSpec.java" />
         <option value="$PROJECT_DIR$/src/batch/BatchConductor.java" />
@@ -272,6 +260,7 @@
         <option value="$PROJECT_DIR$/src/mysql/DBConstManager.java" />
         <option value="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" />
         <option value="$PROJECT_DIR$/src/server/AppMain.java" />
+        <option value="$PROJECT_DIR$/src/redis/RedisWrapper.java" />
         <option value="$PROJECT_DIR$/src/mysql/DBManager.java" />
       </list>
     </option>
@@ -1043,7 +1032,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496746019531</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Redis to MySQL Migration Batch Job established">
+      <created>1496815369621</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1496815369621</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1072,7 +1068,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2973822" sideWeight="0.69322914" order="2" side_tool="false" content_ui="tabs" x="156" y="547" width="1398" height="359" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21302083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21302083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1102,7 +1098,8 @@
     <MESSAGE value="TODO List added" />
     <MESSAGE value="Rest test established" />
     <MESSAGE value="MySQL Migration Manager added" />
-    <option name="LAST_COMMIT_MESSAGE" value="MySQL Migration Manager added" />
+    <MESSAGE value="Redis to MySQL Migration Batch Job established" />
+    <option name="LAST_COMMIT_MESSAGE" value="Redis to MySQL Migration Batch Job established" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1466,16 +1463,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/redis/RedisWrapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1102">
-          <caret line="70" column="53" lean-forward="false" selection-start-line="70" selection-start-column="53" selection-end-line="70" selection-end-column="53" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2223">
@@ -1539,10 +1526,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/redis/RedisWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="348">
+          <caret line="164" column="37" lean-forward="true" selection-start-line="164" selection-start-column="37" selection-end-line="164" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="346">
-          <caret line="61" column="43" lean-forward="true" selection-start-line="61" selection-start-column="43" selection-end-line="61" selection-end-column="43" />
+          <caret line="61" column="41" lean-forward="false" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1551,8 +1546,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/mysql/DBManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="67" column="127" lean-forward="false" selection-start-line="67" selection-start-column="127" selection-end-line="67" selection-end-column="127" />
+        <state relative-caret-position="451">
+          <caret line="69" column="25" lean-forward="true" selection-start-line="69" selection-start-column="25" selection-end-line="69" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

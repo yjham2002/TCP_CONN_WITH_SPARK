@@ -160,8 +160,12 @@ public class RedisWrapper extends ServerConfig{
             while(iterator.hasNext()) {
                 String key = iterator.next();
                 String json = jedis.get(key);
-                T unit = (T)mapper.readValue(json, type);
-                retVal.add(unit);
+                try {
+                    T unit = (T) mapper.readValue(json, type);
+                    retVal.add(unit);
+                }catch(Exception e){
+                    System.out.println("Parsing Error :: Skipping");
+                }
             }
 
         }catch (Exception e){
