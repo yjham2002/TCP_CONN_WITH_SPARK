@@ -18,10 +18,13 @@ public class ConstRest {
      */
     public static final String FARM_CODE = "s_farm_code";
     public static final String HARV_CODE = "s_dong_code";
+    public static final String JSON_CODE = "json";
 
     /**
      * API Parameters
      */
     public static final String MODE_READ_TIMER = "read_timer";
     public static final String MODE_READ_DAYAGE = "read_dayage";
+    public static final String MODE_WRITE_TIMER = "write_timer";
+    public static final String MODE_WRITE_DAYAGE = "write_dayage";
 }

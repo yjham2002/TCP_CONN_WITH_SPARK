@@ -19,6 +19,8 @@ public class TimerSubPOJO extends BasePOJO{
     private int timer_setting_ilum_on;
     private int timer_setting_ilum_off;
 
+    private TimerSubPOJO(){}
+
     /**
      * offset부터 각 on/off 값 맵핑
      * @param offset

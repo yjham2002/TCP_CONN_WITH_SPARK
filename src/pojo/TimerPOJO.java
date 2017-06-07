@@ -15,6 +15,33 @@ import java.util.List;
 public class TimerPOJO extends BasePOJO{
 
     private int offset;
+    private String farmCode;
+    private String dongCode;
+    private int machine_no;
+
+    public int getMachine_no() {
+        return machine_no;
+    }
+
+    public void setMachine_no(int machine_no) {
+        this.machine_no = machine_no;
+    }
+
+    public String getFarmCode() {
+        return farmCode;
+    }
+
+    public void setFarmCode(String farmCode) {
+        this.farmCode = farmCode;
+    }
+
+    public String getDongCode() {
+        return dongCode;
+    }
+
+    public void setDongCode(String dongCode) {
+        this.dongCode = dongCode;
+    }
 
     private List<TimerSubPOJO> timerSubPOJOList;
 
@@ -186,5 +213,13 @@ public class TimerPOJO extends BasePOJO{
         this.timer_ctrl_ilum_off = timer_ctrl_ilum_off;
     }
 
+    public int getOffset() {
+        return offset;
+    }
 
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    private TimerPOJO(){}
 }

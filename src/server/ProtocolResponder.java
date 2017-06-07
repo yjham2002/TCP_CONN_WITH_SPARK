@@ -99,6 +99,8 @@ public class ProtocolResponder extends Thread{
                         uniqueKey = SohaProtocolUtil.getUniqueKeyByFarmCode(SohaProtocolUtil.getFarmCodeByProtocol(buffer));
                 }
 
+                if(byteSerial.getProcessed().length > 9 && byteSerial.getProcessed()[9] == 3 && byteSerial.isLoss()) byteSerial.setLoss(false); // TODO 디버깅용 - 체크섬 정정 이후 삭제 필수
+
                 if (!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
                     if (!started) { // 이니셜 프로토콜에 따른 처리 여부를 확인하여 최초 연결일 경우, 본 로직을 수행
                         started = true; // 이니셜 프로토콜 전송 여부 갱신

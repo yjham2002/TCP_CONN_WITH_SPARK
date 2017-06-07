@@ -45,8 +45,9 @@ public class HexUtil {
     public static byte checkSum(byte[] bytes){
         int checkSum = 0;
         for(byte b : bytes) {
-            if(b < 0) checkSum += b & 0xff;
-            else checkSum += b;
+//            if(b < 0) checkSum += b & 0xff;
+//            else checkSum += b;
+            checkSum += b;
         }
 
         return (byte)checkSum;

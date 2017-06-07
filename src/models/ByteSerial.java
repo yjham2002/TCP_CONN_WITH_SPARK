@@ -83,7 +83,7 @@ public class ByteSerial implements Serializable{
         log.info(Arrays.toString(processed));
 //        log.info(Arrays.toString(bytes));
 
-        if(!HexUtil.isCheckSumSound(this.processed) && this.processed[9] != 3) {
+        if(!HexUtil.isCheckSumSound(this.processed)) {
             loss = true;
             reason += "[Checksum does not match]\n";
         }

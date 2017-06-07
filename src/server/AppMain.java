@@ -15,6 +15,8 @@ import pojo.CropWrappingPOJO;
 import pojo.TimerPOJO;
 import redis.ICallback;
 import server.engine.ServiceProvider;
+import server.response.Response;
+import server.response.ResponseConst;
 import spark.Spark;
 import utils.SohaProtocolUtil;
 
@@ -71,11 +73,6 @@ public class AppMain{
          */
         Spark.port(ConstRest.REST_PORT);
 
-        Spark.post(ConstRest.REST_WRITE_REQUEST, (req, res) -> {
-            log.info(ConstRest.REST_WRITE_REQUEST);
-            return "{\"json\":1}";
-        });
-
         Spark.get(ConstRest.REST_CONNECT_TEST, (req, res) -> {
             DataMap map = RestProcessor.makeProcessData(req.raw());
 
@@ -101,10 +98,8 @@ public class AppMain{
             String rawFarm = map.getString(ConstRest.FARM_CODE);
             String rawHarv = map.getString(ConstRest.HARV_CODE);
             int id = 0;
-            if(map.get("id") == null && !rawHarv.equals("")) id = Integer.parseInt(rawHarv);//dbManager.getMachineNumber(rawFarm, rawHarv);
+            if(map.get("id") == null && !rawHarv.equals("")) id = Integer.parseInt(rawHarv);
             else id = map.getInt("id");
-
-            System.out.println(mode + "::" + map.getString("cli"));
 
             if(id == 0){
                 System.out.println("No appropriate machine code for " + rawFarm + ":" + rawHarv);
@@ -179,7 +174,7 @@ public class AppMain{
 
             if((protocols == null && protocol == null) || retVal == null){
                 log.info("Mode has not been designated - Do nothing");
-                return RESPONSE_NONE;
+                return Response.response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
             }else{
                 return retVal;
             }
@@ -189,9 +184,45 @@ public class AppMain{
         /**
          * WRITE 요청 API
          */
-        Spark.get(ConstRest.REST_WRITE_REQUEST, (req, res) -> {
+        Spark.post(ConstRest.REST_WRITE_REQUEST, (req, res) -> {
+
+            DataMap map = RestProcessor.makeProcessData(req.raw());
+
             log.info(ConstRest.REST_WRITE_REQUEST);
-            return "{\"json\":1}";
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            String mode = map.getString("mode");
+            String rawFarm = map.getString(ConstRest.FARM_CODE);
+            String rawHarv = map.getString(ConstRest.HARV_CODE);
+            String rawJson = map.getString(ConstRest.JSON_CODE);
+
+            int id = 0;
+            if(map.get("id") == null && !rawHarv.equals("")) id = Integer.parseInt(rawHarv);
+            else id = map.getInt("id");
+
+            if(map.get("mode") == null){
+                return Response.response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
+            }
+
+            switch(mode) {
+                case ConstRest.MODE_WRITE_TIMER: {
+                    try {
+                        TimerPOJO timerPOJO = objectMapper.readValue(rawJson, TimerPOJO.class);
+                        return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SAVE_SUCC);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
+                    }
+                }
+                case ConstRest.MODE_WRITE_DAYAGE: {
+                    return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
+                }
+                default: {
+                    return Response.response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
+                }
+            }
+
         });
 
         /**
