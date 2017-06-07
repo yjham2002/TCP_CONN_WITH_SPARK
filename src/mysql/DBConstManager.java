@@ -1,6 +1,7 @@
 package mysql;
 
 import java.sql.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by a on 2017-04-03.
@@ -70,6 +71,30 @@ public class DBConstManager {
         }catch(SQLException e){
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public long getNumber(String sql, String column){
+        try {
+            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
+            st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            long res = 0;
+
+            while(rs.next()){
+                res = rs.getLong(column);
+            }
+
+            rs.close();
+            st.close();
+
+            connection.close();
+
+            return res;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return 0;
         }
     }
 

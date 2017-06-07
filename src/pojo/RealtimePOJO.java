@@ -2,6 +2,7 @@ package pojo;
 
 import models.ByteSerial;
 import mysql.DBManager;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.util.JSONPObject;
 
@@ -321,11 +322,22 @@ public class RealtimePOJO extends BasePOJO{
      * 기타 멤버 종결
      */
 
+    private String farmString = "";
+    private String harvString = "";
+
     public RealtimePOJO(ByteSerial byteSerial){
         this.byteSerial = byteSerial;
         this.classType = this.getClass();
         this.farmCode = Arrays.copyOfRange(byteSerial.getProcessed(), 2, 6);
         this.harvCode = Arrays.copyOfRange(byteSerial.getProcessed(), 6, 8);
+
+        for(int i = 0; i < this.farmCode.length; i++){
+            farmString += (this.farmCode[i] - '0') + "";
+        }
+
+        for(int i = 0; i < this.harvCode.length; i++){
+            harvString += (this.harvCode[i] - '0') + "";
+        }
 
         ellaborate();
     }
@@ -2397,435 +2409,454 @@ public class RealtimePOJO extends BasePOJO{
         return realtimePOJO;
     }
 
-    public List<String> getInsertSQL(){
-        int id = DBManager.getInstance().getLastInsertId("tblMachineData");
+    private String redisTime;
 
-        String sql1 = "INSERT INTO `sohatechfarmdb`.`tblMachineData`\n" +
-                "            (`dataNumber`,\n" +
-                "             `option_changed_aggr`,\n" +
-                "             `option_changed_setting`,\n" +
-                "             `option_changed_timer`,\n" +
-                "             `option_changed_crop1`,\n" +
-                "             `option_changed_crop2`,\n" +
-                "             `option_changed_crop3`,\n" +
-                "             `option_changed_crop4`,\n" +
-                "             `option_changed_crop5`,\n" +
-                "             `option_changed_crop6`,\n" +
-                "             `option_changed_setting_a`,\n" +
-                "             `option_changed_timer_a`,\n" +
-                "             `option_changed_crop1_a`,\n" +
-                "             `option_changed_crop2_a`,\n" +
-                "             `option_changed_crop3_a`,\n" +
-                "             `option_changed_crop4_a`,\n" +
-                "             `option_changed_crop5_a`,\n" +
-                "             `option_changed_crop6_a`,\n" +
-                "             `growth_progress_aggr`,\n" +
-                "             `growth_progress_dt`,\n" +
-                "             `growth_progress_total`,\n" +
-                "             `run_status_aggr`,\n" +
-                "             `run_status_current`,\n" +
-                "             `run_status_mode`,\n" +
-                "             `run_status_prevdata`,\n" +
-                "             `run_status_dry_enabled`,\n" +
-                "             `run_status_dayage_count`,\n" +
-                "             `run_status_dayage_progress`,\n" +
-                "             `errstat_err0_start_md`,\n" +
-                "             `errstat_err0_start_time`,\n" +
-                "             `errstat_err0_progress_time`,\n" +
-                "             `errstat_err1_data`,\n" +
-                "             `errstat_err2_data`,\n" +
-                "             `errstat_err3_data`,\n" +
-                "             `errstat_err4_data`,\n" +
-                "             `errstat_err5_data`,\n" +
-                "             `errstat_err6_data`,\n" +
-                "             `errstat_err7_data`,\n" +
-                "             `errstat_err8_data`,\n" +
-                "             `errstat_err9_data`,\n" +
-                "             `errstat_err10_data`,\n" +
-                "             `errstat_err11_data`,\n" +
-                "             `errstat_err12_data`,\n" +
-                "             `errstat_err13_data`,\n" +
-                "             `errstat_err14_data`,\n" +
-                "             `errstat_err15_data`)\n" +
-                "VALUES (\'" + id + "\', " +
-                "\'" +option_changed_aggr+ "\', " +
-                "\'" +option_changed_setting+ "\', " +
-                "\'" +option_changed_timer+ "\', " +
-                "\'" +option_changed_crop1+ "\', " +
-                "\'" +option_changed_crop2+ "\', " +
-                "\'" +option_changed_crop3+ "\', " +
-                "\'" +option_changed_crop4+ "\', " +
-                "\'" +option_changed_crop5+ "\', " +
-                "\'" +option_changed_crop6+ "\', " +
-                "\'" +option_changed_setting_a+ "\', " +
-                "\'" +option_changed_timer_a+ "\', " +
-                "\'" +option_changed_crop1_a+ "\', " +
-                "\'" +option_changed_crop2_a+ "\', " +
-                "\'" +option_changed_crop3_a+ "\', " +
-                "\'" +option_changed_crop4_a+ "\', " +
-                "\'" +option_changed_crop5_a+ "\', " +
-                "\'" +option_changed_crop6_a+ "\', " +
-                "\'" +growth_progress_aggr+ "\', " +
-                "\'" +growth_progress_dt+ "\', " +
-                "\'" +growth_progress_total+ "\', " +
-                "\'" +run_status_aggr+ "\', " +
-                "\'" +run_status_current+ "\', " +
-                "\'" +run_status_mode+ "\', " +
-                "\'" +run_status_prevdata+ "\', " +
-                "\'" +run_status_dry_enabled+ "\', " +
-                "\'" +run_status_dayage_count+ "\', " +
-                "\'" +run_status_dayage_progress+ "\', " +
-                "\'" +errstat_err0_start_md+ "\', " +
-                "\'" +errstat_err0_start_time+ "\', " +
-                "\'" +errstat_err0_progress_time+ "\', " +
-                "\'" +errstat_err1_data+ "\', " +
-                "\'" +errstat_err2_data+ "\', " +
-                "\'" +errstat_err3_data+ "\', " +
-                "\'" +errstat_err4_data+ "\', " +
-                "\'" +errstat_err5_data+ "\', " +
-                "\'" +errstat_err6_data+ "\', " +
-                "\'" +errstat_err7_data+ "\', " +
-                "\'" +errstat_err8_data+ "\', " +
-                "\'" +errstat_err9_data+ "\', " +
-                "\'" +errstat_err10_data+ "\', " +
-                "\'" +errstat_err11_data+ "\', " +
-                "\'" +errstat_err12_data+ "\', " +
-                "\'" +errstat_err13_data+ "\', " +
-                "\'" +errstat_err14_data+ "\', " +
-                "\'" +errstat_err15_data + "\');";
+    public String getFarmString() {
+        return farmString;
+    }
 
-        String sql2 = "INSERT INTO `sohatechfarmdb`.`tblEtcData`\n" +
-                "            (`dataNumber`,\n" +
-                "             `lcdorder_run`,\n" +
-                "             `lcdorder_mode`,\n" +
-                "             `lcdorder_dayage_start`,\n" +
-                "             `changetype_lcd_setting`,\n" +
-                "             `changetype_lcd_timer`,\n" +
-                "             `changetype_lcd_dayage1`,\n" +
-                "             `changetype_lcd_dayage2`,\n" +
-                "             `changetype_lcd_dayage3`,\n" +
-                "             `changetype_lcd_dayage4`,\n" +
-                "             `changetype_lcd_dayage5`,\n" +
-                "             `changetype_lcd_dayage6`,\n" +
-                "             `changetype_pc_setting`,\n" +
-                "             `changetype_pc_timer`,\n" +
-                "             `changetype_pc_dayage1`,\n" +
-                "             `changetype_pc_dayage2`,\n" +
-                "             `changetype_pc_dayage3`,\n" +
-                "             `changetype_pc_dayage4`,\n" +
-                "             `changetype_pc_dayage5`,\n" +
-                "             `changetype_pc_dayage6`,\n" +
-                "             `networkerr_510to515`,\n" +
-                "             `dayage_low`,\n" +
-                "             `dayage_high`,\n" +
-                "             `real_sec`,\n" +
-                "             `real_hm`,\n" +
-                "             `real_md`,\n" +
-                "             `dymamic_output_mode`,\n" +
-                "             `dymamic_output_inc`,\n" +
-                "             `dymamic_output_dec`,\n" +
-                "             `dymamic_output_analog`,\n" +
-                "             `dymamic_output_valid`,\n" +
-                "             `start_year`,\n" +
-                "             `start_md`,\n" +
-                "             `start_hm`,\n" +
-                "             `mcnctrl_mv510_aggr`,\n" +
-                "             `mcnctrl_mv510_order_co2`,\n" +
-                "             `mcnctrl_mv510_order_temp`,\n" +
-                "             `mcnctrl_mv510_order_humidity`,\n" +
-                "             `mcnctrl_mv510_order_ilum`,\n" +
-                "             `mcnctrl_mv510_order_main1`,\n" +
-                "             `mcnctrl_mv510_order_main2`,\n" +
-                "             `mcnctrl_mv510_stat_fan`,\n" +
-                "             `mcnctrl_mv510_stat_heater`,\n" +
-                "             `mcnctrl_mv510_stat_freezer`,\n" +
-                "             `mcnctrl_mv510_stat_humidifier`,\n" +
-                "             `mcnctrl_mv510_stat_dehumidifier`,\n" +
-                "             `mcnctrl_mv510_stat_ilum`,\n" +
-                "             `mcnctrl_mv510_stat_alarm`,\n" +
-                "             `mcnctrl_mv510_stat_reserve`,\n" +
-                "             `mcnctrl_web_aggr`,\n" +
-                "             `mcnctrl_web_order_co2`,\n" +
-                "             `mcnctrl_web_order_temp`,\n" +
-                "             `mcnctrl_web_order_humidity`,\n" +
-                "             `mcnctrl_web_order_ilum`,\n" +
-                "             `mcnctrl_web_order_main1`,\n" +
-                "             `mcnctrl_web_order_main2`,\n" +
-                "             `mcnctrl_web_stat_fan`,\n" +
-                "             `mcnctrl_web_stat_heater`,\n" +
-                "             `mcnctrl_web_stat_freezer`,\n" +
-                "             `mcnctrl_web_stat_humidifier`,\n" +
-                "             `mcnctrl_web_stat_dehumidifier`,\n" +
-                "             `mcnctrl_web_stat_ilum`,\n" +
-                "             `mcnctrl_web_stat_alarm`,\n" +
-                "             `mcnctrl_web_stat_reserve`)\n" +
-                "VALUES ('" + id + "',\n" +
-                "\'" +lcdorder_run+ "\', " +
-                "\'" +lcdorder_mode+ "\', " +
-                "\'" +lcdorder_dayage_start+ "\', " +
-                "\'" +changetype_lcd_setting+ "\', " +
-                "\'" +changetype_lcd_timer+ "\', " +
-                "\'" +changetype_lcd_dayage1+ "\', " +
-                "\'" +changetype_lcd_dayage2+ "\', " +
-                "\'" +changetype_lcd_dayage3+ "\', " +
-                "\'" +changetype_lcd_dayage4+ "\', " +
-                "\'" +changetype_lcd_dayage5+ "\', " +
-                "\'" +changetype_lcd_dayage6+ "\', " +
-                "\'" +changetype_pc_setting+ "\', " +
-                "\'" +changetype_pc_timer+ "\', " +
-                "\'" +changetype_pc_dayage1+ "\', " +
-                "\'" +changetype_pc_dayage2+ "\', " +
-                "\'" +changetype_pc_dayage3+ "\', " +
-                "\'" +changetype_pc_dayage4+ "\', " +
-                "\'" +changetype_pc_dayage5+ "\', " +
-                "\'" +changetype_pc_dayage6+ "\', " +
-                "\'" +networkerr_510to515+ "\', " +
-                "\'" +dayage_low+ "\', " +
-                "\'" +dayage_high+ "\', " +
-                "\'" +real_sec+ "\', " +
-                "\'" +real_hm+ "\', " +
-                "\'" +real_md+ "\', " +
-                "\'" +dymamic_output_mode+ "\', " +
-                "\'" +dymamic_output_inc+ "\', " +
-                "\'" +dymamic_output_dec+ "\', " +
-                "\'" +dymamic_output_analog+ "\', " +
-                "\'" +dymamic_output_valid+ "\', " +
-                "\'" +start_year+ "\', " +
-                "\'" +start_md+ "\', " +
-                "\'" +start_hm+ "\', " +
-                "\'" +mcnctrl_mv510_aggr+ "\', " +
-                "\'" +mcnctrl_mv510_order_co2+ "\', " +
-                "\'" +mcnctrl_mv510_order_temp+ "\', " +
-                "\'" +mcnctrl_mv510_order_humidity+ "\', " +
-                "\'" +mcnctrl_mv510_order_ilum+ "\', " +
-                "\'" +mcnctrl_mv510_order_main1+ "\', " +
-                "\'" +mcnctrl_mv510_order_main2+ "\', " +
-                "\'" +mcnctrl_mv510_stat_fan+ "\', " +
-                "\'" +mcnctrl_mv510_stat_heater+ "\', " +
-                "\'" +mcnctrl_mv510_stat_freezer+ "\', " +
-                "\'" +mcnctrl_mv510_stat_humidifier+ "\', " +
-                "\'" +mcnctrl_mv510_stat_dehumidifier+ "\', " +
-                "\'" +mcnctrl_mv510_stat_ilum+ "\', " +
-                "\'" +mcnctrl_mv510_stat_alarm+ "\', " +
-                "\'" +mcnctrl_mv510_stat_reserve+ "\', " +
-                "\'" +mcnctrl_web_aggr+ "\', " +
-                "\'" +mcnctrl_web_order_co2+ "\', " +
-                "\'" +mcnctrl_web_order_temp+ "\', " +
-                "\'" +mcnctrl_web_order_humidity+ "\', " +
-                "\'" +mcnctrl_web_order_ilum+ "\', " +
-                "\'" +mcnctrl_web_order_main1+ "\', " +
-                "\'" +mcnctrl_web_order_main2+ "\', " +
-                "\'" +mcnctrl_web_stat_fan+ "\', " +
-                "\'" +mcnctrl_web_stat_heater+ "\', " +
-                "\'" +mcnctrl_web_stat_freezer+ "\', " +
-                "\'" +mcnctrl_web_stat_humidifier+ "\', " +
-                "\'" +mcnctrl_web_stat_dehumidifier+ "\', " +
-                "\'" +mcnctrl_web_stat_ilum+ "\', " +
-                "\'" +mcnctrl_web_stat_alarm+ "\', " +
-                "\'" +mcnctrl_web_stat_reserve + "');";
+    public void setFarmString(String farmString) {
+        this.farmString = farmString;
+    }
 
-        String sql3 = "INSERT INTO `sohatechfarmdb`.`tblSensorData`\n" +
-                "            (`dataNumber`,\n" +
-                "             `co2_sr`,\n" +
-                "             `temp_sr`,\n" +
-                "             `humid_sr`,\n" +
-                "             `illum_sr`,\n" +
-                "             `sr_set1_co2`,\n" +
-                "             `sr_set1_temp`,\n" +
-                "             `sr_set1_humidity`,\n" +
-                "             `sr_set1_ilum`,\n" +
-                "             `sr_set2_co2`,\n" +
-                "             `sr_set2_temp`,\n" +
-                "             `sr_set2_humidity`,\n" +
-                "             `sr_set2_ilum`,\n" +
-                "             `sr_set3_co2`,\n" +
-                "             `sr_set3_temp`,\n" +
-                "             `sr_set3_humidity`,\n" +
-                "             `sr_set3_ilum`,\n" +
-                "             `sr_set4_co2`,\n" +
-                "             `sr_set4_temp`,\n" +
-                "             `sr_set4_humidity`,\n" +
-                "             `sr_set4_ilum`,\n" +
-                "             `sr_val_co2`,\n" +
-                "             `sr_val_temp`,\n" +
-                "             `sr_val_humidity`,\n" +
-                "             `sr_val_ilum`,\n" +
-                "             `controlstat_aggr`,\n" +
-                "             `controlstat_co2_type`,\n" +
-                "             `controlstat_co2_ontype`,\n" +
-                "             `controlstat_co2_offtype`,\n" +
-                "             `controlstat_temp_type`,\n" +
-                "             `controlstat_temp_ontype`,\n" +
-                "             `controlstat_temp_offtype`,\n" +
-                "             `controlstat_humidity_type`,\n" +
-                "             `controlstat_humidity_ontype`,\n" +
-                "             `controlstat_humidity_offtype`,\n" +
-                "             `controlstat_ilum_type`,\n" +
-                "             `controlstat_ilum_ontype`,\n" +
-                "             `controlstat_ilum_offtype`,\n" +
-                "             `co2_value`,\n" +
-                "             `temp_value`,\n" +
-                "             `humidity_value`,\n" +
-                "             `ilum_value`,\n" +
-                "             `vt515_version`)\n" +
-                "VALUES ('" + id + "',\n" +
-                "\'" +co2_sr+ "\', " +
-                "\'" +temp_sr+ "\', " +
-                "\'" +humid_sr+ "\', " +
-                "\'" +illum_sr+ "\', " +
-                "\'" +sr_set1_co2+ "\', " +
-                "\'" +sr_set1_temp+ "\', " +
-                "\'" +sr_set1_humidity+ "\', " +
-                "\'" +sr_set1_ilum+ "\', " +
-                "\'" +sr_set2_co2+ "\', " +
-                "\'" +sr_set2_temp+ "\', " +
-                "\'" +sr_set2_humidity+ "\', " +
-                "\'" +sr_set2_ilum+ "\', " +
-                "\'" +sr_set3_co2+ "\', " +
-                "\'" +sr_set3_temp+ "\', " +
-                "\'" +sr_set3_humidity+ "\', " +
-                "\'" +sr_set3_ilum+ "\', " +
-                "\'" +sr_set4_co2+ "\', " +
-                "\'" +sr_set4_temp+ "\', " +
-                "\'" +sr_set4_humidity+ "\', " +
-                "\'" +sr_set4_ilum+ "\', " +
-                "\'" +sr_val_co2+ "\', " +
-                "\'" +sr_val_temp+ "\', " +
-                "\'" +sr_val_humidity+ "\', " +
-                "\'" +sr_val_ilum+ "\', " +
-                "\'" +controlstat_aggr+ "\', " +
-                "\'" +controlstat_co2_type+ "\', " +
-                "\'" +controlstat_co2_ontype+ "\', " +
-                "\'" +controlstat_co2_offtype+ "\', " +
-                "\'" +controlstat_temp_type+ "\', " +
-                "\'" +controlstat_temp_ontype+ "\', " +
-                "\'" +controlstat_temp_offtype+ "\', " +
-                "\'" +controlstat_humidity_type+ "\', " +
-                "\'" +controlstat_humidity_ontype+ "\', " +
-                "\'" +controlstat_humidity_offtype+ "\', " +
-                "\'" +controlstat_ilum_type+ "\', " +
-                "\'" +controlstat_ilum_ontype+ "\', " +
-                "\'" +controlstat_ilum_offtype+ "\', " +
-                "\'" +co2_value+ "\', " +
-                "\'" +temp_value+ "\', " +
-                "\'" +humidity_value+ "\', " +
-                "\'" +ilum_value+ "\', " +
-                "\'" +vt515_version +"');";
+    public String getHarvString() {
+        return harvString;
+    }
 
-        String sql4 = "INSERT INTO `sohatechfarmdb`.`tblSensorRelayData`\n" +
-                "            (`dataNumber`,\n" +
-                "             `relay_output_aggr`,\n" +
-                "             `relay_output_co2`,\n" +
-                "             `relay_output_heater`,\n" +
-                "             `relay_output_freezer`,\n" +
-                "             `relay_output_humidity`,\n" +
-                "             `relay_output_dehumidity`,\n" +
-                "             `relay_output_ilum`,\n" +
-                "             `relay_output_alarm`,\n" +
-                "             `relay_output_reserve`,\n" +
-                "             `co2_relay_on_start_md`,\n" +
-                "             `co2_relay_on_start_hm`,\n" +
-                "             `co2_relay_on_time`,\n" +
-                "             `co2_relay_off_start_md`,\n" +
-                "             `co2_relay_off_start_hm`,\n" +
-                "             `co2_relay_off_time`,\n" +
-                "             `heat_relay_on_start_md`,\n" +
-                "             `heat_relay_on_start_hm`,\n" +
-                "             `heat_relay_on_time`,\n" +
-                "             `heat_relay_off_start_md`,\n" +
-                "             `heat_relay_off_start_hm`,\n" +
-                "             `heat_relay_off_time`,\n" +
-                "             `cool_relay_on_start_md`,\n" +
-                "             `cool_relay_on_start_hm`,\n" +
-                "             `cool_relay_on_time`,\n" +
-                "             `cool_relay_off_start_md`,\n" +
-                "             `cool_relay_off_start_hm`,\n" +
-                "             `cool_relay_off_time`,\n" +
-                "             `humidify_relay_on_start_md`,\n" +
-                "             `humidify_relay_on_start_hm`,\n" +
-                "             `humidify_relay_on_time`,\n" +
-                "             `humidify_relay_off_start_md`,\n" +
-                "             `humidify_relay_off_start_hm`,\n" +
-                "             `humidify_relay_off_time`,\n" +
-                "             `dehumidify_relay_on_start_md`,\n" +
-                "             `dehumidify_relay_on_start_hm`,\n" +
-                "             `dehumidify_relay_on_time`,\n" +
-                "             `dehumidify_relay_off_start_md`,\n" +
-                "             `dehumidify_relay_off_start_hm`,\n" +
-                "             `dehumidify_relay_off_time`,\n" +
-                "             `illum_relay_on_start_md`,\n" +
-                "             `illum_relay_on_start_hm`,\n" +
-                "             `illum_relay_on_time`,\n" +
-                "             `illum_relay_off_start_md`,\n" +
-                "             `illum_relay_off_start_hm`,\n" +
-                "             `illum_relay_off_time`,\n" +
-                "             `alarm_relay_on_start_md`,\n" +
-                "             `alarm_relay_on_start_hm`,\n" +
-                "             `alarm_relay_on_time`,\n" +
-                "             `alarm_relay_off_start_md`,\n" +
-                "             `alarm_relay_off_start_hm`,\n" +
-                "             `alarm_relay_off_time`)\n" +
-                "VALUES ('" + id + "',\n" +
-                "\'" +relay_output_aggr+ "\', " +
-                "\'" +relay_output_co2+ "\', " +
-                "\'" +relay_output_heater+ "\', " +
-                "\'" +relay_output_freezer+ "\', " +
-                "\'" +relay_output_humidity+ "\', " +
-                "\'" +relay_output_dehumidity+ "\', " +
-                "\'" +relay_output_ilum+ "\', " +
-                "\'" +relay_output_alarm+ "\', " +
-                "\'" +relay_output_reserve+ "\', " +
-                "\'" +co2_relay_on_start_md+ "\', " +
-                "\'" +co2_relay_on_start_hm+ "\', " +
-                "\'" +co2_relay_on_time+ "\', " +
-                "\'" +co2_relay_off_start_md+ "\', " +
-                "\'" +co2_relay_off_start_hm+ "\', " +
-                "\'" +co2_relay_off_time+ "\', " +
-                "\'" +heat_relay_on_start_md+ "\', " +
-                "\'" +heat_relay_on_start_hm+ "\', " +
-                "\'" +heat_relay_on_time+ "\', " +
-                "\'" +heat_relay_off_start_md+ "\', " +
-                "\'" +heat_relay_off_start_hm+ "\', " +
-                "\'" +heat_relay_off_time+ "\', " +
-                "\'" +cool_relay_on_start_md+ "\', " +
-                "\'" +cool_relay_on_start_hm+ "\', " +
-                "\'" +cool_relay_on_time+ "\', " +
-                "\'" +cool_relay_off_start_md+ "\', " +
-                "\'" +cool_relay_off_start_hm+ "\', " +
-                "\'" +cool_relay_off_time+ "\', " +
-                "\'" +humidify_relay_on_start_md+ "\', " +
-                "\'" +humidify_relay_on_start_hm+ "\', " +
-                "\'" +humidify_relay_on_time+ "\', " +
-                "\'" +humidify_relay_off_start_md+ "\', " +
-                "\'" +humidify_relay_off_start_hm+ "\', " +
-                "\'" +humidify_relay_off_time+ "\', " +
-                "\'" +dehumidify_relay_on_start_md+ "\', " +
-                "\'" +dehumidify_relay_on_start_hm+ "\', " +
-                "\'" +dehumidify_relay_on_time+ "\', " +
-                "\'" +dehumidify_relay_off_start_md+ "\', " +
-                "\'" +dehumidify_relay_off_start_hm+ "\', " +
-                "\'" +dehumidify_relay_off_time+ "\', " +
-                "\'" +illum_relay_on_start_md+ "\', " +
-                "\'" +illum_relay_on_start_hm+ "\', " +
-                "\'" +illum_relay_on_time+ "\', " +
-                "\'" +illum_relay_off_start_md+ "\', " +
-                "\'" +illum_relay_off_start_hm+ "\', " +
-                "\'" +illum_relay_off_time+ "\', " +
-                "\'" +alarm_relay_on_start_md+ "\', " +
-                "\'" +alarm_relay_on_start_hm+ "\', " +
-                "\'" +alarm_relay_on_time+ "\', " +
-                "\'" +alarm_relay_off_start_md+ "\', " +
-                "\'" +alarm_relay_off_start_hm+ "\', " +
-                "\'" +alarm_relay_off_time + "');";
+    public void setHarvString(String harvString) {
+        this.harvString = harvString;
+    }
 
-        List<String> sqls = new ArrayList<>();
+    public String getRedisTime() {
+        return redisTime;
+    }
 
-        sqls.add(sql1);
-        sqls.add(sql2);
-        sqls.add(sql3);
-        sqls.add(sql4);
+    public void setRedisTime(String redisTime) {
+        this.redisTime = redisTime;
+    }
 
-        return sqls;
+    /**
+     * SQL 문법으로 해당 인스턴스의 삽입 구문을 추출
+     * @return MySQL 쿼리
+     */
+    @JsonIgnore
+    public String getInsertSQL(){
+
+       String sql = "INSERT INTO `sohatechfarmdb`.`tblRealTimeData` \n" +
+               "\t(`farmCode`, \n" +
+               "\t`dongCode`, \n" +
+               "\t`co2_sr`, \n" +
+               "\t`temp_sr`, \n" +
+               "\t`humid_sr`, \n" +
+               "\t`illum_sr`, \n" +
+               "\t`sr_set1_co2`, \n" +
+               "\t`sr_set1_temp`, \n" +
+               "\t`sr_set1_humidity`, \n" +
+               "\t`sr_set1_ilum`, \n" +
+               "\t`sr_set2_co2`, \n" +
+               "\t`sr_set2_temp`, \n" +
+               "\t`sr_set2_humidity`, \n" +
+               "\t`sr_set2_ilum`, \n" +
+               "\t`sr_set3_co2`, \n" +
+               "\t`sr_set3_temp`, \n" +
+               "\t`sr_set3_humidity`, \n" +
+               "\t`sr_set3_ilum`, \n" +
+               "\t`sr_set4_co2`, \n" +
+               "\t`sr_set4_temp`, \n" +
+               "\t`sr_set4_humidity`, \n" +
+               "\t`sr_set4_ilum`, \n" +
+               "\t`sr_val_co2`, \n" +
+               "\t`sr_val_temp`, \n" +
+               "\t`sr_val_humidity`, \n" +
+               "\t`sr_val_ilum`, \n" +
+               "\t`controlstat_aggr`, \n" +
+               "\t`controlstat_co2_type`, \n" +
+               "\t`controlstat_co2_ontype`, \n" +
+               "\t`controlstat_co2_offtype`, \n" +
+               "\t`controlstat_temp_type`, \n" +
+               "\t`controlstat_temp_ontype`, \n" +
+               "\t`controlstat_temp_offtype`, \n" +
+               "\t`controlstat_humidity_type`, \n" +
+               "\t`controlstat_humidity_ontype`, \n" +
+               "\t`controlstat_humidity_offtype`, \n" +
+               "\t`controlstat_ilum_type`, \n" +
+               "\t`controlstat_ilum_ontype`, \n" +
+               "\t`controlstat_ilum_offtype`, \n" +
+               "\t`co2_value`, \n" +
+               "\t`temp_value`, \n" +
+               "\t`humidity_value`, \n" +
+               "\t`ilum_value`, \n" +
+               "\t`vt515_version`, \n" +
+               "\t`relay_output_aggr`, \n" +
+               "\t`relay_output_co2`, \n" +
+               "\t`relay_output_heater`, \n" +
+               "\t`relay_output_freezer`, \n" +
+               "\t`relay_output_humidity`, \n" +
+               "\t`relay_output_dehumidity`, \n" +
+               "\t`relay_output_ilum`, \n" +
+               "\t`relay_output_alarm`, \n" +
+               "\t`relay_output_reserve`, \n" +
+               "\t`co2_relay_on_start_md`, \n" +
+               "\t`co2_relay_on_start_hm`, \n" +
+               "\t`co2_relay_on_time`, \n" +
+               "\t`co2_relay_off_start_md`, \n" +
+               "\t`co2_relay_off_start_hm`, \n" +
+               "\t`co2_relay_off_time`, \n" +
+               "\t`heat_relay_on_start_md`, \n" +
+               "\t`heat_relay_on_start_hm`, \n" +
+               "\t`heat_relay_on_time`, \n" +
+               "\t`heat_relay_off_start_md`, \n" +
+               "\t`heat_relay_off_start_hm`, \n" +
+               "\t`heat_relay_off_time`, \n" +
+               "\t`cool_relay_on_start_md`, \n" +
+               "\t`cool_relay_on_start_hm`, \n" +
+               "\t`cool_relay_on_time`, \n" +
+               "\t`cool_relay_off_start_md`, \n" +
+               "\t`cool_relay_off_start_hm`, \n" +
+               "\t`cool_relay_off_time`, \n" +
+               "\t`humidify_relay_on_start_md`, \n" +
+               "\t`humidify_relay_on_start_hm`, \n" +
+               "\t`humidify_relay_on_time`, \n" +
+               "\t`humidify_relay_off_start_md`, \n" +
+               "\t`humidify_relay_off_start_hm`, \n" +
+               "\t`humidify_relay_off_time`, \n" +
+               "\t`dehumidify_relay_on_start_md`, \n" +
+               "\t`dehumidify_relay_on_start_hm`, \n" +
+               "\t`dehumidify_relay_on_time`, \n" +
+               "\t`dehumidify_relay_off_start_md`, \n" +
+               "\t`dehumidify_relay_off_start_hm`, \n" +
+               "\t`dehumidify_relay_off_time`, \n" +
+               "\t`illum_relay_on_start_md`, \n" +
+               "\t`illum_relay_on_start_hm`, \n" +
+               "\t`illum_relay_on_time`, \n" +
+               "\t`illum_relay_off_start_md`, \n" +
+               "\t`illum_relay_off_start_hm`, \n" +
+               "\t`illum_relay_off_time`, \n" +
+               "\t`alarm_relay_on_start_md`, \n" +
+               "\t`alarm_relay_on_start_hm`, \n" +
+               "\t`alarm_relay_on_time`, \n" +
+               "\t`alarm_relay_off_start_md`, \n" +
+               "\t`alarm_relay_off_start_hm`, \n" +
+               "\t`alarm_relay_off_time`, \n" +
+               "\t`option_changed_aggr`, \n" +
+               "\t`option_changed_setting`, \n" +
+               "\t`option_changed_timer`, \n" +
+               "\t`option_changed_crop1`, \n" +
+               "\t`option_changed_crop2`, \n" +
+               "\t`option_changed_crop3`, \n" +
+               "\t`option_changed_crop4`, \n" +
+               "\t`option_changed_crop5`, \n" +
+               "\t`option_changed_crop6`, \n" +
+               "\t`option_changed_setting_a`, \n" +
+               "\t`option_changed_timer_a`, \n" +
+               "\t`option_changed_crop1_a`, \n" +
+               "\t`option_changed_crop2_a`, \n" +
+               "\t`option_changed_crop3_a`, \n" +
+               "\t`option_changed_crop4_a`, \n" +
+               "\t`option_changed_crop5_a`, \n" +
+               "\t`option_changed_crop6_a`, \n" +
+               "\t`growth_progress_aggr`, \n" +
+               "\t`growth_progress_dt`, \n" +
+               "\t`growth_progress_total`, \n" +
+               "\t`run_status_aggr`, \n" +
+               "\t`run_status_current`, \n" +
+               "\t`run_status_mode`, \n" +
+               "\t`run_status_prevdata`, \n" +
+               "\t`run_status_dry_enabled`, \n" +
+               "\t`run_status_dayage_count`, \n" +
+               "\t`run_status_dayage_progress`, \n" +
+               "\t`errstat_err0_start_md`, \n" +
+               "\t`errstat_err0_start_time`, \n" +
+               "\t`errstat_err0_progress_time`, \n" +
+               "\t`errstat_err1_data`, \n" +
+               "\t`errstat_err2_data`, \n" +
+               "\t`errstat_err3_data`, \n" +
+               "\t`errstat_err4_data`, \n" +
+               "\t`errstat_err5_data`, \n" +
+               "\t`errstat_err6_data`, \n" +
+               "\t`errstat_err7_data`, \n" +
+               "\t`errstat_err8_data`, \n" +
+               "\t`errstat_err9_data`, \n" +
+               "\t`errstat_err10_data`, \n" +
+               "\t`errstat_err11_data`, \n" +
+               "\t`errstat_err12_data`, \n" +
+               "\t`errstat_err13_data`, \n" +
+               "\t`errstat_err14_data`, \n" +
+               "\t`errstat_err15_data`, \n" +
+               "\t`lcdorder_run`, \n" +
+               "\t`lcdorder_mode`, \n" +
+               "\t`lcdorder_dayage_start`, \n" +
+               "\t`changetype_lcd_setting`, \n" +
+               "\t`changetype_lcd_timer`, \n" +
+               "\t`changetype_lcd_dayage1`, \n" +
+               "\t`changetype_lcd_dayage2`, \n" +
+               "\t`changetype_lcd_dayage3`, \n" +
+               "\t`changetype_lcd_dayage4`, \n" +
+               "\t`changetype_lcd_dayage5`, \n" +
+               "\t`changetype_lcd_dayage6`, \n" +
+               "\t`changetype_pc_setting`, \n" +
+               "\t`changetype_pc_timer`, \n" +
+               "\t`changetype_pc_dayage1`, \n" +
+               "\t`changetype_pc_dayage2`, \n" +
+               "\t`changetype_pc_dayage3`, \n" +
+               "\t`changetype_pc_dayage4`, \n" +
+               "\t`changetype_pc_dayage5`, \n" +
+               "\t`changetype_pc_dayage6`, \n" +
+               "\t`networkerr_510to515`, \n" +
+               "\t`dayage_low`, \n" +
+               "\t`dayage_high`, \n" +
+               "\t`real_sec`, \n" +
+               "\t`real_hm`, \n" +
+               "\t`real_md`, \n" +
+               "\t`dymamic_output_mode`, \n" +
+               "\t`dymamic_output_inc`, \n" +
+               "\t`dymamic_output_dec`, \n" +
+               "\t`dymamic_output_analog`, \n" +
+               "\t`dymamic_output_valid`, \n" +
+               "\t`start_year`, \n" +
+               "\t`start_md`, \n" +
+               "\t`start_hm`, \n" +
+               "\t`mcnctrl_mv510_aggr`, \n" +
+               "\t`mcnctrl_mv510_order_co2`, \n" +
+               "\t`mcnctrl_mv510_order_temp`, \n" +
+               "\t`mcnctrl_mv510_order_humidity`, \n" +
+               "\t`mcnctrl_mv510_order_ilum`, \n" +
+               "\t`mcnctrl_mv510_order_main1`, \n" +
+               "\t`mcnctrl_mv510_order_main2`, \n" +
+               "\t`mcnctrl_mv510_stat_fan`, \n" +
+               "\t`mcnctrl_mv510_stat_heater`, \n" +
+               "\t`mcnctrl_mv510_stat_freezer`, \n" +
+               "\t`mcnctrl_mv510_stat_humidifier`, \n" +
+               "\t`mcnctrl_mv510_stat_dehumidifier`, \n" +
+               "\t`mcnctrl_mv510_stat_ilum`, \n" +
+               "\t`mcnctrl_mv510_stat_alarm`, \n" +
+               "\t`mcnctrl_mv510_stat_reserve`, \n" +
+               "\t`mcnctrl_web_aggr`, \n" +
+               "\t`mcnctrl_web_order_co2`, \n" +
+               "\t`mcnctrl_web_order_temp`, \n" +
+               "\t`mcnctrl_web_order_humidity`, \n" +
+               "\t`mcnctrl_web_order_ilum`, \n" +
+               "\t`mcnctrl_web_order_main1`, \n" +
+               "\t`mcnctrl_web_order_main2`, \n" +
+               "\t`mcnctrl_web_stat_fan`, \n" +
+               "\t`mcnctrl_web_stat_heater`, \n" +
+               "\t`mcnctrl_web_stat_freezer`, \n" +
+               "\t`mcnctrl_web_stat_humidifier`, \n" +
+               "\t`mcnctrl_web_stat_dehumidifier`, \n" +
+               "\t`mcnctrl_web_stat_ilum`, \n" +
+               "\t`mcnctrl_web_stat_alarm`, \n" +
+               "\t`mcnctrl_web_stat_reserve`, \n" +
+               "\t`redisTime`, \n" +
+               "\t`regDate`\n" +
+               "\t)\n" +
+               "\tVALUES\n" +
+               "\t('"+farmString+ "', " +
+               "'" +harvString+ "', " +
+               "'" +co2_sr+ "', " +
+               "'" +temp_sr+ "', " +
+               "'" +humid_sr+ "', " +
+               "'" +illum_sr+ "', " +
+               "'" +sr_set1_co2+ "', " +
+               "'" +sr_set1_temp+ "', " +
+               "'" +sr_set1_humidity+ "', " +
+               "'" +sr_set1_ilum+ "', " +
+               "'" +sr_set2_co2+ "', " +
+               "'" +sr_set2_temp+ "', " +
+               "'" +sr_set2_humidity+ "', " +
+               "'" +sr_set2_ilum+ "', " +
+               "'" +sr_set3_co2+ "', " +
+               "'" +sr_set3_temp+ "', " +
+               "'" +sr_set3_humidity+ "', " +
+               "'" +sr_set3_ilum+ "', " +
+               "'" +sr_set4_co2+ "', " +
+               "'" +sr_set4_temp+ "', " +
+               "'" +sr_set4_humidity+ "', " +
+               "'" +sr_set4_ilum+ "', " +
+               "'" +sr_val_co2+ "', " +
+               "'" +sr_val_temp+ "', " +
+               "'" +sr_val_humidity+ "', " +
+               "'" +sr_val_ilum+ "', " +
+               "'" +controlstat_aggr+ "', " +
+               "'" +controlstat_co2_type+ "', " +
+               "'" +controlstat_co2_ontype+ "', " +
+               "'" +controlstat_co2_offtype+ "', " +
+               "'" +controlstat_temp_type+ "', " +
+               "'" +controlstat_temp_ontype+ "', " +
+               "'" +controlstat_temp_offtype+ "', " +
+               "'" +controlstat_humidity_type+ "', " +
+               "'" +controlstat_humidity_ontype+ "', " +
+               "'" +controlstat_humidity_offtype+ "', " +
+               "'" +controlstat_ilum_type+ "', " +
+               "'" +controlstat_ilum_ontype+ "', " +
+               "'" +controlstat_ilum_offtype+ "', " +
+               "'" +co2_value+ "', " +
+               "'" +temp_value+ "', " +
+               "'" +humidity_value+ "', " +
+               "'" +ilum_value+ "', " +
+               "'" +vt515_version+ "', " +
+               "'" +relay_output_aggr+ "', " +
+               "'" +relay_output_co2+ "', " +
+               "'" +relay_output_heater+ "', " +
+               "'" +relay_output_freezer+ "', " +
+               "'" +relay_output_humidity+ "', " +
+               "'" +relay_output_dehumidity+ "', " +
+               "'" +relay_output_ilum+ "', " +
+               "'" +relay_output_alarm+ "', " +
+               "'" +relay_output_reserve+ "', " +
+               "'" +co2_relay_on_start_md+ "', " +
+               "'" +co2_relay_on_start_hm+ "', " +
+               "'" +co2_relay_on_time+ "', " +
+               "'" +co2_relay_off_start_md+ "', " +
+               "'" +co2_relay_off_start_hm+ "', " +
+               "'" +co2_relay_off_time+ "', " +
+               "'" +heat_relay_on_start_md+ "', " +
+               "'" +heat_relay_on_start_hm+ "', " +
+               "'" +heat_relay_on_time+ "', " +
+               "'" +heat_relay_off_start_md+ "', " +
+               "'" +heat_relay_off_start_hm+ "', " +
+               "'" +heat_relay_off_time+ "', " +
+               "'" +cool_relay_on_start_md+ "', " +
+               "'" +cool_relay_on_start_hm+ "', " +
+               "'" +cool_relay_on_time+ "', " +
+               "'" +cool_relay_off_start_md+ "', " +
+               "'" +cool_relay_off_start_hm+ "', " +
+               "'" +cool_relay_off_time+ "', " +
+               "'" +humidify_relay_on_start_md+ "', " +
+               "'" +humidify_relay_on_start_hm+ "', " +
+               "'" +humidify_relay_on_time+ "', " +
+               "'" +humidify_relay_off_start_md+ "', " +
+               "'" +humidify_relay_off_start_hm+ "', " +
+               "'" +humidify_relay_off_time+ "', " +
+               "'" +dehumidify_relay_on_start_md+ "', " +
+               "'" +dehumidify_relay_on_start_hm+ "', " +
+               "'" +dehumidify_relay_on_time+ "', " +
+               "'" +dehumidify_relay_off_start_md+ "', " +
+               "'" +dehumidify_relay_off_start_hm+ "', " +
+               "'" +dehumidify_relay_off_time+ "', " +
+               "'" +illum_relay_on_start_md+ "', " +
+               "'" +illum_relay_on_start_hm+ "', " +
+               "'" +illum_relay_on_time+ "', " +
+               "'" +illum_relay_off_start_md+ "', " +
+               "'" +illum_relay_off_start_hm+ "', " +
+               "'" +illum_relay_off_time+ "', " +
+               "'" +alarm_relay_on_start_md+ "', " +
+               "'" +alarm_relay_on_start_hm+ "', " +
+               "'" +alarm_relay_on_time+ "', " +
+               "'" +alarm_relay_off_start_md+ "', " +
+               "'" +alarm_relay_off_start_hm+ "', " +
+               "'" +alarm_relay_off_time+ "', " +
+               "'" +option_changed_aggr+ "', " +
+               "'" +option_changed_setting+ "', " +
+               "'" +option_changed_timer+ "', " +
+               "'" +option_changed_crop1+ "', " +
+               "'" +option_changed_crop2+ "', " +
+               "'" +option_changed_crop3+ "', " +
+               "'" +option_changed_crop4+ "', " +
+               "'" +option_changed_crop5+ "', " +
+               "'" +option_changed_crop6+ "', " +
+               "'" +option_changed_setting_a+ "', " +
+               "'" +option_changed_timer_a+ "', " +
+               "'" +option_changed_crop1_a+ "', " +
+               "'" +option_changed_crop2_a+ "', " +
+               "'" +option_changed_crop3_a+ "', " +
+               "'" +option_changed_crop4_a+ "', " +
+               "'" +option_changed_crop5_a+ "', " +
+               "'" +option_changed_crop6_a+ "', " +
+               "'" +growth_progress_aggr+ "', " +
+               "'" +growth_progress_dt+ "', " +
+               "'" +growth_progress_total+ "', " +
+               "'" +run_status_aggr+ "', " +
+               "'" +run_status_current+ "', " +
+               "'" +run_status_mode+ "', " +
+               "'" +run_status_prevdata+ "', " +
+               "'" +run_status_dry_enabled+ "', " +
+               "'" +run_status_dayage_count+ "', " +
+               "'" +run_status_dayage_progress+ "', " +
+               "'" +errstat_err0_start_md+ "', " +
+               "'" +errstat_err0_start_time+ "', " +
+               "'" +errstat_err0_progress_time+ "', " +
+               "'" +errstat_err1_data+ "', " +
+               "'" +errstat_err2_data+ "', " +
+               "'" +errstat_err3_data+ "', " +
+               "'" +errstat_err4_data+ "', " +
+               "'" +errstat_err5_data+ "', " +
+               "'" +errstat_err6_data+ "', " +
+               "'" +errstat_err7_data+ "', " +
+               "'" +errstat_err8_data+ "', " +
+               "'" +errstat_err9_data+ "', " +
+               "'" +errstat_err10_data+ "', " +
+               "'" +errstat_err11_data+ "', " +
+               "'" +errstat_err12_data+ "', " +
+               "'" +errstat_err13_data+ "', " +
+               "'" +errstat_err14_data+ "', " +
+               "'" +errstat_err15_data+ "', " +
+               "'" +lcdorder_run+ "', " +
+               "'" +lcdorder_mode+ "', " +
+               "'" +lcdorder_dayage_start+ "', " +
+               "'" +changetype_lcd_setting+ "', " +
+               "'" +changetype_lcd_timer+ "', " +
+               "'" +changetype_lcd_dayage1+ "', " +
+               "'" +changetype_lcd_dayage2+ "', " +
+               "'" +changetype_lcd_dayage3+ "', " +
+               "'" +changetype_lcd_dayage4+ "', " +
+               "'" +changetype_lcd_dayage5+ "', " +
+               "'" +changetype_lcd_dayage6+ "', " +
+               "'" +changetype_pc_setting+ "', " +
+               "'" +changetype_pc_timer+ "', " +
+               "'" +changetype_pc_dayage1+ "', " +
+               "'" +changetype_pc_dayage2+ "', " +
+               "'" +changetype_pc_dayage3+ "', " +
+               "'" +changetype_pc_dayage4+ "', " +
+               "'" +changetype_pc_dayage5+ "', " +
+               "'" +changetype_pc_dayage6+ "', " +
+               "'" +networkerr_510to515+ "', " +
+               "'" +dayage_low+ "', " +
+               "'" +dayage_high+ "', " +
+               "'" +real_sec+ "', " +
+               "'" +real_hm+ "', " +
+               "'" +real_md+ "', " +
+               "'" +dymamic_output_mode+ "', " +
+               "'" +dymamic_output_inc+ "', " +
+               "'" +dymamic_output_dec+ "', " +
+               "'" +dymamic_output_analog+ "', " +
+               "'" +dymamic_output_valid+ "', " +
+               "'" +start_year+ "', " +
+               "'" +start_md+ "', " +
+               "'" +start_hm+ "', " +
+               "'" +mcnctrl_mv510_aggr+ "', " +
+               "'" +mcnctrl_mv510_order_co2+ "', " +
+               "'" +mcnctrl_mv510_order_temp+ "', " +
+               "'" +mcnctrl_mv510_order_humidity+ "', " +
+               "'" +mcnctrl_mv510_order_ilum+ "', " +
+               "'" +mcnctrl_mv510_order_main1+ "', " +
+               "'" +mcnctrl_mv510_order_main2+ "', " +
+               "'" +mcnctrl_mv510_stat_fan+ "', " +
+               "'" +mcnctrl_mv510_stat_heater+ "', " +
+               "'" +mcnctrl_mv510_stat_freezer+ "', " +
+               "'" +mcnctrl_mv510_stat_humidifier+ "', " +
+               "'" +mcnctrl_mv510_stat_dehumidifier+ "', " +
+               "'" +mcnctrl_mv510_stat_ilum+ "', " +
+               "'" +mcnctrl_mv510_stat_alarm+ "', " +
+               "'" +mcnctrl_mv510_stat_reserve+ "', " +
+               "'" +mcnctrl_web_aggr+ "', " +
+               "'" +mcnctrl_web_order_co2+ "', " +
+               "'" +mcnctrl_web_order_temp+ "', " +
+               "'" +mcnctrl_web_order_humidity+ "', " +
+               "'" +mcnctrl_web_order_ilum+ "', " +
+               "'" +mcnctrl_web_order_main1+ "', " +
+               "'" +mcnctrl_web_order_main2+ "', " +
+               "'" +mcnctrl_web_stat_fan+ "', " +
+               "'" +mcnctrl_web_stat_heater+ "', " +
+               "'" +mcnctrl_web_stat_freezer+ "', " +
+               "'" +mcnctrl_web_stat_humidifier+ "', " +
+               "'" +mcnctrl_web_stat_dehumidifier+ "', " +
+               "'" +mcnctrl_web_stat_ilum+ "', " +
+               "'" +mcnctrl_web_stat_alarm+ "', " +
+               "'" +mcnctrl_web_stat_reserve+ "', " +
+               "'" +redisTime+ "', " +
+               " NOW());";
+
+        return sql;
     }
 
 }

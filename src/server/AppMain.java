@@ -53,11 +53,14 @@ public class AppMain{
          */
         serviceProvider = ServiceProvider.getInstance(); // 인스턴스 할당
 
+        serviceProvider.setCustomTime(1000 * 10);
         /**
          * 주기성 배치 작업 콜백 인터페이스 위임
          */
         serviceProvider.offer(() -> {
-            System.out.println("배치 작업 테스트");
+            System.out.println("[DB Migration has started]");
+            DBManager.getInstance().migrateFromRedis();
+            System.out.println("[DB Migration has done]");
         });
 
         serviceProvider.start(); // 인스턴스 시동

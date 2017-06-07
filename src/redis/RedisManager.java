@@ -29,7 +29,7 @@ public class RedisManager extends RedisWrapper{
     }
 
     public static long getMillisFromRedisKey(String pureKey){
-        String raw = pureKey.split("\\@")[1];
+        String raw = pureKey.split("\\-")[1];
         long millis = Long.parseLong(raw);
 
         return millis;

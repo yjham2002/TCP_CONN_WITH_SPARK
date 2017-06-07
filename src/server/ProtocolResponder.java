@@ -4,6 +4,7 @@ import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 import constants.ConstProtocol;
 import models.ByteSerial;
+import mysql.DBManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.RealtimePOJO;
@@ -134,7 +135,10 @@ public class ProtocolResponder extends Thread{
                         String farm = SohaProtocolUtil.getSimpleKey(SohaProtocolUtil.getFarmCodeByProtocol(buffer));
                         String key = farm + "@" + RedisManager.getTimestamp();
 
+                        String millis = Long.toString(RedisManager.getMillisFromRedisKey(key));
+
                         RealtimePOJO realtimePOJO = new RealtimePOJO(byteSerial);
+                        realtimePOJO.setRedisTime(millis);
 
                         boolean succ = redisManager.put(key, realtimePOJO);
 

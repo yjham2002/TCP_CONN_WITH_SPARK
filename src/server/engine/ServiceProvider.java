@@ -207,7 +207,7 @@ public class ServiceProvider extends ServerConfig{
     }
 
     /**
-     * 배치 작업 주기 시간을 커스텀 설정함함
+     * 배치 작업 주기 시간을 커스텀 설정함
     * @param customTime
      */
     public void setCustomTime(int customTime) {

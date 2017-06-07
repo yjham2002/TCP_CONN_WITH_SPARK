@@ -5,6 +5,8 @@ import redis.RedisManager;
 
 import java.sql.*;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -40,48 +42,30 @@ public class DBManager extends DBConstManager {
         }
     }
 
-    public int getMachineNumber(String farm, String harv){
-        try {
-            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
-            st = connection.createStatement();
-            String sql = "SELECT machine_no \n" +
-                    "FROM dong_list \n" +
-                    "WHERE delete_flag='N' \n" +
-                    "AND farm_code='"+ farm +"' \n" +
-                    "AND dong_code='" + harv + "'";
-            ResultSet rs = st.executeQuery(sql);
-
-            int res = 0;
-
-            while(rs.next()){
-                res = rs.getInt("machine_no");
-            }
-
-            rs.close();
-            st.close();
-
-            connection.close();
-
-            return res;
-        }catch(SQLException e){
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    public static void main(String... args){
-        DBManager.getInstance().migrateFromRedis();
-    }
-
     public boolean migrateFromRedis(){
         try {
             String pattern = RedisManager.getYYMMDDwithPostfix("-");
 
             List<RealtimePOJO> list = RedisManager.getInstance().getList(pattern, RealtimePOJO.class);
+
+            Collections.sort(list, (o1, o2) -> {
+                long t1 = Long.parseLong(o1.getRedisTime());
+                long t2 = Long.parseLong(o2.getRedisTime());
+                if(t1 == t2) return 0;
+                else if(t1 > t2) return 1;
+                else return -1;
+            });
+
+            long maxTime = getNumber("SELECT MAX(redisTime) AS num FROM tblRealTimeData", "num");
+
+            int count = 1;
             for (RealtimePOJO pojo : list) {
-                List<String> sqls = pojo.getInsertSQL(); // Extracting sub queries
-                for(String sql : sqls) execute(sql);
+                if(Long.parseLong(pojo.getRedisTime()) > maxTime) {
+                    count++;
+                    execute(pojo.getInsertSQL());
+                }
             }
+            System.out.println("[Migrating DB Data from REDIS to MySQL] " + count++ + "/" + list.size() + " has newly inserted.");
         }catch(Exception e){
             return false;
         }
