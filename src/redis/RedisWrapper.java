@@ -79,7 +79,7 @@ public class RedisWrapper extends ServerConfig{
             }
 
         }catch (Exception e){
-            e.printStackTrace();
+            log.info("Put Request is not sound - Skipping");
             if(jedis != null) jedis.close();
         }
 
@@ -152,19 +152,27 @@ public class RedisWrapper extends ServerConfig{
 
             ObjectMapper mapper = new ObjectMapper();
 
-            Set<String> object = jedis.keys("*" + pattern + "*");
+            Set<String> object = null;
+
+            try {
+                object = jedis.keys("*" + pattern + "*");
+            }catch(Exception e){
+                System.out.println("Key Execution Error :: Skipping");
+                return retVal;
+            }
             if(object == null || object.size() == 0) return retVal;
 
             Iterator<String> iterator = object.iterator();
 
             while(iterator.hasNext()) {
                 String key = iterator.next();
-                String json = jedis.get(key);
                 try {
+                    String json = jedis.get(key);
                     T unit = (T) mapper.readValue(json, type);
                     retVal.add(unit);
                 }catch(Exception e){
                     System.out.println("Parsing Error :: Skipping");
+                    return retVal;
                 }
             }
 

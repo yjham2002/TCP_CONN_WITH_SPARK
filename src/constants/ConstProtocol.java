@@ -30,6 +30,7 @@ public class ConstProtocol {
 
     public static final int READ_LIMIT = 255;
 
+    public static final Pair<Integer> RANGE_SETTING = new Pair<>(300, 136);
     public static final Pair<Integer> RANGE_TIMER = new Pair<>(448, 93);
     public static final Pair<Integer> RANGE_DAYAGE = new Pair<>(650, 12740);
     public static final Pair<Integer> RANGE_DAYAGE_01 = new Pair<>(650, 1820);

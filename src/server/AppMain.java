@@ -12,6 +12,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.CropWrappingPOJO;
+import pojo.SettingPOJO;
 import pojo.TimerPOJO;
 import redis.ICallback;
 import server.engine.ServiceProvider;
@@ -45,6 +46,7 @@ public class AppMain{
      * @param args
      */
     public static void main(String... args){
+        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         /**
          * 로거 초기화
          */
@@ -122,6 +124,16 @@ public class AppMain{
             String retVal = null;
 
             switch(mode){
+                case ConstRest.MODE_READ_SETTING:
+                    protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), id, farmCode, harvCode);
+                    System.out.println(Arrays.toString(protocol));
+
+                    recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                    if(recv == null) return RESPONSE_NONE;
+                    SettingPOJO settingPOJO = new SettingPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
+                    retVal = objectMapper.writeValueAsString(settingPOJO);
+
+                    break;
                 case ConstRest.MODE_READ_TIMER:
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), id, farmCode, harvCode);
                     System.out.println(Arrays.toString(protocol));

@@ -101,6 +101,8 @@ public class ServiceProvider extends ServerConfig{
             }
         });
 
+        batch.setPriority(Thread.NORM_PRIORITY);
+
         thread = new Thread(() -> {
             while(true){
                 try {
@@ -109,6 +111,7 @@ public class ServiceProvider extends ServerConfig{
                     d("Connection Requested from [" + sock.getRemoteSocketAddress() + "]");
 
                     ProtocolResponder protocolResponder = new ProtocolResponder(sock, clients);
+                    protocolResponder.setPriority(Thread.MIN_PRIORITY);
                     protocolResponder.start();
 
                 }catch(IOException e){

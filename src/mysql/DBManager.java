@@ -58,7 +58,7 @@ public class DBManager extends DBConstManager {
 
             long maxTime = getNumber("SELECT MAX(redisTime) AS num FROM tblRealTimeData", "num");
 
-            int count = 1;
+            int count = 0;
             for (RealtimePOJO pojo : list) {
                 if(Long.parseLong(pojo.getRedisTime()) > maxTime) {
                     count++;
@@ -71,7 +71,7 @@ public class DBManager extends DBConstManager {
         }finally {
             long delCount = getNumber("SELECT COUNT(*) AS num FROM tblRealTimeData WHERE (DATE_SUB(NOW(), INTERVAL 2 MONTH) > regDate)", "num");
             execute("DELETE FROM tblRealTimeData WHERE (DATE_SUB(NOW(), INTERVAL 2 MONTH) > regDate)");
-            System.out.println("[Expiration Check] " + delCount + " items which is expired has deleted from MySQL DB");
+            System.out.println("[Expiration Check] " + delCount + " items which are expired has deleted from MySQL DB");
         }
 
         return true;
