@@ -29,14 +29,14 @@ public class TimerSubPOJO extends BasePOJO{
         this.byteSerial = byteSerial;
         this.sensor_number = sr_no;
 
-        this.timer_setting_co2_on = getLhsFromDual(offset);
-        this.timer_setting_co2_off = getRhsFromDual(offset);
-        this.timer_setting_temp_on = getLhsFromDual(offset+2);
-        this.timer_setting_temp_off = getRhsFromDual(offset+2);
-        this.timer_setting_humidity_on = getLhsFromDual(offset+4);
-        this.timer_setting_humidity_off = getRhsFromDual(offset+4);
-        this.timer_setting_ilum_on = getLhsFromDual(offset+6);
-        this.timer_setting_ilum_off = getRhsFromDual(offset+6);
+        this.timer_setting_co2_on = getLhsFromDualABS(offset);
+        this.timer_setting_co2_off = getRhsFromDualABS(offset);
+        this.timer_setting_temp_on = getLhsFromDualABS(offset+2);
+        this.timer_setting_temp_off = getRhsFromDualABS(offset+2);
+        this.timer_setting_humidity_on = getLhsFromDualABS(offset+4);
+        this.timer_setting_humidity_off = getRhsFromDualABS(offset+4);
+        this.timer_setting_ilum_on = getLhsFromDualABS(offset+6);
+        this.timer_setting_ilum_off = getRhsFromDualABS(offset+6);
     }
 
     public int getTimer_setting_co2_on() {

@@ -64,20 +64,27 @@ public class BasePOJO implements Serializable{
     }
 
     protected int getSumWith2BytesABS(int offset){
-        int absolute = offset;
-        int tempLeft = byteSerial.getProcessed()[absolute];
-        int tempRight = byteSerial.getProcessed()[absolute + 1];
-        if(tempLeft < 0) tempLeft = tempLeft & 0xff;
-        if(tempRight < 0) tempRight = tempRight & 0xff;
-        int lhs = tempLeft << 8;
-        int rhs = tempRight;
+        try {
+            int absolute = offset;
+            int tempLeft = byteSerial.getProcessed()[absolute];
+            int tempRight = byteSerial.getProcessed()[absolute + 1];
 
-        if(lhs < 0) lhs = lhs & 0xff;
-        if(rhs < 0) rhs = rhs & 0xff;
+            if (tempLeft < 0) tempLeft = tempLeft & 0xff;
+            if (tempRight < 0) tempRight = tempRight & 0xff;
+            int lhs = tempLeft << 8;
+            int rhs = tempRight;
 
-        int total = lhs + rhs;
+            if (lhs < 0) lhs = lhs & 0xff;
+            if (rhs < 0) rhs = rhs & 0xff;
 
-        return total;
+            int total = lhs + rhs;
+
+            return total;
+        }catch(ArrayIndexOutOfBoundsException e){
+            System.out.println("The size of array was " + byteSerial.getProcessed().length + " and tried to refer an offset[" + (offset + 1) + "]");
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     protected int getSingleByteABS(int offset){

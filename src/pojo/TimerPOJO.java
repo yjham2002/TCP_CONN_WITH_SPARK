@@ -78,19 +78,19 @@ public class TimerPOJO extends BasePOJO{
     private void init(){
         timerSubPOJOList = new ArrayList<>();
 
-        this.timer_ctrl_aggr = getSumWith2Bytes(offset);
-        this.timer_ctrl_co2_type = toDecimalFromBinaryValue(offset, 0, 2);
-        this.timer_ctrl_co2_on = getBooleanValueFrom2Byte(offset, 2);
-        this.timer_ctrl_co2_off = getBooleanValueFrom2Byte(offset, 3);
-        this.timer_ctrl_temp_type = toDecimalFromBinaryValue(offset, 4, 2);
-        this.timer_ctrl_temp_on = getBooleanValueFrom2Byte(offset, 6);
-        this.timer_ctrl_temp_off = getBooleanValueFrom2Byte(offset, 7);
-        this.timer_ctrl_humidity_type = toDecimalFromBinaryValue(offset, 8, 2);
-        this.timer_ctrl_humidity_on = getBooleanValueFrom2Byte(offset, 10);
-        this.timer_ctrl_humidity_off = getBooleanValueFrom2Byte(offset, 11);
-        this.timer_ctrl_ilum_type = toDecimalFromBinaryValue(offset, 12, 2);
-        this.timer_ctrl_ilum_on = getBooleanValueFrom2Byte(offset, 14);
-        this.timer_ctrl_ilum_off = getBooleanValueFrom2Byte(offset, 15);
+        this.timer_ctrl_aggr = getSumWith2BytesABS(offset);
+        this.timer_ctrl_co2_type = toDecimalFromBinaryValueABS(offset, 0, 2);
+        this.timer_ctrl_co2_on = getBooleanValueFrom2ByteABS(offset, 2);
+        this.timer_ctrl_co2_off = getBooleanValueFrom2ByteABS(offset, 3);
+        this.timer_ctrl_temp_type = toDecimalFromBinaryValueABS(offset, 4, 2);
+        this.timer_ctrl_temp_on = getBooleanValueFrom2ByteABS(offset, 6);
+        this.timer_ctrl_temp_off = getBooleanValueFrom2ByteABS(offset, 7);
+        this.timer_ctrl_humidity_type = toDecimalFromBinaryValueABS(offset, 8, 2);
+        this.timer_ctrl_humidity_on = getBooleanValueFrom2ByteABS(offset, 10);
+        this.timer_ctrl_humidity_off = getBooleanValueFrom2ByteABS(offset, 11);
+        this.timer_ctrl_ilum_type = toDecimalFromBinaryValueABS(offset, 12, 2);
+        this.timer_ctrl_ilum_on = getBooleanValueFrom2ByteABS(offset, 14);
+        this.timer_ctrl_ilum_off = getBooleanValueFrom2ByteABS(offset, 15);
 
         for(int i = 1; i <= 24; i++){
             TimerSubPOJO timerSubPOJO = new TimerSubPOJO(byteSerial, offset + 2 + ( (i - 1) * 8 ), i);

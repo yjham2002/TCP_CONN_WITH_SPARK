@@ -30,14 +30,14 @@ public class ConstProtocol {
 
     public static final int READ_LIMIT = 255;
 
-    public static final Pair<Integer> RANGE_SETTING = new Pair<>(300, 136);
-    public static final Pair<Integer> RANGE_TIMER = new Pair<>(448, 93);
-    public static final Pair<Integer> RANGE_DAYAGE = new Pair<>(650, 12740);
-    public static final Pair<Integer> RANGE_DAYAGE_01 = new Pair<>(650, 1820);
-    public static final Pair<Integer> RANGE_DAYAGE_02 = new Pair<>(2470, 1820);
-    public static final Pair<Integer> RANGE_DAYAGE_03 = new Pair<>(4290, 1820);
-    public static final Pair<Integer> RANGE_DAYAGE_04 = new Pair<>(6110, 1820);
-    public static final Pair<Integer> RANGE_DAYAGE_05 = new Pair<>(7930, 1820);
-    public static final Pair<Integer> RANGE_DAYAGE_06 = new Pair<>(9750, 1820);
+    public static final Pair<Integer> RANGE_SETTING = new Pair<>(300, 68);
+    public static final Pair<Integer> RANGE_TIMER = new Pair<>(448, 97);
+    public static final Pair<Integer> RANGE_DAYAGE = new Pair<>(650, 6370);
+    public static final Pair<Integer> RANGE_DAYAGE_01 = new Pair<>(650, 910);
+    public static final Pair<Integer> RANGE_DAYAGE_02 = new Pair<>(2470, 910);
+    public static final Pair<Integer> RANGE_DAYAGE_03 = new Pair<>(4290, 910);
+    public static final Pair<Integer> RANGE_DAYAGE_04 = new Pair<>(6110, 910);
+    public static final Pair<Integer> RANGE_DAYAGE_05 = new Pair<>(7930, 910);
+    public static final Pair<Integer> RANGE_DAYAGE_06 = new Pair<>(9750, 910);
 
 }

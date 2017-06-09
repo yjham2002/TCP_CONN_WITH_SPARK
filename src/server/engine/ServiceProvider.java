@@ -160,6 +160,7 @@ public class ServiceProvider extends ServerConfig{
     }
 
     public List<ByteSerial> send(String client, byte[][] msgs){
+
         List<ByteSerial> byteSerials = new ArrayList<>();
         for(int e = 0; e < msgs.length; e++) byteSerials.add(send(client, new ByteSerial(msgs[e], ByteSerial.TYPE_NONE)));
 

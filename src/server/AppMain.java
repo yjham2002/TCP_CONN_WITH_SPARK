@@ -46,7 +46,7 @@ public class AppMain{
      * @param args
      */
     public static void main(String... args){
-        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+
         /**
          * 로거 초기화
          */
@@ -91,6 +91,8 @@ public class AppMain{
          * mode : read_timer, read_dayage(order 필요/누락 시 전체 일령)
          */
         Spark.get(ConstRest.REST_READ_REQUEST, (req, res) -> {
+            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+
             DataMap map = RestProcessor.makeProcessData(req.raw());
             log.info(ConstRest.REST_READ_REQUEST);
 
@@ -131,6 +133,9 @@ public class AppMain{
                     recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
                     if(recv == null) return RESPONSE_NONE;
                     SettingPOJO settingPOJO = new SettingPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
+
+                    settingPOJO.setByteSerial(null);
+
                     retVal = objectMapper.writeValueAsString(settingPOJO);
 
                     break;
@@ -155,6 +160,7 @@ public class AppMain{
                         default: order = -1; break;
                     }
                     protocols = SohaProtocolUtil.makeReadProtocols(range.getHead(), range.getTail(), id, farmCode, harvCode);
+
                     recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
                     if(recvs == null) return RESPONSE_NONE;
                     CropWrappingPOJO cropWrappingPOJO = new CropWrappingPOJO(recvs, order);
@@ -197,6 +203,7 @@ public class AppMain{
          * WRITE 요청 API
          */
         Spark.post(ConstRest.REST_WRITE_REQUEST, (req, res) -> {
+            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 
             DataMap map = RestProcessor.makeProcessData(req.raw());
 

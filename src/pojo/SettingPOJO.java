@@ -47,7 +47,7 @@ public class SettingPOJO extends BasePOJO {
     private int alert_alarm_time_select_auto;
     private int alert_alarm_time_select_timer;
     private int alert_alarm_time_select_lamp_unit;
-    private int getAlert_alarm_time_select_timeset;
+    private int alert_alarm_time_select_timeset;
     private int cthi_ctrl_stat_aggr;
     private int cthi_ctrl_stat_co2_ctrl;
     private int cthi_ctrl_stat_co2_ontype;
@@ -141,7 +141,7 @@ public class SettingPOJO extends BasePOJO {
         this.alert_alarm_time_select_auto = getBooleanValueFromByteABS(offset + 24, 0);
         this.alert_alarm_time_select_timer = getBooleanValueFromByteABS(offset + 24, 1);
         this.alert_alarm_time_select_lamp_unit = toDecimalFromBinaryValueABS(offset + 24, 2, 2);
-        this.getAlert_alarm_time_select_timeset = getBooleanValueFromByteABS(offset + 24, 4);
+        this.alert_alarm_time_select_timeset = getBooleanValueFromByteABS(offset + 24, 4);
         this.cthi_ctrl_stat_aggr = getSumWith2BytesABS(offset + 26);
         this.cthi_ctrl_stat_co2_ctrl = toDecimalFromBinaryValueABS(offset + 26, 0, 2);
         this.cthi_ctrl_stat_co2_ontype = getBooleanValueFrom2ByteABS(offset + 26, 2);
@@ -421,12 +421,12 @@ public class SettingPOJO extends BasePOJO {
         this.alert_alarm_time_select_lamp_unit = alert_alarm_time_select_lamp_unit;
     }
 
-    public int getGetAlert_alarm_time_select_timeset() {
-        return getAlert_alarm_time_select_timeset;
+    public int getAlert_alarm_time_select_timeset() {
+        return alert_alarm_time_select_timeset;
     }
 
-    public void setGetAlert_alarm_time_select_timeset(int getAlert_alarm_time_select_timeset) {
-        this.getAlert_alarm_time_select_timeset = getAlert_alarm_time_select_timeset;
+    public void setAlert_alarm_time_select_timeset(int getAlert_alarm_time_select_timeset) {
+        this.alert_alarm_time_select_timeset = getAlert_alarm_time_select_timeset;
     }
 
     public int getCthi_ctrl_stat_aggr() {
