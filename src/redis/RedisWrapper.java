@@ -80,7 +80,6 @@ public class RedisWrapper extends ServerConfig{
 
         }catch (Exception e){
             log.info("Put Request is not sound - Skipping");
-            if(jedis != null) jedis.close();
         }
 
         return true;

@@ -2,6 +2,9 @@ package pojo;
 
 import models.ByteSerial;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author 함의진
  * variable setting supported by 전세호
@@ -23,6 +26,8 @@ public class SettingPOJO extends BasePOJO {
     private int device_id;
 
     private int crop_data_num_and_ctrl_aggr;
+
+    private int sensor_quantity_and_selection_aggr;
     private int sensor_quantity;
     private int sensor_selected_1;
     private int sensor_selected_2;
@@ -102,6 +107,7 @@ public class SettingPOJO extends BasePOJO {
     private int setting_onoff_range_illum;
     private int setting_onoff_range_illum_revision;
 
+    private List<SettingTailPOJO> settingTails;
 
     /**
      * 시리얼 바이트로부터 맵핑 및 의미를 구체화하기 위한 생성자
@@ -111,12 +117,47 @@ public class SettingPOJO extends BasePOJO {
         this.byteSerial = byteSerial;
         this.farmCode = farmCode;
         this.harvCode = harvCode;
+
         init(offset);
+    }
+
+    public void initTails(ByteSerial byteSerial, int offset){
+        settingTails = new ArrayList<>();
+
+        ByteSerial temp = this.byteSerial;
+
+        setByteSerial(byteSerial);
+
+        int order = 1;
+        for(int cursor = offset; cursor <= offset + 24; cursor += 12){
+            SettingTailPOJO tail = new SettingTailPOJO(
+                    order++,
+                    getSumWith2BytesABS(cursor),
+                    getSumWith2BytesABS(cursor + 2),
+                    getSumWith2BytesABS(cursor + 4),
+                    getSumWith2BytesABS(cursor + 6),
+                    getMDorHMWith2Bytes(cursor + 8, ":"),
+                    getMDorHMWith2Bytes(cursor + 10, ":")
+            );
+
+            settingTails.add(tail);
+        }
+
+        setByteSerial(temp);
+    }
+
+    public List<SettingTailPOJO> getSettingTails() {
+        return settingTails;
+    }
+
+    public void setSettingTails(List<SettingTailPOJO> settingTails) {
+        this.settingTails = settingTails;
     }
 
     public void init(int offset){
         this.device_id = getSumWith2BytesABS(offset);
         this.crop_data_num_and_ctrl_aggr = getSumWith2BytesABS(offset + 2);
+        this.sensor_quantity_and_selection_aggr = getSumWith2BytesABS(offset + 4);
         this.sensor_quantity = getSingleByteABS(offset + 4);
         this.sensor_selected_1 = getBooleanValueFromByteABS(offset + 5, 0);
         this.sensor_selected_2 = getBooleanValueFromByteABS(offset + 5, 1);
@@ -195,6 +236,14 @@ public class SettingPOJO extends BasePOJO {
         this.setting_onoff_range_humid_revision = getSumWith2BytesABS(offset + 102);
         this.setting_onoff_range_illum = getSumWith2BytesABS(offset + 104);
         this.setting_onoff_range_illum_revision = getSumWith2BytesABS(offset + 106);
+    }
+
+    public int getSensor_quantity_and_selection_aggr() {
+        return sensor_quantity_and_selection_aggr;
+    }
+
+    public void setSensor_quantity_and_selection_aggr(int sensor_quantity_and_selection_aggr) {
+        this.sensor_quantity_and_selection_aggr = sensor_quantity_and_selection_aggr;
     }
 
     public String getFarmCode() {

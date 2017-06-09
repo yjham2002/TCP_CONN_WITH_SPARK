@@ -20,6 +20,10 @@ public class ServerConfig {
     protected static final int REDIS_TIMEOUT = 10000;
     protected static final String REDIS_PASSWORD = "richware";
 
+    /**
+     * REQUEST TIMEOUT
+     */
+    public static final long REQUEST_TIMEOUT = 1000 * 10;
 
     /**
      * 서버 소켓 포트

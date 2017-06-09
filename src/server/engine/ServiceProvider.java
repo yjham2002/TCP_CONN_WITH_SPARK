@@ -1,6 +1,7 @@
 package server.engine;
 
 import configs.ServerConfig;
+import javafx.application.Platform;
 import models.ByteSerial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +14,13 @@ import spark.Spark;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.*;
 
 import static spark.route.HttpMethod.get;
@@ -45,9 +51,11 @@ public class ServiceProvider extends ServerConfig{
     private Thread thread;
 
     /**
-     * 서버 소켓 인스턴스
+     * 서버 소켓 채널 인스턴스
      */
-    private ServerSocket socket;
+    private ServerSocketChannel socket;
+
+    private Selector selector;
 
     private List<ICallback> jobs;
 
@@ -74,7 +82,13 @@ public class ServiceProvider extends ServerConfig{
         log.info("Initiating Service Provider");
 
         try {
-            socket = new ServerSocket(port); // 서버 소켓 인스턴스 생성
+            selector = Selector.open();
+
+            socket = ServerSocketChannel.open(); // 서버 소켓 인스턴스 생성
+            socket.configureBlocking(false);
+            socket.bind(new InetSocketAddress(port));
+            socket.register(selector, SelectionKey.OP_ACCEPT);
+
             clients = new HashMap<>(); // 클라이언트 해시맵 생성
             Collections.synchronizedMap(clients); // 가변 스레드 환경에서 아토믹하게 해시맵을 이용하기 위한 동기화 명시 호출
         }catch(IOException e){
@@ -106,17 +120,33 @@ public class ServiceProvider extends ServerConfig{
         thread = new Thread(() -> {
             while(true){
                 try {
-                    d("Socket is pending until receiving");
-                    Socket sock = socket.accept();
-                    d("Connection Requested from [" + sock.getRemoteSocketAddress() + "]");
+                    int keyCount = selector.select();
+                    if(keyCount == 0) continue;
 
-                    ProtocolResponder protocolResponder = new ProtocolResponder(sock, clients);
-                    protocolResponder.setPriority(Thread.MIN_PRIORITY);
-                    protocolResponder.start();
+                    d("STATUS :: [Channel is now Pending until Selector is inactive]");
+
+                    Set<SelectionKey> selectedKeys = selector.selectedKeys();
+                    Iterator<SelectionKey> iterator = selectedKeys.iterator();
+
+                    while (iterator.hasNext()) {
+                        SelectionKey selectionKey = iterator.next();
+
+                        if (selectionKey.isAcceptable()) {
+                            accept(selectionKey);
+                        } else if (selectionKey.isReadable()) {
+                            ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
+                            client.receive();
+                        } else if (selectionKey.isWritable()) {
+                            ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
+                            //client.send(selectionKey);
+                        }
+
+                        iterator.remove();
+                    }
 
                 }catch(IOException e){
                     e.printStackTrace();
-                    d("ACK Failed");
+                    d("ERROR :: CHANNEL SELECTOR LEVEL ERROR");
                 }
 
             }
@@ -125,6 +155,23 @@ public class ServiceProvider extends ServerConfig{
         d("Server is ready to respond");
 
     }
+
+    void accept(SelectionKey selectionKey) {
+
+        try {
+            ServerSocketChannel serverSocketChannel = (ServerSocketChannel) selectionKey.channel();
+            SocketChannel socketChannel = serverSocketChannel.accept();
+
+            d("STATUS :: [Connection Requested from [" + socketChannel.getRemoteAddress() + "]]");
+
+            ProtocolResponder protocolResponder = new ProtocolResponder(socketChannel, clients, selector);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            d("ERROR :: NOT ABLE TO GENERATE SOCKET CHANNEL AND AN ERROR OCCURED WHILE ACCEPTING");
+        }
+    }
+
 
     public void offer(ICallback callback){
         this.jobs.add(callback);
@@ -165,25 +212,6 @@ public class ServiceProvider extends ServerConfig{
         for(int e = 0; e < msgs.length; e++) byteSerials.add(send(client, new ByteSerial(msgs[e], ByteSerial.TYPE_NONE)));
 
         return byteSerials;
-    }
-
-    /**
-     * 바이트 시리얼로부터 처리 이후의 바이트 패킷을 추출하여 전체 클라이언트에게 바이트 기반으로 전송
-     * @param msg
-     */
-    @Deprecated
-    private void sendToAll(ByteSerial msg){
-        log.info("Sending :: " + Arrays.toString(msg.getProcessed()));
-
-        Iterator it = clients.keySet().iterator();
-        while(it.hasNext()){
-            try{
-                DataOutputStream out = (DataOutputStream)clients.get(it.next()).getOut();
-                out.write(msg.getProcessed());
-            }catch(IOException e){
-
-            }
-        }
     }
 
     /**

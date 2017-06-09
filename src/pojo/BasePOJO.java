@@ -1,6 +1,7 @@
 package pojo;
 
 import models.ByteSerial;
+import utils.HexUtil;
 import utils.SohaProtocolUtil;
 
 import java.io.Serializable;
@@ -105,6 +106,13 @@ public class BasePOJO implements Serializable{
         return c;
     }
 
+    protected byte[] getAggregation(int lhs, int rhs){
+        int total = (lhs << 8) + rhs;
+        byte[] ret = SohaProtocolUtil.getHexLocation(total);
+
+        return ret;
+    }
+
     protected char getHangleFrom2Byte(int offset){
         return getHangleFrom2ByteABS(offset);
     }
@@ -157,15 +165,6 @@ public class BasePOJO implements Serializable{
         int footer = total - (header << 8);
 
         return footer;
-    }
-
-    public static void main(String... args){
-        int a = -123 & 0xff;
-        int b = -127 & 0xff;
-        int c = a + b;
-        System.out.println(a);
-        System.out.println(b);
-        System.out.println(c);
     }
 
     public static byte[] getValuePairFromString(String str){

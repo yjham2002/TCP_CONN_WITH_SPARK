@@ -1,5 +1,6 @@
 package server;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import configs.ServerConfig;
 import constants.ConstProtocol;
 import constants.ConstRest;
@@ -128,11 +129,18 @@ public class AppMain{
             switch(mode){
                 case ConstRest.MODE_READ_SETTING:
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), id, farmCode, harvCode);
-                    System.out.println(Arrays.toString(protocol));
+                    System.out.println("READING SETTINGS - " + Arrays.toString(protocol));
 
                     recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
                     if(recv == null) return RESPONSE_NONE;
                     SettingPOJO settingPOJO = new SettingPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
+//TODO 분할 읽기 요청 개망함 ㅋ
+//                    protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), id, farmCode, harvCode);
+//                    System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
+//
+//                    recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+//
+//                    settingPOJO.initTails(recv, ConstProtocol.RANGE_READ_START);
 
                     settingPOJO.setByteSerial(null);
 
@@ -235,6 +243,10 @@ public class AppMain{
                     }
                 }
                 case ConstRest.MODE_WRITE_DAYAGE: {
+                    return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
+                }
+                case ConstRest.MODE_WRITE_SETTING:{
+                    System.out.println("write setting");
                     return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
                 }
                 default: {

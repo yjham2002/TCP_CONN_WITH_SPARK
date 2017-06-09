@@ -55,6 +55,12 @@ public class ByteSerial implements Serializable{
 
         this.processed = bytes.clone();
         this.original = bytes.clone();
+
+        boolean sound = HexUtil.isCheckSumSound(bytes);
+
+        if(sound) System.out.println("Protocol Generated And It is sound");
+        else System.out.println("Protocol Generated But it is not sound");
+
         this.type = type;
 
     }

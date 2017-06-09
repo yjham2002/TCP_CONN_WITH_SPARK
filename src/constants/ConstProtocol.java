@@ -15,7 +15,7 @@ public class ConstProtocol {
     public static final byte[] ETX = new byte[]{13, 10}; // End Of Text
     public static final byte[] INITIAL_PROTOCOL_START = new byte[]{83, 79, 72, 65, 85, 78, 73, 70, 65, 82, 77};
 
-    public static final int RANGE_READ_START = 15;
+    public static final int RANGE_READ_START = 11;
 
     public static final byte[] FUNCTION_READ = new byte[]{0x03};
     public static final byte[] FUNCTION_WRITE = new byte[]{0x10};
@@ -28,8 +28,13 @@ public class ConstProtocol {
     public static final int SOCKET_TIMEOUT_LIMIT = 60000;
     public static final int SOCKET_TIMEOUT_COUNT = 3;
 
-    public static final int READ_LIMIT = 255;
+    public static final int READ_LIMIT = 250;
 
+    public static final int LENGTH_REALTIME = 311;
+
+    public static final int RETRY = 3;
+
+    public static final Pair<Integer> RANGE_SETTING_TAILS = new Pair<>(11534, 18);
     public static final Pair<Integer> RANGE_SETTING = new Pair<>(300, 68);
     public static final Pair<Integer> RANGE_TIMER = new Pair<>(448, 97);
     public static final Pair<Integer> RANGE_DAYAGE = new Pair<>(650, 6370);
