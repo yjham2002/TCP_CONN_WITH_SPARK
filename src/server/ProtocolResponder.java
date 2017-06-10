@@ -99,10 +99,6 @@ public class ProtocolResponder{
 
             buffer = byteSerial.getProcessed(); // 처리된 트림 데이터 추출
 
-            System.out.println("==========================================================");
-            System.out.println("LENGTH :: " + buffer.length);
-            System.out.println("==========================================================");
-
             if(buffer.length != LENGTH_REALTIME){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
                 return;
             }
@@ -119,8 +115,6 @@ public class ProtocolResponder{
             if (!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
                 if (!started) { // 이니셜 프로토콜에 따른 처리 여부를 확인하여 최초 연결일 경우, 본 로직을 수행
                     started = true; // 이니셜 프로토콜 전송 여부 갱신
-
-                    System.out.println(Arrays.toString(buffer) + " :::::::::::::::::::::::::::::::::::::::::::::::::::");
 
                     clients.put(uniqueKey, this); // 클라이언트 해시맵에 상위에서 추출한 유니크키를 기준으로 삽입
 

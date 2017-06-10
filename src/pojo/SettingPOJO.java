@@ -136,8 +136,8 @@ public class SettingPOJO extends BasePOJO {
                     getSumWith2BytesABS(cursor + 2),
                     getSumWith2BytesABS(cursor + 4),
                     getSumWith2BytesABS(cursor + 6),
-                    getMDorHMWith2Bytes(cursor + 8, ":"),
-                    getMDorHMWith2Bytes(cursor + 10, ":")
+                    getMDorHMWith2BytesABS(cursor + 8, ":"),
+                    getMDorHMWith2BytesABS(cursor + 10, ":")
             );
 
             settingTails.add(tail);

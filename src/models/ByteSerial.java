@@ -107,7 +107,7 @@ public class ByteSerial implements Serializable{
         }
 
         if(loss) log.info("Packet-Loss Occured or is empty data - Ignoring" + reason);
-        else log.info("Packet has been arrived successfully");
+        else log.info("Packet has been arrived successfully [" + processed.length + ']');
 
         setTypeAutomatically();
     }
