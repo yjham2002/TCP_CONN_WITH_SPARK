@@ -28,7 +28,7 @@ public class ConstProtocol {
     public static final int SOCKET_TIMEOUT_LIMIT = 60000;
     public static final int SOCKET_TIMEOUT_COUNT = 3;
 
-    public static final int READ_LIMIT = 250;
+    public static final int READ_LIMIT = 125;
 
     public static final int LENGTH_REALTIME = 311;
 

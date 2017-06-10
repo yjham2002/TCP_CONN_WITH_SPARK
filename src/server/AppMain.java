@@ -134,7 +134,7 @@ public class AppMain{
                     recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
                     if(recv == null) return RESPONSE_NONE;
                     SettingPOJO settingPOJO = new SettingPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
-//TODO 분할 읽기 요청 개망함 ㅋ
+
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), id, farmCode, harvCode);
                     System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
 

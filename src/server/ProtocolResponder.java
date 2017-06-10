@@ -200,6 +200,13 @@ public class ProtocolResponder{
                     }
                 }
 
+                if(timeouts >= ConstProtocol.RETRY){
+                    byte[] farmBytes = Arrays.copyOfRange(msg.getProcessed(), 2, 6);
+                    byte[] dongBytes = Arrays.copyOfRange(msg.getProcessed(), 6, 8);
+                    ByteSerial byteSerial = new ByteSerial(SohaProtocolUtil.makeAlertProtocol(farmBytes, dongBytes));
+                    send(byteSerial);
+                }
+
                 if(timeouts >= ConstProtocol.RETRY || succ) break;
 
             }
