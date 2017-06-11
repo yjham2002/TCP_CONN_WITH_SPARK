@@ -34,6 +34,11 @@ public class ConstProtocol {
 
     public static final int RETRY = 3;
 
+    /**
+     * 메모리 참조 범위를 기술하기 위한 페어 상수
+     * Head : 메모리 주소(Byte)
+     * Tail : 메모리 참조 길이(Word)
+     */
     public static final Pair<Integer> RANGE_SETTING_TAILS = new Pair<>(11534, 18);
     public static final Pair<Integer> RANGE_SETTING = new Pair<>(300, 68);
     public static final Pair<Integer> RANGE_TIMER = new Pair<>(448, 97);

@@ -22,10 +22,7 @@ import server.response.ResponseConst;
 import spark.Spark;
 import utils.SohaProtocolUtil;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static constants.ConstRest.RESPONSE_INVALID;
 import static constants.ConstRest.RESPONSE_NONE;
@@ -135,6 +132,9 @@ public class AppMain{
                     if(recv == null) return RESPONSE_NONE;
                     SettingPOJO settingPOJO = new SettingPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
 
+                    System.out.println("ORIGIN : " + Arrays.toString(recv.getProcessed()));
+                    System.out.println("BYTES  : " + Arrays.toString(settingPOJO.getBytes()));
+
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), id, farmCode, harvCode);
                     System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
 
@@ -170,14 +170,14 @@ public class AppMain{
 
                     protocols = SohaProtocolUtil.makeReadProtocols(range.getHead(), range.getTail(), id, farmCode, harvCode);
 
-//                    for(int ee = 0; ee < protocols.length; ee++){
-//                        System.out.println(Arrays.toString(protocols[ee]));
-//                    }
-//
-//                    if(true) return "TESTING FOR A WHILE";
+                    recvs = new ArrayList<>();
+                    for(int cursor = 0; cursor < protocols.length; cursor++){
+                        recvs.add(serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols[cursor]));
+                    }
 
-                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
-                    if(recvs == null) return RESPONSE_NONE;
+//                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
+//                    if(recvs == null) return RESPONSE_NONE;
+
                     CropWrappingPOJO cropWrappingPOJO = new CropWrappingPOJO(recvs, order);
                     retVal = objectMapper.writeValueAsString(cropWrappingPOJO);
                     break;
@@ -235,6 +235,10 @@ public class AppMain{
             if(map.get("id") == null && !rawHarv.equals("")) id = Integer.parseInt(rawHarv);
             else id = map.getInt("id");
 
+            byte[] farmCode = rawFarm.getBytes();
+            byte[] harvCode = rawHarv.getBytes();
+            int order = map.getInt("order");
+
             if(map.get("mode") == null){
                 return Response.response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
             }
@@ -253,8 +257,18 @@ public class AppMain{
                     return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
                 }
                 case ConstRest.MODE_WRITE_SETTING:{
-                    System.out.println("write setting");
-                    return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
+                    try{
+                        SettingPOJO settingPOJO = objectMapper.readValue(rawJson, SettingPOJO.class);
+
+                        // TODO setting Tails to byte
+                        //SohaProtocolUtil.makeWriteProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), id, farmCode, harvCode, settingPOJO.getBytes());
+                        // TODO sending protocol for 2 times for writing value on different address
+
+                        return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SAVE_SUCC);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
+                    }
                 }
                 default: {
                     return Response.response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);

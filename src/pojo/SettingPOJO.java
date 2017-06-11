@@ -1,8 +1,14 @@
 package pojo;
 
+import constants.ConstProtocol;
 import models.ByteSerial;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import utils.HexUtil;
+import utils.Modbus;
+import utils.SohaProtocolUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -107,6 +113,38 @@ public class SettingPOJO extends BasePOJO {
     private int setting_onoff_range_illum;
     private int setting_onoff_range_illum_revision;
 
+    private int reserve_setting_year;
+    private String reserve_setting_md;
+    private String reserve_setting_hm;
+    private int reserve_setting_cropno;
+
+    private int dynamic_output_type;
+    private int dynamic_output_value;
+
+    private int growth_start_year;
+    private String growth_start_md;
+    private String growth_start_hm;
+
+    private int change_date_time;
+
+    private int alert_alarm_aggr;
+    private int alert_alarm_internal_co2;
+    private int alert_alarm_internal_temp;
+    private int alert_alarm_internal_humidity;
+    private int alert_alarm_internal_ilum;
+    private int alert_alarm_vent_relay;
+    private int alert_alarm_heat_relay;
+    private int alert_alarm_cool_relay;
+    private int alert_alarm_humidify_relay;
+    private int alert_alarm_dehumidify_relay;
+    private int alert_alarm_ilum_relay;
+    private int alert_alarm_rs485;
+    private int alert_alarm_vt515;
+    private int alert_alarm_vt250_1;
+    private int alert_alarm_vt250_2;
+    private int alert_alarm_vt250_3;
+    private int alert_alarm_vt250_4;
+
     private List<SettingTailPOJO> settingTails;
 
     /**
@@ -144,6 +182,71 @@ public class SettingPOJO extends BasePOJO {
         }
 
         setByteSerial(temp);
+    }
+
+    @JsonIgnore
+    public byte[] getBytes(){
+        byte[] check = SohaProtocolUtil.concat(ConstProtocol.STX, this.farmCode.getBytes(), this.harvCode.getBytes());
+
+        byte[] modbusData = SohaProtocolUtil.concat(new byte[]{Byte.parseByte(this.harvCode), 3, -120}, SohaProtocolUtil.getHexLocation(this.device_id),SohaProtocolUtil.getHexLocation(this.crop_data_num_and_ctrl_aggr), SohaProtocolUtil.getHexLocation(this.sensor_quantity_and_selection_aggr),
+                SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_co2), SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_temp), SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_humid),
+                SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_illum), getAggregation(this.relay_output_setting_co2, this.relay_output_setting_heat),
+                getAggregation(this.relay_output_setting_cool, this.relay_output_setting_humidify), getAggregation(this.relay_output_setting_dehumidify, this.relay_output_setting_illum),
+                getAggregation(this.relay_output_setting_alarm, this.relay_output_setting_reserve), SohaProtocolUtil.getHexLocation(this.dry_condition_setting_aggr),
+                SohaProtocolUtil.getHexLocation(this.alert_alarm_time_select_aggr), SohaProtocolUtil.getHexLocation(this.cthi_ctrl_stat_aggr),
+                SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_high),
+                SohaProtocolUtil.getHexLocation(this.calm_threshold_temp_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_temp_high),
+                SohaProtocolUtil.getHexLocation(this.calm_threshold_humid_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_humid_high),
+                SohaProtocolUtil.getHexLocation(this.calm_threshold_illum_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_illum_high),
+
+                SohaProtocolUtil.getHexLocation(this.setting_range_co2_min),
+                SohaProtocolUtil.getHexLocation(this.setting_range_co2_max), SohaProtocolUtil.getHexLocation(this.setting_range_temp_min),
+                SohaProtocolUtil.getHexLocation(this.setting_range_temp_max), SohaProtocolUtil.getHexLocation(this.setting_range_humid_min),
+                SohaProtocolUtil.getHexLocation(this.setting_range_humid_max), SohaProtocolUtil.getHexLocation(this.setting_range_illum_min),
+                SohaProtocolUtil.getHexLocation(this.setting_range_illum_max), SohaProtocolUtil.getHexLocation(this.sr_revision_co2_01),
+                SohaProtocolUtil.getHexLocation(this.sr_revision_temp_01), SohaProtocolUtil.getHexLocation(this.sr_revision_humid_01),
+                SohaProtocolUtil.getHexLocation(this.sr_revision_illum_01), SohaProtocolUtil.getHexLocation(this.sr_revision_co2_02),
+                SohaProtocolUtil.getHexLocation(this.sr_revision_temp_02), SohaProtocolUtil.getHexLocation(this.sr_revision_humid_02),
+                SohaProtocolUtil.getHexLocation(this.sr_revision_illum_02), SohaProtocolUtil.getHexLocation(this.sr_revision_co2_03),
+                SohaProtocolUtil.getHexLocation(this.sr_revision_temp_03), SohaProtocolUtil.getHexLocation(this.sr_revision_humid_03),
+                SohaProtocolUtil.getHexLocation(this.sr_revision_illum_03), SohaProtocolUtil.getHexLocation(this.sr_revision_co2_04),
+
+                SohaProtocolUtil.getHexLocation(this.sr_revision_temp_04), SohaProtocolUtil.getHexLocation(this.sr_revision_humid_04),
+                SohaProtocolUtil.getHexLocation(this.sr_revision_illum_04), SohaProtocolUtil.getHexLocation(this.setting_onoff_range_co2),
+                SohaProtocolUtil.getHexLocation(this.setting_onoff_range_co2_revision), SohaProtocolUtil.getHexLocation(this.setting_onoff_range_temp),
+                SohaProtocolUtil.getHexLocation(this.setting_onoff_range_temp_revision), SohaProtocolUtil.getHexLocation(this.setting_onoff_range_humid),
+                SohaProtocolUtil.getHexLocation(this.setting_onoff_range_humid_revision), SohaProtocolUtil.getHexLocation(this.setting_onoff_range_illum),
+                SohaProtocolUtil.getHexLocation(this.setting_onoff_range_illum_revision),
+
+                SohaProtocolUtil.getHexLocation(this.reserve_setting_year), getValuePairFromString(this.reserve_setting_md), getValuePairFromString(this.reserve_setting_hm),
+
+                //TODO
+
+                SohaProtocolUtil.getHexLocation(this.reserve_setting_cropno),
+
+
+                SohaProtocolUtil.getHexLocation(this.dynamic_output_type),
+                SohaProtocolUtil.getHexLocation(this.dynamic_output_value),
+                SohaProtocolUtil.getHexLocation(this.growth_start_year),
+
+                getValuePairFromString(this.growth_start_md),
+                getValuePairFromString(this.growth_start_hm),
+                SohaProtocolUtil.getHexLocation(this.change_date_time),
+
+                SohaProtocolUtil.getHexLocation(this.alert_alarm_aggr),
+                new byte[]{-1, -1, -1, -1, -1, -1}
+        );
+
+        Modbus modbus = new Modbus();
+
+        byte[] crc = modbus.fn_makeCRC16(modbusData);
+
+        byte[] fin = SohaProtocolUtil.concat(check, modbusData, crc);
+
+        byte chk = HexUtil.checkSum(fin);
+        byte[] retVal = SohaProtocolUtil.concat(fin, new byte[]{chk}, ConstProtocol.ETX);
+
+        return retVal;
     }
 
     public List<SettingTailPOJO> getSettingTails() {
@@ -236,6 +339,34 @@ public class SettingPOJO extends BasePOJO {
         this.setting_onoff_range_humid_revision = getSumWith2BytesABS(offset + 102);
         this.setting_onoff_range_illum = getSumWith2BytesABS(offset + 104);
         this.setting_onoff_range_illum_revision = getSumWith2BytesABS(offset + 106);
+        this.reserve_setting_year = getSumWith2BytesABS(offset + 108);
+        this.reserve_setting_md = getMDorHMWith2BytesABS(offset + 110, "-");
+        this.reserve_setting_hm = getMDorHMWith2BytesABS(offset + 112, ":");
+        this.reserve_setting_cropno = getSumWith2BytesABS(offset + 114);
+        this.dynamic_output_type = getSumWith2BytesABS(offset + 116);
+        this.dynamic_output_value = getSumWith2BytesABS(offset + 118);
+        this.growth_start_year = getSumWith2BytesABS(offset + 132);
+        this.growth_start_md = getMDorHMWith2BytesABS(offset + 134, "-");
+        this.growth_start_hm = getMDorHMWith2BytesABS(offset + 136, ":");
+        this.change_date_time = getSumWith2BytesABS(offset + 138);
+//
+//        this.alert_alarm_aggr = getSumWith2BytesABS(offset + 140);
+//        this.alert_alarm_internal_co2 = getBooleanValueFrom2ByteABS(offset + 140, 0);
+//        this.alert_alarm_internal_temp = getBooleanValueFrom2ByteABS(offset + 140, 1);
+//        this.alert_alarm_internal_humidity = getBooleanValueFrom2ByteABS(offset + 140, 2);
+//        this.alert_alarm_internal_ilum = getBooleanValueFrom2ByteABS(offset + 140, 3);
+//        this.alert_alarm_vent_relay = getBooleanValueFrom2ByteABS(offset + 140, 4);
+//        this.alert_alarm_heat_relay = getBooleanValueFrom2ByteABS(offset + 140, 5);
+//        this.alert_alarm_cool_relay = getBooleanValueFrom2ByteABS(offset + 140, 6);
+//        this.alert_alarm_humidify_relay = getBooleanValueFrom2ByteABS(offset + 140, 7);
+//        this.alert_alarm_dehumidify_relay = getBooleanValueFrom2ByteABS(offset + 140, 8);
+//        this.alert_alarm_ilum_relay = getBooleanValueFrom2ByteABS(offset + 140, 9);
+//        this.alert_alarm_rs485 = getBooleanValueFrom2ByteABS(offset + 140, 10);
+//        this.alert_alarm_vt515 = getBooleanValueFrom2ByteABS(offset + 140, 11);
+//        this.alert_alarm_vt250_1 = getBooleanValueFrom2ByteABS(offset + 140, 12);
+//        this.alert_alarm_vt250_2 = getBooleanValueFrom2ByteABS(offset + 140, 13);
+//        this.alert_alarm_vt250_3 = getBooleanValueFrom2ByteABS(offset + 140, 14);
+//        this.alert_alarm_vt250_4 = getBooleanValueFrom2ByteABS(offset + 140, 15);
     }
 
     public int getSensor_quantity_and_selection_aggr() {
@@ -244,6 +375,222 @@ public class SettingPOJO extends BasePOJO {
 
     public void setSensor_quantity_and_selection_aggr(int sensor_quantity_and_selection_aggr) {
         this.sensor_quantity_and_selection_aggr = sensor_quantity_and_selection_aggr;
+    }
+
+    public int getReserve_setting_year() {
+        return reserve_setting_year;
+    }
+
+    public void setReserve_setting_year(int reserve_setting_year) {
+        this.reserve_setting_year = reserve_setting_year;
+    }
+
+    public String getReserve_setting_md() {
+        return reserve_setting_md;
+    }
+
+    public void setReserve_setting_md(String reserve_setting_md) {
+        this.reserve_setting_md = reserve_setting_md;
+    }
+
+    public String getReserve_setting_hm() {
+        return reserve_setting_hm;
+    }
+
+    public void setReserve_setting_hm(String reserve_setting_hm) {
+        this.reserve_setting_hm = reserve_setting_hm;
+    }
+
+    public int getReserve_setting_cropno() {
+        return reserve_setting_cropno;
+    }
+
+    public void setReserve_setting_cropno(int reserve_setting_cropno) {
+        this.reserve_setting_cropno = reserve_setting_cropno;
+    }
+
+    public int getDynamic_output_type() {
+        return dynamic_output_type;
+    }
+
+    public void setDynamic_output_type(int dynamic_output_type) {
+        this.dynamic_output_type = dynamic_output_type;
+    }
+
+    public int getDynamic_output_value() {
+        return dynamic_output_value;
+    }
+
+    public void setDynamic_output_value(int dynamic_output_value) {
+        this.dynamic_output_value = dynamic_output_value;
+    }
+
+    public int getGrowth_start_year() {
+        return growth_start_year;
+    }
+
+    public void setGrowth_start_year(int growth_start_year) {
+        this.growth_start_year = growth_start_year;
+    }
+
+    public String getGrowth_start_md() {
+        return growth_start_md;
+    }
+
+    public void setGrowth_start_md(String growth_start_md) {
+        this.growth_start_md = growth_start_md;
+    }
+
+    public String getGrowth_start_hm() {
+        return growth_start_hm;
+    }
+
+    public void setGrowth_start_hm(String growth_start_hm) {
+        this.growth_start_hm = growth_start_hm;
+    }
+
+    public int getChange_date_time() {
+        return change_date_time;
+    }
+
+    public void setChange_date_time(int change_date_time) {
+        this.change_date_time = change_date_time;
+    }
+
+    public int getAlert_alarm_aggr() {
+        return alert_alarm_aggr;
+    }
+
+    public void setAlert_alarm_aggr(int alert_alarm_aggr) {
+        this.alert_alarm_aggr = alert_alarm_aggr;
+    }
+
+    public int getAlert_alarm_internal_co2() {
+        return alert_alarm_internal_co2;
+    }
+
+    public void setAlert_alarm_internal_co2(int alert_alarm_internal_co2) {
+        this.alert_alarm_internal_co2 = alert_alarm_internal_co2;
+    }
+
+    public int getAlert_alarm_internal_temp() {
+        return alert_alarm_internal_temp;
+    }
+
+    public void setAlert_alarm_internal_temp(int alert_alarm_internal_temp) {
+        this.alert_alarm_internal_temp = alert_alarm_internal_temp;
+    }
+
+    public int getAlert_alarm_internal_humidity() {
+        return alert_alarm_internal_humidity;
+    }
+
+    public void setAlert_alarm_internal_humidity(int alert_alarm_internal_humidity) {
+        this.alert_alarm_internal_humidity = alert_alarm_internal_humidity;
+    }
+
+    public int getAlert_alarm_internal_ilum() {
+        return alert_alarm_internal_ilum;
+    }
+
+    public void setAlert_alarm_internal_ilum(int alert_alarm_internal_ilum) {
+        this.alert_alarm_internal_ilum = alert_alarm_internal_ilum;
+    }
+
+    public int getAlert_alarm_vent_relay() {
+        return alert_alarm_vent_relay;
+    }
+
+    public void setAlert_alarm_vent_relay(int alert_alarm_vent_relay) {
+        this.alert_alarm_vent_relay = alert_alarm_vent_relay;
+    }
+
+    public int getAlert_alarm_heat_relay() {
+        return alert_alarm_heat_relay;
+    }
+
+    public void setAlert_alarm_heat_relay(int alert_alarm_heat_relay) {
+        this.alert_alarm_heat_relay = alert_alarm_heat_relay;
+    }
+
+    public int getAlert_alarm_cool_relay() {
+        return alert_alarm_cool_relay;
+    }
+
+    public void setAlert_alarm_cool_relay(int alert_alarm_cool_relay) {
+        this.alert_alarm_cool_relay = alert_alarm_cool_relay;
+    }
+
+    public int getAlert_alarm_humidify_relay() {
+        return alert_alarm_humidify_relay;
+    }
+
+    public void setAlert_alarm_humidify_relay(int alert_alarm_humidify_relay) {
+        this.alert_alarm_humidify_relay = alert_alarm_humidify_relay;
+    }
+
+    public int getAlert_alarm_dehumidify_relay() {
+        return alert_alarm_dehumidify_relay;
+    }
+
+    public void setAlert_alarm_dehumidify_relay(int alert_alarm_dehumidify_relay) {
+        this.alert_alarm_dehumidify_relay = alert_alarm_dehumidify_relay;
+    }
+
+    public int getAlert_alarm_ilum_relay() {
+        return alert_alarm_ilum_relay;
+    }
+
+    public void setAlert_alarm_ilum_relay(int alert_alarm_ilum_relay) {
+        this.alert_alarm_ilum_relay = alert_alarm_ilum_relay;
+    }
+
+    public int getAlert_alarm_rs485() {
+        return alert_alarm_rs485;
+    }
+
+    public void setAlert_alarm_rs485(int alert_alarm_rs485) {
+        this.alert_alarm_rs485 = alert_alarm_rs485;
+    }
+
+    public int getAlert_alarm_vt515() {
+        return alert_alarm_vt515;
+    }
+
+    public void setAlert_alarm_vt515(int alert_alarm_vt515) {
+        this.alert_alarm_vt515 = alert_alarm_vt515;
+    }
+
+    public int getAlert_alarm_vt250_1() {
+        return alert_alarm_vt250_1;
+    }
+
+    public void setAlert_alarm_vt250_1(int alert_alarm_vt250_1) {
+        this.alert_alarm_vt250_1 = alert_alarm_vt250_1;
+    }
+
+    public int getAlert_alarm_vt250_2() {
+        return alert_alarm_vt250_2;
+    }
+
+    public void setAlert_alarm_vt250_2(int alert_alarm_vt250_2) {
+        this.alert_alarm_vt250_2 = alert_alarm_vt250_2;
+    }
+
+    public int getAlert_alarm_vt250_3() {
+        return alert_alarm_vt250_3;
+    }
+
+    public void setAlert_alarm_vt250_3(int alert_alarm_vt250_3) {
+        this.alert_alarm_vt250_3 = alert_alarm_vt250_3;
+    }
+
+    public int getAlert_alarm_vt250_4() {
+        return alert_alarm_vt250_4;
+    }
+
+    public void setAlert_alarm_vt250_4(int alert_alarm_vt250_4) {
+        this.alert_alarm_vt250_4 = alert_alarm_vt250_4;
     }
 
     public String getFarmCode() {

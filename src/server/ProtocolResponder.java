@@ -205,7 +205,9 @@ public class ProtocolResponder{
                     byte[] farmBytes = Arrays.copyOfRange(msg.getProcessed(), 2, 6);
                     byte[] dongBytes = Arrays.copyOfRange(msg.getProcessed(), 6, 8);
                     ByteSerial byteSerial = new ByteSerial(SohaProtocolUtil.makeAlertProtocol(farmBytes, dongBytes));
+                    System.out.println("[INFO :: Sending Alert Protocol since Read Timeout has been occurred for 3 times]");
                     send(byteSerial);
+
                 }
 
                 if(timeouts >= ConstProtocol.RETRY || succ) break;
