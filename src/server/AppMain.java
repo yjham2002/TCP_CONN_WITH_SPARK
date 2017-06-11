@@ -170,6 +170,12 @@ public class AppMain{
 
                     protocols = SohaProtocolUtil.makeReadProtocols(range.getHead(), range.getTail(), id, farmCode, harvCode);
 
+//                    for(int ee = 0; ee < protocols.length; ee++){
+//                        System.out.println(Arrays.toString(protocols[ee]));
+//                    }
+//
+//                    if(true) return "TESTING FOR A WHILE";
+
                     recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
                     if(recvs == null) return RESPONSE_NONE;
                     CropWrappingPOJO cropWrappingPOJO = new CropWrappingPOJO(recvs, order);

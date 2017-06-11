@@ -131,6 +131,12 @@ public class SohaProtocolUtil {
         return ret;
     }
 
+    public static void main(String... args){
+
+        makeReadProtocols(ConstProtocol.RANGE_DAYAGE_01.getHead(), ConstProtocol.RANGE_DAYAGE_01.getTail(), 1, "0078".getBytes(), "01".getBytes());
+
+    }
+
     public static byte[][] makeReadProtocols(int location, int length, int id, byte[] farmCode, byte[] harvCode){
         int start = location;
         int ceil = (int)Math.ceil((double)length / (double)ConstProtocol.READ_LIMIT);
@@ -141,9 +147,12 @@ public class SohaProtocolUtil {
             int jump = (ConstProtocol.READ_LIMIT * e) - 1;
             if(e == ceil) jump = length - 1;
             int newLen = (jump - (ConstProtocol.READ_LIMIT * (e - 1)) + 1);
+
+            System.out.println("newlen :: " + newLen + " / start :: " + start);
+
             bulk[e - 1] = makeReadProtocol(start, newLen, id, farmCode, harvCode);
 
-            start = jump + 1 + location;
+            start += newLen * 2;
         }
 
         System.out.println(bulk.length + " Protocol has been generated");
