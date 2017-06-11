@@ -76,7 +76,7 @@ public class ProtocolResponder{
         }
     }
 
-    public void receive() throws IOException{
+    public boolean receive() throws IOException{
 
         flag = true;
         byteSerial = null;
@@ -88,7 +88,7 @@ public class ProtocolResponder{
             ByteBuffer byteBuffer = ByteBuffer.allocate(ByteSerial.POOL_SIZE);
 
             int byteCount = socket.read(byteBuffer);
-            if(byteCount == -1) return;
+            if(byteCount == -1) return false;
 
             buffer = byteBuffer.array();
 
@@ -100,7 +100,7 @@ public class ProtocolResponder{
             buffer = byteSerial.getProcessed(); // 처리된 트림 데이터 추출
 
             if(buffer.length != LENGTH_REALTIME){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
-                return;
+                return true;
             }
 
 //                if (buffer.length == 0) System.exit(122);// TODO 디버깅용
@@ -166,6 +166,7 @@ public class ProtocolResponder{
         }finally {
             // DO NOTHING
         }
+        return true;
     }
 
     /**
@@ -191,7 +192,7 @@ public class ProtocolResponder{
 
                 boolean succ = true;
 
-                while (byteSerial == null) {
+                while (byteSerial == null || byteSerial.getProcessed().length == LENGTH_REALTIME) {
                     if ((System.currentTimeMillis() - startTime) > ServerConfig.REQUEST_TIMEOUT) {
                         succ = false;
                         System.out.println("[INFO] READ TIMEOUT - " + timeouts);

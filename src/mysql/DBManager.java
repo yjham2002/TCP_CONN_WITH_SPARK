@@ -71,7 +71,7 @@ public class DBManager extends DBConstManager {
         }finally {
             long delCount = getNumber("SELECT COUNT(*) AS num FROM tblRealTimeData WHERE (DATE_SUB(NOW(), INTERVAL 2 MONTH) > regDate)", "num");
             execute("DELETE FROM tblRealTimeData WHERE (DATE_SUB(NOW(), INTERVAL 2 MONTH) > regDate)");
-            System.out.println("[Expiration Check] " + delCount + " items which are expired has deleted from MySQL DB");
+            System.out.println("[Expiration Check] " + delCount + " items which are expired have deleted from MySQL DB");
         }
 
         return true;

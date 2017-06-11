@@ -23,6 +23,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.*;
 
+import static constants.ConstProtocol.SOCKET_TIMEOUT_LIMIT;
 import static spark.route.HttpMethod.get;
 
 /**
@@ -71,17 +72,14 @@ public class ServiceProvider extends ServerConfig{
     private Thread batch;
 
     /**
-     * 포트를 매개변수로 입력받아 인스턴스를 생성하는 내부 접근 지정 생성자
-     * @param port
+     * 서버 소켓 채널 바인딩 포트
      */
-    private ServiceProvider(int port){
-        jobs = new ArrayList<>();
+    private int port;
 
-        log = LoggerFactory.getLogger(this.getClass());
-
-        log.info("Initiating Service Provider");
-
+    private void startServer(){
         try {
+            resetServer();
+
             selector = Selector.open();
 
             socket = ServerSocketChannel.open(); // 서버 소켓 인스턴스 생성
@@ -95,6 +93,31 @@ public class ServiceProvider extends ServerConfig{
             e.printStackTrace();
             d("Socket Creation failed - The port set in const is in use or internet connection is not established.");
         }
+    }
+
+    private void resetServer() throws IOException{
+        if(socket != null){
+            if(socket.isOpen()) socket.close();
+        }
+        if(selector != null){
+            if(selector.isOpen()) selector.close();
+        }
+    }
+
+    /**
+     * 포트를 매개변수로 입력받아 인스턴스를 생성하는 내부 접근 지정 생성자
+     * @param port
+     */
+    private ServiceProvider(int port){
+        this.port = port;
+
+        jobs = new ArrayList<>();
+
+        log = LoggerFactory.getLogger(this.getClass());
+
+        log.info("Initiating Service Provider");
+
+        startServer();
 
         batch = new Thread(() -> {
             // Test
@@ -118,9 +141,10 @@ public class ServiceProvider extends ServerConfig{
         batch.setPriority(Thread.NORM_PRIORITY);
 
         thread = new Thread(() -> {
+            boolean recv = true;
             while(true){
                 try {
-                    int keyCount = selector.select();
+                    int keyCount = selector.select(SOCKET_TIMEOUT_LIMIT);
                     if(keyCount == 0) continue;
 
                     d("STATUS :: [Channel is now Pending until Selector is inactive]");
@@ -135,7 +159,7 @@ public class ServiceProvider extends ServerConfig{
                             accept(selectionKey);
                         } else if (selectionKey.isReadable()) {
                             ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
-                            client.receive();
+                            recv = client.receive();
                         } else if (selectionKey.isWritable()) {
                             ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
                             //client.send(selectionKey);
@@ -144,12 +168,20 @@ public class ServiceProvider extends ServerConfig{
                         iterator.remove();
                     }
 
+                    if(!recv) break;
+
                 }catch(IOException e){
                     e.printStackTrace();
                     d("ERROR :: CHANNEL SELECTOR LEVEL ERROR");
                 }
 
             }
+
+            if(!recv) {
+                System.out.println("WARNING ::::::::::::::::::::::::: [Connection Expired - Restarting :: " + getTimestamp() + "]");
+                startServer();
+            }
+
         });
 
         d("Server is ready to respond");
@@ -209,7 +241,10 @@ public class ServiceProvider extends ServerConfig{
     public List<ByteSerial> send(String client, byte[][] msgs){
 
         List<ByteSerial> byteSerials = new ArrayList<>();
-        for(int e = 0; e < msgs.length; e++) byteSerials.add(send(client, new ByteSerial(msgs[e], ByteSerial.TYPE_NONE)));
+        for(int e = 0; e < msgs.length; e++) {
+            ByteSerial entry = send(client, new ByteSerial(msgs[e], ByteSerial.TYPE_NONE));
+            byteSerials.add(entry);
+        }
 
         return byteSerials;
     }

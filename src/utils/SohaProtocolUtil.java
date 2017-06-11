@@ -123,20 +123,6 @@ public class SohaProtocolUtil {
         return protocol;
     }
 
-    public static void main(String... args){
-
-        byte[] a = new byte[]{83, 84, 48, 48, 55, 56, 48, 50, 2, 3, -120, 0, 2, 0, 1, 1, 1, 4, -80, 0, -6, 1, -62, 0, 9, 0, -55, 1, -109, 2, 93, 0, 7, 0, 50, 0, 3, 17, 17, 1, -12, 0, 30, 0, 100, 3, -24, -61, 80, 1, 44, 2, 88, -1, -99, 3, -25, 0, 0, 0, 79, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -106, 0, 5, 0, 50, 1, -12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -13, 11, -78, 13, 10, 0, 0, 0, 28, 0, 56, 0, 84, 0, 112, 0, -116, 0, -88, 0, -60, 0, -32, 0, -4, -109, 117, 63, -120, 122, -31, 63, -108, 71, -82, 63, -95, 20, 123, 63, -82, 112, -92, 63, -67, -52, -51, 63, -52, 112, -92, 63, -35, 92, 41, 63, -17, 71, -82, 64, 1, -123, 31, 64, 11, 102, 102, 64, 22, -113, 92, 64, 34, 0, 0, 2, -49, 0, -16, 1, -43, 0, 0, 64, 74, -103, -102, 64, 89, 61, 113, 64, 106, -123, 31, 64, 123, 10, 61, 64, -121, -93, -41, 64, -112, 51, 51, 0, 0, 0, 0, 0, 0, 0, 0, 9, 55, 102, 102, 64, -66, 0, 0, 0, 0, 3, -14, 3, -14, 0, -56, 0, 0, 0, 0, 0, 0, 69, -45, 0, 0, 0, 3, 4, 7, 2, 96, 0, 0, 7, -32, 4, -79, 5, -108, 0, 0, 0, 0, 0, 0, -59, 13, 10};
-        byte check = HexUtil.checkSumByFull(a);
-        System.out.println(check);
-        System.out.println(a[a.length - 3]);
-
-//        System.out.println(Integer.toHexString(ConstProtocol.RANGE_TIMER.getTail()));
-//        byte[] arr = new byte[]{0x53, 0x54,        0x30, 0x30, 0x37, 0x38,       0x30, 0x31,     0x01,      0x03,     0x01, (byte)0xC0,      0x00, 0x5d,        (byte)0x85, (byte)0xf3,         0x71,         0x0D, 0x0A};
-//        System.out.println(Arrays.toString(arr));
-//        byte[] arr2 = makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), 1, "0078".getBytes(), "01".getBytes());
-//        System.out.println(Arrays.toString(arr2));
-    }
-
     public static byte[] makeAlertProtocol(byte[] farmCode, byte[] harvCode){
         byte[] prtc = concat(ConstProtocol.STX, farmCode, harvCode);
         byte[] chk = new byte[]{HexUtil.checkSum(prtc)};
@@ -146,7 +132,6 @@ public class SohaProtocolUtil {
     }
 
     public static byte[][] makeReadProtocols(int location, int length, int id, byte[] farmCode, byte[] harvCode){
-
         int start = location;
         int ceil = (int)Math.ceil((double)length / (double)ConstProtocol.READ_LIMIT);
 
@@ -155,9 +140,10 @@ public class SohaProtocolUtil {
         for(int e = 1; e <= ceil; e++){
             int jump = (ConstProtocol.READ_LIMIT * e) - 1;
             if(e == ceil) jump = length - 1;
-            int newLen = (jump - start + 1);
+            int newLen = (jump - (ConstProtocol.READ_LIMIT * (e - 1)) + 1);
             bulk[e - 1] = makeReadProtocol(start, newLen, id, farmCode, harvCode);
-            start = jump + 1;
+
+            start = jump + 1 + location;
         }
 
         System.out.println(bulk.length + " Protocol has been generated");

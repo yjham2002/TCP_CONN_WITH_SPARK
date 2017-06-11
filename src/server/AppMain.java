@@ -167,6 +167,7 @@ public class AppMain{
                         case 6: range = ConstProtocol.RANGE_DAYAGE_06; break;
                         default: order = -1; break;
                     }
+
                     protocols = SohaProtocolUtil.makeReadProtocols(range.getHead(), range.getTail(), id, farmCode, harvCode);
 
                     recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
