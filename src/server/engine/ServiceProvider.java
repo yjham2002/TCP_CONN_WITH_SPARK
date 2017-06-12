@@ -89,6 +89,7 @@ public class ServiceProvider extends ServerConfig{
 
             clients = new HashMap<>(); // 클라이언트 해시맵 생성
             Collections.synchronizedMap(clients); // 가변 스레드 환경에서 아토믹하게 해시맵을 이용하기 위한 동기화 명시 호출
+
         }catch(IOException e){
             e.printStackTrace();
             d("Socket Creation failed - The port set in const is in use or internet connection is not established.");
@@ -157,11 +158,14 @@ public class ServiceProvider extends ServerConfig{
 
                         if (selectionKey.isAcceptable()) {
                             accept(selectionKey);
+                            System.out.println("ServiceProvider :: [Accept]");
                         } else if (selectionKey.isReadable()) {
                             ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
+                            System.out.println("ServiceProvider :: [Receive]");
                             recv = client.receive();
                         } else if (selectionKey.isWritable()) {
                             ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
+                            System.out.println("ServiceProvider :: [Write]");
                             //client.send(selectionKey);
                         }
 
@@ -178,8 +182,8 @@ public class ServiceProvider extends ServerConfig{
             }
 
             if(!recv) {
-                System.out.println("WARNING ::::::::::::::::::::::::: [Connection Expired - Restarting :: " + getTimestamp() + "]");
-                startServer();
+                d("WARNING ::::::::::::::::::::::::: [Connection Expired - Restarting :: " + getTimestamp() + "]");
+                emergencyStart();
             }
 
         });
@@ -216,6 +220,13 @@ public class ServiceProvider extends ServerConfig{
     public ServiceProvider start(){
         thread.start();
         batch.start();
+
+        return instance;
+    }
+
+    private ServiceProvider emergencyStart(){
+        startServer();
+        thread.start();
 
         return instance;
     }
