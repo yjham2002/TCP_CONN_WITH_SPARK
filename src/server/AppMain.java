@@ -133,11 +133,6 @@ public class AppMain{
                     if(recv == null) return RESPONSE_NONE;
                     SettingPOJO settingPOJO = new SettingPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
 
-                    // TODO For Debugging
-                    System.out.println("ORIGIN : " + Arrays.toString(recv.getProcessed()));
-                    System.out.println("BYTES  : " + Arrays.toString(settingPOJO.getBytes()));
-                    // TODO For Debugging
-
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), id, farmCode, harvCode);
                     System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
 
@@ -145,9 +140,16 @@ public class AppMain{
 
                     settingPOJO.initTails(recv, ConstProtocol.RANGE_READ_START);
 
+                    // TODO For Debugging
+                    System.out.println("ORIGIN : " + Arrays.toString(recv.getProcessed()));
+                    System.out.println("BYTES  : " + Arrays.toString(settingPOJO.getBytes()));
+                    // TODO For Debugging
+
                     settingPOJO.setByteSerial(null);
 
                     retVal = objectMapper.writeValueAsString(settingPOJO);
+
+                    DBManager.getInstance().execute(settingPOJO.getInsertSQL());
 
                     break;
                 case ConstRest.MODE_READ_TIMER:

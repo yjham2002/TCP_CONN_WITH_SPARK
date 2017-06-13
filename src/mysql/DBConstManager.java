@@ -57,7 +57,7 @@ public class DBConstManager {
         }
     }
 
-    protected boolean execute(String sql){
+    public boolean execute(String sql){
         boolean retVal = false;
 
         try {

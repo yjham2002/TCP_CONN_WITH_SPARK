@@ -1313,4 +1313,420 @@ public class SettingPOJO extends BasePOJO {
     public void setSetting_onoff_range_illum_revision(int setting_onoff_range_illum_revision) {
         this.setting_onoff_range_illum_revision = setting_onoff_range_illum_revision;
     }
-}
+
+    /**
+     * SQL 문법으로 해당 인스턴스의 삽입 구문을 추출
+     * @return MySQL 쿼리
+     */
+    @JsonIgnore
+    public String getInsertSQL(){
+        if(settingTails == null || settingTails.size() < 3) return "SELECT -1";
+
+        String sql = "insert into `sohatechfarmdb`.`tblSettingData`\n" +
+                "            (" +
+                "             `farmCode`,\n" +
+                "             `dongCode`,\n" +
+                "             `crop_data_num_and_ctrl_aggr`,\n" +
+                "             `sensor_quantity`,\n" +
+                "             `sensor_selected_1`,\n" +
+                "             `sensor_selected_2`,\n" +
+                "             `sensor_selected_3`,\n" +
+                "             `sensor_selected_4`,\n" +
+                "             `singular_ctrl_setting_co2`,\n" +
+                "             `singular_ctrl_setting_temp`,\n" +
+                "             `singular_ctrl_setting_humid`,\n" +
+                "             `singular_ctrl_setting_illum`,\n" +
+                "             `relay_output_setting_co2`,\n" +
+                "             `relay_output_setting_heat`,\n" +
+                "             `relay_output_setting_cool`,\n" +
+                "             `relay_output_setting_humidify`,\n" +
+                "             `relay_output_setting_dehumidify`,\n" +
+                "             `relay_output_setting_illum`,\n" +
+                "             `relay_output_setting_alarm`,\n" +
+                "             `relay_output_setting_reserve`,\n" +
+                "             `dry_condition_setting_aggr`,\n" +
+                "             `dry_condition_setting_ctrl`,\n" +
+                "             `dry_condition_setting_humidity`,\n" +
+                "             `alert_alarm_time_select_aggr`,\n" +
+                "             `alert_alarm_time_select_auto`,\n" +
+                "             `alert_alarm_time_select_timer`,\n" +
+                "             `alert_alarm_time_select_lamp_unit`,\n" +
+                "             `alert_alarm_time_select_timeset`,\n" +
+                "             `cthi_ctrl_stat_aggr`,\n" +
+                "             `cthi_ctrl_stat_co2_ctrl`,\n" +
+                "             `cthi_ctrl_stat_co2_ontype`,\n" +
+                "             `cthi_ctrl_stat_co2_offtype`,\n" +
+                "             `cthi_ctrl_stat_temp_ctrl`,\n" +
+                "             `cthi_ctrl_stat_temp_ontype`,\n" +
+                "             `cthi_ctrl_stat_temp_offtype`,\n" +
+                "             `cthi_ctrl_stat_humid_ctrl`,\n" +
+                "             `cthi_ctrl_stat_humid_ontype`,\n" +
+                "             `cthi_ctrl_stat_humid_offtype`,\n" +
+                "             `cthi_ctrl_stat_illum_ctrl`,\n" +
+                "             `cthi_ctrl_stat_illum_ontype`,\n" +
+                "             `cthi_ctrl_stat_illum_offtype`,\n" +
+                "             `calm_threshold_co2_low`,\n" +
+                "             `calm_threshold_co2_high`,\n" +
+                "             `calm_threshold_temp_low`,\n" +
+                "             `calm_threshold_temp_high`,\n" +
+                "             `calm_threshold_humid_low`,\n" +
+                "             `calm_threshold_humid_high`,\n" +
+                "             `calm_threshold_illum_low`,\n" +
+                "             `calm_threshold_illum_high`,\n" +
+                "             `setting_range_co2_min`,\n" +
+                "             `setting_range_co2_max`,\n" +
+                "             `setting_range_temp_min`,\n" +
+                "             `setting_range_temp_max`,\n" +
+                "             `setting_range_humid_min`,\n" +
+                "             `setting_range_humid_max`,\n" +
+                "             `setting_range_illum_min`,\n" +
+                "             `setting_range_illum_max`,\n" +
+                "             `sr_revision_co2_01`,\n" +
+                "             `sr_revision_temp_01`,\n" +
+                "             `sr_revision_humid_01`,\n" +
+                "             `sr_revision_illum_01`,\n" +
+                "             `sr_revision_co2_02`,\n" +
+                "             `sr_revision_temp_02`,\n" +
+                "             `sr_revision_humid_02`,\n" +
+                "             `sr_revision_illum_02`,\n" +
+                "             `sr_revision_co2_03`,\n" +
+                "             `sr_revision_temp_03`,\n" +
+                "             `sr_revision_humid_03`,\n" +
+                "             `sr_revision_illum_03`,\n" +
+                "             `sr_revision_co2_04`,\n" +
+                "             `sr_revision_temp_04`,\n" +
+                "             `sr_revision_humid_04`,\n" +
+                "             `sr_revision_illum_04`,\n" +
+                "             `setting_onoff_range_co2`,\n" +
+                "             `setting_onoff_range_co2_revision`,\n" +
+                "             `setting_onoff_range_temp`,\n" +
+                "             `setting_onoff_range_temp_revision`,\n" +
+                "             `setting_onoff_range_humid`,\n" +
+                "             `setting_onoff_range_humid_revision`,\n" +
+                "             `setting_onoff_range_illum`,\n" +
+                "             `setting_onoff_range_illum_revision`,\n" +
+                "             `reserve_setting_year`,\n" +
+                "             `reserve_setting_md`,\n" +
+                "             `reserve_setting_hm`,\n" +
+                "             `reserve_setting_cropno`,\n" +
+                "             `dynamic_output_type`,\n" +
+                "             `dynamic_output_value`,\n" +
+                "             `backup_year`,\n" +
+                "             `backup_md`,\n" +
+                "             `backup_hm`,\n" +
+                "             `backup_read_year`,\n" +
+                "             `backup_read_md`,\n" +
+                "             `backup_read_hm`,\n" +
+                "             `growth_start_year`,\n" +
+                "             `growth_start_md`,\n" +
+                "             `growth_start_hm`,\n" +
+                "             `change_date_time`,\n" +
+                "             `alert_alarm_aggr`,\n" +
+                "             `alert_alarm_internal_co2`,\n" +
+                "             `alert_alarm_internal_temp`,\n" +
+                "             `alert_alarm_internal_humidity`,\n" +
+                "             `alert_alarm_internal_ilum`,\n" +
+                "             `alert_alarm_vent_relay`,\n" +
+                "             `alert_alarm_heat_relay`,\n" +
+                "             `alert_alarm_cool_relay`,\n" +
+                "             `alert_alarm_humidify_relay`,\n" +
+                "             `alert_alarm_dehumidify_relay`,\n" +
+                "             `alert_alarm_ilum_relay`,\n" +
+                "             `alert_alarm_rs485`,\n" +
+                "             `alert_alarm_vt515`,\n" +
+                "             `alert_alarm_vt250_1`,\n" +
+                "             `alert_alarm_vt250_2`,\n" +
+                "             `alert_alarm_vt250_3`,\n" +
+                "             `alert_alarm_vt250_4`,\n" +
+                "             `start_time_1`,\n" +
+                "             `end_time_1`,\n" +
+                "             `setting_value_co_2_1`,\n" +
+                "             `setting_value_temp_1`,\n" +
+                "             `setting_value_humid_1`,\n" +
+                "             `setting_value_illum_1`,\n" +
+                "             `start_time_2`,\n" +
+                "             `end_time_2`,\n" +
+                "             `setting_value_co_2_2`,\n" +
+                "             `setting_value_temp_2`,\n" +
+                "             `setting_value_humid_2`,\n" +
+                "             `setting_value_illum_2`,\n" +
+                "             `start_time_3`,\n" +
+                "             `end_time_3`,\n" +
+                "             `setting_value_co_2_3`,\n" +
+                "             `setting_value_temp_3`,\n" +
+                "             `setting_value_humid_3`,\n" +
+                "             `setting_value_illum_3`,\n" +
+                "             `regDate`)\n" +
+                "values (" +
+                "'" +farmCode+"',\n" +
+                "'" +harvCode+"',\n" +
+                "'" +crop_data_num_and_ctrl_aggr+"',\n" +
+                "'" +sensor_quantity+"',\n" +
+                "'" +sensor_selected_1+"',\n" +
+                "'" +sensor_selected_2+"',\n" +
+                "'" +sensor_selected_3+"',\n" +
+                "'" +sensor_selected_4+"',\n" +
+                "'" +singular_ctrl_setting_co2+"',\n" +
+                "'" +singular_ctrl_setting_temp+"',\n" +
+                "'" +singular_ctrl_setting_humid+"',\n" +
+                "'" +singular_ctrl_setting_illum+"',\n" +
+                "'" +relay_output_setting_co2+"',\n" +
+                "'" +relay_output_setting_heat+"',\n" +
+                "'" +relay_output_setting_cool+"',\n" +
+                "'" +relay_output_setting_humidify+"',\n" +
+                "'" +relay_output_setting_dehumidify+"',\n" +
+                "'" +relay_output_setting_illum+"',\n" +
+                "'" +relay_output_setting_alarm+"',\n" +
+                "'" +relay_output_setting_reserve+"',\n" +
+                "'" +dry_condition_setting_aggr+"',\n" +
+                "'" +dry_condition_setting_ctrl+"',\n" +
+                "'" +dry_condition_setting_humidity+"',\n" +
+                "'" +alert_alarm_time_select_aggr+"',\n" +
+                "'" +alert_alarm_time_select_auto+"',\n" +
+                "'" +alert_alarm_time_select_timer+"',\n" +
+                "'" +alert_alarm_time_select_lamp_unit+"',\n" +
+                "'" +alert_alarm_time_select_timeset+"',\n" +
+                "'" +cthi_ctrl_stat_aggr+"',\n" +
+                "'" +cthi_ctrl_stat_co2_ctrl+"',\n" +
+                "'" +cthi_ctrl_stat_co2_ontype+"',\n" +
+                "'" +cthi_ctrl_stat_co2_offtype+"',\n" +
+                "'" +cthi_ctrl_stat_temp_ctrl+"',\n" +
+                "'" +cthi_ctrl_stat_temp_ontype+"',\n" +
+                "'" +cthi_ctrl_stat_temp_offtype+"',\n" +
+                "'" +cthi_ctrl_stat_humid_ctrl+"',\n" +
+                "'" +cthi_ctrl_stat_humid_ontype+"',\n" +
+                "'" +cthi_ctrl_stat_humid_offtype+"',\n" +
+                "'" +cthi_ctrl_stat_illum_ctrl+"',\n" +
+                "'" +cthi_ctrl_stat_illum_ontype+"',\n" +
+                "'" +cthi_ctrl_stat_illum_offtype+"',\n" +
+                "'" +calm_threshold_co2_low+"',\n" +
+                "'" +calm_threshold_co2_high+"',\n" +
+                "'" +calm_threshold_temp_low+"',\n" +
+                "'" +calm_threshold_temp_high+"',\n" +
+                "'" +calm_threshold_humid_low+"',\n" +
+                "'" +calm_threshold_humid_high+"',\n" +
+                "'" +calm_threshold_illum_low+"',\n" +
+                "'" +calm_threshold_illum_high+"',\n" +
+                "'" +setting_range_co2_min+"',\n" +
+                "'" +setting_range_co2_max+"',\n" +
+                "'" +setting_range_temp_min+"',\n" +
+                "'" +setting_range_temp_max+"',\n" +
+                "'" +setting_range_humid_min+"',\n" +
+                "'" +setting_range_humid_max+"',\n" +
+                "'" +setting_range_illum_min+"',\n" +
+                "'" +setting_range_illum_max+"',\n" +
+                "'" +sr_revision_co2_01+"',\n" +
+                "'" +sr_revision_temp_01+"',\n" +
+                "'" +sr_revision_humid_01+"',\n" +
+                "'" +sr_revision_illum_01+"',\n" +
+                "'" +sr_revision_co2_02+"',\n" +
+                "'" +sr_revision_temp_02+"',\n" +
+                "'" +sr_revision_humid_02+"',\n" +
+                "'" +sr_revision_illum_02+"',\n" +
+                "'" +sr_revision_co2_03+"',\n" +
+                "'" +sr_revision_temp_03+"',\n" +
+                "'" +sr_revision_humid_03+"',\n" +
+                "'" +sr_revision_illum_03+"',\n" +
+                "'" +sr_revision_co2_04+"',\n" +
+                "'" +sr_revision_temp_04+"',\n" +
+                "'" +sr_revision_humid_04+"',\n" +
+                "'" +sr_revision_illum_04+"',\n" +
+                "'" +setting_onoff_range_co2+"',\n" +
+                "'" +setting_onoff_range_co2_revision+"',\n" +
+                "'" +setting_onoff_range_temp+"',\n" +
+                "'" +setting_onoff_range_temp_revision+"',\n" +
+                "'" +setting_onoff_range_humid+"',\n" +
+                "'" +setting_onoff_range_humid_revision+"',\n" +
+                "'" +setting_onoff_range_illum+"',\n" +
+                "'" +setting_onoff_range_illum_revision+"',\n" +
+                "'" +reserve_setting_year+"',\n" +
+                "'" +reserve_setting_md+"',\n" +
+                "'" +reserve_setting_hm+"',\n" +
+                "'" +reserve_setting_cropno+"',\n" +
+                "'" +dynamic_output_type+"',\n" +
+                "'" +dynamic_output_value+"',\n" +
+                "'" +backup_year+"',\n" +
+                "'" +backup_md+"',\n" +
+                "'" +backup_hm+"',\n" +
+                "'" +backup_read_year+"',\n" +
+                "'" +backup_read_md+"',\n" +
+                "'" +backup_read_hm+"',\n" +
+                "'" +growth_start_year+"',\n" +
+                "'" +growth_start_md+"',\n" +
+                "'" +growth_start_hm+"',\n" +
+                "'" +change_date_time+"',\n" +
+                "'" +alert_alarm_aggr+"',\n" +
+                "'" +alert_alarm_internal_co2+"',\n" +
+                "'" +alert_alarm_internal_temp+"',\n" +
+                "'" +alert_alarm_internal_humidity+"',\n" +
+                "'" +alert_alarm_internal_ilum+"',\n" +
+                "'" +alert_alarm_vent_relay+"',\n" +
+                "'" +alert_alarm_heat_relay+"',\n" +
+                "'" +alert_alarm_cool_relay+"',\n" +
+                "'" +alert_alarm_humidify_relay+"',\n" +
+                "'" +alert_alarm_dehumidify_relay+"',\n" +
+                "'" +alert_alarm_ilum_relay+"',\n" +
+                "'" +alert_alarm_rs485+"',\n" +
+                "'" +alert_alarm_vt515+"',\n" +
+                "'" +alert_alarm_vt250_1+"',\n" +
+                "'" +alert_alarm_vt250_2+"',\n" +
+                "'" +alert_alarm_vt250_3+"',\n" +
+                "'" +alert_alarm_vt250_4+"',\n" +
+                "'" +settingTails.get(0).getStart_time()+"',\n" +
+                "'" +settingTails.get(0).getEnd_time()+"',\n" +
+                "'" +settingTails.get(0).getSetting_value_co_2()+"',\n" +
+                "'" +settingTails.get(0).getSetting_value_temp()+"',\n" +
+                "'" +settingTails.get(0).getSetting_value_humid()+"',\n" +
+                "'" +settingTails.get(0).getSetting_value_illum()+"',\n" +
+                "'" +settingTails.get(1).getStart_time()+"',\n" +
+                "'" +settingTails.get(1).getEnd_time()+"',\n" +
+                "'" +settingTails.get(1).getSetting_value_co_2()+"',\n" +
+                "'" +settingTails.get(1).getSetting_value_temp()+"',\n" +
+                "'" +settingTails.get(1).getSetting_value_humid()+"',\n" +
+                "'" +settingTails.get(1).getSetting_value_illum()+"',\n" +
+                "'" +settingTails.get(2).getStart_time()+"',\n" +
+                "'" +settingTails.get(2).getEnd_time()+"',\n" +
+                "'" +settingTails.get(2).getSetting_value_co_2()+"',\n" +
+                "'" +settingTails.get(2).getSetting_value_temp()+"',\n" +
+                "'" +settingTails.get(2).getSetting_value_humid()+"',\n" +
+                "'" +settingTails.get(2).getSetting_value_illum()+"',\n" +
+                "        NOW()) " +
+                "ON DUPLICATE KEY UPDATE " +
+                "  `crop_data_num_and_ctrl_aggr` = '" + crop_data_num_and_ctrl_aggr+ "',\n" +
+                "  `sensor_quantity` = '" + sensor_quantity+ "',\n" +
+                "  `sensor_selected_1` = '" + sensor_selected_1+ "',\n" +
+                "  `sensor_selected_2` = '" + sensor_selected_2+ "',\n" +
+                "  `sensor_selected_3` = '" + sensor_selected_3+ "',\n" +
+                "  `sensor_selected_4` = '" + sensor_selected_4+ "',\n" +
+                "  `singular_ctrl_setting_co2` = '" + singular_ctrl_setting_co2+ "',\n" +
+                "  `singular_ctrl_setting_temp` = '" + singular_ctrl_setting_temp+ "',\n" +
+                "  `singular_ctrl_setting_humid` = '" + singular_ctrl_setting_humid+ "',\n" +
+                "  `singular_ctrl_setting_illum` = '" + singular_ctrl_setting_illum+ "',\n" +
+                "  `relay_output_setting_co2` = '" + relay_output_setting_co2+ "',\n" +
+                "  `relay_output_setting_heat` = '" + relay_output_setting_heat+ "',\n" +
+                "  `relay_output_setting_cool` = '" + relay_output_setting_cool+ "',\n" +
+                "  `relay_output_setting_humidify` = '" + relay_output_setting_humidify+ "',\n" +
+                "  `relay_output_setting_dehumidify` = '" + relay_output_setting_dehumidify+ "',\n" +
+                "  `relay_output_setting_illum` = '" + relay_output_setting_illum+ "',\n" +
+                "  `relay_output_setting_alarm` = '" + relay_output_setting_alarm+ "',\n" +
+                "  `relay_output_setting_reserve` = '" + relay_output_setting_reserve+ "',\n" +
+                "  `dry_condition_setting_aggr` = '" + dry_condition_setting_aggr+ "',\n" +
+                "  `dry_condition_setting_ctrl` = '" + dry_condition_setting_ctrl+ "',\n" +
+                "  `dry_condition_setting_humidity` = '" + dry_condition_setting_humidity+ "',\n" +
+                "  `alert_alarm_time_select_aggr` = '" + alert_alarm_time_select_aggr+ "',\n" +
+                "  `alert_alarm_time_select_auto` = '" + alert_alarm_time_select_auto+ "',\n" +
+                "  `alert_alarm_time_select_timer` = '" + alert_alarm_time_select_timer+ "',\n" +
+                "  `alert_alarm_time_select_lamp_unit` = '" + alert_alarm_time_select_lamp_unit+ "',\n" +
+                "  `alert_alarm_time_select_timeset` = '" + alert_alarm_time_select_timeset+ "',\n" +
+                "  `cthi_ctrl_stat_aggr` = '" + cthi_ctrl_stat_aggr+ "',\n" +
+                "  `cthi_ctrl_stat_co2_ctrl` = '" + cthi_ctrl_stat_co2_ctrl+ "',\n" +
+                "  `cthi_ctrl_stat_co2_ontype` = '" + cthi_ctrl_stat_co2_ontype+ "',\n" +
+                "  `cthi_ctrl_stat_co2_offtype` = '" + cthi_ctrl_stat_co2_offtype+ "',\n" +
+                "  `cthi_ctrl_stat_temp_ctrl` = '" + cthi_ctrl_stat_temp_ctrl+ "',\n" +
+                "  `cthi_ctrl_stat_temp_ontype` = '" + cthi_ctrl_stat_temp_ontype+ "',\n" +
+                "  `cthi_ctrl_stat_temp_offtype` = '" + cthi_ctrl_stat_temp_offtype+ "',\n" +
+                "  `cthi_ctrl_stat_humid_ctrl` = '" + cthi_ctrl_stat_humid_ctrl+ "',\n" +
+                "  `cthi_ctrl_stat_humid_ontype` = '" + cthi_ctrl_stat_humid_ontype+ "',\n" +
+                "  `cthi_ctrl_stat_humid_offtype` = '" + cthi_ctrl_stat_humid_offtype+ "',\n" +
+                "  `cthi_ctrl_stat_illum_ctrl` = '" + cthi_ctrl_stat_illum_ctrl+ "',\n" +
+                "  `cthi_ctrl_stat_illum_ontype` = '" + cthi_ctrl_stat_illum_ontype+ "',\n" +
+                "  `cthi_ctrl_stat_illum_offtype` = '" + cthi_ctrl_stat_illum_offtype+ "',\n" +
+                "  `calm_threshold_co2_low` = '" + calm_threshold_co2_low+ "',\n" +
+                "  `calm_threshold_co2_high` = '" + calm_threshold_co2_high+ "',\n" +
+                "  `calm_threshold_temp_low` = '" + calm_threshold_temp_low+ "',\n" +
+                "  `calm_threshold_temp_high` = '" + calm_threshold_temp_high+ "',\n" +
+                "  `calm_threshold_humid_low` = '" + calm_threshold_humid_low+ "',\n" +
+                "  `calm_threshold_humid_high` = '" + calm_threshold_humid_high+ "',\n" +
+                "  `calm_threshold_illum_low` = '" + calm_threshold_illum_low+ "',\n" +
+                "  `calm_threshold_illum_high` = '" + calm_threshold_illum_high+ "',\n" +
+                "  `setting_range_co2_min` = '" + setting_range_co2_min+ "',\n" +
+                "  `setting_range_co2_max` = '" + setting_range_co2_max+ "',\n" +
+                "  `setting_range_temp_min` = '" + setting_range_temp_min+ "',\n" +
+                "  `setting_range_temp_max` = '" + setting_range_temp_max+ "',\n" +
+                "  `setting_range_humid_min` = '" + setting_range_humid_min+ "',\n" +
+                "  `setting_range_humid_max` = '" + setting_range_humid_max+ "',\n" +
+                "  `setting_range_illum_min` = '" + setting_range_illum_min+ "',\n" +
+                "  `setting_range_illum_max` = '" + setting_range_illum_max+ "',\n" +
+                "  `sr_revision_co2_01` = '" + sr_revision_co2_01+ "',\n" +
+                "  `sr_revision_temp_01` = '" + sr_revision_temp_01+ "',\n" +
+                "  `sr_revision_humid_01` = '" + sr_revision_humid_01+ "',\n" +
+                "  `sr_revision_illum_01` = '" + sr_revision_illum_01+ "',\n" +
+                "  `sr_revision_co2_02` = '" + sr_revision_co2_02+ "',\n" +
+                "  `sr_revision_temp_02` = '" + sr_revision_temp_02+ "',\n" +
+                "  `sr_revision_humid_02` = '" + sr_revision_humid_02+ "',\n" +
+                "  `sr_revision_illum_02` = '" + sr_revision_illum_02+ "',\n" +
+                "  `sr_revision_co2_03` = '" + sr_revision_co2_03+ "',\n" +
+                "  `sr_revision_temp_03` = '" + sr_revision_temp_03+ "',\n" +
+                "  `sr_revision_humid_03` = '" + sr_revision_humid_03+ "',\n" +
+                "  `sr_revision_illum_03` = '" + sr_revision_illum_03+ "',\n" +
+                "  `sr_revision_co2_04` = '" + sr_revision_co2_04+ "',\n" +
+                "  `sr_revision_temp_04` = '" + sr_revision_temp_04+ "',\n" +
+                "  `sr_revision_humid_04` = '" + sr_revision_humid_04+ "',\n" +
+                "  `sr_revision_illum_04` = '" + sr_revision_illum_04+ "',\n" +
+                "  `setting_onoff_range_co2` = '" + setting_onoff_range_co2+ "',\n" +
+                "  `setting_onoff_range_co2_revision` = '" + setting_onoff_range_co2_revision+ "',\n" +
+                "  `setting_onoff_range_temp` = '" + setting_onoff_range_temp+ "',\n" +
+                "  `setting_onoff_range_temp_revision` = '" + setting_onoff_range_temp_revision+ "',\n" +
+                "  `setting_onoff_range_humid` = '" + setting_onoff_range_humid+ "',\n" +
+                "  `setting_onoff_range_humid_revision` = '" + setting_onoff_range_humid_revision+ "',\n" +
+                "  `setting_onoff_range_illum` = '" + setting_onoff_range_illum+ "',\n" +
+                "  `setting_onoff_range_illum_revision` = '" + setting_onoff_range_illum_revision+ "',\n" +
+                "  `reserve_setting_year` = '" + reserve_setting_year+ "',\n" +
+                "  `reserve_setting_md` = '" + reserve_setting_md+ "',\n" +
+                "  `reserve_setting_hm` = '" + reserve_setting_hm+ "',\n" +
+                "  `reserve_setting_cropno` = '" + reserve_setting_cropno+ "',\n" +
+                "  `dynamic_output_type` = '" + dynamic_output_type+ "',\n" +
+                "  `dynamic_output_value` = '" + dynamic_output_value+ "',\n" +
+                "  `backup_year` = '" + backup_year+ "',\n" +
+                "  `backup_md` = '" + backup_md+ "',\n" +
+                "  `backup_hm` = '" + backup_hm+ "',\n" +
+                "  `backup_read_year` = '" + backup_read_year+ "',\n" +
+                "  `backup_read_md` = '" + backup_read_md+ "',\n" +
+                "  `backup_read_hm` = '" + backup_read_hm+ "',\n" +
+                "  `growth_start_year` = '" + growth_start_year+ "',\n" +
+                "  `growth_start_md` = '" + growth_start_md+ "',\n" +
+                "  `growth_start_hm` = '" + growth_start_hm+ "',\n" +
+                "  `change_date_time` = '" + change_date_time+ "',\n" +
+                "  `alert_alarm_aggr` = '" + alert_alarm_aggr+ "',\n" +
+                "  `alert_alarm_internal_co2` = '" + alert_alarm_internal_co2+ "',\n" +
+                "  `alert_alarm_internal_temp` = '" + alert_alarm_internal_temp+ "',\n" +
+                "  `alert_alarm_internal_humidity` = '" + alert_alarm_internal_humidity+ "',\n" +
+                "  `alert_alarm_internal_ilum` = '" + alert_alarm_internal_ilum+ "',\n" +
+                "  `alert_alarm_vent_relay` = '" + alert_alarm_vent_relay+ "',\n" +
+                "  `alert_alarm_heat_relay` = '" + alert_alarm_heat_relay+ "',\n" +
+                "  `alert_alarm_cool_relay` = '" + alert_alarm_cool_relay+ "',\n" +
+                "  `alert_alarm_humidify_relay` = '" + alert_alarm_humidify_relay+ "',\n" +
+                "  `alert_alarm_dehumidify_relay` = '" + alert_alarm_dehumidify_relay+ "',\n" +
+                "  `alert_alarm_ilum_relay` = '" + alert_alarm_ilum_relay+ "',\n" +
+                "  `alert_alarm_rs485` = '" + alert_alarm_rs485+ "',\n" +
+                "  `alert_alarm_vt515` = '" + alert_alarm_vt515+ "',\n" +
+                "  `alert_alarm_vt250_1` = '" + alert_alarm_vt250_1+ "',\n" +
+                "  `alert_alarm_vt250_2` = '" + alert_alarm_vt250_2+ "',\n" +
+                "  `alert_alarm_vt250_3` = '" + alert_alarm_vt250_3+ "',\n" +
+                "  `alert_alarm_vt250_4` = '" + alert_alarm_vt250_4+ "',\n" +
+                "  `start_time_1` = '" + settingTails.get(0).getStart_time() + "',\n" +
+                "  `end_time_1` = '" + settingTails.get(0).getEnd_time() + "',\n" +
+                "  `setting_value_co_2_1` = '" + settingTails.get(0).getSetting_value_co_2() + "',\n" +
+                "  `setting_value_temp_1` = '" + settingTails.get(0).getSetting_value_temp() + "',\n" +
+                "  `setting_value_humid_1` = '" + settingTails.get(0).getSetting_value_humid() + "',\n" +
+                "  `setting_value_illum_1` = '" + settingTails.get(0).getSetting_value_illum() + "',\n" +
+                "  `start_time_2` = '" + settingTails.get(1).getStart_time() + "',\n" +
+                "  `end_time_2` = '" + settingTails.get(1).getEnd_time() + "',\n" +
+                "  `setting_value_co_2_2` = '" + settingTails.get(1).getSetting_value_co_2() + "',\n" +
+                "  `setting_value_temp_2` = '" + settingTails.get(1).getSetting_value_temp() + "',\n" +
+                "  `setting_value_humid_2` = '" + settingTails.get(1).getSetting_value_humid() + "',\n" +
+                "  `setting_value_illum_2` = '" + settingTails.get(1).getSetting_value_illum() + "',\n" +
+                "  `start_time_3` = '" + settingTails.get(2).getStart_time() + "',\n" +
+                "  `end_time_3` = '" + settingTails.get(2).getEnd_time() + "',\n" +
+                "  `setting_value_co_2_3` = '" + settingTails.get(2).getSetting_value_co_2() + "',\n" +
+                "  `setting_value_temp_3` = '" + settingTails.get(2).getSetting_value_temp() + "',\n" +
+                "  `setting_value_humid_3` = '" + settingTails.get(2).getSetting_value_humid() + "',\n" +
+                "  `setting_value_illum_3` = '" + settingTails.get(2).getSetting_value_illum() + "',\n" +
+                "  `regDate` = NOW();";
+
+        return sql;
+    }
+
+
+
+    }

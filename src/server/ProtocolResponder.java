@@ -34,8 +34,6 @@ import static constants.ConstProtocol.*;
  */
 public class ProtocolResponder{
 
-    private volatile boolean flag = false;
-
     /**
      * SLF4J 로거
      */
@@ -79,8 +77,6 @@ public class ProtocolResponder{
     }
 
     public boolean receive() throws IOException{
-
-        flag = true;
         byteSerial = null;
 
         try{
@@ -177,7 +173,6 @@ public class ProtocolResponder{
      * @param msg
      */
     public synchronized ByteSerial send(ByteSerial msg){ // TODO 3회 반복
-        flag = false;
 
         byteSerial = null;
 
@@ -207,10 +202,10 @@ public class ProtocolResponder{
                 if(timeouts >= ConstProtocol.RETRY){
                     byte[] farmBytes = Arrays.copyOfRange(msg.getProcessed(), 2, 6);
                     byte[] dongBytes = Arrays.copyOfRange(msg.getProcessed(), 6, 8);
-                    ByteSerial byteSerial = new ByteSerial(SohaProtocolUtil.makeAlertProtocol(farmBytes, dongBytes));
+                    ByteSerial byteSerialAlert = new ByteSerial(SohaProtocolUtil.makeAlertProtocol(farmBytes, dongBytes));
                     System.out.println("[INFO :: Sending Alert Protocol since Read Timeout has been occurred for 3 times]");
-                    sendOneWay(byteSerial);
-
+                    sendOneWay(byteSerialAlert);
+                    return null;
                 }
 
                 if(timeouts >= ConstProtocol.RETRY || succ) break;
@@ -233,7 +228,6 @@ public class ProtocolResponder{
      * @param msg
      */
     public synchronized void sendOneWay(ByteSerial msg){ // TODO 3회 반복
-        flag = false;
 
         byteSerial = null;
 
