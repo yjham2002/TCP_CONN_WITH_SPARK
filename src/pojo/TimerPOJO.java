@@ -68,7 +68,9 @@ public class TimerPOJO extends BasePOJO{
      * @param offset
      * TODO super error
      */
-    public TimerPOJO(ByteSerial byteSerial, int offset){
+    public TimerPOJO(ByteSerial byteSerial, int offset, String farmCode, String harvCode){
+        this.farmCode = farmCode;
+        this.dongCode = harvCode;
         this.byteSerial = byteSerial;
         this.offset = offset;
         init();

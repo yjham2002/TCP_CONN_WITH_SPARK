@@ -167,9 +167,26 @@ public class BasePOJO implements Serializable{
         return footer;
     }
 
+    public static int getBitAggregation(int... bits){
+        int total = 0;
+        for(int e = 0; e < bits.length; e++) total += bits[e] << (bits.length - e - 1);
+        return total;
+    }
+
     public static byte[] getValuePairFromString(String str){
-        String head = str.substring(0, 2);
-        String tail = str.substring(3, 5);
+
+        String[] arr = null;
+        int idx = -1;
+
+        for(int e = 0; e < str.toCharArray().length; e++){
+            char c = str.toCharArray()[e];
+            if(!Character.isDigit(c)) idx = e;
+        }
+
+        if(idx == -1) return new byte[]{0, 0};
+
+        String head = str.substring(0, idx);
+        String tail = str.substring(idx + 1, str.length());
 
         int ihead, itail;
 

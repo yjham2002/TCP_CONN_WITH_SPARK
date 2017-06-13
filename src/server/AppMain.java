@@ -105,6 +105,7 @@ public class AppMain{
 
             if(id == 0){
                 System.out.println("No appropriate machine code for " + rawFarm + ":" + rawHarv);
+                return RESPONSE_NONE;
             }else{
                 System.out.println("Machine Code :: " + id);
             }
@@ -133,6 +134,8 @@ public class AppMain{
                     if(recv == null) return RESPONSE_NONE;
                     SettingPOJO settingPOJO = new SettingPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
 
+                    System.out.println("SETTING BYTES : " + Arrays.toString(recv.getProcessed()));
+
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), id, farmCode, harvCode);
                     System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
 
@@ -141,7 +144,7 @@ public class AppMain{
                     settingPOJO.initTails(recv, ConstProtocol.RANGE_READ_START);
 
                     // TODO For Debugging
-                    System.out.println("ORIGIN : " + Arrays.toString(recv.getProcessed()));
+                    System.out.println("TAIL BYTES : " + Arrays.toString(recv.getProcessed()));
                     System.out.println("BYTES  : " + Arrays.toString(settingPOJO.getBytes()));
                     // TODO For Debugging
 
@@ -158,7 +161,7 @@ public class AppMain{
 
                     recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
                     if(recv == null) return RESPONSE_NONE;
-                    TimerPOJO timerPOJO = new TimerPOJO(recv, ConstProtocol.RANGE_READ_START);
+                    TimerPOJO timerPOJO = new TimerPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
                     retVal = objectMapper.writeValueAsString(timerPOJO);
                     break;
                 case ConstRest.MODE_READ_DAYAGE:
@@ -173,19 +176,21 @@ public class AppMain{
                         default: order = -1; break;
                     }
 
-                    protocols = SohaProtocolUtil.makeReadProtocols(range.getHead(), range.getTail(), id, farmCode, harvCode);
+//                    protocols = SohaProtocolUtil.makeReadProtocols(range.getHead(), range.getTail(), id, farmCode, harvCode);
+//
+//                    for(byte[] aaa : protocols){
+//                        System.out.println(Arrays.toString(aaa));
+//                    }
+//
+//                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
+//                    if(recvs.size() <= 0) return RESPONSE_NONE;
+//
+//                    CropWrappingPOJO cropWrappingPOJO = new CropWrappingPOJO(recvs, order);
+//                    retVal = objectMapper.writeValueAsString(cropWrappingPOJO);
 
-                    for(byte[] aaa : protocols){
-                        System.out.println(Arrays.toString(aaa));
-                    }
+                    protocol = new byte[]{83, 84, 48, 48, 55, 56, 48, 49, 1, 3, 2, -118, 0, -13, 37, -35, 92, 13, 10};
+                    recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
 
-                    if(true) return "";
-
-                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
-                    if(recvs.size() <= 0) return RESPONSE_NONE;
-
-                    CropWrappingPOJO cropWrappingPOJO = new CropWrappingPOJO(recvs, order);
-                    retVal = objectMapper.writeValueAsString(cropWrappingPOJO);
                     break;
                 default: protocols = null; break;
             }

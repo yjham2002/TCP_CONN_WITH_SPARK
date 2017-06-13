@@ -11,7 +11,7 @@ public class ConstRest {
     public static final String REST_WRITE_REQUEST = "write";
 
     public static final String RESPONSE_NONE = "{}";
-    public static final String RESPONSE_INVALID = "{\"err\":Invalid Parameter}";
+    public static final String RESPONSE_INVALID = "{\"err\":\"Invalid Parameter\"}";
 
     /**
      * API Parameter names

@@ -128,7 +128,7 @@ public class ProtocolResponder{
                                     ),
                                     ByteSerial.TYPE_SET
                             );
-                    send(init);
+                    sendOneWay(init);
 
                     System.out.println(Arrays.toString(init.getProcessed()));
 

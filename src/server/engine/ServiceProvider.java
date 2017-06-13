@@ -141,7 +141,14 @@ public class ServiceProvider extends ServerConfig{
 
         batch.setPriority(Thread.NORM_PRIORITY);
 
-        thread = new Thread(() -> {
+        thread = getProviderInstance();
+
+        d("Server is ready to respond");
+
+    }
+
+    private Thread getProviderInstance(){
+        Thread ret = new Thread(() -> {
             boolean recv = true;
             while(!Thread.currentThread().isInterrupted()){
                 try {
@@ -188,8 +195,7 @@ public class ServiceProvider extends ServerConfig{
 
         });
 
-        d("Server is ready to respond");
-
+        return ret;
     }
 
     void accept(SelectionKey selectionKey) {
@@ -226,11 +232,12 @@ public class ServiceProvider extends ServerConfig{
 
     private ServiceProvider emergencyStart(){
         startServer();
+
+        // TODO START_POINT 스레드 인터럽트 처리 ㅡㅡ
+
         thread.interrupt();
 
-        while(thread.isAlive()){
-            System.out.println("WARN :: Waiting for thread interruption");
-        }
+        thread = getProviderInstance();
 
         thread.start();
 
@@ -260,7 +267,11 @@ public class ServiceProvider extends ServerConfig{
         List<ByteSerial> byteSerials = new ArrayList<>();
         for(int e = 0; e < msgs.length; e++) {
             ByteSerial entry = send(client, new ByteSerial(msgs[e], ByteSerial.TYPE_NONE));
-            if(entry != null) byteSerials.add(entry);
+            if(entry != null) {
+                byteSerials.add(entry);
+            }else{
+                break;
+            }
         }
 
         return byteSerials;
