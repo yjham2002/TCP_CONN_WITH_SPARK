@@ -23,7 +23,7 @@ public class ServerConfig {
     /**
      * REQUEST TIMEOUT
      */
-    public static final long REQUEST_TIMEOUT = 1000 * 10;
+    public static final long REQUEST_TIMEOUT = 1000 * 30;
 
     /**
      * 서버 소켓 포트
@@ -33,7 +33,7 @@ public class ServerConfig {
     /**
      * 간단한 배치 작업을 위한 간격 시간
      */
-    protected static final int BATCH_TIME = 10 * 1000;
+    protected static final int BATCH_TIME = 60 * 1000;
 
     /**
      * 디버깅 모드 설정을 위한 정적 변수

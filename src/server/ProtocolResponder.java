@@ -41,6 +41,8 @@ public class ProtocolResponder{
      */
     Logger log;
 
+    private boolean started = false; // 이니셜 프로토콜이 전송되었는지의 여부를 갖는 로컬 변수
+    private boolean generated = false; // 유니크키 생성 여부
     private volatile ByteSerial byteSerial;
     private SelectionKey selectionKey;
     private Selector selector;
@@ -81,9 +83,6 @@ public class ProtocolResponder{
         flag = true;
         byteSerial = null;
 
-        boolean started = false; // 이니셜 프로토콜이 전송되었는지의 여부를 갖는 로컬 변수
-        boolean generated = false; // 유니크키 생성 여부
-
         try{
             ByteBuffer byteBuffer = ByteBuffer.allocate(ByteSerial.POOL_SIZE);
 
@@ -99,7 +98,8 @@ public class ProtocolResponder{
 
             buffer = byteSerial.getProcessed(); // 처리된 트림 데이터 추출
 
-            if(buffer.length != LENGTH_REALTIME){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
+            if(buffer.length != LENGTH_REALTIME && buffer.length != LENGTH_INIT){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
+                System.out.println("::::::::: Handler Escape :::::::::::");
                 return true;
             }
 
@@ -119,7 +119,7 @@ public class ProtocolResponder{
                     clients.put(uniqueKey, this); // 클라이언트 해시맵에 상위에서 추출한 유니크키를 기준으로 삽입
 
                     // 클라이언트 셋에서 키로 참조하여 이니셜 프로토콜을 전송 - 바이트 시리얼의 수신용 생성자가 아닌 이하의 생성자를 사용하여 자동으로 모드버스로 변환
-                    send(new ByteSerial
+                    ByteSerial init = new ByteSerial
                             (
                                     SohaProtocolUtil.getInitProtocol(
                                             buffer,
@@ -131,8 +131,10 @@ public class ProtocolResponder{
                                             ConstProtocol.INIT_TERM_SEC
                                     ),
                                     ByteSerial.TYPE_SET
-                            )
-                    );
+                            );
+                    send(init);
+
+                    System.out.println(Arrays.toString(init.getProcessed()));
 
                     log.info("Responder :: [" + uniqueKey + "] :: Totally " + clients.size() + " connections are being maintained");
                     // 현재 연결된 클라이언트 소켓수와 유니크키를 디버깅을 위해 출력함
@@ -163,6 +165,7 @@ public class ProtocolResponder{
         }catch(IOException e){ // 소켓 연결 두절의 경우, 연결을 종료할 경우, 흔히 발생하므로 에러 핸들링을 별도로 하지 않음
             log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
             clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
+            return false;
         }finally {
             // DO NOTHING
         }
@@ -206,7 +209,7 @@ public class ProtocolResponder{
                     byte[] dongBytes = Arrays.copyOfRange(msg.getProcessed(), 6, 8);
                     ByteSerial byteSerial = new ByteSerial(SohaProtocolUtil.makeAlertProtocol(farmBytes, dongBytes));
                     System.out.println("[INFO :: Sending Alert Protocol since Read Timeout has been occurred for 3 times]");
-                    send(byteSerial);
+                    sendOneWay(byteSerial);
 
                 }
 
@@ -220,6 +223,31 @@ public class ProtocolResponder{
             e.printStackTrace();
         } finally {
             return byteSerial;
+        }
+
+    }
+
+    /**
+     * 바이트 시리얼로부터 처리 이후의 바이트 패킷을 추출하여 바이트 기반으로 전송
+     * 단방향 전송 - 응답에 대해 대기하지 않음
+     * @param msg
+     */
+    public synchronized void sendOneWay(ByteSerial msg){ // TODO 3회 반복
+        flag = false;
+
+        byteSerial = null;
+
+        log.info("Sending :: " + Arrays.toString(msg.getProcessed()));
+        try {
+
+            socket.write(ByteBuffer.wrap(msg.getProcessed()));
+            selectionKey.interestOps(SelectionKey.OP_READ);
+            selector.wakeup();
+
+        }
+
+        catch (IOException e) {
+            e.printStackTrace();
         }
 
     }

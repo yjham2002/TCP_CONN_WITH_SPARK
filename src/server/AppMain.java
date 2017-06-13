@@ -125,6 +125,7 @@ public class AppMain{
 
             switch(mode){
                 case ConstRest.MODE_READ_SETTING:
+
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), id, farmCode, harvCode);
                     System.out.println("READING SETTINGS - " + Arrays.toString(protocol));
 
@@ -172,13 +173,14 @@ public class AppMain{
 
                     protocols = SohaProtocolUtil.makeReadProtocols(range.getHead(), range.getTail(), id, farmCode, harvCode);
 
-                    recvs = new ArrayList<>();
-                    for(int cursor = 0; cursor < protocols.length; cursor++){
-                        recvs.add(serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols[cursor]));
+                    for(byte[] aaa : protocols){
+                        System.out.println(Arrays.toString(aaa));
                     }
 
-//                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
-//                    if(recvs == null) return RESPONSE_NONE;
+                    if(true) return "";
+
+                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
+                    if(recvs.size() <= 0) return RESPONSE_NONE;
 
                     CropWrappingPOJO cropWrappingPOJO = new CropWrappingPOJO(recvs, order);
                     retVal = objectMapper.writeValueAsString(cropWrappingPOJO);

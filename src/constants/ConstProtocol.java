@@ -32,6 +32,8 @@ public class ConstProtocol {
 
     public static final int LENGTH_REALTIME = 311;
 
+    public static final int LENGTH_INIT = 20;
+
     public static final int RETRY = 3;
 
     /**
@@ -40,7 +42,7 @@ public class ConstProtocol {
      * Tail : 메모리 참조 길이(Word)
      */
     public static final Pair<Integer> RANGE_SETTING_TAILS = new Pair<>(11534, 18);
-    public static final Pair<Integer> RANGE_SETTING = new Pair<>(300, 68);
+    public static final Pair<Integer> RANGE_SETTING = new Pair<>(300, 70);
     public static final Pair<Integer> RANGE_TIMER = new Pair<>(448, 97);
     public static final Pair<Integer> RANGE_DAYAGE = new Pair<>(650, 6370);
     public static final Pair<Integer> RANGE_DAYAGE_01 = new Pair<>(650, 910);

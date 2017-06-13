@@ -159,24 +159,7 @@ public class RealtimePOJO extends BasePOJO{
     /**
      * 에러 상태 및 에러데이터 멤버 시작
      */
-    private String errstat_err0_start_md;
-    private String errstat_err0_start_time;
-    private String errstat_err0_progress_time;
-    private int errstat_err1_data;
-    private int errstat_err2_data;
-    private int errstat_err3_data;
-    private int errstat_err4_data;
-    private int errstat_err5_data;
-    private int errstat_err6_data;
-    private int errstat_err7_data;
-    private int errstat_err8_data;
-    private int errstat_err9_data;
-    private int errstat_err10_data;
-    private int errstat_err11_data;
-    private int errstat_err12_data;
-    private int errstat_err13_data;
-    private int errstat_err14_data;
-    private int errstat_err15_data;
+    List<ErrorStatusPOJO> errorStatList;
 
     private int errdata_aggr;
     private int errdata_internal_co2;
@@ -469,24 +452,13 @@ public class RealtimePOJO extends BasePOJO{
         /**
          * 에러 상태 및 에러데이터 멤버 시작
          */
-        this.errstat_err0_start_md = getMDorHMWith2Bytes(116, "-");
-        this.errstat_err0_start_time = getMDorHMWith2Bytes(118, ":");
-        this.errstat_err0_progress_time = getMDorHMWith2Bytes(120, ":");
-        this.errstat_err1_data = getSumWith2Bytes(122);
-        this.errstat_err2_data = getSumWith2Bytes(124);
-        this.errstat_err3_data = getSumWith2Bytes(126);
-        this.errstat_err4_data = getSumWith2Bytes(128);
-        this.errstat_err5_data = getSumWith2Bytes(130);
-        this.errstat_err6_data = getSumWith2Bytes(132);
-        this.errstat_err7_data = getSumWith2Bytes(134);
-        this.errstat_err8_data = getSumWith2Bytes(136);
-        this.errstat_err9_data = getSumWith2Bytes(138);
-        this.errstat_err10_data = getSumWith2Bytes(140);
-        this.errstat_err11_data = getSumWith2Bytes(142);
-        this.errstat_err12_data = getSumWith2Bytes(144);
-        this.errstat_err13_data = getSumWith2Bytes(146);
-        this.errstat_err14_data = getSumWith2Bytes(148);
-        this.errstat_err15_data = getSumWith2Bytes(150);
+        errorStatList = new ArrayList<>();
+        int errorStatStart = 116;
+        int errOrder = 0;
+        for(int q = errorStatStart; q < errorStatStart + (6 * 16); q += 6){
+            ErrorStatusPOJO errorStatusPOJO = new ErrorStatusPOJO(errOrder++, getMDorHMWith2Bytes(q, "-"), getMDorHMWith2Bytes(q + 2, ":"), getMDorHMWith2Bytes(q + 4, ":"));
+            errorStatList.add(errorStatusPOJO);
+        }
 
         this.errdata_aggr = getSumWith2Bytes(152);
         this.errdata_internal_co2 = getBooleanValueFrom2Byte(152, 0);
@@ -1211,148 +1183,12 @@ public class RealtimePOJO extends BasePOJO{
         this.run_status_dayage_progress = run_status_dayage_progress;
     }
 
-    public String getErrstat_err0_start_md() {
-        return errstat_err0_start_md;
+    public List<ErrorStatusPOJO> getErrorStatList() {
+        return errorStatList;
     }
 
-    public void setErrstat_err0_start_md(String errstat_err0_start_md) {
-        this.errstat_err0_start_md = errstat_err0_start_md;
-    }
-
-    public String getErrstat_err0_start_time() {
-        return errstat_err0_start_time;
-    }
-
-    public void setErrstat_err0_start_time(String errstat_err0_start_time) {
-        this.errstat_err0_start_time = errstat_err0_start_time;
-    }
-
-    public String getErrstat_err0_progress_time() {
-        return errstat_err0_progress_time;
-    }
-
-    public void setErrstat_err0_progress_time(String errstat_err0_progress_time) {
-        this.errstat_err0_progress_time = errstat_err0_progress_time;
-    }
-
-    public int getErrstat_err1_data() {
-        return errstat_err1_data;
-    }
-
-    public void setErrstat_err1_data(int errstat_err1_data) {
-        this.errstat_err1_data = errstat_err1_data;
-    }
-
-    public int getErrstat_err2_data() {
-        return errstat_err2_data;
-    }
-
-    public void setErrstat_err2_data(int errstat_err2_data) {
-        this.errstat_err2_data = errstat_err2_data;
-    }
-
-    public int getErrstat_err3_data() {
-        return errstat_err3_data;
-    }
-
-    public void setErrstat_err3_data(int errstat_err3_data) {
-        this.errstat_err3_data = errstat_err3_data;
-    }
-
-    public int getErrstat_err4_data() {
-        return errstat_err4_data;
-    }
-
-    public void setErrstat_err4_data(int errstat_err4_data) {
-        this.errstat_err4_data = errstat_err4_data;
-    }
-
-    public int getErrstat_err5_data() {
-        return errstat_err5_data;
-    }
-
-    public void setErrstat_err5_data(int errstat_err5_data) {
-        this.errstat_err5_data = errstat_err5_data;
-    }
-
-    public int getErrstat_err6_data() {
-        return errstat_err6_data;
-    }
-
-    public void setErrstat_err6_data(int errstat_err6_data) {
-        this.errstat_err6_data = errstat_err6_data;
-    }
-
-    public int getErrstat_err7_data() {
-        return errstat_err7_data;
-    }
-
-    public void setErrstat_err7_data(int errstat_err7_data) {
-        this.errstat_err7_data = errstat_err7_data;
-    }
-
-    public int getErrstat_err8_data() {
-        return errstat_err8_data;
-    }
-
-    public void setErrstat_err8_data(int errstat_err8_data) {
-        this.errstat_err8_data = errstat_err8_data;
-    }
-
-    public int getErrstat_err9_data() {
-        return errstat_err9_data;
-    }
-
-    public void setErrstat_err9_data(int errstat_err9_data) {
-        this.errstat_err9_data = errstat_err9_data;
-    }
-
-    public int getErrstat_err10_data() {
-        return errstat_err10_data;
-    }
-
-    public void setErrstat_err10_data(int errstat_err10_data) {
-        this.errstat_err10_data = errstat_err10_data;
-    }
-
-    public int getErrstat_err11_data() {
-        return errstat_err11_data;
-    }
-
-    public void setErrstat_err11_data(int errstat_err11_data) {
-        this.errstat_err11_data = errstat_err11_data;
-    }
-
-    public int getErrstat_err12_data() {
-        return errstat_err12_data;
-    }
-
-    public void setErrstat_err12_data(int errstat_err12_data) {
-        this.errstat_err12_data = errstat_err12_data;
-    }
-
-    public int getErrstat_err13_data() {
-        return errstat_err13_data;
-    }
-
-    public void setErrstat_err13_data(int errstat_err13_data) {
-        this.errstat_err13_data = errstat_err13_data;
-    }
-
-    public int getErrstat_err14_data() {
-        return errstat_err14_data;
-    }
-
-    public void setErrstat_err14_data(int errstat_err14_data) {
-        this.errstat_err14_data = errstat_err14_data;
-    }
-
-    public int getErrstat_err15_data() {
-        return errstat_err15_data;
-    }
-
-    public void setErrstat_err15_data(int errstat_err15_data) {
-        this.errstat_err15_data = errstat_err15_data;
+    public void setErrorStatList(List<ErrorStatusPOJO> errorStatList) {
+        this.errorStatList = errorStatList;
     }
 
     public int getErrdata_aggr() {
@@ -2441,9 +2277,11 @@ public class RealtimePOJO extends BasePOJO{
      */
     @JsonIgnore
     public String getInsertSQL(){
+        if(errorStatList == null || errorStatList.size() < 16) return "SELECT -1";
 
        String sql = "INSERT INTO `sohatechfarmdb`.`tblRealTimeData` \n" +
-               "\t(`farmCode`, \n" +
+               "\t(" +
+               "`farmCode`, \n" +
                "\t`dongCode`, \n" +
                "\t`co2_sr`, \n" +
                "\t`temp_sr`, \n" +
@@ -2565,24 +2403,55 @@ public class RealtimePOJO extends BasePOJO{
                "\t`run_status_dry_enabled`, \n" +
                "\t`run_status_dayage_count`, \n" +
                "\t`run_status_dayage_progress`, \n" +
-               "\t`errstat_err0_start_md`, \n" +
-               "\t`errstat_err0_start_time`, \n" +
-               "\t`errstat_err0_progress_time`, \n" +
-               "\t`errstat_err1_data`, \n" +
-               "\t`errstat_err2_data`, \n" +
-               "\t`errstat_err3_data`, \n" +
-               "\t`errstat_err4_data`, \n" +
-               "\t`errstat_err5_data`, \n" +
-               "\t`errstat_err6_data`, \n" +
-               "\t`errstat_err7_data`, \n" +
-               "\t`errstat_err8_data`, \n" +
-               "\t`errstat_err9_data`, \n" +
-               "\t`errstat_err10_data`, \n" +
-               "\t`errstat_err11_data`, \n" +
-               "\t`errstat_err12_data`, \n" +
-               "\t`errstat_err13_data`, \n" +
-               "\t`errstat_err14_data`, \n" +
-               "\t`errstat_err15_data`, \n" +
+               "\t`errstat_start_md_0`, \n" +
+               "\t`errstat_start_time_0`, \n" +
+               "\t`errstat_progress_time_0`, \n" +
+               "\t`errstat_start_md_1`, \n" +
+               "\t`errstat_start_time_1`, \n" +
+               "\t`errstat_progress_time_1`, \n" +
+               "\t`errstat_start_md_2`, \n" +
+               "\t`errstat_start_time_2`, \n" +
+               "\t`errstat_progress_time_2`, \n" +
+               "\t`errstat_start_md_3`, \n" +
+               "\t`errstat_start_time_3`, \n" +
+               "\t`errstat_progress_time_3`, \n" +
+               "\t`errstat_start_md_4`, \n" +
+               "\t`errstat_start_time_4`, \n" +
+               "\t`errstat_progress_time_4`, \n" +
+               "\t`errstat_start_md_5`, \n" +
+               "\t`errstat_start_time_5`, \n" +
+               "\t`errstat_progress_time_5`, \n" +
+               "\t`errstat_start_md_6`, \n" +
+               "\t`errstat_start_time_6`, \n" +
+               "\t`errstat_progress_time_6`, \n" +
+               "\t`errstat_start_md_7`, \n" +
+               "\t`errstat_start_time_7`, \n" +
+               "\t`errstat_progress_time_7`, \n" +
+               "\t`errstat_start_md_8`, \n" +
+               "\t`errstat_start_time_8`, \n" +
+               "\t`errstat_progress_time_8`, \n" +
+               "\t`errstat_start_md_9`, \n" +
+               "\t`errstat_start_time_9`, \n" +
+               "\t`errstat_progress_time_9`, \n" +
+               "\t`errstat_start_md_10`, \n" +
+               "\t`errstat_start_time_10`, \n" +
+               "\t`errstat_progress_time_10`, \n" +
+               "\t`errstat_start_md_11`, \n" +
+               "\t`errstat_start_time_11`, \n" +
+               "\t`errstat_progress_time_11`, \n" +
+               "\t`errstat_start_md_12`, \n" +
+               "\t`errstat_start_time_12`, \n" +
+               "\t`errstat_progress_time_12`, \n" +
+               "\t`errstat_start_md_13`, \n" +
+               "\t`errstat_start_time_13`, \n" +
+               "\t`errstat_progress_time_13`, \n" +
+               "\t`errstat_start_md_14`, \n" +
+               "\t`errstat_start_time_14`, \n" +
+               "\t`errstat_progress_time_14`, \n" +
+               "\t`errstat_start_md_15`, \n" +
+               "\t`errstat_start_time_15`, \n" +
+               "\t`errstat_progress_time_15`, \n" +
+               "\t`errStatus`, \n" +
                "\t`lcdorder_run`, \n" +
                "\t`lcdorder_mode`, \n" +
                "\t`lcdorder_dayage_start`, \n" +
@@ -2650,211 +2519,244 @@ public class RealtimePOJO extends BasePOJO{
                "\t`regDate`\n" +
                "\t)\n" +
                "\tVALUES\n" +
-               "\t('"+farmString+ "', " +
-               "'" +harvString+ "', " +
-               "'" +co2_sr+ "', " +
-               "'" +temp_sr+ "', " +
-               "'" +humid_sr+ "', " +
-               "'" +illum_sr+ "', " +
-               "'" +sr_set1_co2+ "', " +
-               "'" +sr_set1_temp+ "', " +
-               "'" +sr_set1_humidity+ "', " +
-               "'" +sr_set1_ilum+ "', " +
-               "'" +sr_set2_co2+ "', " +
-               "'" +sr_set2_temp+ "', " +
-               "'" +sr_set2_humidity+ "', " +
-               "'" +sr_set2_ilum+ "', " +
-               "'" +sr_set3_co2+ "', " +
-               "'" +sr_set3_temp+ "', " +
-               "'" +sr_set3_humidity+ "', " +
-               "'" +sr_set3_ilum+ "', " +
-               "'" +sr_set4_co2+ "', " +
-               "'" +sr_set4_temp+ "', " +
-               "'" +sr_set4_humidity+ "', " +
-               "'" +sr_set4_ilum+ "', " +
-               "'" +sr_val_co2+ "', " +
-               "'" +sr_val_temp+ "', " +
-               "'" +sr_val_humidity+ "', " +
-               "'" +sr_val_ilum+ "', " +
-               "'" +controlstat_aggr+ "', " +
-               "'" +controlstat_co2_type+ "', " +
-               "'" +controlstat_co2_ontype+ "', " +
-               "'" +controlstat_co2_offtype+ "', " +
-               "'" +controlstat_temp_type+ "', " +
-               "'" +controlstat_temp_ontype+ "', " +
-               "'" +controlstat_temp_offtype+ "', " +
-               "'" +controlstat_humidity_type+ "', " +
-               "'" +controlstat_humidity_ontype+ "', " +
-               "'" +controlstat_humidity_offtype+ "', " +
-               "'" +controlstat_ilum_type+ "', " +
-               "'" +controlstat_ilum_ontype+ "', " +
-               "'" +controlstat_ilum_offtype+ "', " +
-               "'" +co2_value+ "', " +
-               "'" +temp_value+ "', " +
-               "'" +humidity_value+ "', " +
-               "'" +ilum_value+ "', " +
-               "'" +vt515_version+ "', " +
-               "'" +relay_output_aggr+ "', " +
-               "'" +relay_output_co2+ "', " +
-               "'" +relay_output_heater+ "', " +
-               "'" +relay_output_freezer+ "', " +
-               "'" +relay_output_humidity+ "', " +
-               "'" +relay_output_dehumidity+ "', " +
-               "'" +relay_output_ilum+ "', " +
-               "'" +relay_output_alarm+ "', " +
-               "'" +relay_output_reserve+ "', " +
-               "'" +co2_relay_on_start_md+ "', " +
-               "'" +co2_relay_on_start_hm+ "', " +
-               "'" +co2_relay_on_time+ "', " +
-               "'" +co2_relay_off_start_md+ "', " +
-               "'" +co2_relay_off_start_hm+ "', " +
-               "'" +co2_relay_off_time+ "', " +
-               "'" +heat_relay_on_start_md+ "', " +
-               "'" +heat_relay_on_start_hm+ "', " +
-               "'" +heat_relay_on_time+ "', " +
-               "'" +heat_relay_off_start_md+ "', " +
-               "'" +heat_relay_off_start_hm+ "', " +
-               "'" +heat_relay_off_time+ "', " +
-               "'" +cool_relay_on_start_md+ "', " +
-               "'" +cool_relay_on_start_hm+ "', " +
-               "'" +cool_relay_on_time+ "', " +
-               "'" +cool_relay_off_start_md+ "', " +
-               "'" +cool_relay_off_start_hm+ "', " +
-               "'" +cool_relay_off_time+ "', " +
-               "'" +humidify_relay_on_start_md+ "', " +
-               "'" +humidify_relay_on_start_hm+ "', " +
-               "'" +humidify_relay_on_time+ "', " +
-               "'" +humidify_relay_off_start_md+ "', " +
-               "'" +humidify_relay_off_start_hm+ "', " +
-               "'" +humidify_relay_off_time+ "', " +
-               "'" +dehumidify_relay_on_start_md+ "', " +
-               "'" +dehumidify_relay_on_start_hm+ "', " +
-               "'" +dehumidify_relay_on_time+ "', " +
-               "'" +dehumidify_relay_off_start_md+ "', " +
-               "'" +dehumidify_relay_off_start_hm+ "', " +
-               "'" +dehumidify_relay_off_time+ "', " +
-               "'" +illum_relay_on_start_md+ "', " +
-               "'" +illum_relay_on_start_hm+ "', " +
-               "'" +illum_relay_on_time+ "', " +
-               "'" +illum_relay_off_start_md+ "', " +
-               "'" +illum_relay_off_start_hm+ "', " +
-               "'" +illum_relay_off_time+ "', " +
-               "'" +alarm_relay_on_start_md+ "', " +
-               "'" +alarm_relay_on_start_hm+ "', " +
-               "'" +alarm_relay_on_time+ "', " +
-               "'" +alarm_relay_off_start_md+ "', " +
-               "'" +alarm_relay_off_start_hm+ "', " +
-               "'" +alarm_relay_off_time+ "', " +
-               "'" +option_changed_aggr+ "', " +
-               "'" +option_changed_setting+ "', " +
-               "'" +option_changed_timer+ "', " +
-               "'" +option_changed_crop1+ "', " +
-               "'" +option_changed_crop2+ "', " +
-               "'" +option_changed_crop3+ "', " +
-               "'" +option_changed_crop4+ "', " +
-               "'" +option_changed_crop5+ "', " +
-               "'" +option_changed_crop6+ "', " +
-               "'" +option_changed_setting_a+ "', " +
-               "'" +option_changed_timer_a+ "', " +
-               "'" +option_changed_crop1_a+ "', " +
-               "'" +option_changed_crop2_a+ "', " +
-               "'" +option_changed_crop3_a+ "', " +
-               "'" +option_changed_crop4_a+ "', " +
-               "'" +option_changed_crop5_a+ "', " +
-               "'" +option_changed_crop6_a+ "', " +
-               "'" +growth_progress_aggr+ "', " +
-               "'" +growth_progress_dt+ "', " +
-               "'" +growth_progress_total+ "', " +
-               "'" +run_status_aggr+ "', " +
-               "'" +run_status_current+ "', " +
-               "'" +run_status_mode+ "', " +
-               "'" +run_status_prevdata+ "', " +
-               "'" +run_status_dry_enabled+ "', " +
-               "'" +run_status_dayage_count+ "', " +
-               "'" +run_status_dayage_progress+ "', " +
-               "'" +errstat_err0_start_md+ "', " +
-               "'" +errstat_err0_start_time+ "', " +
-               "'" +errstat_err0_progress_time+ "', " +
-               "'" +errstat_err1_data+ "', " +
-               "'" +errstat_err2_data+ "', " +
-               "'" +errstat_err3_data+ "', " +
-               "'" +errstat_err4_data+ "', " +
-               "'" +errstat_err5_data+ "', " +
-               "'" +errstat_err6_data+ "', " +
-               "'" +errstat_err7_data+ "', " +
-               "'" +errstat_err8_data+ "', " +
-               "'" +errstat_err9_data+ "', " +
-               "'" +errstat_err10_data+ "', " +
-               "'" +errstat_err11_data+ "', " +
-               "'" +errstat_err12_data+ "', " +
-               "'" +errstat_err13_data+ "', " +
-               "'" +errstat_err14_data+ "', " +
-               "'" +errstat_err15_data+ "', " +
-               "'" +lcdorder_run+ "', " +
-               "'" +lcdorder_mode+ "', " +
-               "'" +lcdorder_dayage_start+ "', " +
-               "'" +changetype_lcd_setting+ "', " +
-               "'" +changetype_lcd_timer+ "', " +
-               "'" +changetype_lcd_dayage1+ "', " +
-               "'" +changetype_lcd_dayage2+ "', " +
-               "'" +changetype_lcd_dayage3+ "', " +
-               "'" +changetype_lcd_dayage4+ "', " +
-               "'" +changetype_lcd_dayage5+ "', " +
-               "'" +changetype_lcd_dayage6+ "', " +
-               "'" +changetype_pc_setting+ "', " +
-               "'" +changetype_pc_timer+ "', " +
-               "'" +changetype_pc_dayage1+ "', " +
-               "'" +changetype_pc_dayage2+ "', " +
-               "'" +changetype_pc_dayage3+ "', " +
-               "'" +changetype_pc_dayage4+ "', " +
-               "'" +changetype_pc_dayage5+ "', " +
-               "'" +changetype_pc_dayage6+ "', " +
-               "'" +networkerr_510to515+ "', " +
-               "'" +dayage_low+ "', " +
-               "'" +dayage_high+ "', " +
-               "'" +real_sec+ "', " +
-               "'" +real_hm+ "', " +
-               "'" +real_md+ "', " +
-               "'" +dymamic_output_mode+ "', " +
-               "'" +dymamic_output_inc+ "', " +
-               "'" +dymamic_output_dec+ "', " +
-               "'" +dymamic_output_analog+ "', " +
-               "'" +dymamic_output_valid+ "', " +
-               "'" +start_year+ "', " +
-               "'" +start_md+ "', " +
-               "'" +start_hm+ "', " +
-               "'" +mcnctrl_mv510_aggr+ "', " +
-               "'" +mcnctrl_mv510_order_co2+ "', " +
-               "'" +mcnctrl_mv510_order_temp+ "', " +
-               "'" +mcnctrl_mv510_order_humidity+ "', " +
-               "'" +mcnctrl_mv510_order_ilum+ "', " +
-               "'" +mcnctrl_mv510_order_main1+ "', " +
-               "'" +mcnctrl_mv510_order_main2+ "', " +
-               "'" +mcnctrl_mv510_stat_fan+ "', " +
-               "'" +mcnctrl_mv510_stat_heater+ "', " +
-               "'" +mcnctrl_mv510_stat_freezer+ "', " +
-               "'" +mcnctrl_mv510_stat_humidifier+ "', " +
-               "'" +mcnctrl_mv510_stat_dehumidifier+ "', " +
-               "'" +mcnctrl_mv510_stat_ilum+ "', " +
-               "'" +mcnctrl_mv510_stat_alarm+ "', " +
-               "'" +mcnctrl_mv510_stat_reserve+ "', " +
-               "'" +mcnctrl_web_aggr+ "', " +
-               "'" +mcnctrl_web_order_co2+ "', " +
-               "'" +mcnctrl_web_order_temp+ "', " +
-               "'" +mcnctrl_web_order_humidity+ "', " +
-               "'" +mcnctrl_web_order_ilum+ "', " +
-               "'" +mcnctrl_web_order_main1+ "', " +
-               "'" +mcnctrl_web_order_main2+ "', " +
-               "'" +mcnctrl_web_stat_fan+ "', " +
-               "'" +mcnctrl_web_stat_heater+ "', " +
-               "'" +mcnctrl_web_stat_freezer+ "', " +
-               "'" +mcnctrl_web_stat_humidifier+ "', " +
-               "'" +mcnctrl_web_stat_dehumidifier+ "', " +
-               "'" +mcnctrl_web_stat_ilum+ "', " +
-               "'" +mcnctrl_web_stat_alarm+ "', " +
-               "'" +mcnctrl_web_stat_reserve+ "', " +
-               "'" +redisTime+ "', " +
-               " NOW());";
+               "\t(" +
+               "'" + farmString + "'," +
+               "'" + harvString + "'," +
+               "'" + co2_sr + "'," +
+               "'" + temp_sr + "'," +
+               "'" + humid_sr + "'," +
+               "'" + illum_sr + "'," +
+               "'" + sr_set1_co2 + "'," +
+               "'" + sr_set1_temp + "'," +
+               "'" + sr_set1_humidity + "'," +
+               "'" + sr_set1_ilum + "'," +
+               "'" + sr_set2_co2 + "'," +
+               "'" + sr_set2_temp + "'," +
+               "'" + sr_set2_humidity + "'," +
+               "'" + sr_set2_ilum + "'," +
+               "'" + sr_set3_co2 + "'," +
+               "'" + sr_set3_temp + "'," +
+               "'" + sr_set3_humidity + "'," +
+               "'" + sr_set3_ilum + "'," +
+               "'" + sr_set4_co2 + "'," +
+               "'" + sr_set4_temp + "'," +
+               "'" + sr_set4_humidity + "'," +
+               "'" + sr_set4_ilum + "'," +
+               "'" + sr_val_co2 + "'," +
+               "'" + sr_val_temp + "'," +
+               "'" + sr_val_humidity + "'," +
+               "'" + sr_val_ilum + "'," +
+               "'" + controlstat_aggr + "'," +
+               "'" + controlstat_co2_type + "'," +
+               "'" + controlstat_co2_ontype + "'," +
+               "'" + controlstat_co2_offtype + "'," +
+               "'" + controlstat_temp_type + "'," +
+               "'" + controlstat_temp_ontype + "'," +
+               "'" + controlstat_temp_offtype + "'," +
+               "'" + controlstat_humidity_type + "'," +
+               "'" + controlstat_humidity_ontype + "'," +
+               "'" + controlstat_humidity_offtype + "'," +
+               "'" + controlstat_ilum_type + "'," +
+               "'" + controlstat_ilum_ontype + "'," +
+               "'" + controlstat_ilum_offtype + "'," +
+               "'" + co2_value + "'," +
+               "'" + temp_value + "'," +
+               "'" + humidity_value + "'," +
+               "'" + ilum_value + "'," +
+               "'" + vt515_version + "'," +
+               "'" + relay_output_aggr + "'," +
+               "'" + relay_output_co2 + "'," +
+               "'" + relay_output_heater + "'," +
+               "'" + relay_output_freezer + "'," +
+               "'" + relay_output_humidity + "'," +
+               "'" + relay_output_dehumidity + "'," +
+               "'" + relay_output_ilum + "'," +
+               "'" + relay_output_alarm + "'," +
+               "'" + relay_output_reserve + "'," +
+               "'" + co2_relay_on_start_md + "'," +
+               "'" + co2_relay_on_start_hm + "'," +
+               "'" + co2_relay_on_time + "'," +
+               "'" + co2_relay_off_start_md + "'," +
+               "'" + co2_relay_off_start_hm + "'," +
+               "'" + co2_relay_off_time + "'," +
+               "'" + heat_relay_on_start_md + "'," +
+               "'" + heat_relay_on_start_hm + "'," +
+               "'" + heat_relay_on_time + "'," +
+               "'" + heat_relay_off_start_md + "'," +
+               "'" + heat_relay_off_start_hm + "'," +
+               "'" + heat_relay_off_time + "'," +
+               "'" + cool_relay_on_start_md + "'," +
+               "'" + cool_relay_on_start_hm + "'," +
+               "'" + cool_relay_on_time + "'," +
+               "'" + cool_relay_off_start_md + "'," +
+               "'" + cool_relay_off_start_hm + "'," +
+               "'" + cool_relay_off_time + "'," +
+               "'" + humidify_relay_on_start_md + "'," +
+               "'" + humidify_relay_on_start_hm + "'," +
+               "'" + humidify_relay_on_time + "'," +
+               "'" + humidify_relay_off_start_md + "'," +
+               "'" + humidify_relay_off_start_hm + "'," +
+               "'" + humidify_relay_off_time + "'," +
+               "'" + dehumidify_relay_on_start_md + "'," +
+               "'" + dehumidify_relay_on_start_hm + "'," +
+               "'" + dehumidify_relay_on_time + "'," +
+               "'" + dehumidify_relay_off_start_md + "'," +
+               "'" + dehumidify_relay_off_start_hm + "'," +
+               "'" + dehumidify_relay_off_time + "'," +
+               "'" + illum_relay_on_start_md + "'," +
+               "'" + illum_relay_on_start_hm + "'," +
+               "'" + illum_relay_on_time + "'," +
+               "'" + illum_relay_off_start_md + "'," +
+               "'" + illum_relay_off_start_hm + "'," +
+               "'" + illum_relay_off_time + "'," +
+               "'" + alarm_relay_on_start_md + "'," +
+               "'" + alarm_relay_on_start_hm + "'," +
+               "'" + alarm_relay_on_time + "'," +
+               "'" + alarm_relay_off_start_md + "'," +
+               "'" + alarm_relay_off_start_hm + "'," +
+               "'" + alarm_relay_off_time + "'," +
+               "'" + option_changed_aggr + "'," +
+               "'" + option_changed_setting + "'," +
+               "'" + option_changed_timer + "'," +
+               "'" + option_changed_crop1 + "'," +
+               "'" + option_changed_crop2 + "'," +
+               "'" + option_changed_crop3 + "'," +
+               "'" + option_changed_crop4 + "'," +
+               "'" + option_changed_crop5 + "'," +
+               "'" + option_changed_crop6 + "'," +
+               "'" + option_changed_setting_a + "'," +
+               "'" + option_changed_timer_a + "'," +
+               "'" + option_changed_crop1_a + "'," +
+               "'" + option_changed_crop2_a + "'," +
+               "'" + option_changed_crop3_a + "'," +
+               "'" + option_changed_crop4_a + "'," +
+               "'" + option_changed_crop5_a + "'," +
+               "'" + option_changed_crop6_a + "'," +
+               "'" + growth_progress_aggr + "'," +
+               "'" + growth_progress_dt + "'," +
+               "'" + growth_progress_total + "'," +
+               "'" + run_status_aggr + "'," +
+               "'" + run_status_current + "'," +
+               "'" + run_status_mode + "'," +
+               "'" + run_status_prevdata + "'," +
+               "'" + run_status_dry_enabled + "'," +
+               "'" + run_status_dayage_count + "'," +
+               "'" + run_status_dayage_progress + "'," +
+               "'" + errorStatList.get(0).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(0).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(0).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(1).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(1).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(1).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(2).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(2).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(2).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(3).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(3).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(3).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(4).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(4).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(4).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(5).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(5).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(5).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(6).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(6).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(6).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(7).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(7).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(7).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(8).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(8).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(8).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(9).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(9).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(9).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(10).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(10).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(10).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(11).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(11).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(11).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(12).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(12).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(12).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(13).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(13).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(13).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(14).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(14).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(14).getErrstat_progress_time() + "'," +
+               "'" + errorStatList.get(15).getErrstat_start_md() + "'," +
+               "'" + errorStatList.get(15).getErrstat_start_time() + "'," +
+               "'" + errorStatList.get(15).getErrstat_progress_time() + "'," +
+               "'Y'," +
+               "'" + lcdorder_run + "'," +
+               "'" + lcdorder_mode + "'," +
+               "'" + lcdorder_dayage_start + "'," +
+               "'" + changetype_lcd_setting + "'," +
+               "'" + changetype_lcd_timer + "'," +
+               "'" + changetype_lcd_dayage1 + "'," +
+               "'" + changetype_lcd_dayage2 + "'," +
+               "'" + changetype_lcd_dayage3 + "'," +
+               "'" + changetype_lcd_dayage4 + "'," +
+               "'" + changetype_lcd_dayage5 + "'," +
+               "'" + changetype_lcd_dayage6 + "'," +
+               "'" + changetype_pc_setting + "'," +
+               "'" + changetype_pc_timer + "'," +
+               "'" + changetype_pc_dayage1 + "'," +
+               "'" + changetype_pc_dayage2 + "'," +
+               "'" + changetype_pc_dayage3 + "'," +
+               "'" + changetype_pc_dayage4 + "'," +
+               "'" + changetype_pc_dayage5 + "'," +
+               "'" + changetype_pc_dayage6 + "'," +
+               "'" + networkerr_510to515 + "'," +
+               "'" + dayage_low + "'," +
+               "'" + dayage_high + "'," +
+               "'" + real_sec + "'," +
+               "'" + real_hm + "'," +
+               "'" + real_md + "'," +
+               "'" + dymamic_output_mode + "'," +
+               "'" + dymamic_output_inc + "'," +
+               "'" + dymamic_output_dec + "'," +
+               "'" + dymamic_output_analog + "'," +
+               "'" + dymamic_output_valid + "'," +
+               "'" + start_year + "'," +
+               "'" + start_md + "'," +
+               "'" + start_hm + "'," +
+               "'" + mcnctrl_mv510_aggr + "'," +
+               "'" + mcnctrl_mv510_order_co2 + "'," +
+               "'" + mcnctrl_mv510_order_temp + "'," +
+               "'" + mcnctrl_mv510_order_humidity + "'," +
+               "'" + mcnctrl_mv510_order_ilum + "'," +
+               "'" + mcnctrl_mv510_order_main1 + "'," +
+               "'" + mcnctrl_mv510_order_main2 + "'," +
+               "'" + mcnctrl_mv510_stat_fan + "'," +
+               "'" + mcnctrl_mv510_stat_heater + "'," +
+               "'" + mcnctrl_mv510_stat_freezer + "'," +
+               "'" + mcnctrl_mv510_stat_humidifier + "'," +
+               "'" + mcnctrl_mv510_stat_dehumidifier + "'," +
+               "'" + mcnctrl_mv510_stat_ilum + "'," +
+               "'" + mcnctrl_mv510_stat_alarm + "'," +
+               "'" + mcnctrl_mv510_stat_reserve + "'," +
+               "'" + mcnctrl_web_aggr + "'," +
+               "'" + mcnctrl_web_order_co2 + "'," +
+               "'" + mcnctrl_web_order_temp + "'," +
+               "'" + mcnctrl_web_order_humidity + "'," +
+               "'" + mcnctrl_web_order_ilum + "'," +
+               "'" + mcnctrl_web_order_main1 + "'," +
+               "'" + mcnctrl_web_order_main2 + "'," +
+               "'" + mcnctrl_web_stat_fan + "'," +
+               "'" + mcnctrl_web_stat_heater + "'," +
+               "'" + mcnctrl_web_stat_freezer + "'," +
+               "'" + mcnctrl_web_stat_humidifier + "'," +
+               "'" + mcnctrl_web_stat_dehumidifier + "'," +
+               "'" + mcnctrl_web_stat_ilum + "'," +
+               "'" + mcnctrl_web_stat_alarm + "'," +
+               "'" + mcnctrl_web_stat_reserve + "'," +
+               "'" + redisTime + "'," +
+               "\tNOW()\n" +
+               "\t);";
 
         return sql;
     }

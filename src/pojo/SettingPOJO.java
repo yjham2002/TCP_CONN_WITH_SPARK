@@ -121,6 +121,14 @@ public class SettingPOJO extends BasePOJO {
     private int dynamic_output_type;
     private int dynamic_output_value;
 
+    private int backup_year;
+    private String backup_md;
+    private String backup_hm;
+
+    private int backup_read_year;
+    private String backup_read_md;
+    private String backup_read_hm;
+
     private int growth_start_year;
     private String growth_start_md;
     private String growth_start_hm;
@@ -345,28 +353,85 @@ public class SettingPOJO extends BasePOJO {
         this.reserve_setting_cropno = getSumWith2BytesABS(offset + 114);
         this.dynamic_output_type = getSumWith2BytesABS(offset + 116);
         this.dynamic_output_value = getSumWith2BytesABS(offset + 118);
+
+        this.backup_year = getSumWith2BytesABS(offset + 120);
+        this.backup_md = getMDorHMWith2BytesABS(offset + 122, "-");
+        this.backup_hm = getMDorHMWith2BytesABS(offset + 124, ":");
+
+        this.backup_read_year = getSumWith2BytesABS(offset + 126);
+        this.backup_read_md = getMDorHMWith2BytesABS(offset + 128, "-");
+        this.backup_read_hm = getMDorHMWith2BytesABS(offset + 130, ":");
+
         this.growth_start_year = getSumWith2BytesABS(offset + 132);
         this.growth_start_md = getMDorHMWith2BytesABS(offset + 134, "-");
         this.growth_start_hm = getMDorHMWith2BytesABS(offset + 136, ":");
         this.change_date_time = getSumWith2BytesABS(offset + 138);
-//
-//        this.alert_alarm_aggr = getSumWith2BytesABS(offset + 140);
-//        this.alert_alarm_internal_co2 = getBooleanValueFrom2ByteABS(offset + 140, 0);
-//        this.alert_alarm_internal_temp = getBooleanValueFrom2ByteABS(offset + 140, 1);
-//        this.alert_alarm_internal_humidity = getBooleanValueFrom2ByteABS(offset + 140, 2);
-//        this.alert_alarm_internal_ilum = getBooleanValueFrom2ByteABS(offset + 140, 3);
-//        this.alert_alarm_vent_relay = getBooleanValueFrom2ByteABS(offset + 140, 4);
-//        this.alert_alarm_heat_relay = getBooleanValueFrom2ByteABS(offset + 140, 5);
-//        this.alert_alarm_cool_relay = getBooleanValueFrom2ByteABS(offset + 140, 6);
-//        this.alert_alarm_humidify_relay = getBooleanValueFrom2ByteABS(offset + 140, 7);
-//        this.alert_alarm_dehumidify_relay = getBooleanValueFrom2ByteABS(offset + 140, 8);
-//        this.alert_alarm_ilum_relay = getBooleanValueFrom2ByteABS(offset + 140, 9);
-//        this.alert_alarm_rs485 = getBooleanValueFrom2ByteABS(offset + 140, 10);
-//        this.alert_alarm_vt515 = getBooleanValueFrom2ByteABS(offset + 140, 11);
-//        this.alert_alarm_vt250_1 = getBooleanValueFrom2ByteABS(offset + 140, 12);
-//        this.alert_alarm_vt250_2 = getBooleanValueFrom2ByteABS(offset + 140, 13);
-//        this.alert_alarm_vt250_3 = getBooleanValueFrom2ByteABS(offset + 140, 14);
-//        this.alert_alarm_vt250_4 = getBooleanValueFrom2ByteABS(offset + 140, 15);
+
+        this.alert_alarm_aggr = getSumWith2BytesABS(offset + 140);
+        this.alert_alarm_internal_co2 = getBooleanValueFrom2ByteABS(offset + 140, 0);
+        this.alert_alarm_internal_temp = getBooleanValueFrom2ByteABS(offset + 140, 1);
+        this.alert_alarm_internal_humidity = getBooleanValueFrom2ByteABS(offset + 140, 2);
+        this.alert_alarm_internal_ilum = getBooleanValueFrom2ByteABS(offset + 140, 3);
+        this.alert_alarm_vent_relay = getBooleanValueFrom2ByteABS(offset + 140, 4);
+        this.alert_alarm_heat_relay = getBooleanValueFrom2ByteABS(offset + 140, 5);
+        this.alert_alarm_cool_relay = getBooleanValueFrom2ByteABS(offset + 140, 6);
+        this.alert_alarm_humidify_relay = getBooleanValueFrom2ByteABS(offset + 140, 7);
+        this.alert_alarm_dehumidify_relay = getBooleanValueFrom2ByteABS(offset + 140, 8);
+        this.alert_alarm_ilum_relay = getBooleanValueFrom2ByteABS(offset + 140, 9);
+        this.alert_alarm_rs485 = getBooleanValueFrom2ByteABS(offset + 140, 10);
+        this.alert_alarm_vt515 = getBooleanValueFrom2ByteABS(offset + 140, 11);
+        this.alert_alarm_vt250_1 = getBooleanValueFrom2ByteABS(offset + 140, 12);
+        this.alert_alarm_vt250_2 = getBooleanValueFrom2ByteABS(offset + 140, 13);
+        this.alert_alarm_vt250_3 = getBooleanValueFrom2ByteABS(offset + 140, 14);
+        this.alert_alarm_vt250_4 = getBooleanValueFrom2ByteABS(offset + 140, 15);
+    }
+
+    public int getBackup_year() {
+        return backup_year;
+    }
+
+    public void setBackup_year(int backup_year) {
+        this.backup_year = backup_year;
+    }
+
+    public String getBackup_md() {
+        return backup_md;
+    }
+
+    public void setBackup_md(String backup_md) {
+        this.backup_md = backup_md;
+    }
+
+    public String getBackup_hm() {
+        return backup_hm;
+    }
+
+    public void setBackup_hm(String backup_hm) {
+        this.backup_hm = backup_hm;
+    }
+
+    public int getBackup_read_year() {
+        return backup_read_year;
+    }
+
+    public void setBackup_read_year(int backup_read_year) {
+        this.backup_read_year = backup_read_year;
+    }
+
+    public String getBackup_read_md() {
+        return backup_read_md;
+    }
+
+    public void setBackup_read_md(String backup_read_md) {
+        this.backup_read_md = backup_read_md;
+    }
+
+    public String getBackup_read_hm() {
+        return backup_read_hm;
+    }
+
+    public void setBackup_read_hm(String backup_read_hm) {
+        this.backup_read_hm = backup_read_hm;
     }
 
     public int getSensor_quantity_and_selection_aggr() {

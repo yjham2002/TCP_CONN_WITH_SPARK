@@ -143,7 +143,7 @@ public class ServiceProvider extends ServerConfig{
 
         thread = new Thread(() -> {
             boolean recv = true;
-            while(true){
+            while(!Thread.currentThread().isInterrupted()){
                 try {
                     int keyCount = selector.select(SOCKET_TIMEOUT_LIMIT);
                     if(keyCount == 0) continue;
@@ -182,7 +182,7 @@ public class ServiceProvider extends ServerConfig{
             }
 
             if(!recv) {
-                d("WARNING ::::::::::::::::::::::::: [Connection Expired - Restarting :: " + getTimestamp() + "]");
+                d("WARNING ::::::::::::::::::::::::: [Connection Expired - Restarting :: " + getTime() + "]");
                 emergencyStart();
             }
 
@@ -226,6 +226,12 @@ public class ServiceProvider extends ServerConfig{
 
     private ServiceProvider emergencyStart(){
         startServer();
+        thread.interrupt();
+
+        while(thread.isAlive()){
+            System.out.println("WARN :: Waiting for thread interruption");
+        }
+
         thread.start();
 
         return instance;
@@ -254,7 +260,7 @@ public class ServiceProvider extends ServerConfig{
         List<ByteSerial> byteSerials = new ArrayList<>();
         for(int e = 0; e < msgs.length; e++) {
             ByteSerial entry = send(client, new ByteSerial(msgs[e], ByteSerial.TYPE_NONE));
-            byteSerials.add(entry);
+            if(entry != null) byteSerials.add(entry);
         }
 
         return byteSerials;
