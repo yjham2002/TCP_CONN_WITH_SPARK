@@ -2,7 +2,10 @@ package pojo;
 
 import constants.ConstProtocol;
 import models.ByteSerial;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +21,8 @@ public class CropSubPOJO extends BasePOJO{
 
     private static final int DAY_TERM = 36;
 
+    private String farm;
+    private String harv;
     private String name;
     private int order;
     private List<CropDaySubPOJO> cropDaySubPOJOs;
@@ -30,7 +35,10 @@ public class CropSubPOJO extends BasePOJO{
      * @param recvs
      * @param order
      */
-    public CropSubPOJO(List<ByteSerial> recvs, int order){
+    public CropSubPOJO(List<ByteSerial> recvs, int order, String farm, String harv){
+
+        this.farm = farm;
+        this.harv = harv;
 
         // TODO START POINT
         /**
@@ -53,6 +61,8 @@ public class CropSubPOJO extends BasePOJO{
 
         init();
     }
+
+    private CropSubPOJO(){}
 
     public void init(){
         cropDaySubPOJOs = new ArrayList<>();
@@ -91,4 +101,52 @@ public class CropSubPOJO extends BasePOJO{
     public void setCropDaySubPOJOs(List<CropDaySubPOJO> cropDaySubPOJOs) {
         this.cropDaySubPOJOs = cropDaySubPOJOs;
     }
+
+    private String toJson() throws IOException{
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(this);
+
+        return json;
+    }
+
+    public String getFarm() {
+        return farm;
+    }
+
+    public void setFarm(String farm) {
+        this.farm = farm;
+    }
+
+    public String getHarv() {
+        return harv;
+    }
+
+    public void setHarv(String harv) {
+        this.harv = harv;
+    }
+
+    @JsonIgnore
+    public String getInsertSQL() throws IOException{
+        try {
+            String sql = "INSERT INTO `sohatechfarmdb`.`tblDaily`\n" +
+                    "            (`farmCode`,\n" +
+                    "             `dongCode`,\n" +
+                    "             `order`,\n" +
+                    "             `rawJson`,\n" +
+                    "             `regDate`)\n" +
+                    "VALUES ('" + farm + "',\n" +
+                    "        '" + harv + "',\n" +
+                    "        '" + order + "',\n" +
+                    "        '" + this.toJson() + "',\n" +
+                    "        NOW())" +
+                    "ON DUPLICATE KEY UPDATE " +
+                    "`rawJson` = '" + this.toJson() + "',\n" +
+                    "  `regDate` = NOW()";
+            return sql;
+        }catch(IOException e){
+            System.out.println("WARN ::: [CropSubPOJO :: Parse Error]");
+            throw new IOException();
+        }
+    }
+
 }

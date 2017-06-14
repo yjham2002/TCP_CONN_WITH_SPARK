@@ -52,6 +52,8 @@ public class CropDaySubPOJO extends BasePOJO{
         }
     }
 
+    private CropDaySubPOJO(){}
+
     public int getDay() {
         return day;
     }

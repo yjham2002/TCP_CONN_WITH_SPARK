@@ -2,6 +2,10 @@ package pojo;
 
 import constants.ConstProtocol;
 import models.ByteSerial;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import utils.HexUtil;
+import utils.Modbus;
+import utils.SohaProtocolUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +107,28 @@ public class TimerPOJO extends BasePOJO{
         }
 
         this.byteSerial = null;
+    }
+
+    @JsonIgnore
+    public byte[] getBytes(){
+        byte[] check = SohaProtocolUtil.concat(ConstProtocol.STX, this.farmCode.getBytes(), this.dongCode.getBytes());
+        byte[] modbusData = SohaProtocolUtil.concat(new byte[]{Byte.parseByte(this.dongCode), 3, (byte)(ConstProtocol.RANGE_TIMER.getTail() * 2)}, SohaProtocolUtil.getHexLocation(this.timer_ctrl_aggr));
+
+        for(int i=0; i<this.timerSubPOJOList.size(); i++){
+            TimerSubPOJO tmpSub = timerSubPOJOList.get(i);
+            modbusData = SohaProtocolUtil.concat(modbusData, getAggregation(tmpSub.getTimer_setting_co2_on(), tmpSub.getTimer_setting_co2_off()),
+                    getAggregation(tmpSub.getTimer_setting_temp_on(), tmpSub.getTimer_setting_temp_off()),
+                    getAggregation(tmpSub.getTimer_setting_humidity_on(), tmpSub.getTimer_setting_humidity_off()),
+                    getAggregation(tmpSub.getTimer_setting_ilum_on(), tmpSub.getTimer_setting_ilum_off()));
+        }
+
+        Modbus modbus = new Modbus();
+        byte[] crc = modbus.fn_makeCRC16(modbusData);
+        byte[] fin = SohaProtocolUtil.concat(check, modbusData, crc);
+        byte chk = HexUtil.checkSum(fin);
+        byte[] retVal = SohaProtocolUtil.concat(fin, new byte[]{chk}, ConstProtocol.ETX);
+
+        return retVal;
     }
 
     public List<TimerSubPOJO> getTimerSubPOJOList() {

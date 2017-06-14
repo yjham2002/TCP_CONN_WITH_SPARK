@@ -49,6 +49,8 @@ public class CropDayDetailPOJO {
         this.illum_timer_off_unit = illum_timer_off_unit;
     }
 
+    private CropDayDetailPOJO(){}
+
     public int getOrder() {
         return order;
     }

@@ -12,6 +12,7 @@ import mysql.DBManager;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pojo.CropDaySubPOJO;
 import pojo.CropSubPOJO;
 import pojo.SettingPOJO;
 import pojo.TimerPOJO;
@@ -21,6 +22,7 @@ import server.response.ResponseConst;
 import spark.Spark;
 import utils.SohaProtocolUtil;
 
+import java.io.IOException;
 import java.util.*;
 
 import static constants.ConstRest.RESPONSE_INVALID;
@@ -141,11 +143,6 @@ public class AppMain{
 
                     settingPOJO.initTails(recv, ConstProtocol.RANGE_READ_START);
 
-                    // TODO For Debugging
-                    System.out.println("TAIL BYTES : " + Arrays.toString(recv.getProcessed()));
-                    System.out.println("BYTES  : " + Arrays.toString(settingPOJO.getBytes()));
-                    // TODO For Debugging
-
                     settingPOJO.setByteSerial(null);
 
                     retVal = objectMapper.writeValueAsString(settingPOJO);
@@ -181,9 +178,16 @@ public class AppMain{
                     recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
                     if(recvs.size() <= 0) return RESPONSE_NONE;
 
-                    CropSubPOJO cropPOJO = new CropSubPOJO(recvs, order);
+                    CropSubPOJO cropPOJO = new CropSubPOJO(recvs, order, rawFarm, rawHarv);
                     cropPOJO.setByteSerial(null);
-                    retVal = objectMapper.writeValueAsString(cropPOJO);
+
+                    try {
+                        String sql = cropPOJO.getInsertSQL();
+                        DBManager.getInstance().execute(sql);
+                        retVal = Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
+                    }catch (IOException e){
+                        retVal = Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_FAILURE);
+                    }
 
                     break;
                 default: protocols = null; break;
@@ -252,6 +256,7 @@ public class AppMain{
                 case ConstRest.MODE_WRITE_TIMER: {
                     try {
                         TimerPOJO timerPOJO = objectMapper.readValue(rawJson, TimerPOJO.class);
+//                        SohaProtocolUtil.makeWriteProtocol();
                         return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SAVE_SUCC);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -259,7 +264,13 @@ public class AppMain{
                     }
                 }
                 case ConstRest.MODE_WRITE_DAYAGE: {
-                    return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
+                    try{
+                        CropSubPOJO cropSubPOJO = objectMapper.readValue(rawJson, CropSubPOJO.class);
+                        return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SAVE_SUCC);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                        return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
+                    }
                 }
                 case ConstRest.MODE_WRITE_SETTING:{
                     try{
