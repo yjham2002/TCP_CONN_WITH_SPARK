@@ -153,16 +153,16 @@ public class BasePOJO implements Serializable{
 
     protected int getLhsFromDual(int offset){
         int total = getSumWith2Bytes(offset);
-        int header = total >> 8;
-        int footer = total - (header << 8);
+        int header = total / 100;
+        int footer = total - (header * 100);
 
         return header;
     }
 
     protected int getRhsFromDual(int offset){
         int total = getSumWith2Bytes(offset);
-        int header = total >> 8;
-        int footer = total - (header << 8);
+        int header = total / 100;
+        int footer = total - (header * 100);
 
         return footer;
     }
@@ -207,16 +207,16 @@ public class BasePOJO implements Serializable{
 
     protected int getLhsFromDualABS(int offset){
         int total = getSumWith2BytesABS(offset);
-        int header = total >> 8;
-        int footer = total - (header << 8);
+        int header = total / 100;
+        int footer = total - (header * 100);
 
         return header;
     }
 
     protected int getRhsFromDualABS(int offset){
         int total = getSumWith2BytesABS(offset);
-        int header = total >> 8;
-        int footer = total - (header << 8);
+        int header = total / 100;
+        int footer = total - (header * 100);
 
         return footer;
     }

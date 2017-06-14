@@ -67,4 +67,6 @@ public class CropDaySubPOJO extends BasePOJO{
     public void setCropDayDetailPOJOs(List<CropDayDetailPOJO> cropDayDetailPOJOs) {
         this.cropDayDetailPOJOs = cropDayDetailPOJOs;
     }
+
+
 }

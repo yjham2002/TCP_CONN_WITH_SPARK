@@ -1,5 +1,6 @@
 package pojo;
 
+import constants.ConstProtocol;
 import models.ByteSerial;
 
 import java.util.ArrayList;
@@ -95,7 +96,8 @@ public class TimerPOJO extends BasePOJO{
         this.timer_ctrl_ilum_off = getBooleanValueFrom2ByteABS(offset, 15);
 
         for(int i = 1; i <= 24; i++){
-            TimerSubPOJO timerSubPOJO = new TimerSubPOJO(byteSerial, offset + 2 + ( (i - 1) * 8 ), i);
+            int newOff = offset + 2 + ( (i - 1) * 8 );
+            TimerSubPOJO timerSubPOJO = new TimerSubPOJO(byteSerial, newOff, i);
             timerSubPOJO.setByteSerial(null);
             timerSubPOJOList.add(timerSubPOJO);
         }

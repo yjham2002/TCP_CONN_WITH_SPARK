@@ -1,9 +1,11 @@
 package models;
 
 import constants.ConstProtocol;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.HexUtil;
+import utils.SohaProtocolUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class ByteSerial implements Serializable{
     public static final int TYPE_WRITE_SUCC = 50; // 클라이언트로부터 수신되는 쓰기 성공 프로토콜 (수신)
     public static final int TYPE_READ_SUCC = 60; // 클라이언트로부터 수신되는 쓰기 성공 프로토콜 (수신)
     public static final int TYPE_ALERT = 70; // 클라이언트에게 경고를 전송하기 위한 프로토콜 (발신)
+    public static final int TYPE_FORCE = 80;
 
 
     private boolean loss = false;
@@ -58,8 +61,12 @@ public class ByteSerial implements Serializable{
 
         boolean sound = HexUtil.isCheckSumSound(bytes);
 
-        if(sound) System.out.println("Protocol Generated And It is sound");
-        else System.out.println("Protocol Generated But it is not sound");
+        if(type != TYPE_FORCE) {
+            if (sound) System.out.println("Protocol Generated And It is sound");
+            else System.out.println("Protocol Generated But it is not sound");
+        }else{
+            System.out.println("ByteSerial Generated Forcely");
+        }
 
         this.type = type;
 
@@ -125,6 +132,44 @@ public class ByteSerial implements Serializable{
 
         this.type = TYPE_NONE;
         return TYPE_NONE;
+    }
+
+    @JsonIgnore
+    public byte[] getPureBytes(){
+        return Arrays.copyOfRange(processed, ConstProtocol.RANGE_READ_START, processed.length - ConstProtocol.RANGE_READ_END);
+    }
+
+    /**
+     * 바이트 시리얼 인스턴스를 가변인자로 입력받아 이들의 데이터 범위를 모두 접합하여 반환한다.
+     * STX와 ETX 그리고 체크섬과 CRC를 모두 제거한다.
+     * @param serials 바이트 시리얼 가변인자
+     * @return 접합 데이터
+     */
+    @JsonIgnore
+    public static byte[] getPureDataConcat(ByteSerial... serials){
+        byte[] arr = new byte[]{};
+        byte temp;
+        for(int i = 0; i < serials.length; i++){
+            if(arr.length > 0){
+                if(serials[i].getPureBytes()[0] == arr[arr.length - 1]) System.out.println("WARNING ::::::: [Check if there is any Data Redundancy while Concatenation]");
+            }
+            arr = SohaProtocolUtil.concat(arr, serials[i].getPureBytes());
+        }
+
+        return arr;
+    }
+
+    @JsonIgnore
+    public static byte[] getPureDataConcat(List<ByteSerial> serials){
+        byte[] arr = new byte[]{};
+        for(int i = 0; i < serials.size(); i++){
+            if(arr.length > 0){
+                if(serials.get(i).getPureBytes()[0] == arr[arr.length - 1]) System.out.println("WARNING ::::::: [Data Redundancy occurred while Concatenation]");
+            }
+            arr = SohaProtocolUtil.concat(arr, serials.get(i).getPureBytes());
+        }
+
+        return arr;
     }
 
     /**

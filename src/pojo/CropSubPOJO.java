@@ -1,5 +1,6 @@
 package pojo;
 
+import constants.ConstProtocol;
 import models.ByteSerial;
 
 import java.util.ArrayList;
@@ -20,23 +21,34 @@ public class CropSubPOJO extends BasePOJO{
     private String name;
     private int order;
     private List<CropDaySubPOJO> cropDaySubPOJOs;
-    private int startIndex;
 
     private static final int NAME_RANGE = 20;
 
     /**
      * 작물 데이터 범위를 한정하여 작물 정보를 추출하는 클래스 생성자
      * AddressPOJO와 CropWrappingPOJO에 대해 한정적 Aggregation 관계를 가짐
-     * @param byteSerial
+     * @param recvs
+     * @param order
      */
-    public CropSubPOJO(ByteSerial byteSerial, int startIndex, int order){
+    public CropSubPOJO(List<ByteSerial> recvs, int order){
+
+        // TODO START POINT
+        /**
+         * 설정 쓰기 파싱
+         * 타이머 쓰기 파싱
+         * 플래그 비트 설정
+         * 일령 리스트 쓰기 파싱
+         * 경보 문자 쓰기 파싱
+         */
+
+        byte[] pure = ByteSerial.getPureDataConcat(recvs);
+        ByteSerial bs = new ByteSerial(pure, ByteSerial.TYPE_FORCE);
+        this.byteSerial = bs;
         this.order = order;
-        this.byteSerial = byteSerial;
-        this.startIndex = startIndex;
 
         name = "";
         for(int e = 0; e <= 18; e += 2){
-            name += getHangleFrom2ByteABS(startIndex + e);
+            name += getHangleFrom2ByteABS(e);
         }
 
         init();
@@ -47,12 +59,36 @@ public class CropSubPOJO extends BasePOJO{
 
         int term = 0;
         for(int e = 1; e <= 50; e++){
-            int start = NAME_RANGE + startIndex + term;
+            int start = NAME_RANGE + term;
             CropDaySubPOJO cropDaySubPOJO = new CropDaySubPOJO(this.byteSerial, start, e);
+            cropDaySubPOJO.setByteSerial(null);
             cropDaySubPOJOs.add(cropDaySubPOJO);
             term += DAY_TERM;
         }
 
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public List<CropDaySubPOJO> getCropDaySubPOJOs() {
+        return cropDaySubPOJOs;
+    }
+
+    public void setCropDaySubPOJOs(List<CropDaySubPOJO> cropDaySubPOJOs) {
+        this.cropDaySubPOJOs = cropDaySubPOJOs;
+    }
 }

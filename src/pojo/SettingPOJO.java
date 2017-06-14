@@ -192,57 +192,87 @@ public class SettingPOJO extends BasePOJO {
         setByteSerial(temp);
     }
 
+    public static void main(String... args){
+
+    }
+
+    @JsonIgnore
+    public byte[] getTailBytes(){
+        byte[] check = SohaProtocolUtil.concat(ConstProtocol.STX, this.farmCode.getBytes(), this.harvCode.getBytes());
+
+        byte[] modbusData = SohaProtocolUtil.concat(new byte[]{Byte.parseByte(this.harvCode), 3, (byte)(ConstProtocol.RANGE_SETTING_TAILS.getTail() * 2)});
+
+        for(int i=0; i<settingTails.size(); i++){
+            SettingTailPOJO setTail = settingTails.get(i);
+            modbusData = SohaProtocolUtil.concat(modbusData, SohaProtocolUtil.getHexLocation(setTail.getSetting_value_co_2()), SohaProtocolUtil.getHexLocation(setTail.getSetting_value_temp()),
+                    SohaProtocolUtil.getHexLocation(setTail.getSetting_value_humid()), SohaProtocolUtil.getHexLocation(setTail.getSetting_value_illum()), getValuePairFromString(setTail.getStart_time()), getValuePairFromString(setTail.getEnd_time()));
+        }
+
+        Modbus modbus = new Modbus();
+
+        byte[] crc = modbus.fn_makeCRC16(modbusData);
+
+        byte[] fin = SohaProtocolUtil.concat(check, modbusData, crc);
+
+        byte chk = HexUtil.checkSum(fin);
+        byte[] retVal = SohaProtocolUtil.concat(fin, new byte[]{chk}, ConstProtocol.ETX);
+
+        return retVal;
+    }
+
     @JsonIgnore
     public byte[] getBytes(){
         byte[] check = SohaProtocolUtil.concat(ConstProtocol.STX, this.farmCode.getBytes(), this.harvCode.getBytes());
 
-        byte[] modbusData = SohaProtocolUtil.concat(new byte[]{Byte.parseByte(this.harvCode), 3, -120}, SohaProtocolUtil.getHexLocation(this.device_id),SohaProtocolUtil.getHexLocation(this.crop_data_num_and_ctrl_aggr), SohaProtocolUtil.getHexLocation(this.sensor_quantity_and_selection_aggr),
-                SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_co2), SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_temp), SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_humid),
-                SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_illum), getAggregation(this.relay_output_setting_co2, this.relay_output_setting_heat),
-                getAggregation(this.relay_output_setting_cool, this.relay_output_setting_humidify), getAggregation(this.relay_output_setting_dehumidify, this.relay_output_setting_illum),
-                getAggregation(this.relay_output_setting_alarm, this.relay_output_setting_reserve), SohaProtocolUtil.getHexLocation(this.dry_condition_setting_aggr),
-                SohaProtocolUtil.getHexLocation(this.alert_alarm_time_select_aggr), SohaProtocolUtil.getHexLocation(this.cthi_ctrl_stat_aggr),
-                SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_high),
-                SohaProtocolUtil.getHexLocation(this.calm_threshold_temp_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_temp_high),
-                SohaProtocolUtil.getHexLocation(this.calm_threshold_humid_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_humid_high),
-                SohaProtocolUtil.getHexLocation(this.calm_threshold_illum_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_illum_high),
+        byte[] modbusData =
+                SohaProtocolUtil.concat(
+                        new byte[]{Byte.parseByte(this.harvCode), 3, (byte)(ConstProtocol.RANGE_SETTING.getTail() * 2)}, SohaProtocolUtil.getHexLocation(this.device_id)
+                        ,SohaProtocolUtil.getHexLocation(this.crop_data_num_and_ctrl_aggr), SohaProtocolUtil.getHexLocation(this.sensor_quantity_and_selection_aggr),
+                        SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_co2), SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_temp), SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_humid),
+                        SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_illum), getAggregation(this.relay_output_setting_co2, this.relay_output_setting_heat),
+                        getAggregation(this.relay_output_setting_cool, this.relay_output_setting_humidify), getAggregation(this.relay_output_setting_dehumidify, this.relay_output_setting_illum),
+                        getAggregation(this.relay_output_setting_alarm, this.relay_output_setting_reserve), SohaProtocolUtil.getHexLocation(this.dry_condition_setting_aggr),
+                        SohaProtocolUtil.getHexLocation(this.alert_alarm_time_select_aggr),  SohaProtocolUtil.getHexLocation(this.cthi_ctrl_stat_aggr),
+                        SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_high),
+                        SohaProtocolUtil.getHexLocation(this.calm_threshold_temp_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_temp_high),
+                        SohaProtocolUtil.getHexLocation(this.calm_threshold_humid_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_humid_high),
+                        SohaProtocolUtil.getHexLocation(this.calm_threshold_illum_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_illum_high),
 
-                SohaProtocolUtil.getHexLocation(this.setting_range_co2_min),
-                SohaProtocolUtil.getHexLocation(this.setting_range_co2_max), SohaProtocolUtil.getHexLocation(this.setting_range_temp_min),
-                SohaProtocolUtil.getHexLocation(this.setting_range_temp_max), SohaProtocolUtil.getHexLocation(this.setting_range_humid_min),
-                SohaProtocolUtil.getHexLocation(this.setting_range_humid_max), SohaProtocolUtil.getHexLocation(this.setting_range_illum_min),
-                SohaProtocolUtil.getHexLocation(this.setting_range_illum_max), SohaProtocolUtil.getHexLocation(this.sr_revision_co2_01),
-                SohaProtocolUtil.getHexLocation(this.sr_revision_temp_01), SohaProtocolUtil.getHexLocation(this.sr_revision_humid_01),
-                SohaProtocolUtil.getHexLocation(this.sr_revision_illum_01), SohaProtocolUtil.getHexLocation(this.sr_revision_co2_02),
-                SohaProtocolUtil.getHexLocation(this.sr_revision_temp_02), SohaProtocolUtil.getHexLocation(this.sr_revision_humid_02),
-                SohaProtocolUtil.getHexLocation(this.sr_revision_illum_02), SohaProtocolUtil.getHexLocation(this.sr_revision_co2_03),
-                SohaProtocolUtil.getHexLocation(this.sr_revision_temp_03), SohaProtocolUtil.getHexLocation(this.sr_revision_humid_03),
-                SohaProtocolUtil.getHexLocation(this.sr_revision_illum_03), SohaProtocolUtil.getHexLocation(this.sr_revision_co2_04),
+                        SohaProtocolUtil.getHexLocation(this.setting_range_co2_min),
+                        SohaProtocolUtil.getHexLocation(this.setting_range_co2_max), SohaProtocolUtil.getHexLocation(this.setting_range_temp_min),
+                        SohaProtocolUtil.getHexLocation(this.setting_range_temp_max), SohaProtocolUtil.getHexLocation(this.setting_range_humid_min),
+                        SohaProtocolUtil.getHexLocation(this.setting_range_humid_max), SohaProtocolUtil.getHexLocation(this.setting_range_illum_min),
+                        SohaProtocolUtil.getHexLocation(this.setting_range_illum_max), SohaProtocolUtil.getHexLocation(this.sr_revision_co2_01),
+                        SohaProtocolUtil.getHexLocation(this.sr_revision_temp_01), SohaProtocolUtil.getHexLocation(this.sr_revision_humid_01),
+                        SohaProtocolUtil.getHexLocation(this.sr_revision_illum_01), SohaProtocolUtil.getHexLocation(this.sr_revision_co2_02),
+                        SohaProtocolUtil.getHexLocation(this.sr_revision_temp_02), SohaProtocolUtil.getHexLocation(this.sr_revision_humid_02),
+                        SohaProtocolUtil.getHexLocation(this.sr_revision_illum_02), SohaProtocolUtil.getHexLocation(this.sr_revision_co2_03),
+                        SohaProtocolUtil.getHexLocation(this.sr_revision_temp_03), SohaProtocolUtil.getHexLocation(this.sr_revision_humid_03),
+                        SohaProtocolUtil.getHexLocation(this.sr_revision_illum_03), SohaProtocolUtil.getHexLocation(this.sr_revision_co2_04),
 
-                SohaProtocolUtil.getHexLocation(this.sr_revision_temp_04), SohaProtocolUtil.getHexLocation(this.sr_revision_humid_04),
-                SohaProtocolUtil.getHexLocation(this.sr_revision_illum_04), SohaProtocolUtil.getHexLocation(this.setting_onoff_range_co2),
-                SohaProtocolUtil.getHexLocation(this.setting_onoff_range_co2_revision), SohaProtocolUtil.getHexLocation(this.setting_onoff_range_temp),
-                SohaProtocolUtil.getHexLocation(this.setting_onoff_range_temp_revision), SohaProtocolUtil.getHexLocation(this.setting_onoff_range_humid),
-                SohaProtocolUtil.getHexLocation(this.setting_onoff_range_humid_revision), SohaProtocolUtil.getHexLocation(this.setting_onoff_range_illum),
-                SohaProtocolUtil.getHexLocation(this.setting_onoff_range_illum_revision),
+                        SohaProtocolUtil.getHexLocation(this.sr_revision_temp_04), SohaProtocolUtil.getHexLocation(this.sr_revision_humid_04),
+                        SohaProtocolUtil.getHexLocation(this.sr_revision_illum_04), SohaProtocolUtil.getHexLocation(this.setting_onoff_range_co2),
+                        SohaProtocolUtil.getHexLocation(this.setting_onoff_range_co2_revision), SohaProtocolUtil.getHexLocation(this.setting_onoff_range_temp),
+                        SohaProtocolUtil.getHexLocation(this.setting_onoff_range_temp_revision), SohaProtocolUtil.getHexLocation(this.setting_onoff_range_humid),
+                        SohaProtocolUtil.getHexLocation(this.setting_onoff_range_humid_revision), SohaProtocolUtil.getHexLocation(this.setting_onoff_range_illum),
+                        SohaProtocolUtil.getHexLocation(this.setting_onoff_range_illum_revision),
 
-                SohaProtocolUtil.getHexLocation(this.reserve_setting_year), getValuePairFromString(this.reserve_setting_md), getValuePairFromString(this.reserve_setting_hm),
+                        SohaProtocolUtil.getHexLocation(this.reserve_setting_year), getValuePairFromString(this.reserve_setting_md), getValuePairFromString(this.reserve_setting_hm),
+                        SohaProtocolUtil.getHexLocation(this.reserve_setting_cropno),
+                        SohaProtocolUtil.getHexLocation(this.dynamic_output_type),
+                        SohaProtocolUtil.getHexLocation(this.dynamic_output_value),
 
-                //TODO
 
-                SohaProtocolUtil.getHexLocation(this.reserve_setting_cropno),
+                        SohaProtocolUtil.getHexLocation(this.backup_year), getValuePairFromString(this.backup_md), getValuePairFromString(this.backup_hm),
+                        SohaProtocolUtil.getHexLocation(this.backup_read_year), getValuePairFromString(this.backup_read_md), getValuePairFromString(this.backup_read_hm),
 
+                        SohaProtocolUtil.getHexLocation(this.growth_start_year),
 
-                SohaProtocolUtil.getHexLocation(this.dynamic_output_type),
-                SohaProtocolUtil.getHexLocation(this.dynamic_output_value),
-                SohaProtocolUtil.getHexLocation(this.growth_start_year),
+                        getValuePairFromString(this.growth_start_md),
+                        getValuePairFromString(this.growth_start_hm),
+                        SohaProtocolUtil.getHexLocation(this.change_date_time),
 
-                getValuePairFromString(this.growth_start_md),
-                getValuePairFromString(this.growth_start_hm),
-                SohaProtocolUtil.getHexLocation(this.change_date_time),
-
-                SohaProtocolUtil.getHexLocation(this.alert_alarm_aggr),
-                new byte[]{-1, -1, -1, -1, -1, -1}
+                        SohaProtocolUtil.getHexLocation(this.alert_alarm_aggr)
         );
 
         Modbus modbus = new Modbus();

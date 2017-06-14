@@ -16,6 +16,7 @@ public class ConstProtocol {
     public static final byte[] INITIAL_PROTOCOL_START = new byte[]{83, 79, 72, 65, 85, 78, 73, 70, 65, 82, 77};
 
     public static final int RANGE_READ_START = 11;
+    public static final int RANGE_READ_END = 5;
 
     public static final byte[] FUNCTION_READ = new byte[]{0x03};
     public static final byte[] FUNCTION_WRITE = new byte[]{0x10};
@@ -42,7 +43,7 @@ public class ConstProtocol {
      * Tail : 메모리 참조 길이(Word)
      */
     public static final Pair<Integer> RANGE_SETTING_TAILS = new Pair<>(11534, 18);
-    public static final Pair<Integer> RANGE_SETTING = new Pair<>(300, 70);
+    public static final Pair<Integer> RANGE_SETTING = new Pair<>(300, 71);
     public static final Pair<Integer> RANGE_TIMER = new Pair<>(448, 97);
     public static final Pair<Integer> RANGE_DAYAGE = new Pair<>(650, 6370);
     public static final Pair<Integer> RANGE_DAYAGE_01 = new Pair<>(650, 910);
@@ -51,5 +52,7 @@ public class ConstProtocol {
     public static final Pair<Integer> RANGE_DAYAGE_04 = new Pair<>(6110, 910);
     public static final Pair<Integer> RANGE_DAYAGE_05 = new Pair<>(7930, 910);
     public static final Pair<Integer> RANGE_DAYAGE_06 = new Pair<>(9750, 910);
+
+    public static final int LENGTH_DAILY_AGE = 1820;
 
 }

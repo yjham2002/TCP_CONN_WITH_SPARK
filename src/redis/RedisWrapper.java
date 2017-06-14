@@ -42,6 +42,10 @@ public class RedisWrapper extends ServerConfig{
      */
     protected RedisWrapper(){
         log = LoggerFactory.getLogger(this.getClass());
+        init();
+    }
+
+    public void init(){
         jedisPoolConfig = new JedisPoolConfig();
         jedisPoolConfig.setMaxIdle(400);
         jedisPoolConfig.setMinIdle(1);
@@ -158,6 +162,7 @@ public class RedisWrapper extends ServerConfig{
             }catch(Exception e){
                 e.printStackTrace();
                 System.out.println("Key Execution Error :: Skipping");
+                init();
                 return retVal;
             }
             if(object == null || object.size() == 0) return retVal;
@@ -171,7 +176,6 @@ public class RedisWrapper extends ServerConfig{
                     T unit = (T) mapper.readValue(json, type);
                     retVal.add(unit);
                 }catch(Exception e){
-                    e.printStackTrace();
                     System.out.println("Parsing Error :: Skipping");
                     return retVal;
                 }

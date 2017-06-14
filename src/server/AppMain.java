@@ -12,10 +12,9 @@ import mysql.DBManager;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.CropWrappingPOJO;
+import pojo.CropSubPOJO;
 import pojo.SettingPOJO;
 import pojo.TimerPOJO;
-import redis.ICallback;
 import server.engine.ServiceProvider;
 import server.response.Response;
 import server.response.ResponseConst;
@@ -26,7 +25,6 @@ import java.util.*;
 
 import static constants.ConstRest.RESPONSE_INVALID;
 import static constants.ConstRest.RESPONSE_NONE;
-import static spark.route.HttpMethod.get;
 
 /**
  * 서버 인스턴스 호출 및 실행을 위한 메인 클래스
@@ -176,20 +174,16 @@ public class AppMain{
                         default: order = -1; break;
                     }
 
-//                    protocols = SohaProtocolUtil.makeReadProtocols(range.getHead(), range.getTail(), id, farmCode, harvCode);
-//
-//                    for(byte[] aaa : protocols){
-//                        System.out.println(Arrays.toString(aaa));
-//                    }
-//
-//                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
-//                    if(recvs.size() <= 0) return RESPONSE_NONE;
-//
-//                    CropWrappingPOJO cropWrappingPOJO = new CropWrappingPOJO(recvs, order);
-//                    retVal = objectMapper.writeValueAsString(cropWrappingPOJO);
+                    if(order == -1 || order > 6) return RESPONSE_INVALID;
 
-                    protocol = new byte[]{83, 84, 48, 48, 55, 56, 48, 49, 1, 3, 2, -118, 0, -13, 37, -35, 92, 13, 10};
-                    recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                    protocols = SohaProtocolUtil.makeReadProtocols(range.getHead(), range.getTail(), id, farmCode, harvCode);
+
+                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
+                    if(recvs.size() <= 0) return RESPONSE_NONE;
+
+                    CropSubPOJO cropPOJO = new CropSubPOJO(recvs, order);
+                    cropPOJO.setByteSerial(null);
+                    retVal = objectMapper.writeValueAsString(cropPOJO);
 
                     break;
                 default: protocols = null; break;
