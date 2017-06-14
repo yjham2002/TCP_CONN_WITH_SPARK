@@ -97,11 +97,21 @@ public class SohaProtocolUtil {
         return arr;
     }
 
+    /**
+     * 쓰기 프로토콜을 생성한다
+     * @param location
+     * @param length WORD 단위 길이
+     * @param id
+     * @param farmCode
+     * @param harvCode
+     * @param data
+     * @return
+     */
     public static byte[] makeWriteProtocol(int location, int length, int id, byte[] farmCode, byte[] harvCode, byte[] data){
         Modbus modbus = new Modbus();
         byte[] protocol;
         byte[] loc = getHexLocation(location);
-        byte[] len = concat(new byte[]{0x00}, getHexLocation(length));
+        byte[] len = new byte[]{0x00, (byte)length, (byte)(length * 2)};
         byte[] deviceId = new byte[]{(byte)id};
         byte[] crc16 = modbus.fn_makeCRC16(concat(deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data));
         byte[] checkSum = new byte[]{HexUtil.checkSum(concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data, crc16))};
@@ -110,6 +120,15 @@ public class SohaProtocolUtil {
         return protocol;
     }
 
+    /**
+     * 읽기 프로토콜을 생성한다
+     * @param location
+     * @param length WORD 단위 길이
+     * @param id
+     * @param farmCode
+     * @param harvCode
+     * @return
+     */
     public static byte[] makeReadProtocol(int location, int length, int id, byte[] farmCode, byte[] harvCode){
         Modbus modbus = new Modbus();
         byte[] protocol = null;

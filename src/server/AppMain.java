@@ -25,9 +25,6 @@ import utils.SohaProtocolUtil;
 import java.io.IOException;
 import java.util.*;
 
-import static constants.ConstRest.RESPONSE_INVALID;
-import static constants.ConstRest.RESPONSE_NONE;
-
 /**
  * 서버 인스턴스 호출 및 실행을 위한 메인 클래스
  */
@@ -105,7 +102,7 @@ public class AppMain{
 
             if(id == 0){
                 System.out.println("No appropriate machine code for " + rawFarm + ":" + rawHarv);
-                return RESPONSE_NONE;
+                return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
             }else{
                 System.out.println("Machine Code :: " + id);
             }
@@ -115,7 +112,7 @@ public class AppMain{
             int order = map.getInt("order");
 
             if(map.get("mode") == null || map.get(ConstRest.FARM_CODE) == null || map.get(ConstRest.HARV_CODE) == null){
-                return RESPONSE_INVALID;
+                return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
             }
 
             byte[] protocol = null;
@@ -131,7 +128,7 @@ public class AppMain{
                     System.out.println("READING SETTINGS - " + Arrays.toString(protocol));
 
                     recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
-                    if(recv == null) return RESPONSE_NONE;
+                    if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
                     SettingPOJO settingPOJO = new SettingPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
 
                     System.out.println("SETTING BYTES : " + Arrays.toString(recv.getProcessed()));
@@ -155,7 +152,7 @@ public class AppMain{
                     System.out.println(Arrays.toString(protocol));
 
                     recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
-                    if(recv == null) return RESPONSE_NONE;
+                    if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
                     TimerPOJO timerPOJO = new TimerPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
                     retVal = objectMapper.writeValueAsString(timerPOJO);
                     break;
@@ -171,12 +168,12 @@ public class AppMain{
                         default: order = -1; break;
                     }
 
-                    if(order == -1 || order > 6) return RESPONSE_INVALID;
+                    if(order == -1 || order > 6) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
 
                     protocols = SohaProtocolUtil.makeReadProtocols(range.getHead(), range.getTail(), id, farmCode, harvCode);
 
                     recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
-                    if(recvs.size() <= 0) return RESPONSE_NONE;
+                    if(recvs.size() <= 0) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
 
                     CropSubPOJO cropPOJO = new CropSubPOJO(recvs, order, rawFarm, rawHarv);
                     cropPOJO.setByteSerial(null);
@@ -235,6 +232,10 @@ public class AppMain{
 
             ObjectMapper objectMapper = new ObjectMapper();
 
+            if(map.get("mode") == null || map.get(ConstRest.FARM_CODE) == null || map.get(ConstRest.HARV_CODE) == null){
+                return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
+            }
+
             String mode = map.getString("mode");
             String rawFarm = map.getString(ConstRest.FARM_CODE);
             String rawHarv = map.getString(ConstRest.HARV_CODE);
@@ -252,11 +253,24 @@ public class AppMain{
                 return Response.response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
             }
 
+            byte[] protocol = null;
+            byte[][] protocols = null;
+            ByteSerial recv;
+            List<ByteSerial> recvs;
+            String retVal = null;
+
             switch(mode) {
                 case ConstRest.MODE_WRITE_TIMER: {
                     try {
+                        System.out.println("WRITING TIMER " + rawFarm + ":" + rawHarv);
                         TimerPOJO timerPOJO = objectMapper.readValue(rawJson, TimerPOJO.class);
-//                        SohaProtocolUtil.makeWriteProtocol();
+                        protocol = SohaProtocolUtil.makeWriteProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), id, farmCode, harvCode, timerPOJO.getBytes());
+                        recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+
+                        if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
+
+                        System.out.println("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));
+
                         return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SAVE_SUCC);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -264,6 +278,7 @@ public class AppMain{
                     }
                 }
                 case ConstRest.MODE_WRITE_DAYAGE: {
+                    System.out.println("WRITING DAILY AGE " + rawFarm + ":" + rawHarv);
                     try{
                         CropSubPOJO cropSubPOJO = objectMapper.readValue(rawJson, CropSubPOJO.class);
                         return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SAVE_SUCC);
@@ -273,6 +288,7 @@ public class AppMain{
                     }
                 }
                 case ConstRest.MODE_WRITE_SETTING:{
+                    System.out.println("WRITING SETTING " + rawFarm + ":" + rawHarv);
                     try{
                         SettingPOJO settingPOJO = objectMapper.readValue(rawJson, SettingPOJO.class);
 

@@ -275,6 +275,7 @@ public class RealtimePOJO extends BasePOJO{
     private int mcnctrl_mv510_order_temp;
     private int mcnctrl_mv510_order_humidity;
     private int mcnctrl_mv510_order_ilum;
+    private int mcnctrl_mv510_pause;
     private int mcnctrl_mv510_order_main1;
     private int mcnctrl_mv510_order_main2;
     private int mcnctrl_mv510_stat_fan;
@@ -291,6 +292,7 @@ public class RealtimePOJO extends BasePOJO{
     private int mcnctrl_web_order_temp;
     private int mcnctrl_web_order_humidity;
     private int mcnctrl_web_order_ilum;
+    private int mcnctrl_web_pause;
     private int mcnctrl_web_order_main1;
     private int mcnctrl_web_order_main2;
     private int mcnctrl_web_stat_fan;
@@ -571,6 +573,7 @@ public class RealtimePOJO extends BasePOJO{
         this.mcnctrl_mv510_order_temp = getBooleanValueFrom2Byte(222, 1);
         this.mcnctrl_mv510_order_humidity = getBooleanValueFrom2Byte(222, 2);
         this.mcnctrl_mv510_order_ilum = getBooleanValueFrom2Byte(222, 3);
+        this.mcnctrl_mv510_pause = getBooleanValueFrom2Byte(222, 4);
         this.mcnctrl_mv510_order_main1 = getBooleanValueFrom2Byte(222, 6);
         this.mcnctrl_mv510_order_main2 = getBooleanValueFrom2Byte(222, 7);
         this.mcnctrl_mv510_stat_fan = getBooleanValueFrom2Byte(222, 8);
@@ -587,6 +590,7 @@ public class RealtimePOJO extends BasePOJO{
         this.mcnctrl_web_order_temp = getBooleanValueFrom2Byte(224, 1);
         this.mcnctrl_web_order_humidity = getBooleanValueFrom2Byte(224, 2);
         this.mcnctrl_web_order_ilum = getBooleanValueFrom2Byte(224, 3);
+        this.mcnctrl_web_pause = getBooleanValueFrom2Byte(224, 4);
         this.mcnctrl_web_order_main1 = getBooleanValueFrom2Byte(224, 6);
         this.mcnctrl_web_order_main2 = getBooleanValueFrom2Byte(224, 7);
         this.mcnctrl_web_stat_fan = getBooleanValueFrom2Byte(224, 8);
@@ -597,6 +601,22 @@ public class RealtimePOJO extends BasePOJO{
         this.mcnctrl_web_stat_ilum  = getBooleanValueFrom2Byte(224, 13);
         this.mcnctrl_web_stat_alarm = getBooleanValueFrom2Byte(224, 14);
         this.mcnctrl_web_stat_reserve = getBooleanValueFrom2Byte(224, 15);
+    }
+
+    public int getMcnctrl_web_pause() {
+        return mcnctrl_web_pause;
+    }
+
+    public void setMcnctrl_web_pause(int mcnctrl_web_pause) {
+        this.mcnctrl_web_pause = mcnctrl_web_pause;
+    }
+
+    public int getMcnctrl_mv510_pause() {
+        return mcnctrl_mv510_pause;
+    }
+
+    public void setMcnctrl_mv510_pause(int mcnctrl_mv510_pause) {
+        this.mcnctrl_mv510_pause = mcnctrl_mv510_pause;
     }
 
     public String getCo2_relay_on_start_md() {
@@ -2516,7 +2536,9 @@ public class RealtimePOJO extends BasePOJO{
                "\t`mcnctrl_web_stat_alarm`, \n" +
                "\t`mcnctrl_web_stat_reserve`, \n" +
                "\t`redisTime`, \n" +
-               "\t`regDate`\n" +
+               "\t`regDate`,\n" +
+               "\t`mcnctrl_mv510_pause`, \n" +
+               "\t`mcnctrl_web_pause` \n" +
                "\t)\n" +
                "\tVALUES\n" +
                "\t(" +
@@ -2755,7 +2777,9 @@ public class RealtimePOJO extends BasePOJO{
                "'" + mcnctrl_web_stat_alarm + "'," +
                "'" + mcnctrl_web_stat_reserve + "'," +
                "'" + redisTime + "'," +
-               "\tNOW()\n" +
+               "\tNOW(),\n" +
+               "'" + mcnctrl_mv510_pause + "'," +
+               "'" + mcnctrl_web_pause + "'" +
                "\t);";
 
         return sql;
