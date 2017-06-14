@@ -19,7 +19,7 @@ public class ConstProtocol {
     public static final int RANGE_READ_END = 5;
 
     public static final byte[] FUNCTION_READ = new byte[]{0x03};
-    public static final byte[] FUNCTION_WRITE = new byte[]{0x0A};
+    public static final byte[] FUNCTION_WRITE = new byte[]{0x10};
 
     public static final int INIT_TERM_MIN10 = 0;
     public static final int INIT_TERM_MIN = 0;

@@ -191,27 +191,6 @@ public class AppMain{
                 default: protocols = null; break;
             }
 
-            // TODO START POINT
-            /**
-             * MySQL 컨버터가 필요함
-             * 쓰기 명령 작성해야 함
-             * 쓰기 명령 시 프로토콜을 나누어 처리하는 로직이 필요함
-             * 인덱싱 이슈 정확히 살펴봐야 함
-             * 기계 작동 여부 확인
-             * MySQL 업서트 패턴 구현
-             * 제어 플래그 업데이트 - 필히 Bit Clear
-             * 전달 3단 제어 체크
-             * 쓰기 명령 프로토콜 생성 시 역방향 파싱이 필요
-             * 타임아웃 에러 핸들링 코드에서 경보 문자 로직 작성
-             * 기계 연결 - 저장 - 에러 이슈 별도 저장(MySQL) - 이후 필요 시 REST 요청에 응답
-             *
-             * [작업 진행 계획]
-             * 위 TCP/IP 프로토콜 통신 모두 완료
-             * 각 UI단에서 MySQL과 REST 중 데이터를 받을 곳을 확정해야 함
-             * REST 연결 및 소켓 연결 유니크키 테스트
-             * 유니크키 로직 공유
-             */
-
             if((protocols == null && protocol == null) || retVal == null){
                 log.info("Mode has not been designated - Do nothing");
                 return Response.response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
@@ -223,6 +202,8 @@ public class AppMain{
 
         /**
          * WRITE 요청 API
+         * id, mode, farm, harv, order(optional)
+         * mode : read_timer, read_dayage(order 필요/누락 시 전체 일령)
          */
         Spark.post(ConstRest.REST_WRITE_REQUEST, (req, res) -> {
             Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
@@ -265,7 +246,8 @@ public class AppMain{
                     try {
                         System.out.println("WRITING TIMER " + rawFarm + ":" + rawHarv);
                         TimerPOJO timerPOJO = objectMapper.readValue(rawJson, TimerPOJO.class);
-                        protocol = SohaProtocolUtil.makeWriteProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), id, farmCode, harvCode, timerPOJO.getBytes());
+                        byte[] pure = new ByteSerial(timerPOJO.getBytes(), ByteSerial.TYPE_FORCE).getPureBytes();
+                        protocol = SohaProtocolUtil.makeWriteProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), id, farmCode, harvCode, pure);
                         recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
 
                         if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);

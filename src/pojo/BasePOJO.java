@@ -173,6 +173,8 @@ public class BasePOJO implements Serializable{
         return total;
     }
 
+    // TODO getBitAggr - 일반화
+
     public static byte[] getValuePairFromString(String str){
 
         String[] arr = null;
@@ -294,12 +296,15 @@ public class BasePOJO implements Serializable{
     protected int getBitLhsFromDual(int value){
         String bin = Integer.toBinaryString(value);
         if(bin.length() > 2) return 0;
+        if(bin.length() < 2) return 0;
         return Integer.parseInt(bin.substring(0, 1));
     }
 
     protected int getBitRhsFromDual(int value){
+        System.out.println("Converting :: " + value);
         String bin = Integer.toBinaryString(value);
         if(bin.length() > 2) return 0;
+        if(bin.length() < 2) return value;
         return Integer.parseInt(bin.substring(1, 2));
     }
 
