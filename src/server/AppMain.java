@@ -154,6 +154,7 @@ public class AppMain{
                     recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
                     if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
                     TimerPOJO timerPOJO = new TimerPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
+
                     retVal = objectMapper.writeValueAsString(timerPOJO);
                     break;
                 case ConstRest.MODE_READ_DAYAGE:

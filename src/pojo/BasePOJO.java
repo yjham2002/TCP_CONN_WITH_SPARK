@@ -107,7 +107,7 @@ public class BasePOJO implements Serializable{
     }
 
     protected byte[] getAggregation(int lhs, int rhs){
-        int total = (lhs << 8) + rhs;
+        int total = (lhs * 100) + rhs;
         byte[] ret = SohaProtocolUtil.getHexLocation(total);
 
         return ret;
@@ -289,6 +289,18 @@ public class BasePOJO implements Serializable{
         }
 
         return Integer.parseInt(total, 2);
+    }
+
+    protected int getBitLhsFromDual(int value){
+        String bin = Integer.toBinaryString(value);
+        if(bin.length() > 2) return 0;
+        return Integer.parseInt(bin.substring(0, 1));
+    }
+
+    protected int getBitRhsFromDual(int value){
+        String bin = Integer.toBinaryString(value);
+        if(bin.length() > 2) return 0;
+        return Integer.parseInt(bin.substring(1, 2));
     }
 
     protected int getBooleanValueFromByteABS(int offset, int bitIndex){
