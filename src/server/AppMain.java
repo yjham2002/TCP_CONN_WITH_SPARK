@@ -250,6 +250,14 @@ public class AppMain{
 
             switch(mode) {
                 case ConstRest.MODE_WRITE_TIMER: {
+                    // TODO START POINT
+                    /**
+                     * 일령 리스트 쓰기
+                     * 실시간 데이터 쓰기
+                     * 경보 쓰기
+                     * 플래그 초기화
+                     * 06/15 일일보고서 작성
+                     */
 
                     try {
                         System.out.println("WRITING TIMER " + rawFarm + ":" + rawHarv);
