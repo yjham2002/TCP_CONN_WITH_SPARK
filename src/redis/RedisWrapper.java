@@ -160,7 +160,6 @@ public class RedisWrapper extends ServerConfig{
             try {
                 object = jedis.keys("*" + pattern + "*");
             }catch(Exception e){
-                e.printStackTrace();
                 System.out.println("Key Execution Error :: Skipping");
                 init();
                 return retVal;
@@ -177,7 +176,6 @@ public class RedisWrapper extends ServerConfig{
                     retVal.add(unit);
                 }catch(Exception e){
                     System.out.println("Parsing Error :: Skipping");
-                    return retVal;
                 }
             }
 

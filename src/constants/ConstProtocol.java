@@ -53,6 +53,25 @@ public class ConstProtocol {
     public static final Pair<Integer> RANGE_DAYAGE_05 = new Pair<>(7930, 910);
     public static final Pair<Integer> RANGE_DAYAGE_06 = new Pair<>(9750, 910);
 
+    public static final Pair<Integer> RANGE_FLAG_BIT = new Pair<>(110, 1);
+
+    public static final int FLAG_INIT = 0;
+
+    public static final int FLAG_SETTING = 1;
+    public static final int FLAG_TIMER = 2;
+    public static final int FLAG_DAILY_1 = 4;
+    public static final int FLAG_DAILY_2 = 8;
+    public static final int FLAG_DAILY_3 = 16;
+    public static final int FLAG_DAILY_4 = 32;
+    public static final int FLAG_DAILY_5 = 64;
+    public static final int FLAG_DAILY_6 = 128;
+
+    public static byte makeFlagSet(int... flags){
+        int total = 0;
+        for(int e = 0; e < flags.length; e++) total += flags[e];
+        return (byte)total;
+    }
+
     public static final int LENGTH_DAILY_AGE = 1820;
 
 }

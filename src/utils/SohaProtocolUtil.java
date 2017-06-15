@@ -121,6 +121,28 @@ public class SohaProtocolUtil {
     }
 
     /**
+     * 플래그 비트를 세팅하기 위한 프로토콜을 생성하는 메소드이다.
+     * 본 메소드는 서버로부터 기기에 변경을 알리기 위한 프로토콜을 생성하며, 기기로부터 변경 플래그를 받기 위한 비트를 모두 클리어한다.
+     * 동기화 지연을 발생시킬 수 있고, 이는 쓰기 빈도가 실시간 데이터 수신의 빈도보다 낮다는 가정하의 로직이다.
+     * @param id 기기 아이디
+     * @param farmCode 농가코드
+     * @param harvCode 재배동 코드
+     * @param flags 플래그 가변인자
+     * @return 플래그 프로토콜
+     */
+    public static byte[] makeFlagNotifyProtocol(int id, byte[] farmCode, byte[] harvCode, int... flags){
+        byte[] data = new byte[]{0, ConstProtocol.makeFlagSet(flags)};
+        byte[] prtc = makeWriteProtocol(ConstProtocol.RANGE_FLAG_BIT.getHead(), ConstProtocol.RANGE_FLAG_BIT.getTail(), id, farmCode, harvCode, data);
+        return prtc;
+    }
+
+    public static byte[] makeFlagInitProtocol(int id, byte[] farmCode, byte[] harvCode){
+        byte[] data = new byte[]{0, 0};
+        byte[] prtc = makeWriteProtocol(ConstProtocol.RANGE_FLAG_BIT.getHead(), ConstProtocol.RANGE_FLAG_BIT.getTail(), id, farmCode, harvCode, data);
+        return prtc;
+    }
+
+    /**
      * 읽기 프로토콜을 생성한다
      * @param location
      * @param length WORD 단위 길이

@@ -27,9 +27,9 @@ import java.util.List;
 public class SettingPOJO extends BasePOJO {
 
     private String farmCode;
-    private String harvCode;
+    private String dongCode;
 
-    private int device_id;
+    private int machine_no;
 
     private int crop_data_num_and_ctrl_aggr;
 
@@ -162,10 +162,12 @@ public class SettingPOJO extends BasePOJO {
     public SettingPOJO(ByteSerial byteSerial, int offset, String farmCode, String harvCode){
         this.byteSerial = byteSerial;
         this.farmCode = farmCode;
-        this.harvCode = harvCode;
+        this.dongCode = harvCode;
 
         init(offset);
     }
+
+    private SettingPOJO(){}
 
     public void initTails(ByteSerial byteSerial, int offset){
         settingTails = new ArrayList<>();
@@ -193,19 +195,32 @@ public class SettingPOJO extends BasePOJO {
     }
 
     public static void main(String... args){
+        byte[] arr = new byte[]{83, 84, 48, 48, 55, 56, 48, 49, 1, 3, -114, 0, 1, 0, 1, 1, 1, 4, -80, 0, -6, 1, -62, 0, 9, 0, -55, 1, -109, 3, -119, 0, 7, 0, 50, 0, 3, -52, -52, -2, 12, 1, -12, -1, -30, 0, 30, -1, -100, 0, 100, 0, 0, 0, 0, 1, 44, -61, 80, -1, -99, 2, 88, 0, 0, 3, -25, 0, 0, 0, 79, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 5, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 39, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, -1, -1, 11, 9, -33, 13, 10};
+        byte[] arr2 = new byte[]{83, 84, 48, 48, 55, 56, 48, 49, 1, 3, 36, 1, 44, 0, 100, 0, 100, 0, 1, 3, 32, 4, -80, 1, 45, 0, 101, 0, 101, 0, 2, 4, -80, 7, 8, 1, 46, 0, 102, 0, 102, 0, 3, 7, 8, 2, -68, 35, 109, -28, 13, 10};
+        SettingPOJO sp = new SettingPOJO(new ByteSerial(arr), ConstProtocol.RANGE_READ_START, "0078", "01");
+        sp.initTails(new ByteSerial(arr2), ConstProtocol.RANGE_READ_START);
 
+        byte[] gen = sp.getBytes();
+
+        System.out.println(Arrays.toString(gen));
+        System.out.println(Arrays.toString(arr));
+
+        for(int i = 0; i < arr.length; i++) if(gen[i] != arr[i]) System.out.println(":::: " + i);
     }
 
     @JsonIgnore
     public byte[] getTailBytes(){
-        byte[] check = SohaProtocolUtil.concat(ConstProtocol.STX, this.farmCode.getBytes(), this.harvCode.getBytes());
+        byte[] check = SohaProtocolUtil.concat(ConstProtocol.STX, this.farmCode.getBytes(), this.dongCode.getBytes());
 
-        byte[] modbusData = SohaProtocolUtil.concat(new byte[]{Byte.parseByte(this.harvCode), 3, (byte)(ConstProtocol.RANGE_SETTING_TAILS.getTail() * 2)});
+        byte[] modbusData = SohaProtocolUtil.concat(new byte[]{Byte.parseByte(this.dongCode), 3, (byte)(ConstProtocol.RANGE_SETTING_TAILS.getTail() * 2)});
 
-        for(int i=0; i<settingTails.size(); i++){
+        for(int i = 0; i < settingTails.size(); i++){
             SettingTailPOJO setTail = settingTails.get(i);
-            modbusData = SohaProtocolUtil.concat(modbusData, SohaProtocolUtil.getHexLocation(setTail.getSetting_value_co_2()), SohaProtocolUtil.getHexLocation(setTail.getSetting_value_temp()),
-                    SohaProtocolUtil.getHexLocation(setTail.getSetting_value_humid()), SohaProtocolUtil.getHexLocation(setTail.getSetting_value_illum()), getValuePairFromString(setTail.getStart_time()), getValuePairFromString(setTail.getEnd_time()));
+            modbusData = SohaProtocolUtil.concat(
+                    modbusData,
+                    SohaProtocolUtil.getHexLocation(setTail.getSetting_value_co_2()), SohaProtocolUtil.getHexLocation(setTail.getSetting_value_temp()),
+                    SohaProtocolUtil.getHexLocation(setTail.getSetting_value_humid()), SohaProtocolUtil.getHexLocation(setTail.getSetting_value_illum()),
+                    getValuePairFromString(setTail.getStart_time()), getValuePairFromString(setTail.getEnd_time()));
         }
 
         Modbus modbus = new Modbus();
@@ -222,17 +237,18 @@ public class SettingPOJO extends BasePOJO {
 
     @JsonIgnore
     public byte[] getBytes(){
-        byte[] check = SohaProtocolUtil.concat(ConstProtocol.STX, this.farmCode.getBytes(), this.harvCode.getBytes());
+        byte[] check = SohaProtocolUtil.concat(ConstProtocol.STX, this.farmCode.getBytes(), this.dongCode.getBytes());
 
         byte[] modbusData =
                 SohaProtocolUtil.concat(
-                        new byte[]{Byte.parseByte(this.harvCode), 3, (byte)(ConstProtocol.RANGE_SETTING.getTail() * 2)}, SohaProtocolUtil.getHexLocation(this.device_id)
+                        new byte[]{Byte.parseByte(this.dongCode), 3, (byte)(ConstProtocol.RANGE_SETTING.getTail() * 2)}, SohaProtocolUtil.getHexLocation(this.machine_no)
                         ,SohaProtocolUtil.getHexLocation(this.crop_data_num_and_ctrl_aggr), SohaProtocolUtil.getHexLocation(this.sensor_quantity_and_selection_aggr),
-                        SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_co2), SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_temp), SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_humid),
+                        SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_co2), SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_temp),
+                        SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_humid),
                         SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_illum), getAggregation(this.relay_output_setting_co2, this.relay_output_setting_heat),
                         getAggregation(this.relay_output_setting_cool, this.relay_output_setting_humidify), getAggregation(this.relay_output_setting_dehumidify, this.relay_output_setting_illum),
                         getAggregation(this.relay_output_setting_alarm, this.relay_output_setting_reserve), SohaProtocolUtil.getHexLocation(this.dry_condition_setting_aggr),
-                        SohaProtocolUtil.getHexLocation(this.alert_alarm_time_select_aggr),  SohaProtocolUtil.getHexLocation(this.cthi_ctrl_stat_aggr),
+                        SohaProtocolUtil.getHexLocation(this.alert_alarm_time_select_aggr), SohaProtocolUtil.getHexLocation(this.cthi_ctrl_stat_aggr),
                         SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_high),
                         SohaProtocolUtil.getHexLocation(this.calm_threshold_temp_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_temp_high),
                         SohaProtocolUtil.getHexLocation(this.calm_threshold_humid_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_humid_high),
@@ -296,7 +312,7 @@ public class SettingPOJO extends BasePOJO {
     }
 
     public void init(int offset){
-        this.device_id = getSumWith2BytesABS(offset);
+        this.machine_no = getSumWith2BytesABS(offset);
         this.crop_data_num_and_ctrl_aggr = getSumWith2BytesABS(offset + 2);
         this.sensor_quantity_and_selection_aggr = getSumWith2BytesABS(offset + 4);
         this.sensor_quantity = getSingleByteABS(offset + 4);
@@ -319,7 +335,7 @@ public class SettingPOJO extends BasePOJO {
         this.dry_condition_setting_aggr = getSumWith2BytesABS(offset + 22);
         this.dry_condition_setting_ctrl = getLhsFromDualABS(offset + 22);
         this.dry_condition_setting_humidity = getRhsFromDualABS(offset + 22);
-        this.alert_alarm_time_select_aggr = getSingleByteABS(offset + 24);
+        this.alert_alarm_time_select_aggr = getSumWith2BytesABS(offset + 24);
         this.alert_alarm_time_select_auto = getBooleanValueFromByteABS(offset + 24, 0);
         this.alert_alarm_time_select_timer = getBooleanValueFromByteABS(offset + 24, 1);
         this.alert_alarm_time_select_lamp_unit = toDecimalFromBinaryValueABS(offset + 24, 2, 2);
@@ -696,20 +712,20 @@ public class SettingPOJO extends BasePOJO {
         this.farmCode = farmCode;
     }
 
-    public String getHarvCode() {
-        return harvCode;
+    public String getDongCode() {
+        return dongCode;
     }
 
-    public void setHarvCode(String harvCode) {
-        this.harvCode = harvCode;
+    public void setDongCode(String dongCode) {
+        this.dongCode = dongCode;
     }
 
-    public int getDevice_id() {
-        return device_id;
+    public int getMachine_no() {
+        return machine_no;
     }
 
-    public void setDevice_id(int device_id) {
-        this.device_id = device_id;
+    public void setMachine_no(int machine_no) {
+        this.machine_no = machine_no;
     }
 
     public int getCrop_data_num_and_ctrl_aggr() {
@@ -1489,7 +1505,7 @@ public class SettingPOJO extends BasePOJO {
                 "             `regDate`)\n" +
                 "values (" +
                 "'" +farmCode+"',\n" +
-                "'" +harvCode+"',\n" +
+                "'" +dongCode+"',\n" +
                 "'" +crop_data_num_and_ctrl_aggr+"',\n" +
                 "'" +sensor_quantity+"',\n" +
                 "'" +sensor_selected_1+"',\n" +

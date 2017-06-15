@@ -462,23 +462,23 @@ public class RealtimePOJO extends BasePOJO{
             errorStatList.add(errorStatusPOJO);
         }
 
-        this.errdata_aggr = getSumWith2Bytes(152);
-        this.errdata_internal_co2 = getBooleanValueFrom2Byte(152, 0);
-        this.errdata_internal_temp = getBooleanValueFrom2Byte(152, 1);
-        this.errdata_internal_humid = getBooleanValueFrom2Byte(152, 2);
-        this.errdata_internal_ilum = getBooleanValueFrom2Byte(152, 3);
-        this.errdata_vent_relay = getBooleanValueFrom2Byte(152, 4);
-        this.errdata_raisetemp_relay = getBooleanValueFrom2Byte(152, 5);
-        this.errdata_raisecool_relay = getBooleanValueFrom2Byte(152, 6);
-        this.errdata_humidify_relay = getBooleanValueFrom2Byte(152, 7);       //??? 추가됨
-        this.errdata_dehumidify_relay = getBooleanValueFrom2Byte(152, 8);
-        this.errdata_ilum_output = getBooleanValueFrom2Byte(152, 9);          //??? 추가됨
-        this.errdata_crop_data = getBooleanValueFrom2Byte(152, 10);
-        this.errdata_device_connection = getBooleanValueFrom2Byte(152, 11);
-        this.errdata_network1 = getBooleanValueFrom2Byte(152, 12);
-        this.errdata_network2 = getBooleanValueFrom2Byte(152, 13);
-        this.errdata_network3 = getBooleanValueFrom2Byte(152, 14);
-        this.errdata_network4 = getBooleanValueFrom2Byte(152, 15);
+        this.errdata_aggr = getSumWith2Bytes(212);
+        this.errdata_internal_co2 = getBooleanValueFrom2Byte(212, 0);
+        this.errdata_internal_temp = getBooleanValueFrom2Byte(212, 1);
+        this.errdata_internal_humid = getBooleanValueFrom2Byte(212, 2);
+        this.errdata_internal_ilum = getBooleanValueFrom2Byte(212, 3);
+        this.errdata_vent_relay = getBooleanValueFrom2Byte(212, 4);
+        this.errdata_raisetemp_relay = getBooleanValueFrom2Byte(212, 5);
+        this.errdata_raisecool_relay = getBooleanValueFrom2Byte(212, 6);
+        this.errdata_humidify_relay = getBooleanValueFrom2Byte(212, 7);       //??? 추가됨
+        this.errdata_dehumidify_relay = getBooleanValueFrom2Byte(212, 8);
+        this.errdata_ilum_output = getBooleanValueFrom2Byte(212, 9);          //??? 추가됨
+        this.errdata_crop_data = getBooleanValueFrom2Byte(212, 10);
+        this.errdata_device_connection = getBooleanValueFrom2Byte(212, 11);
+        this.errdata_network1 = getBooleanValueFrom2Byte(212, 12);
+        this.errdata_network2 = getBooleanValueFrom2Byte(212, 13);
+        this.errdata_network3 = getBooleanValueFrom2Byte(212, 14);
+        this.errdata_network4 = getBooleanValueFrom2Byte(212, 15);
         /**
          * 에러 상태 및 에러데이터 멤버 종결
          */
@@ -486,121 +486,121 @@ public class RealtimePOJO extends BasePOJO{
         /**
          * 기타 멤버 시작
          */
-        this.sr_set1_co2 = getSumWith2Bytes(154);
-        this.sr_set1_temp = getSumWith2Bytes(156);
-        this.sr_set1_humidity = getSumWith2Bytes(158);
-        this.sr_set1_ilum = getSumWith2Bytes(160);
-        this.sr_set2_co2 = getSumWith2Bytes(162);
-        this.sr_set2_temp = getSumWith2Bytes(164);
-        this.sr_set2_humidity = getSumWith2Bytes(166);
-        this.sr_set2_ilum = getSumWith2Bytes(168);
-        this.sr_set3_co2 = getSumWith2Bytes(170);
-        this.sr_set3_temp = getSumWith2Bytes(172);
-        this.sr_set3_humidity = getSumWith2Bytes(174);
-        this.sr_set3_ilum = getSumWith2Bytes(176);
-        this.sr_set4_co2 = getSumWith2Bytes(178);
-        this.sr_set4_temp = getSumWith2Bytes(180);
-        this.sr_set4_humidity = getSumWith2Bytes(182);
-        this.sr_set4_ilum = getSumWith2Bytes(184);
+        this.sr_set1_co2 = getSumWith2Bytes(214);
+        this.sr_set1_temp = getSumWith2Bytes(216);
+        this.sr_set1_humidity = getSumWith2Bytes(218);
+        this.sr_set1_ilum = getSumWith2Bytes(220);
+        this.sr_set2_co2 = getSumWith2Bytes(222);
+        this.sr_set2_temp = getSumWith2Bytes(224);
+        this.sr_set2_humidity = getSumWith2Bytes(226);
+        this.sr_set2_ilum = getSumWith2Bytes(228);
+        this.sr_set3_co2 = getSumWith2Bytes(230);
+        this.sr_set3_temp = getSumWith2Bytes(232);
+        this.sr_set3_humidity = getSumWith2Bytes(234);
+        this.sr_set3_ilum = getSumWith2Bytes(236);
+        this.sr_set4_co2 = getSumWith2Bytes(238);
+        this.sr_set4_temp = getSumWith2Bytes(240);
+        this.sr_set4_humidity = getSumWith2Bytes(242);
+        this.sr_set4_ilum = getSumWith2Bytes(244);
 
-        this.sr_val_co2 = getSumWith2Bytes(178); // 주소 ㅡㅡ
-        this.sr_val_temp = getSumWith2Bytes(180);
-        this.sr_val_humidity = getSumWith2Bytes(182);
-        this.sr_val_ilum = getSumWith2Bytes(184);
+        this.sr_val_co2 = getSumWith2Bytes(246); // 주소 ㅡㅡ
+        this.sr_val_temp = getSumWith2Bytes(248);
+        this.sr_val_humidity = getSumWith2Bytes(250);
+        this.sr_val_ilum = getSumWith2Bytes(252);
 
-        this.controlstat_aggr = getSumWith2Bytes(186);
-        this.controlstat_co2_type = toDecimalFromBinaryValue(186, 0, 1);
-        this.controlstat_co2_ontype = getBooleanValueFrom2Byte(186, 2);
-        this.controlstat_co2_offtype = getBooleanValueFrom2Byte(186, 3);
-        this.controlstat_temp_type = toDecimalFromBinaryValue(186, 4, 2);
-        this.controlstat_temp_ontype = getBooleanValueFrom2Byte(186, 6);
-        this.controlstat_temp_offtype = getBooleanValueFrom2Byte(186, 7);
-        this.controlstat_humidity_type = toDecimalFromBinaryValue(186, 8, 2);
-        this.controlstat_humidity_ontype = getBooleanValueFrom2Byte(186, 10);
-        this.controlstat_humidity_offtype = getBooleanValueFrom2Byte(186, 11);
-        this.controlstat_ilum_type = toDecimalFromBinaryValue(186, 12, 2);
-        this.controlstat_ilum_ontype = getBooleanValueFrom2Byte(186, 14);
-        this.controlstat_ilum_offtype = getBooleanValueFrom2Byte(186, 15);
+        this.controlstat_aggr = getSumWith2Bytes(254);
+        this.controlstat_co2_type = toDecimalFromBinaryValue(254, 0, 1);
+        this.controlstat_co2_ontype = getBooleanValueFrom2Byte(254, 2);
+        this.controlstat_co2_offtype = getBooleanValueFrom2Byte(254, 3);
+        this.controlstat_temp_type = toDecimalFromBinaryValue(254, 4, 2);
+        this.controlstat_temp_ontype = getBooleanValueFrom2Byte(254, 6);
+        this.controlstat_temp_offtype = getBooleanValueFrom2Byte(254, 7);
+        this.controlstat_humidity_type = toDecimalFromBinaryValue(254, 8, 2);
+        this.controlstat_humidity_ontype = getBooleanValueFrom2Byte(254, 10);
+        this.controlstat_humidity_offtype = getBooleanValueFrom2Byte(254, 11);
+        this.controlstat_ilum_type = toDecimalFromBinaryValue(254, 12, 2);
+        this.controlstat_ilum_ontype = getBooleanValueFrom2Byte(254, 14);
+        this.controlstat_ilum_offtype = getBooleanValueFrom2Byte(254, 15);
 
-        this.co2_value = getSumWith2Bytes(188);
-        this.temp_value = getSumWith2Bytes(190);
-        this.humidity_value = getSumWith2Bytes(192);
-        this.ilum_value = getSumWith2Bytes(194);
+        this.co2_value = getSumWith2Bytes(260);
+        this.temp_value = getSumWith2Bytes(262);
+        this.humidity_value = getSumWith2Bytes(264);
+        this.ilum_value = getSumWith2Bytes(266);
 
-        this.vt515_version = getSumWith2Bytes(196);
+        this.vt515_version = getSumWith2Bytes(268);
 
-        this.lcdorder_run = getBooleanValueFromByte(198, 0);
-        this.lcdorder_mode = toDecimalFromBinaryValue(198, 1, 2);
-        this.lcdorder_dayage_start = getBooleanValueFrom2Byte(198, 15);
+        this.lcdorder_run = getBooleanValueFromByte(270, 0);
+        this.lcdorder_mode = toDecimalFromBinaryValue(270, 1, 2);
+        this.lcdorder_dayage_start = getBooleanValueFrom2Byte(270, 15);
 
-        this.changetype_lcd_setting = getBooleanValueFrom2Byte(200, 0);
-        this.changetype_lcd_timer = getBooleanValueFrom2Byte(200, 1);
-        this.changetype_lcd_dayage1 = getBooleanValueFrom2Byte(200, 2);
-        this.changetype_lcd_dayage2 = getBooleanValueFrom2Byte(200, 3);
-        this.changetype_lcd_dayage3 = getBooleanValueFrom2Byte(200, 4);
-        this.changetype_lcd_dayage4 = getBooleanValueFrom2Byte(200, 5);
-        this.changetype_lcd_dayage5 = getBooleanValueFrom2Byte(200, 6);
-        this.changetype_lcd_dayage6 = getBooleanValueFrom2Byte(200, 7);
-        this.changetype_pc_setting = getBooleanValueFrom2Byte(200, 8);
-        this.changetype_pc_timer = getBooleanValueFrom2Byte(200, 9);
-        this.changetype_pc_dayage1 = getBooleanValueFrom2Byte(200, 10);
-        this.changetype_pc_dayage2 = getBooleanValueFrom2Byte(200, 11);
-        this.changetype_pc_dayage3 = getBooleanValueFrom2Byte(200, 12);
-        this.changetype_pc_dayage4 = getBooleanValueFrom2Byte(200, 13);
-        this.changetype_pc_dayage5 = getBooleanValueFrom2Byte(200, 14);
-        this.changetype_pc_dayage6 = getBooleanValueFrom2Byte(200, 15);
+        this.changetype_lcd_setting = getBooleanValueFrom2Byte(272, 0);
+        this.changetype_lcd_timer = getBooleanValueFrom2Byte(272, 1);
+        this.changetype_lcd_dayage1 = getBooleanValueFrom2Byte(272, 2);
+        this.changetype_lcd_dayage2 = getBooleanValueFrom2Byte(272, 3);
+        this.changetype_lcd_dayage3 = getBooleanValueFrom2Byte(272, 4);
+        this.changetype_lcd_dayage4 = getBooleanValueFrom2Byte(272, 5);
+        this.changetype_lcd_dayage5 = getBooleanValueFrom2Byte(272, 6);
+        this.changetype_lcd_dayage6 = getBooleanValueFrom2Byte(272, 7);
+        this.changetype_pc_setting = getBooleanValueFrom2Byte(272, 8);
+        this.changetype_pc_timer = getBooleanValueFrom2Byte(272, 9);
+        this.changetype_pc_dayage1 = getBooleanValueFrom2Byte(272, 10);
+        this.changetype_pc_dayage2 = getBooleanValueFrom2Byte(272, 11);
+        this.changetype_pc_dayage3 = getBooleanValueFrom2Byte(272, 12);
+        this.changetype_pc_dayage4 = getBooleanValueFrom2Byte(272, 13);
+        this.changetype_pc_dayage5 = getBooleanValueFrom2Byte(272, 14);
+        this.changetype_pc_dayage6 = getBooleanValueFrom2Byte(272, 15);
 
-        this.networkerr_510to515 = getSumWith2Bytes(202);
-        this.dayage_low = getSumWith2Bytes(204);
-        this.dayage_high = getSumWith2Bytes(206);
+        this.networkerr_510to515 = getSumWith2Bytes(274);
+        this.dayage_low = getSumWith2Bytes(276);
+        this.dayage_high = getSumWith2Bytes(278);
 
-        this.real_sec = getSumWith2Bytes(208);
-        this.real_hm = getMDorHMWith2Bytes(210, ":");
-        this.real_md = getMDorHMWith2Bytes(212, "-");
+        this.real_sec = getSumWith2Bytes(280);
+        this.real_hm = getMDorHMWith2Bytes(282, ":");
+        this.real_md = getMDorHMWith2Bytes(284, "-");
 
-        this.dymamic_output_mode = toDecimalFromBinaryValue(214, 0, 2);
-        this.dymamic_output_inc = getBooleanValueFrom2Byte(214, 2);
-        this.dymamic_output_dec = getBooleanValueFrom2Byte(214, 3);
-        this.dymamic_output_analog = getBooleanValueFrom2Byte(214, 14);
-        this.dymamic_output_valid = getBooleanValueFrom2Byte(214, 15);
+        this.dymamic_output_mode = toDecimalFromBinaryValue(286, 0, 2);
+        this.dymamic_output_inc = getBooleanValueFrom2Byte(286, 2);
+        this.dymamic_output_dec = getBooleanValueFrom2Byte(286, 3);
+        this.dymamic_output_analog = getBooleanValueFrom2Byte(286, 14);
+        this.dymamic_output_valid = getBooleanValueFrom2Byte(286, 15);
 
-        this.start_year = getSumWith2Bytes(216);
-        this.start_md = getMDorHMWith2Bytes(218, "-");
-        this.start_hm = getMDorHMWith2Bytes(220, ":");
+        this.start_year = getSumWith2Bytes(288);
+        this.start_md = getMDorHMWith2Bytes(290, "-");
+        this.start_hm = getMDorHMWith2Bytes(292, ":");
 
-        this.mcnctrl_mv510_aggr = getSumWith2Bytes(222);
-        this.mcnctrl_mv510_order_co2 = getBooleanValueFrom2Byte(222, 0);
-        this.mcnctrl_mv510_order_temp = getBooleanValueFrom2Byte(222, 1);
-        this.mcnctrl_mv510_order_humidity = getBooleanValueFrom2Byte(222, 2);
-        this.mcnctrl_mv510_order_ilum = getBooleanValueFrom2Byte(222, 3);
-        this.mcnctrl_mv510_pause = getBooleanValueFrom2Byte(222, 4);
-        this.mcnctrl_mv510_order_main1 = getBooleanValueFrom2Byte(222, 6);
-        this.mcnctrl_mv510_order_main2 = getBooleanValueFrom2Byte(222, 7);
-        this.mcnctrl_mv510_stat_fan = getBooleanValueFrom2Byte(222, 8);
-        this.mcnctrl_mv510_stat_heater = getBooleanValueFrom2Byte(222, 9);
-        this.mcnctrl_mv510_stat_freezer = getBooleanValueFrom2Byte(222, 10);
-        this.mcnctrl_mv510_stat_humidifier = getBooleanValueFrom2Byte(222, 11);
-        this.mcnctrl_mv510_stat_dehumidifier = getBooleanValueFrom2Byte(222, 12);
-        this.mcnctrl_mv510_stat_ilum = getBooleanValueFrom2Byte(222, 13);
-        this.mcnctrl_mv510_stat_alarm = getBooleanValueFrom2Byte(222, 14);
-        this.mcnctrl_mv510_stat_reserve = getBooleanValueFrom2Byte(222, 15);
+        this.mcnctrl_mv510_aggr = getSumWith2Bytes(294);
+        this.mcnctrl_mv510_order_co2 = getBooleanValueFrom2Byte(294, 0);
+        this.mcnctrl_mv510_order_temp = getBooleanValueFrom2Byte(294, 1);
+        this.mcnctrl_mv510_order_humidity = getBooleanValueFrom2Byte(294, 2);
+        this.mcnctrl_mv510_order_ilum = getBooleanValueFrom2Byte(294, 3);
+        this.mcnctrl_mv510_pause = getBooleanValueFrom2Byte(294, 4);
+        this.mcnctrl_mv510_order_main1 = getBooleanValueFrom2Byte(294, 6);
+        this.mcnctrl_mv510_order_main2 = getBooleanValueFrom2Byte(294, 7);
+        this.mcnctrl_mv510_stat_fan = getBooleanValueFrom2Byte(294, 8);
+        this.mcnctrl_mv510_stat_heater = getBooleanValueFrom2Byte(294, 9);
+        this.mcnctrl_mv510_stat_freezer = getBooleanValueFrom2Byte(294, 10);
+        this.mcnctrl_mv510_stat_humidifier = getBooleanValueFrom2Byte(294, 11);
+        this.mcnctrl_mv510_stat_dehumidifier = getBooleanValueFrom2Byte(294, 12);
+        this.mcnctrl_mv510_stat_ilum = getBooleanValueFrom2Byte(294, 13);
+        this.mcnctrl_mv510_stat_alarm = getBooleanValueFrom2Byte(294, 14);
+        this.mcnctrl_mv510_stat_reserve = getBooleanValueFrom2Byte(294, 15);
 
-        this.mcnctrl_web_aggr = getSumWith2Bytes(224);
-        this.mcnctrl_web_order_co2 = getBooleanValueFrom2Byte(224, 0);
-        this.mcnctrl_web_order_temp = getBooleanValueFrom2Byte(224, 1);
-        this.mcnctrl_web_order_humidity = getBooleanValueFrom2Byte(224, 2);
-        this.mcnctrl_web_order_ilum = getBooleanValueFrom2Byte(224, 3);
-        this.mcnctrl_web_pause = getBooleanValueFrom2Byte(224, 4);
-        this.mcnctrl_web_order_main1 = getBooleanValueFrom2Byte(224, 6);
-        this.mcnctrl_web_order_main2 = getBooleanValueFrom2Byte(224, 7);
-        this.mcnctrl_web_stat_fan = getBooleanValueFrom2Byte(224, 8);
-        this.mcnctrl_web_stat_heater = getBooleanValueFrom2Byte(224, 9);
-        this.mcnctrl_web_stat_freezer = getBooleanValueFrom2Byte(224, 10);
-        this.mcnctrl_web_stat_humidifier = getBooleanValueFrom2Byte(224, 11);
-        this.mcnctrl_web_stat_dehumidifier = getBooleanValueFrom2Byte(224, 12);
-        this.mcnctrl_web_stat_ilum  = getBooleanValueFrom2Byte(224, 13);
-        this.mcnctrl_web_stat_alarm = getBooleanValueFrom2Byte(224, 14);
-        this.mcnctrl_web_stat_reserve = getBooleanValueFrom2Byte(224, 15);
+        this.mcnctrl_web_aggr = getSumWith2Bytes(296);
+        this.mcnctrl_web_order_co2 = getBooleanValueFrom2Byte(296, 0);
+        this.mcnctrl_web_order_temp = getBooleanValueFrom2Byte(296, 1);
+        this.mcnctrl_web_order_humidity = getBooleanValueFrom2Byte(296, 2);
+        this.mcnctrl_web_order_ilum = getBooleanValueFrom2Byte(296, 3);
+        this.mcnctrl_web_pause = getBooleanValueFrom2Byte(296, 4);
+        this.mcnctrl_web_order_main1 = getBooleanValueFrom2Byte(296, 6);
+        this.mcnctrl_web_order_main2 = getBooleanValueFrom2Byte(296, 7);
+        this.mcnctrl_web_stat_fan = getBooleanValueFrom2Byte(296, 8);
+        this.mcnctrl_web_stat_heater = getBooleanValueFrom2Byte(296, 9);
+        this.mcnctrl_web_stat_freezer = getBooleanValueFrom2Byte(296, 10);
+        this.mcnctrl_web_stat_humidifier = getBooleanValueFrom2Byte(296, 11);
+        this.mcnctrl_web_stat_dehumidifier = getBooleanValueFrom2Byte(296, 12);
+        this.mcnctrl_web_stat_ilum  = getBooleanValueFrom2Byte(296, 13);
+        this.mcnctrl_web_stat_alarm = getBooleanValueFrom2Byte(296, 14);
+        this.mcnctrl_web_stat_reserve = getBooleanValueFrom2Byte(296, 15);
     }
 
     public int getMcnctrl_web_pause() {
@@ -2784,5 +2784,7 @@ public class RealtimePOJO extends BasePOJO{
 
         return sql;
     }
+
+
 
 }

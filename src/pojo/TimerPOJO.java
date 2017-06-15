@@ -3,10 +3,12 @@ package pojo;
 import constants.ConstProtocol;
 import models.ByteSerial;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.ObjectMapper;
 import utils.HexUtil;
 import utils.Modbus;
 import utils.SohaProtocolUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -252,4 +254,24 @@ public class TimerPOJO extends BasePOJO{
     }
 
     private TimerPOJO(){}
+
+    @JsonIgnore
+    public String getInsertSQL() throws IOException{
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(this);
+        String sql = "INSERT INTO `sohatechfarmdb`.`tblTimerData`\n" +
+                "            (`farmCode`,\n" +
+                "             `dongCode`,\n" +
+                "             `rawJson`,\n" +
+                "             `regDate`)\n" +
+                "VALUES ('" + farmCode + "',\n" +
+                "        '" + dongCode + "',\n" +
+                "        '" + json + "',\n" +
+                "        NOW())\n" +
+                "        ON DUPLICATE KEY UPDATE\n" +
+                "        `rawJson` = '" + json + "',\n" +
+                "        `regDate` = NOW();";
+        return sql;
+    }
+
 }

@@ -137,16 +137,16 @@ public class BasePOJO implements Serializable{
      */
     protected String getMDorHMWith2Bytes(int offset, String delimiter){
         int total = getSumWith2Bytes(offset);
-        int header = total >> 8;
-        int footer = total - (header << 8);
+        int header = total / 100;
+        int footer = total - (header * 100);
 
         return String.format("%02d" + delimiter + "%02d", header, footer);
     }
 
     protected String getMDorHMWith2BytesABS(int offset, String delimiter){
         int total = getSumWith2BytesABS(offset);
-        int header = total >> 8;
-        int footer = total - (header << 8);
+        int header = total / 100;
+        int footer = total - (header * 100);
 
         return String.format("%02d" + delimiter + "%02d", header, footer);
     }
@@ -202,9 +202,9 @@ public class BasePOJO implements Serializable{
             itail = 0;
         }
 
-        byte[] ret = new byte[]{(byte)ihead, (byte)itail};
+        int total = (ihead * 100) + itail;
 
-        return ret;
+        return SohaProtocolUtil.getHexLocation(total);
     }
 
     protected int getLhsFromDualABS(int offset){
