@@ -4,6 +4,7 @@
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/AppMain.java" afterPath="$PROJECT_DIR$/src/server/AppMain.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -20,14 +21,56 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="AppMain.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AppMain.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2228">
-              <caret line="374" column="110" lean-forward="true" selection-start-line="374" selection-start-column="110" selection-end-line="374" selection-end-column="110" />
+            <state relative-caret-position="309">
+              <caret line="276" column="33" lean-forward="true" selection-start-line="276" selection-start-column="33" selection-end-line="276" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RedisWrapper.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/redis/RedisWrapper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="247">
+              <caret line="25" column="20" lean-forward="true" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="1349">
+                <caret line="243" column="0" lean-forward="true" selection-start-line="243" selection-start-column="0" selection-end-line="243" selection-end-column="0" />
+                <folding>
+                  <marker date="1497610119218" expanded="true" signature="2014:2407" ph="..." />
+                  <marker date="1497610119218" expanded="true" signature="2409:2541" ph="/**...*/" />
+                  <marker date="1497610119218" expanded="true" signature="2595:2627" ph="/**...*/" />
+                  <marker date="1497610119218" expanded="true" signature="2657:2784" ph="/**...*/" />
+                  <marker date="1497610119218" expanded="true" signature="2914:2956" ph="/**...*/" />
+                  <marker date="1497610119218" expanded="true" signature="2985:3064" ph="{...}" />
+                  <marker date="1497610119218" expanded="true" signature="3088:3635" ph="{...}" />
+                  <marker date="1497610119218" expanded="true" signature="3641:3818" ph="/**...*/" />
+                  <marker date="1497610119218" expanded="true" signature="3891:4436" ph="{...}" />
+                  <marker date="1497610119218" expanded="true" signature="4442:4577" ph="/**...*/" />
+                  <marker date="1497610119218" expanded="true" signature="4627:4637" ph=" { " />
+                  <marker date="1497610119218" expanded="true" signature="4667:4673" ph=" }" />
+                  <marker date="1497610119218" expanded="true" signature="4679:4823" ph="/**...*/" />
+                  <marker date="1497610119218" expanded="true" signature="4869:5372" ph="{...}" />
+                  <marker date="1497610119218" expanded="true" signature="5378:5483" ph="/**...*/" />
+                  <marker date="1497610119218" expanded="true" signature="5536:5648" ph="{...}" />
+                  <marker date="1497610119218" expanded="true" signature="5654:5854" ph="/**...*/" />
+                  <marker date="1497610119218" expanded="true" signature="5912:7160" ph="{...}" />
+                </folding>
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -51,25 +94,6 @@
                 <element signature="imports" expanded="true" />
                 <element signature="e#31968#31969#0" expanded="true" />
                 <element signature="e#32001#32002#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DebugUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/utils/DebugUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="9" column="38" lean-forward="false" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="38" />
-              <folding>
-                <element signature="e#1144#1145#0" expanded="true" />
-                <element signature="e#1196#1197#0" expanded="true" />
-                <element signature="e#1245#1246#0" expanded="true" />
-                <element signature="e#1282#1283#0" expanded="true" />
-                <element signature="e#1736#1737#0" expanded="true" />
-                <element signature="e#1788#1789#0" expanded="true" />
-                <element signature="e#1840#1841#0" expanded="true" />
-                <element signature="e#1877#1878#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -843,13 +867,6 @@
       <option name="presentableId" value="Default" />
       <updated>1495674868999</updated>
     </task>
-    <task id="LOCAL-00003" summary="initial commit">
-      <created>1495688820716</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1495688820716</updated>
-    </task>
     <task id="LOCAL-00004" summary="initial commit">
       <created>1495688922708</created>
       <option name="number" value="00004" />
@@ -1186,7 +1203,14 @@
       <option name="project" value="LOCAL" />
       <updated>1497609361971</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="README changed">
+      <created>1497609900645</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1497609900645</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1230,7 +1254,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Multi-Protocol established" />
     <MESSAGE value="TODO List added" />
     <MESSAGE value="Rest test established" />
     <MESSAGE value="MySQL Migration Manager added" />
@@ -1255,7 +1278,8 @@
     <MESSAGE value="Writing Established" />
     <MESSAGE value="Today Closing" />
     <MESSAGE value="Daily Age Writing Established" />
-    <option name="LAST_COMMIT_MESSAGE" value="Daily Age Writing Established" />
+    <MESSAGE value="README changed" />
+    <option name="LAST_COMMIT_MESSAGE" value="README changed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1550,14 +1574,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/redis/RedisWrapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="177" column="68" lean-forward="false" selection-start-line="177" selection-start-column="68" selection-end-line="177" selection-end-column="68" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/constants/ConstRest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="347">
@@ -1685,24 +1701,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="475">
-            <caret line="47" column="85" lean-forward="true" selection-start-line="47" selection-start-column="85" selection-end-line="47" selection-end-column="85" />
-            <folding />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2228">
-          <caret line="374" column="110" lean-forward="true" selection-start-line="374" selection-start-column="110" selection-end-line="374" selection-end-column="110" />
+        <state relative-caret-position="309">
+          <caret line="276" column="33" lean-forward="true" selection-start-line="276" selection-start-column="33" selection-end-line="276" selection-end-column="33" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/redis/RedisWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="25" column="20" lean-forward="true" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="1349">
+            <caret line="243" column="0" lean-forward="true" selection-start-line="243" selection-start-column="0" selection-end-line="243" selection-end-column="0" />
+            <folding>
+              <marker date="1497610119218" expanded="true" signature="2014:2407" ph="..." />
+              <marker date="1497610119218" expanded="true" signature="2409:2541" ph="/**...*/" />
+              <marker date="1497610119218" expanded="true" signature="2595:2627" ph="/**...*/" />
+              <marker date="1497610119218" expanded="true" signature="2657:2784" ph="/**...*/" />
+              <marker date="1497610119218" expanded="true" signature="2914:2956" ph="/**...*/" />
+              <marker date="1497610119218" expanded="true" signature="2985:3064" ph="{...}" />
+              <marker date="1497610119218" expanded="true" signature="3088:3635" ph="{...}" />
+              <marker date="1497610119218" expanded="true" signature="3641:3818" ph="/**...*/" />
+              <marker date="1497610119218" expanded="true" signature="3891:4436" ph="{...}" />
+              <marker date="1497610119218" expanded="true" signature="4442:4577" ph="/**...*/" />
+              <marker date="1497610119218" expanded="true" signature="4627:4637" ph=" { " />
+              <marker date="1497610119218" expanded="true" signature="4667:4673" ph=" }" />
+              <marker date="1497610119218" expanded="true" signature="4679:4823" ph="/**...*/" />
+              <marker date="1497610119218" expanded="true" signature="4869:5372" ph="{...}" />
+              <marker date="1497610119218" expanded="true" signature="5378:5483" ph="/**...*/" />
+              <marker date="1497610119218" expanded="true" signature="5536:5648" ph="{...}" />
+              <marker date="1497610119218" expanded="true" signature="5654:5854" ph="/**...*/" />
+              <marker date="1497610119218" expanded="true" signature="5912:7160" ph="{...}" />
+            </folding>
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
