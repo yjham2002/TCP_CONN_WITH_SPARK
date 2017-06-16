@@ -8,7 +8,7 @@
 #### Service Provider
 - 가변 스레딩 처리를 위한 운영 스레드로 싱글턴 패턴 및 데코레이터 패턴 기반으로 작성
 1. 싱크로나이즈된 해시맵으로 클라이언트들을 농장코드 기반의 유니크키로 관리하며, 본 해시맵의 레퍼런스 포인터는 개발 편의를 위해 각 스레드마다 레퍼런스 포인터로 단일 포함 관계를 이룬다.
-2. 서버 소켓으로부터 새로운 IP의 요청이 있을 때마다 스레드를 증가시키며, 각 스레드별로 바이트 어레이 관리를 위한 스택을 크게 사용하므로, 스레드풀을 두지 않고 가변 스레딩으로 관리한다.
+2. 서버 소켓으로부터 새로운 IP의 요청이 있을 때마다 셀렉터와 채널을 증가시키며, 각 스레드별로 바이트 어레이 관리를 위한 스택을 크게 사용하고 연속적인 처리에 대응해야 하므로, Selector를 이용하여 Non-Blocking 소켓 채널로 관리한다.
 
 - 서버 시동 예시
 ```java
@@ -16,7 +16,8 @@ ServiceProvider serviceProvider = ServiceProvider.getInstance(ServerConfig.SOCKE
 ```
 
 #### ProtocolResponder
-- 가변 스레딩 처리를 위한 개별 스레드로 ServiceProvider로부터 Aggregation 관계를 이룸
+- 가변 스레딩 처리를 위한 단위로 ServiceProvider로부터 Aggregation 관계를 이룬다.
+- Selector를 이용하여 요청을 분할 처리하며, Non-Blocking 방식이기에 소켓에 대한 별도의 설정은 적용되지 않는다.
 
 #### ByteSerial
 - 충분한 사이즈로 입력스트림을 수용하므로, 이를 트림하고 손상 여부를 생성과 함께 판단하는 프로토콜 패킷 추상화 클래스
@@ -36,3 +37,12 @@ public static final int TYPE_WRITE_SUCC = 50; // 클라이언트로부터 수신
 public static final int TYPE_READ_SUCC = 60; // 클라이언트로부터 수신되는 쓰기 성공 프로토콜 (수신)
 public static final int TYPE_ALERT = 70; // 클라이언트에게 경고를 전송하기 위한 프로토콜 (발신)
 ```
+
+### Pair
+- 제네릭 데이터 타입으로 두 가지 값을 가질 수 있는 밸류 페어 클래스
+
+### ConstProtocol
+- 프로토콜 관련 상수를 정의하며, 플래그 비트 값을 관리하는 정적 메소드를 포함한다.
+
+### BasePOJO and Derived Classes (Plain Old Java Object)
+- 특정 목적을 가진 데이터들을 캡슐화하는 클래스로, 바이트 어레이 계산 및 인코딩/디코딩을 수행하며, DB 및 REDIS I/O의 단위체로서 이용된다.
