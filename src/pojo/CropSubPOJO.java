@@ -26,8 +26,8 @@ public class CropSubPOJO extends BasePOJO{
 
     private static final int DAY_TERM = 36;
 
-    private String farm;
-    private String harv;
+    private String farmCode;
+    private String dongCode;
     private String name;
     private int order;
     private List<CropDaySubPOJO> cropDaySubPOJOs;
@@ -42,8 +42,8 @@ public class CropSubPOJO extends BasePOJO{
      */
     public CropSubPOJO(List<ByteSerial> recvs, int order, String farm, String harv){
 
-        this.farm = farm;
-        this.harv = harv;
+        this.farmCode = farm;
+        this.dongCode = harv;
 
         // TODO START POINT
         /**
@@ -166,20 +166,20 @@ public class CropSubPOJO extends BasePOJO{
         return json;
     }
 
-    public String getFarm() {
-        return farm;
+    public String getFarmCode() {
+        return farmCode;
     }
 
-    public void setFarm(String farm) {
-        this.farm = farm;
+    public void setFarmCode(String farmCode) {
+        this.farmCode = farmCode;
     }
 
-    public String getHarv() {
-        return harv;
+    public String getDongCode() {
+        return dongCode;
     }
 
-    public void setHarv(String harv) {
-        this.harv = harv;
+    public void setDongCode(String dongCode) {
+        this.dongCode = dongCode;
     }
 
     @JsonIgnore
@@ -191,8 +191,8 @@ public class CropSubPOJO extends BasePOJO{
                     "             `order`,\n" +
                     "             `rawJson`,\n" +
                     "             `regDate`)\n" +
-                    "VALUES ('" + farm + "',\n" +
-                    "        '" + harv + "',\n" +
+                    "VALUES ('" + farmCode + "',\n" +
+                    "        '" + dongCode + "',\n" +
                     "        '" + order + "',\n" +
                     "        '" + this.toJson() + "',\n" +
                     "        NOW())" +

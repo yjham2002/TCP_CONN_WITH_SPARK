@@ -324,6 +324,8 @@ public class AppMain{
 
                         if(order == -1 || range == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
 
+                        System.out.println(rawJson);
+
                         CropSubPOJO cropSubPOJO = objectMapper.readValue(rawJson, CropSubPOJO.class);
 
                         int resCount = 0;

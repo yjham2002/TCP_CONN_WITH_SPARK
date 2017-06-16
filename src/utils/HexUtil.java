@@ -76,7 +76,7 @@ public class HexUtil {
     }
 
     //byte 배열을 string 배열로 교체후 Decimal값으로 전환
-    public String[] byteToStringDecimalArray(byte [] ValueData) {
+    public static String[] byteToStringDecimalArray(byte [] ValueData) {
         String[] HexStrArray = null;
         String[] DecimalArray = null;
         try{
@@ -103,14 +103,14 @@ public class HexUtil {
     }
 
     //16진수를 10진수로 변환
-    public String getHextoDec(String hex)
+    public static String getHextoDec(String hex)
     {
         long value = Long.parseLong(hex,16);
         return String.valueOf(value);
     }
 
     //byte배열을 String배열로 변환
-    public String hexbyteToStr(byte[] data) {
+    public static String hexbyteToStr(byte[] data) {
         StringBuffer sb = new StringBuffer();
         String HexaID;
         for(int x = 0; x < data.length ; x++) {
@@ -121,5 +121,9 @@ public class HexUtil {
         return sb.toString();
     }
 
+    public static int getNegativeValueConditionally(int value, int threshold){
+        if(value > threshold) return value - (65536);
+        return value;
+    }
 
 }
