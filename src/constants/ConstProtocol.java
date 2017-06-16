@@ -42,6 +42,7 @@ public class ConstProtocol {
      * Head : 메모리 주소(Byte)
      * Tail : 메모리 참조 길이(Word)
      */
+    public static final Pair<Integer> RANGE_REALTIME_WRITABLE = new Pair<>(286, 7);
     public static final Pair<Integer> RANGE_SETTING_TAILS = new Pair<>(11534, 18);
     public static final Pair<Integer> RANGE_SETTING = new Pair<>(300, 71);
     public static final Pair<Integer> RANGE_TIMER = new Pair<>(448, 97);

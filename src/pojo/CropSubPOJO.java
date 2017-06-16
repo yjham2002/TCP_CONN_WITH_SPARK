@@ -4,10 +4,15 @@ import constants.ConstProtocol;
 import models.ByteSerial;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.ObjectMapper;
+import utils.DebugUtil;
+import utils.HexUtil;
+import utils.SohaProtocolUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * @author 함의진
@@ -60,6 +65,58 @@ public class CropSubPOJO extends BasePOJO{
         }
 
         init();
+    }
+
+    @JsonIgnore
+    public byte[] getPureBytes(){
+        byte[] nameSet = this.name.getBytes();
+
+        byte[] set = new byte[]{};
+
+        for(int k = 0; k < nameSet.length; k++){
+            int temp = nameSet[k];
+            if(temp < 0) temp = nameSet[k] & 0xff;
+            set = SohaProtocolUtil.concat(set, SohaProtocolUtil.getHexLocation(temp));
+        }
+
+        for(int e = 0; e < cropDaySubPOJOs.size(); e++){
+            CropDaySubPOJO crop = cropDaySubPOJOs.get(e);
+            for(int u = 0; u < crop.getCropDayDetailPOJOs().size(); u++) {
+                CropDayDetailPOJO detail = crop.getCropDayDetailPOJOs().get(u);
+                int bitAggr1 =
+                        getBitAggregation(
+                                detail.getIllum_timer_off_unit(),
+                                detail.getIllum_timer_on_unit(),
+                                getBitRhsFromDual(detail.getIllum_ctrl()),
+                                getBitLhsFromDual(detail.getIllum_ctrl()),
+                                detail.getHumid_timer_off_unit(),
+                                detail.getHumid_timer_on_unit(),
+                                getBitRhsFromDual(detail.getHumid_ctrl()),
+                                getBitLhsFromDual(detail.getHumid_ctrl())
+                        );
+                int bitAggr2 =
+                        getBitAggregation(
+                                detail.getTemp_timer_off_unit(),
+                                detail.getTemp_timer_on_unit(),
+                                getBitRhsFromDual(detail.getTemp_ctrl()),
+                                getBitLhsFromDual(detail.getTemp_ctrl()),
+                                detail.getCo2_timer_off_unit(),
+                                detail.getCo2_timer_on_unit(),
+                                getBitRhsFromDual(detail.getCo2_ctrl()),
+                                getBitLhsFromDual(detail.getCo2_ctrl())
+                        );
+                set = SohaProtocolUtil.concat(set,
+                        SohaProtocolUtil.getHexLocation(detail.getCo2_setting()),
+                        SohaProtocolUtil.getHexLocation(detail.getTemp_setting()),
+                        SohaProtocolUtil.getHexLocation(detail.getHumid_setting()),
+                        SohaProtocolUtil.getHexLocation(detail.getIllum_setting()),
+                        getValuePairFromString(detail.getStart_time()),
+                        new byte[]{(byte)bitAggr1, (byte)bitAggr2}
+                );
+            }
+        }
+
+        return set;
     }
 
     private CropSubPOJO(){}

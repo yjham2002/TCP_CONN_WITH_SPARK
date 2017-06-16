@@ -172,12 +172,6 @@ public class SohaProtocolUtil {
         return ret;
     }
 
-    public static void main(String... args){
-
-        makeReadProtocols(ConstProtocol.RANGE_DAYAGE_01.getHead(), ConstProtocol.RANGE_DAYAGE_01.getTail(), 1, "0078".getBytes(), "01".getBytes());
-
-    }
-
     public static byte[][] makeReadProtocols(int location, int length, int id, byte[] farmCode, byte[] harvCode){
         int start = location;
         int ceil = (int)Math.ceil((double)length / (double)ConstProtocol.READ_LIMIT);
@@ -199,6 +193,41 @@ public class SohaProtocolUtil {
         System.out.println(bulk.length + " Protocol has been generated");
 
         return bulk;
+    }
+
+    public static byte[][] makeWriteProtocols(int location, int length, int id, byte[] farmCode, byte[] harvCode, byte[] data){
+        int start = location;
+        int ceil = (int)Math.ceil((double)length / (double)ConstProtocol.READ_LIMIT);
+
+        byte[][] bulk = new byte[ceil][];
+
+        for(int e = 1; e <= ceil; e++){
+            int jump = (ConstProtocol.READ_LIMIT * e) - 1;
+            if(e == ceil) jump = length - 1;
+            int newLen = (jump - (ConstProtocol.READ_LIMIT * (e - 1)) + 1);
+
+            System.out.println("newlen :: " + newLen + " / start :: " + start);
+
+            byte[] cropData = Arrays.copyOfRange(data, (start - location), (start - location + (newLen * 2)));
+
+            bulk[e - 1] = makeWriteProtocol(start, newLen, id, farmCode, harvCode, cropData);
+
+            start += newLen * 2;
+        }
+
+        System.out.println(bulk.length + " Protocol has been generated");
+
+        return bulk;
+    }
+
+    public static void main(String... args){
+        byte[] arr = new byte[]{1,2,3,4,5,6,7,8,9,10, 11, 12, 13, 14, 15, 16, 17};
+
+        for(int i = 0; i < arr.length; i++) {
+            int cursor = 0;
+            DebugUtil.printArray(Arrays.copyOfRange(arr, cursor, cursor + 3));
+            cursor += 125;
+        }
     }
 
     /**

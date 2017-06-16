@@ -274,6 +274,30 @@ public class BasePOJO implements Serializable{
         else return 0;
     }
 
+    public static int getBooleanValue(byte[] array, int offset, int index){
+        assert index < 8;
+
+        final String format = "00000000";
+
+        int absolute = offset;
+        int value = array[absolute];
+        if(value < 0) value = value & 0xff;
+        String bin = Integer.toBinaryString(value);
+        String fmt = "";
+        String retVal = "";
+        if(bin.length() < 8){
+            int leak = 8 - bin.length();
+            fmt = format.substring(0, leak);
+        }
+
+        retVal = fmt + bin;
+
+        int newIndex = retVal.length() - (index + 1);
+
+        if(retVal.charAt(newIndex) == '1') return 1;
+        else return 0;
+    }
+
     protected int getBooleanValueFrom2Byte(int offset, int bitIndex){
         assert bitIndex < 16;
 
@@ -301,7 +325,6 @@ public class BasePOJO implements Serializable{
     }
 
     protected int getBitRhsFromDual(int value){
-        System.out.println("Converting :: " + value);
         String bin = Integer.toBinaryString(value);
         if(bin.length() > 2) return 0;
         if(bin.length() < 2) return value;

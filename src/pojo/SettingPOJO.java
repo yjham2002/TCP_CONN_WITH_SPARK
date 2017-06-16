@@ -3,10 +3,12 @@ package pojo;
 import constants.ConstProtocol;
 import models.ByteSerial;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.ObjectMapper;
 import utils.HexUtil;
 import utils.Modbus;
 import utils.SohaProtocolUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -1368,6 +1370,14 @@ public class SettingPOJO extends BasePOJO {
     public String getInsertSQL(){
         if(settingTails == null || settingTails.size() < 3) return "SELECT -1";
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = objectMapper.writeValueAsString(this);
+        }catch (IOException e){
+            json = "";
+        }
+
         String sql = "insert into `sohatechfarmdb`.`tblSettingData`\n" +
                 "            (" +
                 "             `farmCode`,\n" +
@@ -1502,6 +1512,7 @@ public class SettingPOJO extends BasePOJO {
                 "             `setting_value_temp_3`,\n" +
                 "             `setting_value_humid_3`,\n" +
                 "             `setting_value_illum_3`,\n" +
+                "             `rawJson`,\n" +
                 "             `regDate`)\n" +
                 "values (" +
                 "'" +farmCode+"',\n" +
@@ -1636,6 +1647,7 @@ public class SettingPOJO extends BasePOJO {
                 "'" +settingTails.get(2).getSetting_value_temp()+"',\n" +
                 "'" +settingTails.get(2).getSetting_value_humid()+"',\n" +
                 "'" +settingTails.get(2).getSetting_value_illum()+"',\n" +
+                "'" +json+"',\n" +
                 "        NOW()) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "  `crop_data_num_and_ctrl_aggr` = '" + crop_data_num_and_ctrl_aggr+ "',\n" +
@@ -1768,6 +1780,7 @@ public class SettingPOJO extends BasePOJO {
                 "  `setting_value_temp_3` = '" + settingTails.get(2).getSetting_value_temp() + "',\n" +
                 "  `setting_value_humid_3` = '" + settingTails.get(2).getSetting_value_humid() + "',\n" +
                 "  `setting_value_illum_3` = '" + settingTails.get(2).getSetting_value_illum() + "',\n" +
+                "  `rawJson` = '" + json + "',\n" +
                 "  `regDate` = NOW();";
 
         return sql;

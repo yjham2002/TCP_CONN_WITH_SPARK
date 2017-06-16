@@ -12,10 +12,7 @@ import mysql.DBManager;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.CropDaySubPOJO;
-import pojo.CropSubPOJO;
-import pojo.SettingPOJO;
-import pojo.TimerPOJO;
+import pojo.*;
 import server.engine.ServiceProvider;
 import server.response.Response;
 import server.response.ResponseConst;
@@ -249,7 +246,32 @@ public class AppMain{
             String retVal = null;
 
             switch(mode) {
+                case ConstRest.MODE_WRITE_REALTIME:{
+                    try {
+                        System.out.println("WRITING REALTIME " + rawFarm + ":" + rawHarv);
+                        RealtimePOJO realPOJO = objectMapper.readValue(rawJson, RealtimePOJO.class);
+                        byte[] pure = realPOJO.getWritableData();
+                        protocol = SohaProtocolUtil.makeWriteProtocol(ConstProtocol.RANGE_REALTIME_WRITABLE.getHead(), ConstProtocol.RANGE_REALTIME_WRITABLE.getTail(), id, farmCode, harvCode, pure);
+                        recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+
+                        if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
+                        if(recv.isLoss()) {
+                            return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
+                        }else{
+                            protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_SETTING);
+                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                        }
+
+                        System.out.println("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));
+
+                        return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SAVE_SUCC);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
+                    }
+                }
                 case ConstRest.MODE_WRITE_TIMER: {
+
                     // TODO START POINT
                     /**
                      * 일령 리스트 쓰기
@@ -286,8 +308,43 @@ public class AppMain{
 
                     System.out.println("WRITING DAILY AGE " + rawFarm + ":" + rawHarv);
                     try{
+                        if(map.get("order") == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
+
+                        Pair<Integer> range;
+                        int dailyFlag = -1;
+
+                        switch (order){
+                            case 1: range = ConstProtocol.RANGE_DAYAGE_01; dailyFlag = ConstProtocol.FLAG_DAILY_1; break;
+                            case 2: range = ConstProtocol.RANGE_DAYAGE_02; dailyFlag = ConstProtocol.FLAG_DAILY_2; break;
+                            case 3: range = ConstProtocol.RANGE_DAYAGE_03; dailyFlag = ConstProtocol.FLAG_DAILY_3; break;
+                            case 4: range = ConstProtocol.RANGE_DAYAGE_04; dailyFlag = ConstProtocol.FLAG_DAILY_4; break;
+                            case 5: range = ConstProtocol.RANGE_DAYAGE_05; dailyFlag = ConstProtocol.FLAG_DAILY_5; break;
+                            case 6: range = ConstProtocol.RANGE_DAYAGE_06; dailyFlag = ConstProtocol.FLAG_DAILY_6; break;
+                            default: range = null; order = -1; break;
+                        }
+
+                        if(order == -1 || range == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
+
                         CropSubPOJO cropSubPOJO = objectMapper.readValue(rawJson, CropSubPOJO.class);
-                        return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SAVE_SUCC);
+
+                        int resCount = 0;
+
+                        byte[] pure = cropSubPOJO.getPureBytes();
+                        protocols = SohaProtocolUtil.makeWriteProtocols(range.getHead(), range.getTail(), id, farmCode, harvCode, pure);
+
+                        for(int c = 0; c < protocols.length; c++){
+                            protocol = protocols[c];
+                            recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                            if(recv != null) resCount++;
+                        }
+
+                        if(resCount == protocols.length){
+                            System.out.println("WRITE ::::::::::::::::: DAILY AGE SUCC");
+                            protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, dailyFlag);
+                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                            return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SAVE_SUCC);
+                        }
+                        else return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
                     }catch(Exception e){
                         e.printStackTrace();
                         return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
@@ -318,6 +375,7 @@ public class AppMain{
                             return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
                         }else{
                             protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_SETTING);
+                            System.out.println("Sending Flag :::::::::::::::: " + Arrays.toString(protocol));
                             serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
                         }
 
