@@ -341,54 +341,54 @@ public class RealtimePOJO extends BasePOJO{
          */
         this.co2_relay_on_start_md = getMDorHMWith2Bytes(0, "-");
         this.co2_relay_on_start_hm = getMDorHMWith2Bytes(2, ":");
-        this.co2_relay_on_time = getSumWith2Bytes(4);
+        this.co2_relay_on_time = getSumWith2Bytes(4, SUM_MODE_P);
         this.co2_relay_off_start_md = getMDorHMWith2Bytes(6, "-");
         this.co2_relay_off_start_hm = getMDorHMWith2Bytes(8, ":");
-        this.co2_relay_off_time = getSumWith2Bytes(10);
+        this.co2_relay_off_time = getSumWith2Bytes(10, SUM_MODE_P);
         this.heat_relay_on_start_md = getMDorHMWith2Bytes(12, "-");
         this.heat_relay_on_start_hm = getMDorHMWith2Bytes(14, ":");
-        this.heat_relay_on_time = getSumWith2Bytes(16);
+        this.heat_relay_on_time = getSumWith2Bytes(16, SUM_MODE_P);
         this.heat_relay_off_start_md = getMDorHMWith2Bytes(18, "-");
         this.heat_relay_off_start_hm = getMDorHMWith2Bytes(20, ":");
-        this.heat_relay_off_time = getSumWith2Bytes(22);
+        this.heat_relay_off_time = getSumWith2Bytes(22, SUM_MODE_P);
         this.cool_relay_on_start_md = getMDorHMWith2Bytes(24, "-");
         this.cool_relay_on_start_hm = getMDorHMWith2Bytes(26, ":");
-        this.cool_relay_on_time = getSumWith2Bytes(28);
+        this.cool_relay_on_time = getSumWith2Bytes(28, SUM_MODE_P);
         this.cool_relay_off_start_md = getMDorHMWith2Bytes(30, "-");
         this.cool_relay_off_start_hm = getMDorHMWith2Bytes(32, ":");
-        this.cool_relay_off_time = getSumWith2Bytes(34);
+        this.cool_relay_off_time = getSumWith2Bytes(34, SUM_MODE_P);
         this.humidify_relay_on_start_md = getMDorHMWith2Bytes(36, "-");
         this.humidify_relay_on_start_hm = getMDorHMWith2Bytes(38, ":");
-        this.humidify_relay_on_time = getSumWith2Bytes(40);
+        this.humidify_relay_on_time = getSumWith2Bytes(40, SUM_MODE_P);
         this.humidify_relay_off_start_md = getMDorHMWith2Bytes(42, "-");
         this.humidify_relay_off_start_hm = getMDorHMWith2Bytes(44, ":");
-        this.humidify_relay_off_time = getSumWith2Bytes(46);
+        this.humidify_relay_off_time = getSumWith2Bytes(46, SUM_MODE_P);
         this.dehumidify_relay_on_start_md = getMDorHMWith2Bytes(48, "-");
         this.dehumidify_relay_on_start_hm = getMDorHMWith2Bytes(50, ":");
-        this.dehumidify_relay_on_time = getSumWith2Bytes(52);
+        this.dehumidify_relay_on_time = getSumWith2Bytes(52, SUM_MODE_P);
         this.dehumidify_relay_off_start_md = getMDorHMWith2Bytes(54, "-");
         this.dehumidify_relay_off_start_hm = getMDorHMWith2Bytes(56, ":");
-        this.dehumidify_relay_off_time = getSumWith2Bytes(58);
+        this.dehumidify_relay_off_time = getSumWith2Bytes(58, SUM_MODE_P);
         this.illum_relay_on_start_md = getMDorHMWith2Bytes(60, "-");
         this.illum_relay_on_start_hm = getMDorHMWith2Bytes(62, ":");
-        this.illum_relay_on_time = getSumWith2Bytes(64);
+        this.illum_relay_on_time = getSumWith2Bytes(64, SUM_MODE_P);
         this.illum_relay_off_start_md = getMDorHMWith2Bytes(66, "-");
         this.illum_relay_off_start_hm = getMDorHMWith2Bytes(68, ":");
-        this.illum_relay_off_time = getSumWith2Bytes(70);
+        this.illum_relay_off_time = getSumWith2Bytes(70, SUM_MODE_P);
         this.alarm_relay_on_start_md = getMDorHMWith2Bytes(72, "-");
         this.alarm_relay_on_start_hm = getMDorHMWith2Bytes(74, ":");
-        this.alarm_relay_on_time = getSumWith2Bytes(76);
+        this.alarm_relay_on_time = getSumWith2Bytes(76, SUM_MODE_P);
         this.alarm_relay_off_start_md = getMDorHMWith2Bytes(78, "-");
         this.alarm_relay_off_start_hm = getMDorHMWith2Bytes(80, ":");
-        this.alarm_relay_off_time = getSumWith2Bytes(82);
+        this.alarm_relay_off_time = getSumWith2Bytes(82, SUM_MODE_P);
 
         /**
          * Sensor measured data
          */
-        this.co2_sr = getSumWith2Bytes(100);
-        this.temp_sr = getSumWith2Bytes(102);
-        this.humid_sr = getSumWith2Bytes(104);
-        this.illum_sr = getSumWith2Bytes(106);
+        this.co2_sr = getSumWith2Bytes(100, SUM_MODE_P);
+        this.temp_sr = getSumWith2Bytes(102, SUM_MODE_TEMP);
+        this.humid_sr = getSumWith2Bytes(104, SUM_MODE_HUMID);
+        this.illum_sr = getSumWith2Bytes(106, SUM_MODE_P);
 
         /**
          * 릴레이 출력 데이터 시작
@@ -409,7 +409,7 @@ public class RealtimePOJO extends BasePOJO{
         /**
          * 옵션 변화 데이터 시작
          */
-        this.option_changed_aggr = getSumWith2Bytes(110);
+        this.option_changed_aggr = getSumWith2Bytes(110, SUM_MODE_P);
         this.option_changed_setting = getBooleanValueFrom2Byte(110, 0);
         this.option_changed_timer = getBooleanValueFrom2Byte(110, 1);
         this.option_changed_crop1 = getBooleanValueFrom2Byte(110, 2);
@@ -433,7 +433,7 @@ public class RealtimePOJO extends BasePOJO{
         /**
          * 재배 진행 일자 데이터 시작
          */
-        this.growth_progress_aggr = getSumWith2Bytes(112);
+        this.growth_progress_aggr = getSumWith2Bytes(112, SUM_MODE_P);
         this.growth_progress_dt = getRhsFromDual(112); // ???
         this.growth_progress_total = getLhsFromDual(112); // ???
         /**
@@ -443,7 +443,7 @@ public class RealtimePOJO extends BasePOJO{
         /**
          * 실행 상태 데이터 시작
          */
-        this.run_status_aggr = getSumWith2Bytes(114);
+        this.run_status_aggr = getSumWith2Bytes(114, SUM_MODE_P);
         this.run_status_current = getBooleanValueFrom2Byte(114, 0);
         this.run_status_mode = toDecimalFromBinaryValue(114, 1, 2);
         this.run_status_prevdata = getBooleanValueFromByte(114, 5);
@@ -465,7 +465,7 @@ public class RealtimePOJO extends BasePOJO{
             errorStatList.add(errorStatusPOJO);
         }
 
-        this.errdata_aggr = getSumWith2Bytes(212);
+        this.errdata_aggr = getSumWith2Bytes(212, SUM_MODE_P);
         this.errdata_internal_co2 = getBooleanValueFrom2Byte(212, 0);
         this.errdata_internal_temp = getBooleanValueFrom2Byte(212, 1);
         this.errdata_internal_humid = getBooleanValueFrom2Byte(212, 2);
@@ -489,29 +489,29 @@ public class RealtimePOJO extends BasePOJO{
         /**
          * 기타 멤버 시작
          */
-        this.sr_set1_co2 = getSumWith2Bytes(214);
-        this.sr_set1_temp = getSumWith2Bytes(216);
-        this.sr_set1_humidity = getSumWith2Bytes(218);
-        this.sr_set1_ilum = getSumWith2Bytes(220);
-        this.sr_set2_co2 = getSumWith2Bytes(222);
-        this.sr_set2_temp = getSumWith2Bytes(224);
-        this.sr_set2_humidity = getSumWith2Bytes(226);
-        this.sr_set2_ilum = getSumWith2Bytes(228);
-        this.sr_set3_co2 = getSumWith2Bytes(230);
-        this.sr_set3_temp = getSumWith2Bytes(232);
-        this.sr_set3_humidity = getSumWith2Bytes(234);
-        this.sr_set3_ilum = getSumWith2Bytes(236);
-        this.sr_set4_co2 = getSumWith2Bytes(238);
-        this.sr_set4_temp = getSumWith2Bytes(240);
-        this.sr_set4_humidity = getSumWith2Bytes(242);
-        this.sr_set4_ilum = getSumWith2Bytes(244);
+        this.sr_set1_co2 = getSumWith2Bytes(214, SUM_MODE_P);
+        this.sr_set1_temp = getSumWith2Bytes(216, SUM_MODE_TEMP);
+        this.sr_set1_humidity = getSumWith2Bytes(218, SUM_MODE_HUMID);
+        this.sr_set1_ilum = getSumWith2Bytes(220, SUM_MODE_P);
+        this.sr_set2_co2 = getSumWith2Bytes(222, SUM_MODE_P);
+        this.sr_set2_temp = getSumWith2Bytes(224, SUM_MODE_TEMP);
+        this.sr_set2_humidity = getSumWith2Bytes(226, SUM_MODE_HUMID);
+        this.sr_set2_ilum = getSumWith2Bytes(228, SUM_MODE_P);
+        this.sr_set3_co2 = getSumWith2Bytes(230, SUM_MODE_P);
+        this.sr_set3_temp = getSumWith2Bytes(232, SUM_MODE_TEMP);
+        this.sr_set3_humidity = getSumWith2Bytes(234, SUM_MODE_HUMID);
+        this.sr_set3_ilum = getSumWith2Bytes(236, SUM_MODE_P);
+        this.sr_set4_co2 = getSumWith2Bytes(238, SUM_MODE_P);
+        this.sr_set4_temp = getSumWith2Bytes(240, SUM_MODE_TEMP);
+        this.sr_set4_humidity = getSumWith2Bytes(242, SUM_MODE_TEMP);
+        this.sr_set4_ilum = getSumWith2Bytes(244, SUM_MODE_P);
 
-        this.sr_val_co2 = getSumWith2Bytes(246); // 주소 ㅡㅡ
-        this.sr_val_temp = getSumWith2Bytes(248);
-        this.sr_val_humidity = getSumWith2Bytes(250);
-        this.sr_val_ilum = getSumWith2Bytes(252);
+        this.sr_val_co2 = getSumWith2Bytes(246, SUM_MODE_P);
+        this.sr_val_temp = getSumWith2Bytes(248, SUM_MODE_TEMP);
+        this.sr_val_humidity = getSumWith2Bytes(250, SUM_MODE_HUMID);
+        this.sr_val_ilum = getSumWith2Bytes(252, SUM_MODE_P);
 
-        this.controlstat_aggr = getSumWith2Bytes(254);
+        this.controlstat_aggr = getSumWith2Bytes(254, SUM_MODE_P);
         this.controlstat_co2_type = toDecimalFromBinaryValue(254, 0, 1);
         this.controlstat_co2_ontype = getBooleanValueFrom2Byte(254, 2);
         this.controlstat_co2_offtype = getBooleanValueFrom2Byte(254, 3);
@@ -525,12 +525,12 @@ public class RealtimePOJO extends BasePOJO{
         this.controlstat_ilum_ontype = getBooleanValueFrom2Byte(254, 14);
         this.controlstat_ilum_offtype = getBooleanValueFrom2Byte(254, 15);
 
-        this.co2_value = getSumWith2Bytes(260);
-        this.temp_value = getSumWith2Bytes(262);
-        this.humidity_value = getSumWith2Bytes(264);
-        this.ilum_value = getSumWith2Bytes(266);
+        this.co2_value = getSumWith2Bytes(260, SUM_MODE_P);
+        this.temp_value = getSumWith2Bytes(262, SUM_MODE_TEMP);
+        this.humidity_value = getSumWith2Bytes(264, SUM_MODE_HUMID);
+        this.ilum_value = getSumWith2Bytes(266, SUM_MODE_P);
 
-        this.vt515_version = getSumWith2Bytes(268);
+        this.vt515_version = getSumWith2Bytes(268, SUM_MODE_P);
 
         this.lcdorder_run = getBooleanValueFromByte(270, 0);
         this.lcdorder_mode = toDecimalFromBinaryValue(270, 1, 2);
@@ -553,11 +553,11 @@ public class RealtimePOJO extends BasePOJO{
         this.changetype_pc_dayage5 = getBooleanValueFrom2Byte(272, 14);
         this.changetype_pc_dayage6 = getBooleanValueFrom2Byte(272, 15);
 
-        this.networkerr_510to515 = getSumWith2Bytes(274);
-        this.dayage_low = getSumWith2Bytes(276);
-        this.dayage_high = getSumWith2Bytes(278);
+        this.networkerr_510to515 = getSumWith2Bytes(274, SUM_MODE_P);
+        this.dayage_low = getSumWith2Bytes(276, SUM_MODE_P);
+        this.dayage_high = getSumWith2Bytes(278, SUM_MODE_P);
 
-        this.real_sec = getSumWith2Bytes(280);
+        this.real_sec = getSumWith2Bytes(280, SUM_MODE_P);
         this.real_hm = getMDorHMWith2Bytes(282, ":");
         this.real_md = getMDorHMWith2Bytes(284, "-");
 
@@ -567,11 +567,11 @@ public class RealtimePOJO extends BasePOJO{
         this.dymamic_output_analog = getBooleanValueFrom2Byte(286, 14);
         this.dymamic_output_valid = getBooleanValueFrom2Byte(286, 15);
 
-        this.start_year = getSumWith2Bytes(288);
+        this.start_year = getSumWith2Bytes(288, SUM_MODE_P);
         this.start_md = getMDorHMWith2Bytes(290, "-");
         this.start_hm = getMDorHMWith2Bytes(292, ":");
 
-        this.mcnctrl_mv510_aggr = getSumWith2Bytes(294);
+        this.mcnctrl_mv510_aggr = getSumWith2Bytes(294, SUM_MODE_P);
         this.mcnctrl_mv510_order_co2 = getBooleanValueFrom2Byte(294, 0);
         this.mcnctrl_mv510_order_temp = getBooleanValueFrom2Byte(294, 1);
         this.mcnctrl_mv510_order_humidity = getBooleanValueFrom2Byte(294, 2);
@@ -588,7 +588,7 @@ public class RealtimePOJO extends BasePOJO{
         this.mcnctrl_mv510_stat_alarm = getBooleanValueFrom2Byte(294, 14);
         this.mcnctrl_mv510_stat_reserve = getBooleanValueFrom2Byte(294, 15);
 
-        this.mcnctrl_web_aggr = getSumWith2Bytes(296);
+        this.mcnctrl_web_aggr = getSumWith2Bytes(296, SUM_MODE_P);
         this.mcnctrl_web_order_co2 = getBooleanValueFrom2Byte(296, 0);
         this.mcnctrl_web_order_temp = getBooleanValueFrom2Byte(296, 1);
         this.mcnctrl_web_order_humidity = getBooleanValueFrom2Byte(296, 2);
@@ -609,11 +609,11 @@ public class RealtimePOJO extends BasePOJO{
     @JsonIgnore
     public byte[] getWritableData(){
         byte[] check = SohaProtocolUtil.concat(
-                new byte[]{(byte)getBitAggregation(0, 0, 0, 0, this.dymamic_output_dec, this.dymamic_output_inc, getBitRhsFromDual(this.dymamic_output_mode), getBitLhsFromDual(this.dymamic_output_mode))},
-                new byte[]{(byte)getBitAggregation(this.dymamic_output_valid, this.dymamic_output_analog, 0, 0, 0, 0, 0, 0)},
-                SohaProtocolUtil.getHexLocation(this.start_year), getValuePairFromString(this.start_md), getValuePairFromString(this.start_hm),
-                new byte[]{(byte)getBitAggregation(this.mcnctrl_mv510_order_main2, this.mcnctrl_mv510_order_main1, 0, this.mcnctrl_mv510_pause, this.mcnctrl_mv510_order_ilum, this.mcnctrl_mv510_order_humidity, this.mcnctrl_mv510_order_temp, this.mcnctrl_mv510_order_co2)},
-                new byte[]{(byte)getBitAggregation(this.mcnctrl_mv510_stat_reserve, this.mcnctrl_mv510_stat_alarm, this.mcnctrl_mv510_stat_ilum, this.mcnctrl_mv510_stat_dehumidifier, this.mcnctrl_mv510_stat_humidifier, this.mcnctrl_mv510_stat_freezer, this.mcnctrl_mv510_stat_heater, this.mcnctrl_mv510_stat_fan)},
+//                new byte[]{(byte)getBitAggregation(0, 0, 0, 0, this.dymamic_output_dec, this.dymamic_output_inc, getBitRhsFromDual(this.dymamic_output_mode), getBitLhsFromDual(this.dymamic_output_mode))},
+//                new byte[]{(byte)getBitAggregation(this.dymamic_output_valid, this.dymamic_output_analog, 0, 0, 0, 0, 0, 0)},
+//                SohaProtocolUtil.getHexLocation(this.start_year), getValuePairFromString(this.start_md), getValuePairFromString(this.start_hm),
+//                new byte[]{(byte)getBitAggregation(this.mcnctrl_mv510_order_main2, this.mcnctrl_mv510_order_main1, 0, this.mcnctrl_mv510_pause, this.mcnctrl_mv510_order_ilum, this.mcnctrl_mv510_order_humidity, this.mcnctrl_mv510_order_temp, this.mcnctrl_mv510_order_co2)},
+//                new byte[]{(byte)getBitAggregation(this.mcnctrl_mv510_stat_reserve, this.mcnctrl_mv510_stat_alarm, this.mcnctrl_mv510_stat_ilum, this.mcnctrl_mv510_stat_dehumidifier, this.mcnctrl_mv510_stat_humidifier, this.mcnctrl_mv510_stat_freezer, this.mcnctrl_mv510_stat_heater, this.mcnctrl_mv510_stat_fan)},
 
                 new byte[]{(byte)getBitAggregation(this.mcnctrl_web_order_main2, this.mcnctrl_web_order_main1, 0, this.mcnctrl_web_pause, this.mcnctrl_web_order_ilum, this.mcnctrl_web_order_humidity, this.mcnctrl_web_order_temp, this.getMcnctrl_web_order_co2())},
                 new byte[]{(byte)getBitAggregation(this.mcnctrl_web_stat_reserve, this.mcnctrl_web_stat_alarm, this.mcnctrl_web_stat_ilum, this.mcnctrl_web_stat_dehumidifier, this.mcnctrl_web_stat_humidifier, this.mcnctrl_web_stat_freezer, this.mcnctrl_web_stat_heater, this.mcnctrl_web_stat_fan)},

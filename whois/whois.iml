@@ -7,16 +7,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="com.sparkjava:spark-core:2.6.0" level="project" />
-    <orderEntry type="library" name="org.slf4j:slf4j-simple:1.6.2" level="project" />
-    <orderEntry type="library" name="org.codehaus.jackson:jackson-mapper-asl:1.9.9" level="project" />
-    <orderEntry type="library" name="org.apache.commons:commons-lang3:3.3.2" level="project" />
-    <orderEntry type="library" name="redis.clients:jedis:2.9.0" level="project" />
-    <orderEntry type="library" name="mysql:mysql-connector-java:5.1.41" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/whois/activation.jar!/" />
+          <root url="jar://$MODULE_DIR$/activation.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -25,7 +19,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/whois/commons-codec.jar!/" />
+          <root url="jar://$MODULE_DIR$/commons-codec.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -34,7 +28,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/whois/commons-fileupload.jar!/" />
+          <root url="jar://$MODULE_DIR$/commons-fileupload.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -43,7 +37,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/whois/commons-io.jar!/" />
+          <root url="jar://$MODULE_DIR$/commons-io.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -52,7 +46,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/whois/commons-logging.jar!/" />
+          <root url="jar://$MODULE_DIR$/commons-logging.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -61,7 +55,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/whois/commons-net.jar!/" />
+          <root url="jar://$MODULE_DIR$/commons-net.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -70,7 +64,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/whois/helma.jar!/" />
+          <root url="jar://$MODULE_DIR$/helma.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -79,7 +73,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/whois/jetty.jar!/" />
+          <root url="jar://$MODULE_DIR$/jetty.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -88,7 +82,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/whois/mail.jar!/" />
+          <root url="jar://$MODULE_DIR$/mail.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -97,7 +91,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/whois/rhino.jar!/" />
+          <root url="jar://$MODULE_DIR$/rhino.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -106,7 +100,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/whois/servlet.jar!/" />
+          <root url="jar://$MODULE_DIR$/servlet.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -115,7 +109,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/whois/tagsoup.jar!/" />
+          <root url="jar://$MODULE_DIR$/tagsoup.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -124,21 +118,10 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/whois/xmlrpc.jar!/" />
+          <root url="jar://$MODULE_DIR$/xmlrpc.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/whois" />
-          <root url="file://$MODULE_DIR$/whois" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/whois" recursive="false" />
       </library>
     </orderEntry>
   </component>

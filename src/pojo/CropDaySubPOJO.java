@@ -33,10 +33,10 @@ public class CropDaySubPOJO extends BasePOJO{
             int rev = DETAIL_LENGTH * (i - 1);
             cropDayDetailPOJOs.add(new CropDayDetailPOJO(
                     i,
-                    getSumWith2BytesABS(offset + rev),
-                    getSumWith2BytesABS(offset + 2 + rev),
-                    getSumWith2BytesABS(offset + 4 + rev),
-                    getSumWith2BytesABS(offset + 6 + rev),
+                    getSumWith2BytesABS(offset + rev, SUM_MODE_P),
+                    getSumWith2BytesABS(offset + 2 + rev, SUM_MODE_TEMP),
+                    getSumWith2BytesABS(offset + 4 + rev, SUM_MODE_HUMID),
+                    getSumWith2BytesABS(offset + 6 + rev, SUM_MODE_P),
                     getMDorHMWith2BytesABS(offset + 8 + rev, ":"),
                     toDecimalFromBinaryValueABS(offset + 10 + rev, 0, 2),
                     getBooleanValueFrom2ByteABS(offset + 10 + rev, 2),

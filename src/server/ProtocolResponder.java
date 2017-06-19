@@ -104,7 +104,7 @@ public class ProtocolResponder{
             if (!generated) {
                 generated = true;
                 uniqueKey = SohaProtocolUtil.getUniqueKeyByInit(buffer); // 유니크키를 농장코드로 설정하여 추출
-                if (uniqueKey.equals(SohaProtocolUtil.getMeaninglessUniqueKey()))
+                if (uniqueKey.equals(SohaProtocolUtil.getMeaninglessUniqueKey()) || buffer.length != LENGTH_INIT)
                     uniqueKey = SohaProtocolUtil.getUniqueKeyByFarmCode(SohaProtocolUtil.getFarmCodeByProtocol(buffer));
             }
 
@@ -153,7 +153,13 @@ public class ProtocolResponder{
 
                     log.info("JEDIS REALTIME DATA PUT : " + succ);
 
-                    log.info("Farm Code :: " + Arrays.toString(SohaProtocolUtil.getFarmCodeByProtocol(buffer)) + " / HarvCode :: " + Arrays.toString(SohaProtocolUtil.getHarvCodeByProtocol(buffer)));
+                    byte[] farmCodeTemp = SohaProtocolUtil.getFarmCodeByProtocol(buffer);
+                    byte[] harvCodeTemp = SohaProtocolUtil.getHarvCodeByProtocol(buffer);
+
+                    log.info("Farm Code :: " + Arrays.toString(farmCodeTemp) + " / HarvCode :: " + Arrays.toString(harvCodeTemp));
+
+                    synchronizeStatus(realtimePOJO, farmCodeTemp, harvCodeTemp, HexUtil.getNumericValue(harvCodeTemp));
+
                 }
             }
 
@@ -166,6 +172,47 @@ public class ProtocolResponder{
             // DO NOTHING
         }
         return true;
+    }
+
+    public void synchronizeStatus(RealtimePOJO realtimePOJO, byte[] farmC, byte[] harvC, int idC){
+        try {
+            if (realtimePOJO.getOption_changed_setting_a() == ConstProtocol.TRUE) {
+                System.out.println("INFO :: Setting Change Detected");
+            }
+            if (realtimePOJO.getOption_changed_timer_a() == ConstProtocol.TRUE) {
+                System.out.println("INFO :: Timer Change Detected");
+            }
+            if (realtimePOJO.getOption_changed_crop1_a() == ConstProtocol.TRUE) {
+                System.out.println("INFO :: Crop[1] Change Detected");
+            }
+            if (realtimePOJO.getOption_changed_crop2_a() == ConstProtocol.TRUE) {
+                System.out.println("INFO :: Crop[2] Change Detected");
+            }
+            if (realtimePOJO.getOption_changed_crop3_a() == ConstProtocol.TRUE) {
+                System.out.println("INFO :: Crop[3] Change Detected");
+            }
+            if (realtimePOJO.getOption_changed_crop4_a() == ConstProtocol.TRUE) {
+                System.out.println("INFO :: Crop[4] Change Detected");
+            }
+            if (realtimePOJO.getOption_changed_crop5_a() == ConstProtocol.TRUE) {
+                System.out.println("INFO :: Crop[5] Change Detected");
+            }
+            if (realtimePOJO.getOption_changed_crop6_a() == ConstProtocol.TRUE) {
+                System.out.println("INFO :: Crop[6] Change Detected");
+            }
+
+            byte[] initPrtc = SohaProtocolUtil.makeFlagInitProtocol(idC, farmC, harvC);
+            ByteSerial ellaborated = new ByteSerial(initPrtc, ByteSerial.TYPE_FORCE);
+
+            //send(ellaborated);
+
+            //System.out.println("INFO :: Initiating Flag Bits");
+
+        }catch(Exception e){
+            System.out.println("=============================================================");
+            System.out.println("WARN :: An error occurred while Initiating Flag Bits");
+            System.out.println("=============================================================");
+        }
     }
 
     /**

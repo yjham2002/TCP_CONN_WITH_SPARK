@@ -182,10 +182,10 @@ public class SettingPOJO extends BasePOJO {
         for(int cursor = offset; cursor <= offset + 24; cursor += 12){
             SettingTailPOJO tail = new SettingTailPOJO(
                     order++,
-                    getSumWith2BytesABS(cursor),
-                    getSumWith2BytesABS(cursor + 2),
-                    getSumWith2BytesABS(cursor + 4),
-                    getSumWith2BytesABS(cursor + 6),
+                    getSumWith2BytesABS(cursor, SUM_MODE_P),
+                    getSumWith2BytesABS(cursor + 2, SUM_MODE_TEMP),
+                    getSumWith2BytesABS(cursor + 4, SUM_MODE_HUMID),
+                    getSumWith2BytesABS(cursor + 6, SUM_MODE_P),
                     getMDorHMWith2BytesABS(cursor + 8, ":"),
                     getMDorHMWith2BytesABS(cursor + 10, ":")
             );
@@ -343,35 +343,35 @@ public class SettingPOJO extends BasePOJO {
     }
 
     public void init(int offset){
-        this.machine_no = getSumWith2BytesABS(offset);
-        this.crop_data_num_and_ctrl_aggr = getSumWith2BytesABS(offset + 2);
-        this.sensor_quantity_and_selection_aggr = getSumWith2BytesABS(offset + 4);
+        this.machine_no = getSumWith2BytesABS(offset, SUM_MODE_P);
+        this.crop_data_num_and_ctrl_aggr = getSumWith2BytesABS(offset + 2, SUM_MODE_P);
+        this.sensor_quantity_and_selection_aggr = getSumWith2BytesABS(offset + 4, SUM_MODE_P);
         this.sensor_quantity = getSingleByteABS(offset + 4);
         this.sensor_selected_1 = getBooleanValueFromByteABS(offset + 5, 0);
         this.sensor_selected_2 = getBooleanValueFromByteABS(offset + 5, 1);
         this.sensor_selected_3 = getBooleanValueFromByteABS(offset + 5, 2);
         this.sensor_selected_4 = getBooleanValueFromByteABS(offset + 5, 3);
-        this.singular_ctrl_setting_co2 = getSumWith2BytesABS(offset + 6);
-        this.singular_ctrl_setting_temp = getSumWith2BytesABS(offset + 8);
-        this.singular_ctrl_setting_humid = getSumWith2BytesABS(offset + 10);
-        this.singular_ctrl_setting_illum = getSumWith2BytesABS(offset + 12);
-        this.relay_output_setting_co2 = getLhsFromDualABS(offset + 14);
-        this.relay_output_setting_heat = getRhsFromDualABS(offset + 14);
-        this.relay_output_setting_cool = getLhsFromDualABS(offset + 16);
-        this.relay_output_setting_humidify = getRhsFromDualABS(offset + 16);
-        this.relay_output_setting_dehumidify = getLhsFromDualABS(offset + 18);
-        this.relay_output_setting_illum = getRhsFromDualABS(offset + 18);
-        this.relay_output_setting_alarm = getLhsFromDualABS(offset + 20);
-        this.relay_output_setting_reserve = getRhsFromDualABS(offset + 20);
-        this.dry_condition_setting_aggr = getSumWith2BytesABS(offset + 22);
+        this.singular_ctrl_setting_co2 = getSumWith2BytesABS(offset + 6, SUM_MODE_P);
+        this.singular_ctrl_setting_temp = getSumWith2BytesABS(offset + 8, SUM_MODE_TEMP);
+        this.singular_ctrl_setting_humid = getSumWith2BytesABS(offset + 10, SUM_MODE_HUMID);
+        this.singular_ctrl_setting_illum = getSumWith2BytesABS(offset + 12, SUM_MODE_P);
+        this.relay_output_setting_co2 = getRhsFromDualABS(offset + 14);
+        this.relay_output_setting_heat = getLhsFromDualABS(offset + 14);
+        this.relay_output_setting_cool = getRhsFromDualABS(offset + 16);
+        this.relay_output_setting_humidify = getLhsFromDualABS(offset + 16);
+        this.relay_output_setting_dehumidify = getRhsFromDualABS(offset + 18);
+        this.relay_output_setting_illum = getLhsFromDualABS(offset + 18);
+        this.relay_output_setting_alarm = getRhsFromDualABS(offset + 20);
+        this.relay_output_setting_reserve = getLhsFromDualABS(offset + 20);
+        this.dry_condition_setting_aggr = getSumWith2BytesABS(offset + 22, SUM_MODE_P);
         this.dry_condition_setting_ctrl = getLhsFromDualABS(offset + 22);
         this.dry_condition_setting_humidity = getRhsFromDualABS(offset + 22);
-        this.alert_alarm_time_select_aggr = getSumWith2BytesABS(offset + 24);
+        this.alert_alarm_time_select_aggr = getSumWith2BytesABS(offset + 24, SUM_MODE_P);
         this.alert_alarm_time_select_auto = getBooleanValueFromByteABS(offset + 24, 0);
         this.alert_alarm_time_select_timer = getBooleanValueFromByteABS(offset + 24, 1);
         this.alert_alarm_time_select_lamp_unit = toDecimalFromBinaryValueABS(offset + 24, 2, 2);
         this.alert_alarm_time_select_timeset = getBooleanValueFromByteABS(offset + 24, 4);
-        this.cthi_ctrl_stat_aggr = getSumWith2BytesABS(offset + 26);
+        this.cthi_ctrl_stat_aggr = getSumWith2BytesABS(offset + 26, SUM_MODE_P);
         this.cthi_ctrl_stat_co2_ctrl = toDecimalFromBinaryValueABS(offset + 26, 0, 2);
         this.cthi_ctrl_stat_co2_ontype = getBooleanValueFrom2ByteABS(offset + 26, 2);
         this.cthi_ctrl_stat_co2_offtype = getBooleanValueFrom2ByteABS(offset + 26, 3);
@@ -384,67 +384,67 @@ public class SettingPOJO extends BasePOJO {
         this.cthi_ctrl_stat_illum_ctrl = toDecimalFromBinaryValueABS(offset + 26, 12, 2);
         this.cthi_ctrl_stat_illum_ontype = getBooleanValueFrom2ByteABS(offset + 26, 14);
         this.cthi_ctrl_stat_illum_offtype = getBooleanValueFrom2ByteABS(offset + 26, 15);
-        this.calm_threshold_co2_low = getSumWith2BytesABS(offset + 28);
-        this.calm_threshold_co2_high = getSumWith2BytesABS(offset + 30);
-        this.calm_threshold_temp_low = getSumWith2BytesABS(offset + 32);
-        this.calm_threshold_temp_high = getSumWith2BytesABS(offset + 34);
-        this.calm_threshold_humid_low = getSumWith2BytesABS(offset + 36);
-        this.calm_threshold_humid_high = getSumWith2BytesABS(offset + 38);
-        this.calm_threshold_illum_low = getSumWith2BytesABS(offset + 40);
-        this.calm_threshold_illum_high = getSumWith2BytesABS(offset + 42);
-        this.setting_range_co2_min = getSumWith2BytesABS(offset + 44);
-        this.setting_range_co2_max = getSumWith2BytesABS(offset + 46);
-        this.setting_range_temp_min = getSumWith2BytesABS(offset + 48);
-        this.setting_range_temp_max = getSumWith2BytesABS(offset + 50);
-        this.setting_range_humid_min = getSumWith2BytesABS(offset + 52);
-        this.setting_range_humid_max = getSumWith2BytesABS(offset + 54);
-        this.setting_range_illum_min = getSumWith2BytesABS(offset + 56);
-        this.setting_range_illum_max = getSumWith2BytesABS(offset + 58);
-        this.sr_revision_co2_01 = getSumWith2BytesABS(offset + 60);
-        this.sr_revision_temp_01 = getSumWith2BytesABS(offset + 62);
-        this.sr_revision_humid_01 = getSumWith2BytesABS(offset + 64);
-        this.sr_revision_illum_01 = getSumWith2BytesABS(offset + 66);
-        this.sr_revision_co2_02 = getSumWith2BytesABS(offset + 68);
-        this.sr_revision_temp_02 = getSumWith2BytesABS(offset + 70);
-        this.sr_revision_humid_02 = getSumWith2BytesABS(offset + 72);
-        this.sr_revision_illum_02 = getSumWith2BytesABS(offset + 74);
-        this.sr_revision_co2_03 = getSumWith2BytesABS(offset + 76);
-        this.sr_revision_temp_03 = getSumWith2BytesABS(offset + 78);
-        this.sr_revision_humid_03 = getSumWith2BytesABS(offset + 80);
-        this.sr_revision_illum_03 = getSumWith2BytesABS(offset + 82);
-        this.sr_revision_co2_04 = getSumWith2BytesABS(offset + 84);
-        this.sr_revision_temp_04 = getSumWith2BytesABS(offset + 86);
-        this.sr_revision_humid_04 = getSumWith2BytesABS(offset + 88);
-        this.sr_revision_illum_04 = getSumWith2BytesABS(offset + 90);
-        this.setting_onoff_range_co2 = getSumWith2BytesABS(offset + 92);
-        this.setting_onoff_range_co2_revision = getSumWith2BytesABS(offset + 94);
-        this.setting_onoff_range_temp = getSumWith2BytesABS(offset + 96);
-        this.setting_onoff_range_temp_revision = getSumWith2BytesABS(offset + 98);
-        this.setting_onoff_range_humid = getSumWith2BytesABS(offset + 100);
-        this.setting_onoff_range_humid_revision = getSumWith2BytesABS(offset + 102);
-        this.setting_onoff_range_illum = getSumWith2BytesABS(offset + 104);
-        this.setting_onoff_range_illum_revision = getSumWith2BytesABS(offset + 106);
-        this.reserve_setting_year = getSumWith2BytesABS(offset + 108);
+        this.calm_threshold_co2_low = getSumWith2BytesABS(offset + 28, SUM_MODE_REV);
+        this.calm_threshold_co2_high = getSumWith2BytesABS(offset + 30, SUM_MODE_REV);
+        this.calm_threshold_temp_low = getSumWith2BytesABS(offset + 32, SUM_MODE_TEMP);
+        this.calm_threshold_temp_high = getSumWith2BytesABS(offset + 34, SUM_MODE_TEMP);
+        this.calm_threshold_humid_low = getSumWith2BytesABS(offset + 36, SUM_MODE_HUMID);
+        this.calm_threshold_humid_high = getSumWith2BytesABS(offset + 38, SUM_MODE_HUMID);
+        this.calm_threshold_illum_low = getSumWith2BytesABS(offset + 40, SUM_MODE_REV);
+        this.calm_threshold_illum_high = getSumWith2BytesABS(offset + 42, SUM_MODE_REV);
+        this.setting_range_co2_min = getSumWith2BytesABS(offset + 44, SUM_MODE_P);
+        this.setting_range_co2_max = getSumWith2BytesABS(offset + 46, SUM_MODE_P);
+        this.setting_range_temp_min = getSumWith2BytesABS(offset + 48, SUM_MODE_TEMP);
+        this.setting_range_temp_max = getSumWith2BytesABS(offset + 50, SUM_MODE_TEMP);
+        this.setting_range_humid_min = getSumWith2BytesABS(offset + 52, SUM_MODE_HUMID);
+        this.setting_range_humid_max = getSumWith2BytesABS(offset + 54, SUM_MODE_HUMID);
+        this.setting_range_illum_min = getSumWith2BytesABS(offset + 56, SUM_MODE_P);
+        this.setting_range_illum_max = getSumWith2BytesABS(offset + 58, SUM_MODE_P);
+        this.sr_revision_co2_01 = getSumWith2BytesABS(offset + 60, SUM_MODE_REV);
+        this.sr_revision_temp_01 = getSumWith2BytesABS(offset + 62, SUM_MODE_TEMP);
+        this.sr_revision_humid_01 = getSumWith2BytesABS(offset + 64, SUM_MODE_HUMID);
+        this.sr_revision_illum_01 = getSumWith2BytesABS(offset + 66, SUM_MODE_REV);
+        this.sr_revision_co2_02 = getSumWith2BytesABS(offset + 68, SUM_MODE_REV);
+        this.sr_revision_temp_02 = getSumWith2BytesABS(offset + 70, SUM_MODE_TEMP);
+        this.sr_revision_humid_02 = getSumWith2BytesABS(offset + 72, SUM_MODE_HUMID);
+        this.sr_revision_illum_02 = getSumWith2BytesABS(offset + 74, SUM_MODE_REV);
+        this.sr_revision_co2_03 = getSumWith2BytesABS(offset + 76, SUM_MODE_REV);
+        this.sr_revision_temp_03 = getSumWith2BytesABS(offset + 78, SUM_MODE_TEMP);
+        this.sr_revision_humid_03 = getSumWith2BytesABS(offset + 80, SUM_MODE_HUMID);
+        this.sr_revision_illum_03 = getSumWith2BytesABS(offset + 82, SUM_MODE_REV);
+        this.sr_revision_co2_04 = getSumWith2BytesABS(offset + 84, SUM_MODE_REV);
+        this.sr_revision_temp_04 = getSumWith2BytesABS(offset + 86, SUM_MODE_TEMP);
+        this.sr_revision_humid_04 = getSumWith2BytesABS(offset + 88, SUM_MODE_HUMID);
+        this.sr_revision_illum_04 = getSumWith2BytesABS(offset + 90, SUM_MODE_REV);
+        this.setting_onoff_range_co2 = getSumWith2BytesABS(offset + 92, SUM_MODE_P);
+        this.setting_onoff_range_co2_revision = getSumWith2BytesABS(offset + 94, SUM_MODE_P);
+        this.setting_onoff_range_temp = getSumWith2BytesABS(offset + 96, SUM_MODE_TEMP);
+        this.setting_onoff_range_temp_revision = getSumWith2BytesABS(offset + 98, SUM_MODE_TEMP);
+        this.setting_onoff_range_humid = getSumWith2BytesABS(offset + 100, SUM_MODE_HUMID);
+        this.setting_onoff_range_humid_revision = getSumWith2BytesABS(offset + 102, SUM_MODE_HUMID);
+        this.setting_onoff_range_illum = getSumWith2BytesABS(offset + 104, SUM_MODE_P);
+        this.setting_onoff_range_illum_revision = getSumWith2BytesABS(offset + 106, SUM_MODE_P);
+        this.reserve_setting_year = getSumWith2BytesABS(offset + 108, SUM_MODE_P);
         this.reserve_setting_md = getMDorHMWith2BytesABS(offset + 110, "-");
         this.reserve_setting_hm = getMDorHMWith2BytesABS(offset + 112, ":");
-        this.reserve_setting_cropno = getSumWith2BytesABS(offset + 114);
-        this.dynamic_output_type = getSumWith2BytesABS(offset + 116);
-        this.dynamic_output_value = getSumWith2BytesABS(offset + 118);
+        this.reserve_setting_cropno = getSumWith2BytesABS(offset + 114, SUM_MODE_P);
+        this.dynamic_output_type = getSumWith2BytesABS(offset + 116, SUM_MODE_P);
+        this.dynamic_output_value = getSumWith2BytesABS(offset + 118, SUM_MODE_P);
 
-        this.backup_year = getSumWith2BytesABS(offset + 120);
+        this.backup_year = getSumWith2BytesABS(offset + 120, SUM_MODE_P);
         this.backup_md = getMDorHMWith2BytesABS(offset + 122, "-");
         this.backup_hm = getMDorHMWith2BytesABS(offset + 124, ":");
 
-        this.backup_read_year = getSumWith2BytesABS(offset + 126);
+        this.backup_read_year = getSumWith2BytesABS(offset + 126, SUM_MODE_P);
         this.backup_read_md = getMDorHMWith2BytesABS(offset + 128, "-");
         this.backup_read_hm = getMDorHMWith2BytesABS(offset + 130, ":");
 
-        this.growth_start_year = getSumWith2BytesABS(offset + 132);
+        this.growth_start_year = getSumWith2BytesABS(offset + 132, SUM_MODE_P);
         this.growth_start_md = getMDorHMWith2BytesABS(offset + 134, "-");
         this.growth_start_hm = getMDorHMWith2BytesABS(offset + 136, ":");
-        this.change_date_time = getSumWith2BytesABS(offset + 138);
+        this.change_date_time = getSumWith2BytesABS(offset + 138, SUM_MODE_P);
 
-        this.alert_alarm_aggr = getSumWith2BytesABS(offset + 140);
+        this.alert_alarm_aggr = getSumWith2BytesABS(offset + 140, SUM_MODE_P);
         this.alert_alarm_internal_co2 = getBooleanValueFrom2ByteABS(offset + 140, 0);
         this.alert_alarm_internal_temp = getBooleanValueFrom2ByteABS(offset + 140, 1);
         this.alert_alarm_internal_humidity = getBooleanValueFrom2ByteABS(offset + 140, 2);

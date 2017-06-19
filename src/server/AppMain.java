@@ -137,11 +137,12 @@ public class AppMain{
 
                     settingPOJO.initTails(recv, ConstProtocol.RANGE_READ_START);
 
-                    settingPOJO.setByteSerial(null);
-
-                    retVal = objectMapper.writeValueAsString(settingPOJO);
-
-                    DBManager.getInstance().execute(settingPOJO.getInsertSQL());
+                    try {
+                        DBManager.getInstance().execute(settingPOJO.getInsertSQL());
+                        retVal = Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
+                    }catch (IOException e){
+                        retVal = Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_FAILURE);
+                    }
 
                     break;
                 case ConstRest.MODE_READ_TIMER:

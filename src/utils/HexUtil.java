@@ -102,6 +102,15 @@ public class HexUtil {
         return DecimalArray;
     }
 
+    public static int getNumericValue(byte[] array){
+        String str = "";
+        for(int i = 0; i < array.length; i++) {
+            str += (array[i] - '0') + "";
+        }
+
+        return Integer.parseInt(str);
+    }
+
     //16진수를 10진수로 변환
     public static String getHextoDec(String hex)
     {

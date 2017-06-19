@@ -87,7 +87,7 @@ public class TimerPOJO extends BasePOJO{
     private void init(){
         timerSubPOJOList = new ArrayList<>();
 
-        this.timer_ctrl_aggr = getSumWith2BytesABS(offset);
+        this.timer_ctrl_aggr = getSumWith2BytesABS(offset, SUM_MODE_P);
         this.timer_ctrl_co2_type = toDecimalFromBinaryValueABS(offset, 0, 2);
         this.timer_ctrl_co2_on = getBooleanValueFrom2ByteABS(offset, 2);
         this.timer_ctrl_co2_off = getBooleanValueFrom2ByteABS(offset, 3);

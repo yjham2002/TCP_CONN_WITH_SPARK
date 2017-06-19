@@ -98,8 +98,17 @@ public class ServiceProvider extends ServerConfig{
     }
 
     private void resetServer() throws IOException{
+//        if(clients != null){
+//            Iterator<String> iterator = clients.keySet().iterator();
+//            while(iterator.hasNext()){
+//                String key = iterator.next();
+//                clients.get(key).getSocket().close();
+//            }
+//        }
         if(socket != null){
-            if(socket.isOpen()) socket.close();
+            if(socket.isOpen()) {
+                socket.close();
+            }
         }
         if(selector != null){
             if(selector.isOpen()) selector.close();
@@ -180,18 +189,16 @@ public class ServiceProvider extends ServerConfig{
                         iterator.remove();
                     }
 
-                    if(!recv) break;
+                    if(!recv){
+                        d("WARN :: [Connection Expired - Closing Remotely and Restarting :: " + getTime() + "]");
+                        startServer();
+                    }
 
                 }catch(IOException e){
                     e.printStackTrace();
                     d("ERROR :: CHANNEL SELECTOR LEVEL ERROR");
                 }
 
-            }
-
-            if(!recv) {
-                d("WARNING ::::::::::::::::::::::::: [Connection Expired - Restarting :: " + getTime() + "]");
-                emergencyStart();
             }
 
         });
@@ -227,20 +234,6 @@ public class ServiceProvider extends ServerConfig{
     public ServiceProvider start(){
         thread.start();
         batch.start();
-
-        return instance;
-    }
-
-    private ServiceProvider emergencyStart(){
-        startServer();
-
-        // TODO START_POINT 스레드 인터럽트 처리 ㅡㅡ
-
-        thread.interrupt();
-
-        thread = getProviderInstance();
-
-        thread.start();
 
         return instance;
     }

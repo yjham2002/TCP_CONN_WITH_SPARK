@@ -68,7 +68,11 @@ public class SohaProtocolUtil {
     }
 
     public static byte[] getHexLocation(int location){
-        if(location < 0) location = location & 0xff;
+
+        if(location < 0) {
+            //location = location & 0xff;
+            location += ConstProtocol.NEGATIVE_OFFSET;
+        }
 
         String format = "0000";
         String hex = Integer.toHexString(location);

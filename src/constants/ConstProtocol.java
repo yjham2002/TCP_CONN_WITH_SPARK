@@ -42,7 +42,7 @@ public class ConstProtocol {
      * Head : 메모리 주소(Byte)
      * Tail : 메모리 참조 길이(Word)
      */
-    public static final Pair<Integer> RANGE_REALTIME_WRITABLE = new Pair<>(286, 7);
+    public static final Pair<Integer> RANGE_REALTIME_WRITABLE = new Pair<>(296, 2);
     public static final Pair<Integer> RANGE_SETTING_TAILS = new Pair<>(11534, 18);
     public static final Pair<Integer> RANGE_SETTING = new Pair<>(300, 71);
     public static final Pair<Integer> RANGE_TIMER = new Pair<>(448, 97);
@@ -67,6 +67,11 @@ public class ConstProtocol {
     public static final int FLAG_DAILY_5 = 64;
     public static final int FLAG_DAILY_6 = 128;
 
+    public static final int NEGATIVE_OFFSET = 65536;
+    public static final int NEGATIVE_THRESHOLD_TEMP = 32767;
+    public static final int NEGATIVE_THRESHOLD_HUMID = 32767;
+    public static final int NEGATIVE_THRESHOLD_REVISION = 32767;
+
     public static byte makeFlagSet(int... flags){
         int total = 0;
         for(int e = 0; e < flags.length; e++) total += flags[e];
@@ -74,5 +79,8 @@ public class ConstProtocol {
     }
 
     public static final int LENGTH_DAILY_AGE = 1820;
+
+    public static final int TRUE = 1;
+    public static final int FALSE = 0;
 
 }

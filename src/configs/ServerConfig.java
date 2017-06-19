@@ -21,6 +21,13 @@ public class ServerConfig {
     protected static final String REDIS_PASSWORD = "richware";
 
     /**
+     * Whois SMS Account
+     */
+    protected static final String SMS_ID = "hayan60";
+    protected static final String SMS_PW = "12340757sh*";
+    protected static final String SMS_DEFAULT_PHONE = "010-0000-0000";
+
+    /**
      * REQUEST TIMEOUT
      */
     public static final long REQUEST_TIMEOUT = 1000 * 5;

@@ -1,5 +1,6 @@
 package pojo;
 
+import constants.ConstProtocol;
 import models.ByteSerial;
 import utils.HexUtil;
 import utils.SohaProtocolUtil;
@@ -37,7 +38,7 @@ public class BasePOJO implements Serializable{
      * @return 바이트 합의 10의 승수번째 자리수
      */
     protected int getUnitNumberFrom2Byte(int offset, int square){
-        int sum = getSumWith2Bytes(offset);
+        int sum = getSumWith2Bytes(offset, SUM_MODE_P);
         String strSum = Integer.toString(sum);
         int len = strSum.length() - (square + 1);
         if(strSum.length() <= len || len < 0) return 0;
@@ -54,7 +55,7 @@ public class BasePOJO implements Serializable{
      * @return 바이트 합의 10의 승수번째 자리수
      */
     protected int getUnitNumberFrom2ByteABS(int offset, int square){
-        int sum = getSumWith2BytesABS(offset);
+        int sum = getSumWith2BytesABS(offset, SUM_MODE_P);
         String strSum = Integer.toString(sum);
         int len = strSum.length() - (square + 1);
         if(strSum.length() <= len || len < 0) return 0;
@@ -64,7 +65,7 @@ public class BasePOJO implements Serializable{
         return retVal;
     }
 
-    protected int getSumWith2BytesABS(int offset){
+    protected int getSumWith2BytesABS(int offset, int mode){
         try {
             int absolute = offset;
             int tempLeft = byteSerial.getProcessed()[absolute];
@@ -79,6 +80,14 @@ public class BasePOJO implements Serializable{
             if (rhs < 0) rhs = rhs & 0xff;
 
             int total = lhs + rhs;
+
+            if(mode == SUM_MODE_TEMP && total > ConstProtocol.NEGATIVE_THRESHOLD_TEMP){
+                total = total - ConstProtocol.NEGATIVE_OFFSET;
+            }else if(mode == SUM_MODE_HUMID && total > ConstProtocol.NEGATIVE_THRESHOLD_HUMID){
+                total = total - ConstProtocol.NEGATIVE_OFFSET;
+            }else if(mode == SUM_MODE_REV && total > ConstProtocol.NEGATIVE_THRESHOLD_REVISION){
+                total = total - ConstProtocol.NEGATIVE_OFFSET;
+            }
 
             return total;
         }catch(ArrayIndexOutOfBoundsException e){
@@ -119,13 +128,13 @@ public class BasePOJO implements Serializable{
 
     protected int getSumByArbitraryRangeBytesABS(int offset, int length){
         int total = 0;
-        for(int i = offset; i < offset + length; i++) total += getSumWith2BytesABS(i);
+        for(int i = offset; i < offset + length; i++) total += getSumWith2BytesABS(i, SUM_MODE_P);
         return total;
     }
 
     protected int getSumByArbitraryRangeBytes(int offset, int length){
         int total = 0;
-        for(int i = offset; i < offset + length; i++) total += getSumWith2Bytes(i);
+        for(int i = offset; i < offset + length; i++) total += getSumWith2Bytes(i, SUM_MODE_P);
         return total;
     }
 
@@ -136,7 +145,7 @@ public class BasePOJO implements Serializable{
      * @return Formatted String
      */
     protected String getMDorHMWith2Bytes(int offset, String delimiter){
-        int total = getSumWith2Bytes(offset);
+        int total = getSumWith2Bytes(offset, SUM_MODE_P);
         int header = total / 100;
         int footer = total - (header * 100);
 
@@ -144,7 +153,7 @@ public class BasePOJO implements Serializable{
     }
 
     protected String getMDorHMWith2BytesABS(int offset, String delimiter){
-        int total = getSumWith2BytesABS(offset);
+        int total = getSumWith2BytesABS(offset, SUM_MODE_P);
         int header = total / 100;
         int footer = total - (header * 100);
 
@@ -152,7 +161,7 @@ public class BasePOJO implements Serializable{
     }
 
     protected int getLhsFromDual(int offset){
-        int total = getSumWith2Bytes(offset);
+        int total = getSumWith2Bytes(offset, SUM_MODE_P);
         int header = total / 100;
         int footer = total - (header * 100);
 
@@ -160,7 +169,7 @@ public class BasePOJO implements Serializable{
     }
 
     protected int getRhsFromDual(int offset){
-        int total = getSumWith2Bytes(offset);
+        int total = getSumWith2Bytes(offset, SUM_MODE_P);
         int header = total / 100;
         int footer = total - (header * 100);
 
@@ -208,7 +217,7 @@ public class BasePOJO implements Serializable{
     }
 
     protected int getLhsFromDualABS(int offset){
-        int total = getSumWith2BytesABS(offset);
+        int total = getSumWith2BytesABS(offset, SUM_MODE_P);
         int header = total / 100;
         int footer = total - (header * 100);
 
@@ -216,7 +225,7 @@ public class BasePOJO implements Serializable{
     }
 
     protected int getRhsFromDualABS(int offset){
-        int total = getSumWith2BytesABS(offset);
+        int total = getSumWith2BytesABS(offset, SUM_MODE_P);
         int header = total / 100;
         int footer = total - (header * 100);
 
@@ -232,7 +241,7 @@ public class BasePOJO implements Serializable{
      * '절대위치'를 이곳에서 계산하기에 다른 곳의 offset을 조정해서는 절대 안 됨
      * 프로토콜 변경이 있을 경우, BasePOJO의 상수를 수정해야 함
      */
-    protected int getSumWith2Bytes(int offset){
+    protected int getSumWith2Bytes(int offset, int mode){
         int absolute = offset + ARRAY_START_RANGE;
         int tempLeft = byteSerial.getProcessed()[absolute];
         int tempRight = byteSerial.getProcessed()[absolute + 1];
@@ -246,8 +255,21 @@ public class BasePOJO implements Serializable{
 
         int total = lhs + rhs;
 
+        if(mode == SUM_MODE_TEMP && total > ConstProtocol.NEGATIVE_THRESHOLD_TEMP){
+            total = total - ConstProtocol.NEGATIVE_OFFSET;
+        }else if(mode == SUM_MODE_HUMID && total > ConstProtocol.NEGATIVE_THRESHOLD_HUMID){
+            total = total - ConstProtocol.NEGATIVE_OFFSET;
+        }else if(mode == SUM_MODE_REV && total > ConstProtocol.NEGATIVE_THRESHOLD_REVISION){
+            total = total - ConstProtocol.NEGATIVE_OFFSET;
+        }
+
         return total;
     }
+
+    public static final int SUM_MODE_P = 0;
+    public static final int SUM_MODE_TEMP = 1;
+    public static final int SUM_MODE_HUMID = 2;
+    public static final int SUM_MODE_REV = 3;
 
     protected int getSingleByte(int offset){
         return getSingleByteABS(ARRAY_START_RANGE + offset);
@@ -258,6 +280,7 @@ public class BasePOJO implements Serializable{
 
         final String format = "00000000";
         int value = getSingleByte(offset);
+
         String bin = Integer.toBinaryString(value);
         String fmt = "";
         String retVal = "";
@@ -302,10 +325,21 @@ public class BasePOJO implements Serializable{
         assert bitIndex < 16;
 
         if(bitIndex >= 8){
-            return getBooleanValueFromByte(offset + 1, bitIndex - 8);
+            return getBooleanValueFromByte(offset, bitIndex - 8);
         }else{
-            return getBooleanValueFromByte(offset, bitIndex);
+            return getBooleanValueFromByte(offset + 1, bitIndex);
         }
+    }
+
+    public static void main(String... args){
+        byte[] arr = new byte[]{83, 84, 48, 48, 55, 56, 48, 49, 2, 107, 6, 93, 0, 7, 0, 0, 0, 0, -111, -19, 2, 107, 6, 93, 0, 7, 0, 0, 0, 0, -111, -19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -111, -12, 2, 107, 6, 93, 0, 7, 0, 0, 0, 0, -111, -19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -111, -12, 2, 107, 6, 93, 0, 7, 0, 0, 0, 0, -111, -19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -111, -12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44, -102, 1, -65, 1, 28, 0, 9, 0, 43, 0, 0, 0, 99, 6, 5, 40, -10, 64, 60, 61, 113, 64, 74, -103, -102, 64, 89, 61, 113, 64, 106, -123, 31, 64, 123, 10, 61, 64, -121, -93, -41, 64, -112, 51, 51, 64, -101, 20, 123, 64, -90, -21, -123, 64, -79, 102, 102, 64, -66, 51, 51, 64, -53, -103, -102, 64, -39, 81, -20, 64, -24, 0, 0, 64, -8, 81, -20, 65, 4, 30, -72, 65, 13, 102, 102, 65, 22, 0, 0, 65, 32, -103, -102, 65, 41, -52, -51, 65, 52, -103, -102, 65, 65, -52, -51, 65, 76, -103, -102, 65, 89, 0, 0, 44, -102, 1, -65, 1, 28, 0, 9, 65, -126, 102, 102, 65, -118, 102, 102, 65, -110, 51, 51, 65, -101, -52, -51, 65, -92, 102, 102, 65, -82, 0, 0, 4, -80, 0, -6, 1, -62, 0, 9, -35, -35, -103, -102, 65, 25, 4, 87, 8, -82, 13, 5, 4, -57, 0, -56, 0, 5, 0, 0, 0, 0, 9, -63, -1, -60, 0, 44, 6, 100, 2, 107, 0, 0, 7, -31, 2, 107, 6, 93, -1, 15, 0, 0, 0, 0, 86, 13, 10};
+        BasePOJO basePOJO = new BasePOJO();
+        basePOJO.byteSerial = new ByteSerial(arr);
+
+        System.out.println(basePOJO.getSumWith2Bytes(294, SUM_MODE_P));
+        for(int i = 0; i < 8; i++)
+            System.out.print(basePOJO.getBooleanValueFromByte(294, i) + " ");
+
     }
 
     protected int toDecimalFromBinaryValue(int offset, int bitBeginIndex, int length){
@@ -356,9 +390,9 @@ public class BasePOJO implements Serializable{
         assert bitIndex < 16;
 
         if(bitIndex >= 8){
-            return getBooleanValueFromByteABS(offset + 1, bitIndex - 8);
+            return getBooleanValueFromByteABS(offset, bitIndex - 8);
         }else{
-            return getBooleanValueFromByteABS(offset, bitIndex);
+            return getBooleanValueFromByteABS(offset + 1, bitIndex);
         }
     }
 
