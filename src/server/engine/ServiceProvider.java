@@ -83,6 +83,7 @@ public class ServiceProvider extends ServerConfig{
             selector = Selector.open();
 
             socket = ServerSocketChannel.open(); // 서버 소켓 인스턴스 생성
+
             socket.configureBlocking(false);
             socket.bind(new InetSocketAddress(port));
             socket.register(selector, SelectionKey.OP_ACCEPT);

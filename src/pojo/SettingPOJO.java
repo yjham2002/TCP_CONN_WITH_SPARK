@@ -197,10 +197,8 @@ public class SettingPOJO extends BasePOJO {
     }
 
     public static void main(String... args){
-        byte[] arr = new byte[]{83, 84, 48, 48, 55, 56, 48, 49, 1, 3, -114, 0, 1, 0, 1, 1, 1, 4, -80, 0, -6, 1, -62, 0, 9, 0, -55, 1, -109, 3, -119, 0, 7, 0, 50, 0, 3, -52, -52, -2, 12, 1, -12, -1, -30, 0, 30, -1, -100, 0, 100, 0, 0, 0, 0, 1, 44, -61, 80, -1, -99, 2, 88, 0, 0, 3, -25, 0, 0, 0, 79, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 5, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 39, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, -1, -1, 11, 9, -33, 13, 10};
-        byte[] arr2 = new byte[]{83, 84, 48, 48, 55, 56, 48, 49, 1, 3, 36, 1, 44, 0, 100, 0, 100, 0, 1, 3, 32, 4, -80, 1, 45, 0, 101, 0, 101, 0, 2, 4, -80, 7, 8, 1, 46, 0, 102, 0, 102, 0, 3, 7, 8, 2, -68, 35, 109, -28, 13, 10};
+        byte[] arr = new byte[]{83, 84, 48, 48, 55, 56, 48, 49, 1, 3, -114, 0, 1, 35, -15, 1, 1, 4, 100, 4, -40, 0, -126, 0, 9, 0, -55, 1, -109, 3, -119, 0, 7, 0, 0, 0, 3, -52, -52, -2, 12, 1, -12, -1, -30, 0, 30, -1, -100, 0, 100, 0, 0, 0, 0, 1, 44, -61, 80, -1, -99, 2, 88, 0, 0, 3, -25, 0, 0, 0, 79, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 5, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 39, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, -1, -1, 56, 117, -82, 13, 10};
         SettingPOJO sp = new SettingPOJO(new ByteSerial(arr), ConstProtocol.RANGE_READ_START, "0078", "01");
-        sp.initTails(new ByteSerial(arr2), ConstProtocol.RANGE_READ_START);
 
         byte[] gen = sp.getBytes();
 
@@ -241,16 +239,47 @@ public class SettingPOJO extends BasePOJO {
     public byte[] getBytes(){
         byte[] check = SohaProtocolUtil.concat(ConstProtocol.STX, this.farmCode.getBytes(), this.dongCode.getBytes());
 
+        int bitAggr_h =
+                getBitAggregation(
+                        alert_alarm_vt250_4,
+                        alert_alarm_vt250_3,
+                        alert_alarm_vt250_2,
+                        alert_alarm_vt250_1,
+                        alert_alarm_vt515,
+                        alert_alarm_rs485,
+                        alert_alarm_ilum_relay,
+                        alert_alarm_dehumidify_relay
+                );
+
+        int bitAggr_t =
+                getBitAggregation(
+                        alert_alarm_humidify_relay,
+                        alert_alarm_cool_relay,
+                        alert_alarm_heat_relay,
+                        alert_alarm_vent_relay,
+                        alert_alarm_internal_ilum,
+                        alert_alarm_internal_humidity,
+                        alert_alarm_internal_temp,
+                        alert_alarm_internal_co2
+                );
+
         byte[] modbusData =
                 SohaProtocolUtil.concat(
-                        new byte[]{Byte.parseByte(this.dongCode), 3, (byte)(ConstProtocol.RANGE_SETTING.getTail() * 2)}, SohaProtocolUtil.getHexLocation(this.machine_no)
-                        ,SohaProtocolUtil.getHexLocation(this.crop_data_num_and_ctrl_aggr), SohaProtocolUtil.getHexLocation(this.sensor_quantity_and_selection_aggr),
+                        new byte[]{Byte.parseByte(this.dongCode), 3, (byte)(ConstProtocol.RANGE_SETTING.getTail() * 2)}, SohaProtocolUtil.getHexLocation(this.machine_no),
+
+                        SohaProtocolUtil.getHexLocation(this.crop_data_num_and_ctrl_aggr),
+                        SohaProtocolUtil.getHexLocation(this.sensor_quantity_and_selection_aggr),
+
                         SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_co2), SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_temp),
                         SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_humid),
                         SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_illum), getAggregation(this.relay_output_setting_co2, this.relay_output_setting_heat),
                         getAggregation(this.relay_output_setting_cool, this.relay_output_setting_humidify), getAggregation(this.relay_output_setting_dehumidify, this.relay_output_setting_illum),
-                        getAggregation(this.relay_output_setting_alarm, this.relay_output_setting_reserve), SohaProtocolUtil.getHexLocation(this.dry_condition_setting_aggr),
-                        SohaProtocolUtil.getHexLocation(this.alert_alarm_time_select_aggr), SohaProtocolUtil.getHexLocation(this.cthi_ctrl_stat_aggr),
+                        getAggregation(this.relay_output_setting_alarm, this.relay_output_setting_reserve),
+
+                        SohaProtocolUtil.getHexLocation(this.dry_condition_setting_aggr),
+                        SohaProtocolUtil.getHexLocation(this.alert_alarm_time_select_aggr),
+                        SohaProtocolUtil.getHexLocation(this.cthi_ctrl_stat_aggr),
+
                         SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_high),
                         SohaProtocolUtil.getHexLocation(this.calm_threshold_temp_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_temp_high),
                         SohaProtocolUtil.getHexLocation(this.calm_threshold_humid_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_humid_high),
@@ -290,7 +319,7 @@ public class SettingPOJO extends BasePOJO {
                         getValuePairFromString(this.growth_start_hm),
                         SohaProtocolUtil.getHexLocation(this.change_date_time),
 
-                        SohaProtocolUtil.getHexLocation(this.alert_alarm_aggr)
+                        new byte[]{(byte)bitAggr_h, (byte)bitAggr_t}
         );
 
         Modbus modbus = new Modbus();
