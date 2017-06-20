@@ -2556,6 +2556,22 @@ public class RealtimePOJO extends BasePOJO{
                "\t`mcnctrl_web_stat_reserve`, \n" +
                "\t`redisTime`, \n" +
                "\t`regDate`,\n" +
+               "\t`errdata_internal_co2`, \n" +
+               "\t`errdata_internal_temp`, \n" +
+               "\t`errdata_internal_humid`, \n" +
+               "\t`errdata_internal_ilum`, \n" +
+               "\t`errdata_vent_relay`, \n" +
+               "\t`errdata_raisetemp_relay`, \n" +
+               "\t`errdata_raisecool_relay`, \n" +
+               "\t`errdata_humidify_relay`, \n" +
+               "\t`errdata_dehumidify_relay`, \n" +
+               "\t`errdata_ilum_output`, \n" +
+               "\t`errdata_crop_data`, \n" +
+               "\t`errdata_device_connection`, \n" +
+               "\t`errdata_network1`, \n" +
+               "\t`errdata_network2`, \n" +
+               "\t`errdata_network3`, \n" +
+               "\t`errdata_network4`, \n" +
                "\t`mcnctrl_mv510_pause`, \n" +
                "\t`mcnctrl_web_pause` \n" +
                "\t)\n" +
@@ -2797,6 +2813,22 @@ public class RealtimePOJO extends BasePOJO{
                "'" + mcnctrl_web_stat_reserve + "'," +
                "'" + redisTime + "'," +
                "\tNOW(),\n" +
+               "'" + this.errdata_internal_co2 + "'," +
+               "'" + this.errdata_internal_temp + "'," +
+               "'" + this.errdata_internal_humid + "'," +
+               "'" + this.errdata_internal_ilum + "'," +
+               "'" + this.errdata_vent_relay + "'," +
+               "'" + this.errdata_raisetemp_relay + "'," +
+               "'" + this.errdata_raisecool_relay + "'," +
+               "'" + this.errdata_humidify_relay + "'," +
+               "'" + this.errdata_dehumidify_relay + "'," +
+               "'" + this.errdata_ilum_output + "'," +
+               "'" + this.errdata_crop_data + "'," +
+               "'" + this.errdata_device_connection + "'," +
+               "'" + this.errdata_network1 + "'," +
+               "'" + this.errdata_network2 + "'," +
+               "'" + this.errdata_network3 + "'," +
+               "'" + this.errdata_network4 + "'," +
                "'" + mcnctrl_mv510_pause + "'," +
                "'" + mcnctrl_web_pause + "'" +
                "\t);";

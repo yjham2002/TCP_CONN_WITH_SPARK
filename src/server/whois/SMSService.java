@@ -63,6 +63,7 @@ public class SMSService extends ServerConfig implements ISMSSyncSVC {
          * fail 5  : Code=>500, CodeMsg=>No Valid Message
          * fail 6  : Code=>600, CodeMsg=>Auth Fail
          * fail 7  : Code=>700, CodeMsg=>Invalid Recall Number
+         * fail 8  : Coude=>800, CodeMsg=>Send Number Auth Fail
          */
 
         if( rcode > 0 ) {

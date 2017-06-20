@@ -83,6 +83,8 @@ public class ProtocolResponder{
         }
     }
 
+    private static boolean tempVar = false; // 디버깅용 변수
+
     public boolean receive() throws IOException{
         byteSerial = null;
 
@@ -163,14 +165,24 @@ public class ProtocolResponder{
                     byte[] farmCodeTemp = SohaProtocolUtil.getFarmCodeByProtocol(buffer);
                     byte[] harvCodeTemp = SohaProtocolUtil.getHarvCodeByProtocol(buffer);
 
+                    String farmString = HexUtil.getNumericStringFromAscii(farmCodeTemp);
+                    String harvString = HexUtil.getNumericStringFromAscii(harvCodeTemp);
+
                     if(SohaProtocolUtil.getErrorCount(realtimePOJO) > 0){
-                        String farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farm), ConstProtocol.SQL_COL_FARMNAME);
-                        String harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farm, HexUtil.getNumericStringFromAscii(harvCodeTemp)), ConstProtocol.SQL_COL_DONGNAME);
-                        String tel = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARM_TEL, farm), ConstProtocol.SQL_COL_FARM_TEL);
+                        int errArray[] = SohaProtocolUtil.getErrorArray(realtimePOJO);
+
+                        String farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farmString), ConstProtocol.SQL_COL_FARMNAME);
+                        String harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
+                        String tel = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARM_TEL, farmString), ConstProtocol.SQL_COL_FARM_TEL);
 
                         String msg = SohaProtocolUtil.getErrorMessage(realtimePOJO, farmName, harvName);
 
-                        smsService.sendSMS(tel, msg);
+                        // TODO Conditional - and Detecting new one
+
+                        if(!tempVar) {
+                            tempVar = true;
+                            smsService.sendSMS(tel, msg);
+                        }
 
                     }
 
