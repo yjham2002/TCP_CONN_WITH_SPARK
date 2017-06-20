@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="SMS module attached">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/configs/ServerConfig.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/configs/ServerConfig.class" />
+    <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/configs/ServerConfig.java" afterPath="$PROJECT_DIR$/src/configs/ServerConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/whois/WhoisSmsSVC.java" afterPath="$PROJECT_DIR$/src/server/whois/WhoisSmsSVC.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/utils/DebugUtil.java" afterPath="$PROJECT_DIR$/src/utils/DebugUtil.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -79,8 +75,8 @@
       <file leaf-file-name="WhoisSmsSVC.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/whois/WhoisSmsSVC.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="75" column="52" lean-forward="false" selection-start-line="75" selection-start-column="52" selection-end-line="75" selection-end-column="52" />
+            <state relative-caret-position="266">
+              <caret line="69" column="13" lean-forward="true" selection-start-line="69" selection-start-column="13" selection-end-line="69" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2154#2155#0" expanded="true" />
@@ -852,8 +848,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.WhoisSmsSVC" />
-        <item index="1" class="java.lang.String" itemvalue="Application.AppMain" />
+        <item index="0" class="java.lang.String" itemvalue="Application.AppMain" />
+        <item index="1" class="java.lang.String" itemvalue="Application.WhoisSmsSVC" />
         <item index="2" class="java.lang.String" itemvalue="Application.BasePOJO" />
         <item index="3" class="java.lang.String" itemvalue="Application.SettingPOJO" />
         <item index="4" class="java.lang.String" itemvalue="Application.HexUtil" />
@@ -873,13 +869,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1495674868999</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Protocol Generator added and Initial Code Sending Process established">
-      <created>1496112521808</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1496112521808</updated>
     </task>
     <task id="LOCAL-00009" summary="Detail Comments added (Protocol Loss Issue)">
       <created>1496128944941</created>
@@ -1217,7 +1206,14 @@
       <option name="project" value="LOCAL" />
       <updated>1497873157374</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="Today Backup">
+      <created>1497919325377</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1497919325377</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1243,7 +1239,7 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40209424" sideWeight="0.7572917" order="2" side_tool="false" content_ui="tabs" x="156" y="547" width="1398" height="359" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40209424" sideWeight="0.7572917" order="2" side_tool="false" content_ui="tabs" x="156" y="547" width="1398" height="359" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21302083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1261,7 +1257,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Redis to MySQL Migration Batch Job established" />
     <MESSAGE value="Redis to MySQL Migration Batch Job established - Expiration Check" />
     <MESSAGE value="Redis crashed ㅠㅠ" />
     <MESSAGE value="SettingPOJO Established" />
@@ -1286,7 +1281,8 @@
     <MESSAGE value="Daily Age Write issue handled" />
     <MESSAGE value="Setting Aggregation Variables has been splitted" />
     <MESSAGE value="SMS module attached" />
-    <option name="LAST_COMMIT_MESSAGE" value="SMS module attached" />
+    <MESSAGE value="Today Backup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Today Backup" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1743,8 +1739,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/whois/WhoisSmsSVC.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="75" column="52" lean-forward="false" selection-start-line="75" selection-start-column="52" selection-end-line="75" selection-end-column="52" />
+        <state relative-caret-position="266">
+          <caret line="69" column="13" lean-forward="true" selection-start-line="69" selection-start-column="13" selection-end-line="69" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2154#2155#0" expanded="true" />
