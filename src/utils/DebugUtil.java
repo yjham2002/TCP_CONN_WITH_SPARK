@@ -3,10 +3,18 @@ package utils;
 import java.io.PrintStream;
 
 /**
- * Created by a on 2017-06-16.
+ * @author 함의진
+ * @version 1.0.0
+ * 디버깅의 위해 사용할 수 있는 정적 메소드 클래스
  */
 public class DebugUtil {
 
+    /**
+     * 배열을 출력하기 위한 클래스로 특정 인덱스에 표시하여 출력이 가능하다
+     * @param array
+     * @param index
+     * @param stream
+     */
     public static void printArray(byte[] array, int index, PrintStream stream){
         stream.print("[");
         for(int i = 0; i < array.length; i++){

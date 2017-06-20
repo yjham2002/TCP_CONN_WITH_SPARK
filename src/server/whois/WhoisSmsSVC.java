@@ -2,16 +2,20 @@ package server.whois;
 
 import configs.ServerConfig;
 
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
+import java.util.logging.Logger;
 
 public class WhoisSmsSVC extends ServerConfig implements ISMSSyncSVC {
 
+    private Logger logger;
     private String id = ""	;
     private String pw = "" ;
     private String defaultFromPhone = "" ;
 
-    private WhoisSmsSVC(String id, String pw, String defaultFromPhone)
-    {
+    public WhoisSmsSVC(String id, String pw, String defaultFromPhone) {
+        this.logger = Logger.getLogger(this.getClass().getName());
         this.id = id ;
         this.pw = pw ;
         this.defaultFromPhone = defaultFromPhone ;
@@ -34,8 +38,8 @@ public class WhoisSmsSVC extends ServerConfig implements ISMSSyncSVC {
             e.printStackTrace();
         }
 
-        sms.login(id, pw) ;
-        // sms.setUtf8();
+        sms.login(this.id, this.pw) ;
+        sms.setUtf8();
         sms.setParams(toPhone, fromPhone, msg, "0") ;
         sms.emmaSend() ;
 
@@ -57,7 +61,7 @@ public class WhoisSmsSVC extends ServerConfig implements ISMSSyncSVC {
          */
 
         if( rcode > 0 ) {
-            System.out.println("[WhoisSmsSVC] rcode =" + rcode + ":::" + rmsg + " [Point] : " + lastPoint + " [toPhone] : " + toPhone) ;
+            logger.info("returnCode =" + rcode + ":::" + rmsg + " [Point] : " + lastPoint + " [toPhone] : " + toPhone); ;
         }
 
         return rcode ;
@@ -65,12 +69,11 @@ public class WhoisSmsSVC extends ServerConfig implements ISMSSyncSVC {
 
     @Override
     public int sendSMS(String toPhone, String msg) {
-        return sendSMS(toPhone,this.defaultFromPhone,msg) ;
+        return sendSMS(toPhone,this.defaultFromPhone, msg) ;
     }
 
     public static void main(String... args){
         WhoisSmsSVC whoisSmsSVC = new WhoisSmsSVC();
-        whoisSmsSVC.sendSMS("010-2918-9484", "test");
     }
 
 }

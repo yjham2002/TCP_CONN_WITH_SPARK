@@ -25,7 +25,7 @@ public class ServerConfig {
      */
     protected static final String SMS_ID = "hayan60";
     protected static final String SMS_PW = "12340757sh*";
-    protected static final String SMS_DEFAULT_PHONE = "010-0000-0000";
+    protected static final String SMS_DEFAULT_PHONE = "010-8713-6214";
 
     /**
      * REQUEST TIMEOUT
