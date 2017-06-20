@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.RealtimePOJO;
 import redis.RedisManager;
+import server.whois.SMSService;
 import utils.HexUtil;
 import utils.SerialUtil;
 import utils.SohaProtocolUtil;
@@ -39,6 +40,7 @@ public class ProtocolResponder{
      */
     Logger log;
 
+    private SMSService smsService;
     private boolean started = false; // 이니셜 프로토콜이 전송되었는지의 여부를 갖는 로컬 변수
     private boolean generated = false; // 유니크키 생성 여부
     private volatile ByteSerial byteSerial;
@@ -60,6 +62,11 @@ public class ProtocolResponder{
         log = LoggerFactory.getLogger(this.getClass());
         this.socket = socket; // 멤버 세팅
         this.selector = selector;
+
+        /**
+         * SMS 전송 클래스 생성
+         */
+        this.smsService = new SMSService();
 
         this.clients = clients; // 멤버 세팅
         try {
@@ -155,6 +162,17 @@ public class ProtocolResponder{
 
                     byte[] farmCodeTemp = SohaProtocolUtil.getFarmCodeByProtocol(buffer);
                     byte[] harvCodeTemp = SohaProtocolUtil.getHarvCodeByProtocol(buffer);
+
+                    if(SohaProtocolUtil.getErrorCount(realtimePOJO) > 0){
+                        String farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farm), ConstProtocol.SQL_COL_FARMNAME);
+                        String harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farm, HexUtil.getNumericStringFromAscii(harvCodeTemp)), ConstProtocol.SQL_COL_DONGNAME);
+                        String tel = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARM_TEL, farm), ConstProtocol.SQL_COL_FARM_TEL);
+
+                        String msg = SohaProtocolUtil.getErrorMessage(realtimePOJO, farmName, harvName);
+
+                        smsService.sendSMS(tel, msg);
+
+                    }
 
                     log.info("Farm Code :: " + Arrays.toString(farmCodeTemp) + " / HarvCode :: " + Arrays.toString(harvCodeTemp));
 

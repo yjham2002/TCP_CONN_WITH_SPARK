@@ -72,4 +72,18 @@ public class DebugUtil {
         printArray(array, -1);
     }
 
+    public static void printAndCompare(byte[] array1, byte[] array2){
+        int len = array1.length > array2.length ? array2.length : array1.length;
+        int count = 0;
+        for(int i = 0; i < len; i++){
+            if(array1[i] != array2[i]) {
+                count++;
+                System.out.println("array1["+i+"] = " + array1[i] + " : array["+i+"] = " + array2[i]);
+            }
+        }
+
+        if(count == 0) System.out.println("[DebugUtil] Both arrays are same");
+        else System.out.println("[DebugUtil] Both arrays are not same");
+    }
+
 }

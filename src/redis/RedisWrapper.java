@@ -168,6 +168,8 @@ public class RedisWrapper extends ServerConfig{
 
             Iterator<String> iterator = object.iterator();
 
+            int errorCount = 0;
+
             while(iterator.hasNext()) {
                 String key = iterator.next();
                 try {
@@ -175,9 +177,11 @@ public class RedisWrapper extends ServerConfig{
                     T unit = (T) mapper.readValue(json, type);
                     retVal.add(unit);
                 }catch(Exception e){
-                    System.out.println("Parsing Error :: Skipping");
+                    errorCount++;
                 }
             }
+
+            System.out.println("Parsing Error :: " + errorCount + "items has been Skipped");
 
         }catch (Exception e){
             e.printStackTrace();

@@ -263,22 +263,69 @@ public class SettingPOJO extends BasePOJO {
                         alert_alarm_internal_co2
                 );
 
+        int bitAggr_sr =
+                getBitAggregation(
+                        0,
+                        0,
+                        0,
+                        0,
+                        sensor_selected_4,
+                        sensor_selected_3,
+                        sensor_selected_2,
+                        sensor_selected_1
+                );
+
+        int bitAggr_ctrl_1 =
+                getBitAggregation(
+                        cthi_ctrl_stat_illum_offtype,
+                        cthi_ctrl_stat_illum_ontype,
+                        getBitRhsFromDual(cthi_ctrl_stat_illum_ctrl),
+                        getBitLhsFromDual(cthi_ctrl_stat_illum_ctrl),
+                        cthi_ctrl_stat_humid_offtype,
+                        cthi_ctrl_stat_humid_ontype,
+                        getBitRhsFromDual(cthi_ctrl_stat_humid_ctrl),
+                        getBitLhsFromDual(cthi_ctrl_stat_humid_ctrl)
+
+                );
+        int bitAggr_ctrl_2 =
+                getBitAggregation(
+                        cthi_ctrl_stat_temp_offtype,
+                        cthi_ctrl_stat_temp_ontype,
+                        getBitRhsFromDual(cthi_ctrl_stat_temp_ctrl),
+                        getBitLhsFromDual(cthi_ctrl_stat_temp_ctrl),
+                        cthi_ctrl_stat_co2_offtype,
+                        cthi_ctrl_stat_co2_ontype,
+                        getBitRhsFromDual(cthi_ctrl_stat_co2_ctrl),
+                        getBitLhsFromDual(cthi_ctrl_stat_co2_ctrl)
+                );
+
+        int bitAggr_alt =
+                getBitAggregation(
+                        this.alert_alarm_time_select_timeset,
+                        getBitRhsFromDual(this.alert_alarm_time_select_lamp_unit),
+                        getBitLhsFromDual(this.alert_alarm_time_select_lamp_unit),
+                        this.alert_alarm_time_select_timer,
+                        this.alert_alarm_time_select_auto
+                );
+
         byte[] modbusData =
                 SohaProtocolUtil.concat(
                         new byte[]{Byte.parseByte(this.dongCode), 3, (byte)(ConstProtocol.RANGE_SETTING.getTail() * 2)}, SohaProtocolUtil.getHexLocation(this.machine_no),
 
-                        SohaProtocolUtil.getHexLocation(this.crop_data_num_and_ctrl_aggr),
-                        SohaProtocolUtil.getHexLocation(this.sensor_quantity_and_selection_aggr),
+                        SohaProtocolUtil.getHexLocation(bitAggr_alt),
+                        new byte[]{(byte)this.sensor_quantity, (byte)bitAggr_sr},
 
                         SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_co2), SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_temp),
                         SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_humid),
-                        SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_illum), getAggregation(this.relay_output_setting_co2, this.relay_output_setting_heat),
-                        getAggregation(this.relay_output_setting_cool, this.relay_output_setting_humidify), getAggregation(this.relay_output_setting_dehumidify, this.relay_output_setting_illum),
-                        getAggregation(this.relay_output_setting_alarm, this.relay_output_setting_reserve),
+                        SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_illum),
+                        getAggregation(this.relay_output_setting_heat, this.relay_output_setting_co2),
+                        getAggregation(this.relay_output_setting_humidify, this.relay_output_setting_cool),
+                        getAggregation(this.relay_output_setting_illum, this.relay_output_setting_dehumidify),
+                        getAggregation(this.relay_output_setting_reserve, this.relay_output_setting_alarm),
 
-                        SohaProtocolUtil.getHexLocation(this.dry_condition_setting_aggr),
+                        getAggregation(this.dry_condition_setting_ctrl, this.dry_condition_setting_humidity),
                         SohaProtocolUtil.getHexLocation(this.alert_alarm_time_select_aggr),
-                        SohaProtocolUtil.getHexLocation(this.cthi_ctrl_stat_aggr),
+                        new byte[]{(byte)bitAggr_ctrl_1, (byte)bitAggr_ctrl_2},
 
                         SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_high),
                         SohaProtocolUtil.getHexLocation(this.calm_threshold_temp_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_temp_high),
@@ -347,10 +394,10 @@ public class SettingPOJO extends BasePOJO {
         this.crop_data_num_and_ctrl_aggr = getSumWith2BytesABS(offset + 2, SUM_MODE_P);
         this.sensor_quantity_and_selection_aggr = getSumWith2BytesABS(offset + 4, SUM_MODE_P);
         this.sensor_quantity = getSingleByteABS(offset + 4);
-        this.sensor_selected_1 = getBooleanValueFromByteABS(offset + 5, 0);
-        this.sensor_selected_2 = getBooleanValueFromByteABS(offset + 5, 1);
-        this.sensor_selected_3 = getBooleanValueFromByteABS(offset + 5, 2);
-        this.sensor_selected_4 = getBooleanValueFromByteABS(offset + 5, 3);
+        this.sensor_selected_1 = getBooleanValueFrom2ByteABS(offset + 5, 8);
+        this.sensor_selected_2 = getBooleanValueFrom2ByteABS(offset + 5, 9);
+        this.sensor_selected_3 = getBooleanValueFrom2ByteABS(offset + 5, 10);
+        this.sensor_selected_4 = getBooleanValueFrom2ByteABS(offset + 5, 11);
         this.singular_ctrl_setting_co2 = getSumWith2BytesABS(offset + 6, SUM_MODE_P);
         this.singular_ctrl_setting_temp = getSumWith2BytesABS(offset + 8, SUM_MODE_TEMP);
         this.singular_ctrl_setting_humid = getSumWith2BytesABS(offset + 10, SUM_MODE_HUMID);
@@ -367,10 +414,10 @@ public class SettingPOJO extends BasePOJO {
         this.dry_condition_setting_ctrl = getLhsFromDualABS(offset + 22);
         this.dry_condition_setting_humidity = getRhsFromDualABS(offset + 22);
         this.alert_alarm_time_select_aggr = getSumWith2BytesABS(offset + 24, SUM_MODE_P);
-        this.alert_alarm_time_select_auto = getBooleanValueFromByteABS(offset + 24, 0);
-        this.alert_alarm_time_select_timer = getBooleanValueFromByteABS(offset + 24, 1);
+        this.alert_alarm_time_select_auto = getBooleanValueFrom2ByteABS(offset + 24, 0);
+        this.alert_alarm_time_select_timer = getBooleanValueFrom2ByteABS(offset + 24, 1);
         this.alert_alarm_time_select_lamp_unit = toDecimalFromBinaryValueABS(offset + 24, 2, 2);
-        this.alert_alarm_time_select_timeset = getBooleanValueFromByteABS(offset + 24, 4);
+        this.alert_alarm_time_select_timeset = getBooleanValueFrom2ByteABS(offset + 24, 4);
         this.cthi_ctrl_stat_aggr = getSumWith2BytesABS(offset + 26, SUM_MODE_P);
         this.cthi_ctrl_stat_co2_ctrl = toDecimalFromBinaryValueABS(offset + 26, 0, 2);
         this.cthi_ctrl_stat_co2_ontype = getBooleanValueFrom2ByteABS(offset + 26, 2);

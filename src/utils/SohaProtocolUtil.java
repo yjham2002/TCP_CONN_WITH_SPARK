@@ -2,7 +2,9 @@ package utils;
 
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import constants.ConstProtocol;
+import pojo.RealtimePOJO;
 
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -309,6 +311,57 @@ public class SohaProtocolUtil {
         for(int e = 0; e < numbers.length; e++) array[e] = intToAscii(numbers[e]);
 
         return array;
+    }
+
+    public static int getErrorCount(RealtimePOJO realtimePOJO){
+        int args[] = getErrorArray(realtimePOJO);
+        int sum = 0;
+        for(int i = 0; i < args.length; i++) sum += args[i];
+
+        System.out.println("[REALTIME ERROR COUNT] :: " + sum);
+
+        return sum;
+    }
+
+    public static int[] getErrorArray(RealtimePOJO realtimePOJO){
+        int[] array = new int[]{
+                realtimePOJO.getErrdata_internal_co2(),
+                realtimePOJO.getErrdata_internal_temp(),
+                realtimePOJO.getErrdata_internal_humid(),
+                realtimePOJO.getErrdata_internal_ilum(),
+                realtimePOJO.getErrdata_vent_relay(),
+                realtimePOJO.getErrdata_raisetemp_relay(),
+                realtimePOJO.getErrdata_raisecool_relay(),
+                realtimePOJO.getErrdata_humidify_relay(),
+                realtimePOJO.getErrdata_dehumidify_relay(),
+                realtimePOJO.getErrdata_ilum_output(),
+                realtimePOJO.getErrdata_crop_data(),
+                realtimePOJO.getErrdata_device_connection(),
+                realtimePOJO.getErrdata_network1(),
+                realtimePOJO.getErrdata_network2(),
+                realtimePOJO.getErrdata_network3(),
+                realtimePOJO.getErrdata_network4()
+        };
+
+        return array;
+    }
+
+    public static String getErrorMessage(RealtimePOJO realtimePOJO, String farmName, String harvName){
+
+        String errorMsg = "";
+        int[] errorArray = getErrorArray(realtimePOJO);
+
+        if(errorArray.length <= 0) return null;
+
+        for(int i = 0; i < errorArray.length; i++){
+            if(errorArray[i] != ConstProtocol.FALSE) errorMsg += ConstProtocol.ERROR_MSG[i] + "\n";
+        }
+
+        errorMsg = errorMsg.trim();
+
+        String finalMsg = "[" + farmName + " - " + harvName + "]\n" + errorMsg;
+
+        return finalMsg;
     }
 
 }

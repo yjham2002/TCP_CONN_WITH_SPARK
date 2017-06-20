@@ -1,27 +1,32 @@
 package server.whois;
 
 import configs.ServerConfig;
+import constants.ConstProtocol;
+import mysql.DBManager;
+import utils.HexUtil;
+import utils.SohaProtocolUtil;
 
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.logging.Logger;
 
-public class WhoisSmsSVC extends ServerConfig implements ISMSSyncSVC {
+public class SMSService extends ServerConfig implements ISMSSyncSVC {
 
     private Logger logger;
     private String id = ""	;
     private String pw = "" ;
     private String defaultFromPhone = "" ;
 
-    public WhoisSmsSVC(String id, String pw, String defaultFromPhone) {
+    public SMSService(String id, String pw, String defaultFromPhone) {
         this.logger = Logger.getLogger(this.getClass().getName());
         this.id = id ;
         this.pw = pw ;
         this.defaultFromPhone = defaultFromPhone ;
     }
 
-    public WhoisSmsSVC(){
+    public SMSService(){
+        this.logger = Logger.getLogger(this.getClass().getName());
         this.id = SMS_ID;
         this.pw = SMS_PW;
         this.defaultFromPhone = SMS_DEFAULT_PHONE;
@@ -39,7 +44,7 @@ public class WhoisSmsSVC extends ServerConfig implements ISMSSyncSVC {
         }
 
         sms.login(this.id, this.pw) ;
-        sms.setUtf8();
+//        sms.setUtf8();
         sms.setParams(toPhone, fromPhone, msg, "0") ;
         sms.emmaSend() ;
 
@@ -70,10 +75,6 @@ public class WhoisSmsSVC extends ServerConfig implements ISMSSyncSVC {
     @Override
     public int sendSMS(String toPhone, String msg) {
         return sendSMS(toPhone,this.defaultFromPhone, msg) ;
-    }
-
-    public static void main(String... args){
-        WhoisSmsSVC whoisSmsSVC = new WhoisSmsSVC();
     }
 
 }

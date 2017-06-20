@@ -98,4 +98,28 @@ public class DBConstManager {
         }
     }
 
+    public String getString(String sql, String column){
+        try {
+            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
+            st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            String res = "";
+
+            while(rs.next()){
+                res = rs.getString(column);
+            }
+
+            rs.close();
+            st.close();
+
+            connection.close();
+
+            return res;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

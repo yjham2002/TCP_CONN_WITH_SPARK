@@ -189,10 +189,10 @@ public class ServiceProvider extends ServerConfig{
                         iterator.remove();
                     }
 
-                    if(!recv){
-                        d("WARN :: [Connection Expired - Closing Remotely and Restarting :: " + getTime() + "]");
-                        startServer();
-                    }
+//                    if(!recv){
+//                        d("WARN :: [Connection Expired - Closing Remotely and Restarting :: " + getTime() + "]");
+//                        startServer();
+//                    }
 
                 }catch(IOException e){
                     e.printStackTrace();

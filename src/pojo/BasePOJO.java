@@ -365,6 +365,7 @@ public class BasePOJO implements Serializable{
         return Integer.parseInt(bin.substring(1, 2));
     }
 
+    @Deprecated
     protected int getBooleanValueFromByteABS(int offset, int bitIndex){
         assert bitIndex < 8;
 

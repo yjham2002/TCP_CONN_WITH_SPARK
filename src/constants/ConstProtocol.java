@@ -83,4 +83,31 @@ public class ConstProtocol {
     public static final int TRUE = 1;
     public static final int FALSE = 0;
 
+    public static final String[] ERROR_MSG = {
+            "실내 CO2값 이상",
+            "실내 온도 이상",
+            "실내 습도 이상",
+            "실내 조도 이상",
+            "환기 릴레이 이상",
+            "가온 릴레이 이상",
+            "가냉 릴레이 이상",
+            "가습 릴레이 이상",
+            "제습 릴레이 이상",
+            "조도 출력 이상",
+            "작물 데이터 이상",
+            "장치간 통신 이상",
+            "VT250 #1 통신 이상",
+            "VT250 #2 통신 이상",
+            "VT250 #3 통신 이상",
+            "VT250 #4 통신 이상"
+    };
+
+    public static final String SQL_FARMNAME_FORMAT = "SELECT farm_name AS farmName FROM farm_list WHERE farm_code = '%s' LIMIT 1";
+    public static final String SQL_DONGNAME_FORMAT = "SELECT dong_name AS dongName FROM dong_list WHERE farm_code = '%s' AND dong_code = '%s' LIMIT 1";
+    public static final String SQL_FARM_TEL = "SELECT farm_tel AS tel FROM farm_list WHERE farm_code = '%s' LIMIT 1";
+
+    public static final String SQL_COL_FARMNAME = "farmName";
+    public static final String SQL_COL_DONGNAME = "dongName";
+    public static final String SQL_COL_FARM_TEL = "tel";
+
 }
