@@ -312,7 +312,8 @@ public class SettingPOJO extends BasePOJO {
         byte[] modbusData =
                 SohaProtocolUtil.concat(
                         new byte[]{Byte.parseByte(this.dongCode), 3, (byte)(ConstProtocol.RANGE_SETTING.getTail() * 2)}, SohaProtocolUtil.getHexLocation(this.machine_no),
-                        new byte[]{(byte)bitAggr_alt, 0, (byte)this.sensor_quantity, (byte)bitAggr_sr},
+                        SohaProtocolUtil.getHexLocation(crop_data_num_and_ctrl_aggr),
+                        new byte[]{ (byte)this.sensor_quantity, (byte)bitAggr_sr},
 
                         SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_co2), SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_temp),
                         SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_humid),
@@ -323,7 +324,7 @@ public class SettingPOJO extends BasePOJO {
                         getAggregation(this.relay_output_setting_reserve, this.relay_output_setting_alarm),
 
                         getAggregation(this.dry_condition_setting_ctrl, this.dry_condition_setting_humidity),
-                        SohaProtocolUtil.getHexLocation(this.alert_alarm_time_select_aggr),
+                        SohaProtocolUtil.getHexLocation(bitAggr_alt),
                         new byte[]{(byte)bitAggr_ctrl_1, (byte)bitAggr_ctrl_2},
 
                         SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_low), SohaProtocolUtil.getHexLocation(this.calm_threshold_co2_high),

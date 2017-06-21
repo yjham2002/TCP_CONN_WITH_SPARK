@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/SettingPOJO.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/SettingPOJO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/AppMain.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/AppMain.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/SettingPOJO.java" afterPath="$PROJECT_DIR$/src/pojo/SettingPOJO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redis/RedisWrapper.java" afterPath="$PROJECT_DIR$/src/redis/RedisWrapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/AppMain.java" afterPath="$PROJECT_DIR$/src/server/AppMain.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -68,11 +63,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="213">
-              <caret line="180" column="0" lean-forward="true" selection-start-line="180" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
+            <state relative-caret-position="251">
+              <caret line="182" column="43" lean-forward="true" selection-start-line="182" selection-start-column="43" selection-end-line="182" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -88,23 +83,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DBConstManager.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DBConstManager.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/mysql/DBConstManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2261">
+            <state relative-caret-position="417">
               <caret line="120" column="23" lean-forward="false" selection-start-line="120" selection-start-column="23" selection-end-line="120" selection-end-column="23" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SettingPOJO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pojo/SettingPOJO.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="392" column="87" lean-forward="true" selection-start-line="392" selection-start-column="87" selection-end-line="392" selection-end-column="87" />
               <folding />
             </state>
           </provider>
@@ -131,7 +114,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>gene</find>
       <find>getInser</find>
       <find>WRITE</find>
       <find>MODE_READ_T</find>
@@ -156,10 +138,11 @@
       <find>dry_condition</find>
       <find>alert_alarm_time_select_aggr</find>
       <find>aggr</find>
-      <find>getByte</find>
       <find>skipping</find>
       <find>260</find>
       <find>init</find>
+      <find>crop_data_num_and_ctrl_aggr</find>
+      <find>getByte</find>
       <find>WRITE_DA</find>
     </findStrings>
     <replaceStrings>
@@ -238,9 +221,9 @@
         <option value="$PROJECT_DIR$/src/constants/ConstProtocol.java" />
         <option value="$PROJECT_DIR$/src/server/whois/SMSService.java" />
         <option value="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
-        <option value="$PROJECT_DIR$/src/pojo/SettingPOJO.java" />
         <option value="$PROJECT_DIR$/src/server/AppMain.java" />
         <option value="$PROJECT_DIR$/src/redis/RedisWrapper.java" />
+        <option value="$PROJECT_DIR$/src/pojo/SettingPOJO.java" />
       </list>
     </option>
   </component>
@@ -860,13 +843,6 @@
       <option name="presentableId" value="Default" />
       <updated>1495674868999</updated>
     </task>
-    <task id="LOCAL-00009" summary="Detail Comments added (Protocol Loss Issue)">
-      <created>1496128944941</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1496128944941</updated>
-    </task>
     <task id="LOCAL-00010" summary="Detail Comments added (Protocol Loss Issue)">
       <created>1496130058173</created>
       <option name="number" value="00010" />
@@ -1203,7 +1179,14 @@
       <option name="project" value="LOCAL" />
       <updated>1497919325377</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="Today Backup">
+      <created>1498038838782</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1498038838782</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1229,7 +1212,7 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37172773" sideWeight="0.75416666" order="2" side_tool="false" content_ui="tabs" x="156" y="547" width="1398" height="359" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37172773" sideWeight="0.75416666" order="2" side_tool="false" content_ui="tabs" x="156" y="547" width="1398" height="359" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21302083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1633,16 +1616,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/mysql/DBConstManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2261">
-          <caret line="120" column="23" lean-forward="false" selection-start-line="120" selection-start-column="23" selection-end-line="120" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/whois/SMSService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1273">
@@ -1694,14 +1667,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pojo/SettingPOJO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="392" column="87" lean-forward="true" selection-start-line="392" selection-start-column="87" selection-end-line="392" selection-end-column="87" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/redis/RedisWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
@@ -1712,8 +1677,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="180" column="0" lean-forward="true" selection-start-line="180" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
+        <state relative-caret-position="251">
+          <caret line="182" column="43" lean-forward="true" selection-start-line="182" selection-start-column="43" selection-end-line="182" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pojo/SettingPOJO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="326" column="67" lean-forward="false" selection-start-line="326" selection-start-column="67" selection-end-line="326" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/mysql/DBConstManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="417">
+          <caret line="120" column="23" lean-forward="false" selection-start-line="120" selection-start-column="23" selection-end-line="120" selection-end-column="23" />
           <folding />
         </state>
       </provider>
