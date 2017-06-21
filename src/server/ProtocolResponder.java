@@ -92,7 +92,14 @@ public class ProtocolResponder{
             ByteBuffer byteBuffer = ByteBuffer.allocate(ByteSerial.POOL_SIZE);
 
             int byteCount = socket.read(byteBuffer);
-            if(byteCount == -1) return false;
+            if(byteCount == -1) {
+                selector.wakeup();
+                socket.shutdownInput();
+                socket.shutdownOutput();
+                socket.close();
+                System.out.println("WARN :: Force Closing");
+                return false;
+            }
 
             buffer = byteBuffer.array();
 
