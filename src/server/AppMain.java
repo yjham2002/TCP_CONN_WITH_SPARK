@@ -135,9 +135,12 @@ public class AppMain{
 
                     recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
 
+                    if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_FAILURE);
+
                     settingPOJO.initTails(recv, ConstProtocol.RANGE_READ_START);
 
                     try {
+                        settingPOJO.setByteSerial(null);
                         DBManager.getInstance().execute(settingPOJO.getInsertSQL());
                         retVal = Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
                     }catch (IOException e){
@@ -293,7 +296,7 @@ public class AppMain{
                             return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
                         }else{
                             protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_TIMER);
-                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                            recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
                         }
 
                         System.out.println("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));
@@ -344,7 +347,14 @@ public class AppMain{
                             System.out.println("WRITE ::::::::::::::::: DAILY AGE SUCC");
                             protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, dailyFlag);
                             serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
-                            return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SAVE_SUCC);
+
+                            try {
+                                String sql = cropSubPOJO.getInsertSQL();
+                                DBManager.getInstance().execute(sql);
+                                return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
+                            }catch (IOException e){
+                                return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_FAILURE);
+                            }
                         }
                         else return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
                     }catch(Exception e){

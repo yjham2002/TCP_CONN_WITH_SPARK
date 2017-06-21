@@ -181,7 +181,7 @@ public class RedisWrapper extends ServerConfig{
                 }
             }
 
-            if(errorCount > 0) System.out.println("Parsing Error :: " + errorCount + " items has been Skipped");
+            if(errorCount > 0) System.out.println("Parsing Error :: " + errorCount + " items have been Skipped");
 
         }catch (Exception e){
             e.printStackTrace();

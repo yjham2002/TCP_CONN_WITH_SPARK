@@ -301,6 +301,7 @@ public class SettingPOJO extends BasePOJO {
 
         int bitAggr_alt =
                 getBitAggregation(
+                        0,0,0,
                         this.alert_alarm_time_select_timeset,
                         getBitRhsFromDual(this.alert_alarm_time_select_lamp_unit),
                         getBitLhsFromDual(this.alert_alarm_time_select_lamp_unit),
@@ -311,9 +312,7 @@ public class SettingPOJO extends BasePOJO {
         byte[] modbusData =
                 SohaProtocolUtil.concat(
                         new byte[]{Byte.parseByte(this.dongCode), 3, (byte)(ConstProtocol.RANGE_SETTING.getTail() * 2)}, SohaProtocolUtil.getHexLocation(this.machine_no),
-
-                        SohaProtocolUtil.getHexLocation(bitAggr_alt),
-                        new byte[]{(byte)this.sensor_quantity, (byte)bitAggr_sr},
+                        new byte[]{(byte)bitAggr_alt, 0, (byte)this.sensor_quantity, (byte)bitAggr_sr},
 
                         SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_co2), SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_temp),
                         SohaProtocolUtil.getHexLocation(this.singular_ctrl_setting_humid),
