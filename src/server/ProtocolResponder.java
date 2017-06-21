@@ -25,6 +25,7 @@ import java.nio.channels.SocketChannel;
 import java.util.*;
 
 import static constants.ConstProtocol.*;
+import static models.ByteSerial.POOL_SIZE;
 
 /**
  * @author 함의진
@@ -39,6 +40,8 @@ public class ProtocolResponder{
      * SLF4J 로거
      */
     Logger log;
+
+    private ByteBuffer byteBuffer;
 
     private SMSService smsService;
     private boolean started = false; // 이니셜 프로토콜이 전송되었는지의 여부를 갖는 로컬 변수
@@ -62,7 +65,7 @@ public class ProtocolResponder{
         log = LoggerFactory.getLogger(this.getClass());
         this.socket = socket; // 멤버 세팅
         this.selector = selector;
-
+        this.byteBuffer = ByteBuffer.allocate(POOL_SIZE);
         /**
          * SMS 전송 클래스 생성
          */
@@ -86,20 +89,23 @@ public class ProtocolResponder{
     private static boolean tempVar = false; // 디버깅용 변수
 
     public boolean receive() throws IOException{
+//        System.out.println("RECEIVE[ENTERED] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
         byteSerial = null;
 
         try{
-            ByteBuffer byteBuffer = ByteBuffer.allocate(ByteSerial.POOL_SIZE);
+//            byteBuffer.clear();
+
+             byteBuffer = ByteBuffer.allocate(POOL_SIZE); // ByteBuffer Limit has to be considered
+
+//            System.out.println("RECEIVE[ALLOC] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
 
             int byteCount = socket.read(byteBuffer);
             if(byteCount == -1) {
-                selector.wakeup();
-                socket.shutdownInput();
-                socket.shutdownOutput();
-                socket.close();
-                System.out.println("WARN :: Force Closing");
+                System.out.println("RECEIVE[-1] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
                 return false;
             }
+
+//            System.out.println("RECEIVE[READ] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
 
             buffer = byteBuffer.array();
 
@@ -125,7 +131,7 @@ public class ProtocolResponder{
             }
 
             if (!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
-                if (!started) { // 이니셜 프로토콜에 따른 처리 여부를 확인하여 최초 연결일 경우, 본 로직을 수행
+                if (!started || buffer.length != LENGTH_REALTIME) { // 이니셜 프로토콜에 따른 처리 여부를 확인하여 최초 연결일 경우, 본 로직을 수행
                     started = true; // 이니셜 프로토콜 전송 여부 갱신
 
                     clients.put(uniqueKey, this); // 클라이언트 해시맵에 상위에서 추출한 유니크키를 기준으로 삽입
@@ -202,6 +208,10 @@ public class ProtocolResponder{
 
 
         }catch(IOException e){ // 소켓 연결 두절의 경우, 연결을 종료할 경우, 흔히 발생하므로 에러 핸들링을 별도로 하지 않음
+//            e.printStackTrace();
+            selectionKey.cancel();
+            selectionKey.channel().close();
+//            socket.finishConnect();
             log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
             clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
             return false;
