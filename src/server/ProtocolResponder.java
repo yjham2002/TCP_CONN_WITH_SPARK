@@ -102,7 +102,7 @@ public class ProtocolResponder{
             int byteCount = socket.read(byteBuffer);
             if(byteCount == -1) {
                 System.out.println("RECEIVE[-1] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
-                return false;
+                throw new IOException();
             }
 
 //            System.out.println("RECEIVE[READ] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
@@ -194,7 +194,7 @@ public class ProtocolResponder{
 
                         if(!tempVar) {
                             tempVar = true;
-                            smsService.sendSMS(tel, msg);
+//                            smsService.sendSMS(tel, msg);
                         }
 
                     }
