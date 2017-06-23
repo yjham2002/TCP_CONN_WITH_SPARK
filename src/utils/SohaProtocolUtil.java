@@ -346,10 +346,30 @@ public class SohaProtocolUtil {
         return array;
     }
 
-    public static String getErrorMessage(RealtimePOJO realtimePOJO, String farmName, String harvName){
+    public static String getErrorSQL(String farm, String harv, int errCode, String flag){
+
+        if(flag.length() > 1) return "SELECT -1";
+
+        String sql = "insert into `sohatechfarmdb`.`tblError`\n" +
+                "            (\n" +
+                "             `farmCode`,\n" +
+                "             `dongCode`,\n" +
+                "             `errCode`,\n" +
+                "             `flag`,\n" +
+                "             `regDate`)\n" +
+                "values (\n" +
+                "        '" + farm + "',\n" +
+                "        '" + harv + "',\n" +
+                "        '" + errCode + "',\n" +
+                "        '" + flag + "',\n" +
+                "        NOW());";
+
+        return sql;
+    }
+
+    public static String getErrorMessage(int errorArray[], String farmName, String harvName){
 
         String errorMsg = "";
-        int[] errorArray = getErrorArray(realtimePOJO);
 
         if(errorArray.length <= 0) return null;
 

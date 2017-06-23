@@ -54,6 +54,8 @@ public class ProtocolResponder{
     private SocketChannel socket; // ServiceProvider로부터 accept된 단위 소켓
     private HashMap<String, ProtocolResponder> clients; // ServiceProvider의 클라이언트 집합의 레퍼런스 포인터
 
+    private int[] prevErrorData = null;
+
     /**
      * 프로토콜에 따른 응답을 위한 클래스의 생성자로서 단위 소켓과 함께 클라이언트 레퍼런스 포인터를 수용
      * @param socket
@@ -183,19 +185,38 @@ public class ProtocolResponder{
 
                     if(SohaProtocolUtil.getErrorCount(realtimePOJO) > 0){
                         int errArray[] = SohaProtocolUtil.getErrorArray(realtimePOJO);
+                        int errSMSarray[] = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-                        String farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farmString), ConstProtocol.SQL_COL_FARMNAME);
-                        String harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
-                        String tel = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARM_TEL, farmString), ConstProtocol.SQL_COL_FARM_TEL);
+                        boolean haveToSend = false;
 
-                        String msg = SohaProtocolUtil.getErrorMessage(realtimePOJO, farmName, harvName);
+                        if(prevErrorData != null){
+                            for(int err = 0; err < errArray.length; err++){
+                                if(errArray[err] != prevErrorData[err]){
+                                    if(errArray[err] == ConstProtocol.TRUE) {
 
-                        // TODO Conditional - and Detecting new one
+                                        haveToSend = true;
+                                        errSMSarray[err] = ConstProtocol.TRUE;
 
-                        if(!tempVar) {
-                            tempVar = true;
-//                            smsService.sendSMS(tel, msg);
+                                        String sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "Y");
+                                        DBManager.getInstance().execute(sql);
+                                    }else{
+                                        String sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "N");
+                                        DBManager.getInstance().execute(sql);
+                                    }
+                                }
+                            }
                         }
+
+                        if(haveToSend) {
+                            String farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farmString), ConstProtocol.SQL_COL_FARMNAME);
+                            String harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
+                            String tel = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARM_TEL, farmString), ConstProtocol.SQL_COL_FARM_TEL);
+
+                            String msg = SohaProtocolUtil.getErrorMessage(errSMSarray, farmName, harvName);
+                            smsService.sendSMS(tel, msg);
+                        }
+
+                        prevErrorData = errArray;
 
                     }
 
