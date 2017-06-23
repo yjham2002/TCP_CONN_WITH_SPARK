@@ -211,7 +211,7 @@ public class AppMain{
         /**
          * WRITE 요청 API
          * id, mode, farm, harv, order(optional)
-         * mode : read_timer, read_dayage(order 필요/누락 시 전체 일령)
+         * mode : read_timer, read_dayage(order 필요)
          */
         Spark.post(ConstRest.REST_WRITE_REQUEST, (req, res) -> {
             Thread.currentThread().setPriority(Thread.MAX_PRIORITY);

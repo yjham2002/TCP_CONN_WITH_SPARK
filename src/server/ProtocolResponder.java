@@ -66,6 +66,9 @@ public class ProtocolResponder{
 
         log = LoggerFactory.getLogger(this.getClass());
         this.socket = socket; // 멤버 세팅
+
+//        this.socket.socket().setReuseAddress(true);
+
         this.selector = selector;
         this.byteBuffer = ByteBuffer.allocate(POOL_SIZE);
         /**
@@ -229,7 +232,7 @@ public class ProtocolResponder{
 
 
         }catch(IOException e){ // 소켓 연결 두절의 경우, 연결을 종료할 경우, 흔히 발생하므로 에러 핸들링을 별도로 하지 않음
-//            e.printStackTrace();
+            e.printStackTrace();
             selectionKey.cancel();
             selectionKey.channel().close();
 //            socket.finishConnect();
