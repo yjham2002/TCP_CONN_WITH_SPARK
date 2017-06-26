@@ -98,11 +98,11 @@ public class ProtocolResponder{
         byteSerial = null;
 
         try{
-//            byteBuffer.clear();
+//          byteBuffer.clear();
 
-             byteBuffer = ByteBuffer.allocate(POOL_SIZE); // ByteBuffer Limit has to be considered
+            byteBuffer = ByteBuffer.allocate(POOL_SIZE); // ByteBuffer Limit has to be considered
 
-//            System.out.println("RECEIVE[ALLOC] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
+            System.out.println("RECEIVE[ALLOC] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
 
             int byteCount = socket.read(byteBuffer);
             if(byteCount == -1) {
@@ -110,7 +110,7 @@ public class ProtocolResponder{
                 throw new IOException();
             }
 
-//            System.out.println("RECEIVE[READ] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
+            System.out.println("RECEIVE[READ] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
 
             buffer = byteBuffer.array();
 
@@ -233,7 +233,7 @@ public class ProtocolResponder{
 
         }catch(IOException e){ // 소켓 연결 두절의 경우, 연결을 종료할 경우, 흔히 발생하므로 에러 핸들링을 별도로 하지 않음
             e.printStackTrace();
-            selectionKey.cancel();
+            if(selectionKey.isValid()) selectionKey.cancel();
             selectionKey.channel().close();
 //            socket.finishConnect();
             log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
@@ -334,6 +334,11 @@ public class ProtocolResponder{
 
         } catch (IOException e) {
             e.printStackTrace();
+            if(selectionKey.isValid()) selectionKey.cancel();
+            selectionKey.channel().close();
+//            socket.finishConnect();
+            log.info("Connection Finished - Send"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
+            clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
         } finally {
             return byteSerial;
         }
@@ -356,10 +361,13 @@ public class ProtocolResponder{
             selectionKey.interestOps(SelectionKey.OP_READ);
             selector.wakeup();
 
-        }
-
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            if(selectionKey.isValid()) selectionKey.cancel();
+            try{selectionKey.channel().close();}catch(Exception ee){ee.printStackTrace();}
+//            socket.finishConnect();
+            log.info("Connection Finished - Send Oneway"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
+            clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
         }
 
     }

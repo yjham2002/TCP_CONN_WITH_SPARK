@@ -23,6 +23,7 @@ public class ConstRest {
     /**
      * API Parameters
      */
+    public static final String MODE_READ_REALTIME = "read_realtime";
     public static final String MODE_READ_TIMER = "read_timer";
     public static final String MODE_READ_DAYAGE = "read_dayage";
     public static final String MODE_READ_SETTING = "read_setting";

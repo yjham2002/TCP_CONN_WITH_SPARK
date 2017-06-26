@@ -12,6 +12,7 @@ import utils.SohaProtocolUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -393,15 +394,15 @@ public class RealtimePOJO extends BasePOJO{
         /**
          * 릴레이 출력 데이터 시작
          */
-        this.relay_output_aggr = getSingleByte(108);
-        this.relay_output_co2 = getBooleanValueFromByte(108, 0);
-        this.relay_output_heater = getBooleanValueFromByte(108, 1);
-        this.relay_output_freezer = getBooleanValueFromByte(108, 2);
-        this.relay_output_humidity = getBooleanValueFromByte(108, 3);
-        this.relay_output_dehumidity = getBooleanValueFromByte(108, 4);
-        this.relay_output_ilum = getBooleanValueFromByte(108, 5);
-        this.relay_output_alarm = getBooleanValueFromByte(108, 6);
-        this.relay_output_reserve = getBooleanValueFromByte(108, 7);
+        this.relay_output_aggr = getSumWith2Bytes(108, SUM_MODE_P);
+        this.relay_output_co2 = getBooleanValueFrom2Byte(108, 0);
+        this.relay_output_heater = getBooleanValueFrom2Byte(108, 1);
+        this.relay_output_freezer = getBooleanValueFrom2Byte(108, 2);
+        this.relay_output_humidity = getBooleanValueFrom2Byte(108, 3);
+        this.relay_output_dehumidity = getBooleanValueFrom2Byte(108, 4);
+        this.relay_output_ilum = getBooleanValueFrom2Byte(108, 5);
+        this.relay_output_alarm = getBooleanValueFrom2Byte(108, 6);
+        this.relay_output_reserve = getBooleanValueFrom2Byte(108, 7);
         /**
          * 릴레이 출력 데이터 종결
          */
@@ -446,8 +447,8 @@ public class RealtimePOJO extends BasePOJO{
         this.run_status_aggr = getSumWith2Bytes(114, SUM_MODE_P);
         this.run_status_current = getBooleanValueFrom2Byte(114, 0);
         this.run_status_mode = toDecimalFromBinaryValue(114, 1, 2);
-        this.run_status_prevdata = getBooleanValueFromByte(114, 5);
-        this.run_status_dry_enabled = getBooleanValueFromByte(114, 7);
+        this.run_status_prevdata = getBooleanValueFrom2Byte(114, 5);
+        this.run_status_dry_enabled = getBooleanValueFrom2Byte(114, 7);
         this.run_status_dayage_count = toDecimalFromBinaryValue(114, 8, 2);
         this.run_status_dayage_progress = getBooleanValueFrom2Byte(114, 15);
         /**
@@ -493,14 +494,17 @@ public class RealtimePOJO extends BasePOJO{
         this.sr_set1_temp = getSumWith2Bytes(216, SUM_MODE_TEMP);
         this.sr_set1_humidity = getSumWith2Bytes(218, SUM_MODE_HUMID);
         this.sr_set1_ilum = getSumWith2Bytes(220, SUM_MODE_P);
+
         this.sr_set2_co2 = getSumWith2Bytes(222, SUM_MODE_P);
         this.sr_set2_temp = getSumWith2Bytes(224, SUM_MODE_TEMP);
         this.sr_set2_humidity = getSumWith2Bytes(226, SUM_MODE_HUMID);
         this.sr_set2_ilum = getSumWith2Bytes(228, SUM_MODE_P);
+
         this.sr_set3_co2 = getSumWith2Bytes(230, SUM_MODE_P);
         this.sr_set3_temp = getSumWith2Bytes(232, SUM_MODE_TEMP);
         this.sr_set3_humidity = getSumWith2Bytes(234, SUM_MODE_HUMID);
         this.sr_set3_ilum = getSumWith2Bytes(236, SUM_MODE_P);
+
         this.sr_set4_co2 = getSumWith2Bytes(238, SUM_MODE_P);
         this.sr_set4_temp = getSumWith2Bytes(240, SUM_MODE_TEMP);
         this.sr_set4_humidity = getSumWith2Bytes(242, SUM_MODE_TEMP);
@@ -532,7 +536,7 @@ public class RealtimePOJO extends BasePOJO{
 
         this.vt515_version = getSumWith2Bytes(268, SUM_MODE_P);
 
-        this.lcdorder_run = getBooleanValueFromByte(270, 0);
+        this.lcdorder_run = getBooleanValueFrom2Byte(270, 0);
         this.lcdorder_mode = toDecimalFromBinaryValue(270, 1, 2);
         this.lcdorder_dayage_start = getBooleanValueFrom2Byte(270, 15);
 
@@ -2317,6 +2321,8 @@ public class RealtimePOJO extends BasePOJO{
     @JsonIgnore
     public String getInsertSQL(){
         if(errorStatList == null || errorStatList.size() < 16) return "SELECT -1";
+
+        if(this.redisTime == null) this.redisTime = Calendar.getInstance().getTimeInMillis() + "";
 
        String sql = "INSERT INTO `sohatechfarmdb`.`tblRealTimeData` \n" +
                "\t(" +

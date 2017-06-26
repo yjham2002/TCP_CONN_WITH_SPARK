@@ -113,12 +113,37 @@ public class AppMain{
             }
 
             byte[] protocol = null;
+            byte[] protocol_sub = null;
             byte[][] protocols = null;
             ByteSerial recv;
             List<ByteSerial> recvs;
             String retVal = null;
 
             switch(mode){
+                case ConstRest.MODE_READ_REALTIME:
+
+                    protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_REALTIME_READABLE.getHead(), ConstProtocol.RANGE_REALTIME_READABLE.getTail(), id, farmCode, harvCode);
+                    protocol_sub = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_REALTIME_READABLE_TAILS.getHead(), ConstProtocol.RANGE_REALTIME_READABLE_TAILS.getTail(), id, farmCode, harvCode);
+                    protocols = new byte[][]{protocol_sub.clone(), protocol.clone()};
+                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
+
+                    if(recvs.size() <= 0) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
+                    else{
+                        byte[] pure = ByteSerial.getPureDataConcatForRealtime(recvs);
+
+                        ByteSerial rSerial = new ByteSerial(SohaProtocolUtil.concat(ConstProtocol.STX, farmCode, harvCode, pure, new byte[]{ 0 }, ConstProtocol.ETX));
+
+                        RealtimePOJO realtimePOJO = new RealtimePOJO(rSerial);
+
+                        try {
+                            DBManager.getInstance().execute(realtimePOJO.getInsertSQL());
+                            return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
+                        }catch (Exception e){
+                            return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
+                        }
+
+                    }
+
                 case ConstRest.MODE_READ_SETTING:
 
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), id, farmCode, harvCode);
@@ -393,7 +418,14 @@ public class AppMain{
 
                         System.out.println("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));
 
-                        return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SAVE_SUCC);
+                        try {
+                            settingPOJO.setByteSerial(null);
+                            DBManager.getInstance().execute(settingPOJO.getInsertSQL());
+                            return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
+                        }catch (IOException e){
+                            return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_FAILURE);
+                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);

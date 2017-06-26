@@ -172,6 +172,15 @@ public class ByteSerial implements Serializable{
         return arr;
     }
 
+    @JsonIgnore
+    public static byte[] getPureDataConcatForRealtime(List<ByteSerial> serials){
+        if(serials.size() < 2) return null;
+
+        byte[] padding = new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        byte[] arr = SohaProtocolUtil.concat(serials.get(0).getPureBytes(), padding, serials.get(1).getPureBytes());
+        return arr;
+    }
+
     /**
      * 바이트 시리얼의 종결 배열을 확인하기 위한 메소드
      * @param bytes
