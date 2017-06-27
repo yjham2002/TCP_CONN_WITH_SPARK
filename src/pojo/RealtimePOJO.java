@@ -152,6 +152,7 @@ public class RealtimePOJO extends BasePOJO{
     private int run_status_aggr;
     private int run_status_current;
     private int run_status_mode;
+    private int run_status_3rd;
     private int run_status_prevdata;
     private int run_status_dry_enabled;
     private int run_status_dayage_count;
@@ -447,6 +448,7 @@ public class RealtimePOJO extends BasePOJO{
         this.run_status_aggr = getSumWith2Bytes(114, SUM_MODE_P);
         this.run_status_current = getBooleanValueFrom2Byte(114, 0);
         this.run_status_mode = toDecimalFromBinaryValue(114, 1, 2);
+        this.run_status_3rd = getBooleanValueFrom2Byte(114, 3);
         this.run_status_prevdata = getBooleanValueFrom2Byte(114, 5);
         this.run_status_dry_enabled = getBooleanValueFrom2Byte(114, 7);
         this.run_status_dayage_count = toDecimalFromBinaryValue(114, 8, 2);
@@ -516,7 +518,7 @@ public class RealtimePOJO extends BasePOJO{
         this.sr_val_ilum = getSumWith2Bytes(252, SUM_MODE_P);
 
         this.controlstat_aggr = getSumWith2Bytes(254, SUM_MODE_P);
-        this.controlstat_co2_type = toDecimalFromBinaryValue(254, 0, 1);
+        this.controlstat_co2_type = toDecimalFromBinaryValue(254, 0, 2);
         this.controlstat_co2_ontype = getBooleanValueFrom2Byte(254, 2);
         this.controlstat_co2_offtype = getBooleanValueFrom2Byte(254, 3);
         this.controlstat_temp_type = toDecimalFromBinaryValue(254, 4, 2);
@@ -2266,6 +2268,14 @@ public class RealtimePOJO extends BasePOJO{
         this.errdata_ilum_output = errdata_ilum_output;
     }
 
+    public int getRun_status_3rd() {
+        return run_status_3rd;
+    }
+
+    public void setRun_status_3rd(int run_status_3rd) {
+        this.run_status_3rd = run_status_3rd;
+    }
+
     @Override
     public String toString(){
         return "Realtime Data : " + byteSerial.getProcessed();
@@ -2444,6 +2454,7 @@ public class RealtimePOJO extends BasePOJO{
                "\t`run_status_aggr`, \n" +
                "\t`run_status_current`, \n" +
                "\t`run_status_mode`, \n" +
+               "\t`run_status_3rd`, \n" +
                "\t`run_status_prevdata`, \n" +
                "\t`run_status_dry_enabled`, \n" +
                "\t`run_status_dayage_count`, \n" +
@@ -2701,6 +2712,7 @@ public class RealtimePOJO extends BasePOJO{
                "'" + run_status_aggr + "'," +
                "'" + run_status_current + "'," +
                "'" + run_status_mode + "'," +
+               "'" + run_status_3rd + "'," +
                "'" + run_status_prevdata + "'," +
                "'" + run_status_dry_enabled + "'," +
                "'" + run_status_dayage_count + "'," +
@@ -2840,6 +2852,7 @@ public class RealtimePOJO extends BasePOJO{
                "\t);";
 
         return sql;
+
     }
 
 

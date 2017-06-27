@@ -411,7 +411,7 @@ public class AppMain{
                         if(multiCount != confirmCount) {
                             return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
                         }else{
-                            protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_SETTING);
+                            protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_SETTING, ConstProtocol.FLAG_DAILY_6);
                             System.out.println("Sending Flag :::::::::::::::: " + Arrays.toString(protocol));
                             serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
                         }

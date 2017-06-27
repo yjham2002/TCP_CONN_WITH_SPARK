@@ -75,6 +75,7 @@ public class SMSService extends ServerConfig implements ISMSSyncSVC {
 
     @Override
     public int sendSMS(String toPhone, String msg) {
+        System.out.println("Sending SMS :: " + toPhone + " :: msg ::" + msg);
         return sendSMS(toPhone,this.defaultFromPhone, msg) ;
     }
 
