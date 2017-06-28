@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/constants/ConstProtocol.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/constants/ConstProtocol.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/BasePOJO.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/BasePOJO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/RealtimePOJO.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/RealtimePOJO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/constants/ConstProtocol.java" afterPath="$PROJECT_DIR$/src/constants/ConstProtocol.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/BasePOJO.java" afterPath="$PROJECT_DIR$/src/pojo/BasePOJO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" afterPath="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ProtocolResponder.java" afterPath="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/SettingPOJO.java" afterPath="$PROJECT_DIR$/src/pojo/SettingPOJO.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -32,8 +25,8 @@
       <file leaf-file-name="AppMain.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2719">
-              <caret line="208" column="91" lean-forward="true" selection-start-line="208" selection-start-column="91" selection-end-line="208" selection-end-column="91" />
+            <state relative-caret-position="292">
+              <caret line="415" column="110" lean-forward="true" selection-start-line="415" selection-start-column="110" selection-end-line="415" selection-end-column="110" />
               <folding>
                 <marker date="1498632542263" expanded="true" signature="9623:10190" ph="..." />
               </folding>
@@ -51,11 +44,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="338" column="0" lean-forward="true" selection-start-line="338" selection-start-column="0" selection-end-line="338" selection-end-column="0" />
+            <state relative-caret-position="252">
+              <caret line="293" column="0" lean-forward="true" selection-start-line="293" selection-start-column="0" selection-end-line="293" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -71,21 +64,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ConstRest.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ConstRest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/constants/ConstRest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="534">
               <caret line="34" column="0" lean-forward="true" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RealtimePOJO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pojo/RealtimePOJO.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="156">
-              <caret line="451" column="68" lean-forward="true" selection-start-line="451" selection-start-column="68" selection-end-line="451" selection-end-column="68" />
               <folding />
             </state>
           </provider>
@@ -106,16 +89,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-1266">
               <caret line="51" column="18" lean-forward="false" selection-start-line="51" selection-start-column="12" selection-end-line="51" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SettingPOJO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pojo/SettingPOJO.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="290">
-              <caret line="293" column="68" lean-forward="true" selection-start-line="293" selection-start-column="68" selection-end-line="293" selection-end-column="68" />
               <folding />
             </state>
           </provider>
@@ -142,8 +115,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>READ_REAL</find>
-      <find>output</find>
       <find>relay_out</find>
       <find>this.relay_ou</find>
       <find>redistime</find>
@@ -155,7 +126,6 @@
       <find>write_real</find>
       <find>toDecimal</find>
       <find>114</find>
-      <find>write_setting</find>
       <find>errstat_pro</find>
       <find>errorStatList</find>
       <find>294</find>
@@ -169,9 +139,12 @@
       <find>singular_ctrl_setting_humid</find>
       <find>26</find>
       <find>CROP</find>
-      <find>thread</find>
       <find>initi</find>
       <find>cthi</find>
+      <find>controlstat_temp</find>
+      <find>thread</find>
+      <find>getBitL</find>
+      <find>write_setting</find>
     </findStrings>
     <replaceStrings>
       <replace>log.info</replace>
@@ -240,7 +213,6 @@
         <option value="$PROJECT_DIR$/src/server/whois/WhoisSmsSVC.java" />
         <option value="$PROJECT_DIR$/src/mysql/DBConstManager.java" />
         <option value="$PROJECT_DIR$/src/utils/HexUtil.java" />
-        <option value="$PROJECT_DIR$/src/pojo/SettingPOJO.java" />
         <option value="$PROJECT_DIR$/src/utils/SohaProtocolUtil.java" />
         <option value="$PROJECT_DIR$/src/redis/RedisWrapper.java" />
         <option value="$PROJECT_DIR$/src/constants/ConstRest.java" />
@@ -252,6 +224,7 @@
         <option value="$PROJECT_DIR$/src/server/AppMain.java" />
         <option value="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" />
         <option value="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
+        <option value="$PROJECT_DIR$/src/pojo/SettingPOJO.java" />
       </list>
     </option>
   </component>
@@ -850,8 +823,8 @@
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Application.AppMain" />
-        <item index="1" class="java.lang.String" itemvalue="Application.SMSService" />
-        <item index="2" class="java.lang.String" itemvalue="Application.SettingPOJO" />
+        <item index="1" class="java.lang.String" itemvalue="Application.SettingPOJO" />
+        <item index="2" class="java.lang.String" itemvalue="Application.SMSService" />
         <item index="3" class="java.lang.String" itemvalue="Application.TimerPOJO" />
         <item index="4" class="java.lang.String" itemvalue="Application.BasePOJO" />
       </list>
@@ -1241,7 +1214,7 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27329844" sideWeight="0.7526042" order="2" side_tool="false" content_ui="tabs" x="156" y="547" width="1398" height="359" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46910995" sideWeight="0.7526042" order="2" side_tool="false" content_ui="tabs" x="156" y="547" width="1398" height="359" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21302083" sideWeight="0.49317738" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1633,26 +1606,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/constants/ConstRest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="534">
-          <caret line="34" column="0" lean-forward="true" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/pojo/BasePOJO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="488">
           <caret line="406" column="5" lean-forward="true" selection-start-line="406" selection-start-column="5" selection-end-line="406" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pojo/RealtimePOJO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="451" column="68" lean-forward="true" selection-start-line="451" selection-start-column="68" selection-end-line="451" selection-end-column="68" />
           <folding />
         </state>
       </provider>
@@ -1681,13 +1638,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="293" column="0" lean-forward="true" selection-start-line="293" selection-start-column="0" selection-end-line="293" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2719">
-          <caret line="208" column="91" lean-forward="true" selection-start-line="208" selection-start-column="91" selection-end-line="208" selection-end-column="91" />
+        <state relative-caret-position="292">
+          <caret line="415" column="110" lean-forward="true" selection-start-line="415" selection-start-column="110" selection-end-line="415" selection-end-column="110" />
           <folding>
             <marker date="1498632542263" expanded="true" signature="9623:10190" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pojo/SettingPOJO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="304" column="31" lean-forward="false" selection-start-line="304" selection-start-column="24" selection-end-line="304" selection-end-column="31" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1699,18 +1672,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pojo/SettingPOJO.java">
+    <entry file="file://$PROJECT_DIR$/src/pojo/RealtimePOJO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="293" column="68" lean-forward="true" selection-start-line="293" selection-start-column="68" selection-end-line="293" selection-end-column="68" />
+        <state relative-caret-position="140">
+          <caret line="618" column="39" lean-forward="false" selection-start-line="618" selection-start-column="39" selection-end-line="618" selection-end-column="39" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
+    <entry file="file://$PROJECT_DIR$/src/constants/ConstRest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="338" column="0" lean-forward="true" selection-start-line="338" selection-start-column="0" selection-end-line="338" selection-end-column="0" />
+        <state relative-caret-position="534">
+          <caret line="34" column="0" lean-forward="true" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
           <folding />
         </state>
       </provider>

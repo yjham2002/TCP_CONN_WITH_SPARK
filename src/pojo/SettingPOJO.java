@@ -279,32 +279,31 @@ public class SettingPOJO extends BasePOJO {
                 getBitAggregation(
                         cthi_ctrl_stat_illum_offtype,
                         cthi_ctrl_stat_illum_ontype,
-                        getBitRhsFromDual(cthi_ctrl_stat_illum_ctrl),
                         getBitLhsFromDual(cthi_ctrl_stat_illum_ctrl),
+                        getBitRhsFromDual(cthi_ctrl_stat_illum_ctrl),
                         cthi_ctrl_stat_humid_offtype,
                         cthi_ctrl_stat_humid_ontype,
-                        getBitRhsFromDual(cthi_ctrl_stat_humid_ctrl),
-                        getBitLhsFromDual(cthi_ctrl_stat_humid_ctrl)
-
+                        getBitLhsFromDual(cthi_ctrl_stat_humid_ctrl),
+                        getBitRhsFromDual(cthi_ctrl_stat_humid_ctrl)
                 );
         int bitAggr_ctrl_2 =
                 getBitAggregation(
                         cthi_ctrl_stat_temp_offtype,
                         cthi_ctrl_stat_temp_ontype,
-                        getBitRhsFromDual(cthi_ctrl_stat_temp_ctrl),
                         getBitLhsFromDual(cthi_ctrl_stat_temp_ctrl),
+                        getBitRhsFromDual(cthi_ctrl_stat_temp_ctrl),
                         cthi_ctrl_stat_co2_offtype,
                         cthi_ctrl_stat_co2_ontype,
-                        getBitRhsFromDual(cthi_ctrl_stat_co2_ctrl),
-                        getBitLhsFromDual(cthi_ctrl_stat_co2_ctrl)
+                        getBitLhsFromDual(cthi_ctrl_stat_co2_ctrl),
+                        getBitRhsFromDual(cthi_ctrl_stat_co2_ctrl)
                 );
 
         int bitAggr_alt =
                 getBitAggregation(
                         0,0,0,
                         this.alert_alarm_time_select_timeset,
-                        getBitRhsFromDual(this.alert_alarm_time_select_lamp_unit),
                         getBitLhsFromDual(this.alert_alarm_time_select_lamp_unit),
+                        getBitRhsFromDual(this.alert_alarm_time_select_lamp_unit),
                         this.alert_alarm_time_select_timer,
                         this.alert_alarm_time_select_auto
                 );
