@@ -602,6 +602,7 @@ public class RealtimePOJO extends BasePOJO{
         this.mcnctrl_web_pause = getBooleanValueFrom2Byte(296, 4);
         this.mcnctrl_web_order_main1 = getBooleanValueFrom2Byte(296, 6);
         this.mcnctrl_web_order_main2 = getBooleanValueFrom2Byte(296, 7);
+
         this.mcnctrl_web_stat_fan = getBooleanValueFrom2Byte(296, 8);
         this.mcnctrl_web_stat_heater = getBooleanValueFrom2Byte(296, 9);
         this.mcnctrl_web_stat_freezer = getBooleanValueFrom2Byte(296, 10);
@@ -615,15 +616,9 @@ public class RealtimePOJO extends BasePOJO{
     @JsonIgnore
     public byte[] getWritableData(){
         byte[] check = SohaProtocolUtil.concat(
-//                new byte[]{(byte)getBitAggregation(0, 0, 0, 0, this.dymamic_output_dec, this.dymamic_output_inc, getBitRhsFromDual(this.dymamic_output_mode), getBitLhsFromDual(this.dymamic_output_mode))},
-//                new byte[]{(byte)getBitAggregation(this.dymamic_output_valid, this.dymamic_output_analog, 0, 0, 0, 0, 0, 0)},
-//                SohaProtocolUtil.getHexLocation(this.start_year), getValuePairFromString(this.start_md), getValuePairFromString(this.start_hm),
-//                new byte[]{(byte)getBitAggregation(this.mcnctrl_mv510_order_main2, this.mcnctrl_mv510_order_main1, 0, this.mcnctrl_mv510_pause, this.mcnctrl_mv510_order_ilum, this.mcnctrl_mv510_order_humidity, this.mcnctrl_mv510_order_temp, this.mcnctrl_mv510_order_co2)},
-//                new byte[]{(byte)getBitAggregation(this.mcnctrl_mv510_stat_reserve, this.mcnctrl_mv510_stat_alarm, this.mcnctrl_mv510_stat_ilum, this.mcnctrl_mv510_stat_dehumidifier, this.mcnctrl_mv510_stat_humidifier, this.mcnctrl_mv510_stat_freezer, this.mcnctrl_mv510_stat_heater, this.mcnctrl_mv510_stat_fan)},
-
-                new byte[]{(byte)getBitAggregation(this.mcnctrl_web_order_main2, this.mcnctrl_web_order_main1, 0, this.mcnctrl_web_pause, this.mcnctrl_web_order_ilum, this.mcnctrl_web_order_humidity, this.mcnctrl_web_order_temp, this.getMcnctrl_web_order_co2())},
                 new byte[]{(byte)getBitAggregation(this.mcnctrl_web_stat_reserve, this.mcnctrl_web_stat_alarm, this.mcnctrl_web_stat_ilum, this.mcnctrl_web_stat_dehumidifier, this.mcnctrl_web_stat_humidifier, this.mcnctrl_web_stat_freezer, this.mcnctrl_web_stat_heater, this.mcnctrl_web_stat_fan)},
-                new byte[]{0, 0}
+                new byte[]{(byte)getBitAggregation(this.mcnctrl_web_order_main2, this.mcnctrl_web_order_main1, 0, this.mcnctrl_web_pause, this.mcnctrl_web_order_ilum, this.mcnctrl_web_order_humidity, this.mcnctrl_web_order_temp, this.getMcnctrl_web_order_co2())}
+
         );
         return check;
     }

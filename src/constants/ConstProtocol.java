@@ -44,7 +44,7 @@ public class ConstProtocol {
      */
     public static final Pair<Integer> RANGE_REALTIME_READABLE = new Pair<>(100, 100);
     public static final Pair<Integer> RANGE_REALTIME_READABLE_TAILS = new Pair<>(60000, 41);
-    public static final Pair<Integer> RANGE_REALTIME_WRITABLE = new Pair<>(296, 2);
+    public static final Pair<Integer> RANGE_REALTIME_WRITABLE = new Pair<>(296, 1);
     public static final Pair<Integer> RANGE_SETTING_TAILS = new Pair<>(11534, 18);
     public static final Pair<Integer> RANGE_SETTING = new Pair<>(300, 71);
     public static final Pair<Integer> RANGE_TIMER = new Pair<>(448, 97);

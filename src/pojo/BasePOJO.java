@@ -345,7 +345,7 @@ public class BasePOJO implements Serializable{
     protected int toDecimalFromBinaryValue(int offset, int bitBeginIndex, int length){
         String total = "";
         for(int i = bitBeginIndex; i < bitBeginIndex + length; i++){
-            total += getBooleanValueFrom2Byte(offset, i);
+            total = getBooleanValueFrom2Byte(offset, i) + total;
         }
 
         return Integer.parseInt(total, 2);
@@ -400,7 +400,7 @@ public class BasePOJO implements Serializable{
     protected int toDecimalFromBinaryValueABS(int offset, int bitBeginIndex, int length){
         String total = "";
         for(int i = bitBeginIndex; i < bitBeginIndex + length; i++){
-            total += getBooleanValueFrom2ByteABS(offset, i);
+            total = getBooleanValueFrom2ByteABS(offset, i) + total;
         }
 
         return Integer.parseInt(total, 2);

@@ -5,11 +5,17 @@ import com.sun.istack.internal.Nullable;
 import configs.ServerConfig;
 import constants.ConstProtocol;
 import models.ByteSerial;
+import models.Pair;
 import mysql.DBManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pojo.CropSubPOJO;
 import pojo.RealtimePOJO;
+import pojo.SettingPOJO;
+import pojo.TimerPOJO;
 import redis.RedisManager;
+import server.response.Response;
+import server.response.ResponseConst;
 import server.whois.SMSService;
 import utils.HexUtil;
 import utils.SerialUtil;
@@ -23,6 +29,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static constants.ConstProtocol.*;
 import static models.ByteSerial.POOL_SIZE;
@@ -42,6 +49,8 @@ public class ProtocolResponder{
     Logger log;
 
     private ByteBuffer byteBuffer;
+
+    private volatile boolean semaphore = false;
 
     private SMSService smsService;
     private boolean started = false; // 이니셜 프로토콜이 전송되었는지의 여부를 갖는 로컬 변수
@@ -225,7 +234,12 @@ public class ProtocolResponder{
 
                     log.info("Farm Code :: " + Arrays.toString(farmCodeTemp) + " / HarvCode :: " + Arrays.toString(harvCodeTemp));
 
-                    synchronizeStatus(realtimePOJO, farmCodeTemp, harvCodeTemp, HexUtil.getNumericValue(harvCodeTemp));
+                    Thread synchronizer = new Thread(() -> {
+                        semaphore = true;
+                        synchronizeStatus(realtimePOJO, farmString, harvString, HexUtil.getNumericValue(harvCodeTemp));
+                    });
+
+                    if(!semaphore) synchronizer.start();
 
                 }
             }
@@ -245,45 +259,147 @@ public class ProtocolResponder{
         return true;
     }
 
-    public void synchronizeStatus(RealtimePOJO realtimePOJO, byte[] farmC, byte[] harvC, int idC){
+    public void synchronizeStatus(RealtimePOJO realtimePOJO, String farmC, String harvC, int idC){
+
+        boolean toSend = false;
+
+        ByteSerial recv;
+        byte[] protocol;
+
         try {
             if (realtimePOJO.getOption_changed_setting_a() == ConstProtocol.TRUE) {
                 System.out.println("INFO :: Setting Change Detected");
+                protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), idC, farmC.getBytes(), harvC.getBytes());
+                System.out.println("READING SETTINGS - " + Arrays.toString(protocol));
+
+                recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
+
+                if(recv == null) throw new Exception("An error occurred while auto reading");
+
+                SettingPOJO settingPOJO = new SettingPOJO(recv, ConstProtocol.RANGE_READ_START, farmC, harvC);
+
+                System.out.println("SETTING BYTES : " + Arrays.toString(recv.getProcessed()));
+
+                protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), idC, farmC.getBytes(), harvC.getBytes());
+                System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
+
+                recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
+
+                if(recv == null) throw new Exception("An error occurred while auto reading");
+
+                settingPOJO.initTails(recv, ConstProtocol.RANGE_READ_START);
+
+                settingPOJO.setByteSerial(null);
+                DBManager.getInstance().execute(settingPOJO.getInsertSQL());
+
+                toSend = true;
             }
             if (realtimePOJO.getOption_changed_timer_a() == ConstProtocol.TRUE) {
                 System.out.println("INFO :: Timer Change Detected");
+                protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), idC, farmC.getBytes(), harvC.getBytes());
+                System.out.println(Arrays.toString(protocol));
+
+                recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
+
+                if(recv == null) throw new Exception("An error occurred while auto reading");
+
+                TimerPOJO timerPOJO = new TimerPOJO(recv, ConstProtocol.RANGE_READ_START, farmC, harvC);
+                String sql = timerPOJO.getInsertSQL();
+                DBManager.getInstance().execute(sql);
+
+                toSend = true;
             }
             if (realtimePOJO.getOption_changed_crop1_a() == ConstProtocol.TRUE) {
                 System.out.println("INFO :: Crop[1] Change Detected");
+                readDailyAge(1, farmC, harvC, idC);
+
+                toSend = true;
             }
             if (realtimePOJO.getOption_changed_crop2_a() == ConstProtocol.TRUE) {
                 System.out.println("INFO :: Crop[2] Change Detected");
+                readDailyAge(2, farmC, harvC, idC);
+
+                toSend = true;
             }
             if (realtimePOJO.getOption_changed_crop3_a() == ConstProtocol.TRUE) {
                 System.out.println("INFO :: Crop[3] Change Detected");
+                readDailyAge(3, farmC, harvC, idC);
+
+                toSend = true;
             }
             if (realtimePOJO.getOption_changed_crop4_a() == ConstProtocol.TRUE) {
                 System.out.println("INFO :: Crop[4] Change Detected");
+                readDailyAge(4, farmC, harvC, idC);
+
+                toSend = true;
             }
             if (realtimePOJO.getOption_changed_crop5_a() == ConstProtocol.TRUE) {
                 System.out.println("INFO :: Crop[5] Change Detected");
+                readDailyAge(5, farmC, harvC, idC);
+
+                toSend = true;
             }
             if (realtimePOJO.getOption_changed_crop6_a() == ConstProtocol.TRUE) {
                 System.out.println("INFO :: Crop[6] Change Detected");
+                readDailyAge(6, farmC, harvC, idC);
+
+                toSend = true;
             }
 
-            byte[] initPrtc = SohaProtocolUtil.makeFlagInitProtocol(idC, farmC, harvC);
+            byte[] initPrtc = SohaProtocolUtil.makeFlagInitProtocol(idC, farmC.getBytes(), harvC.getBytes());
             ByteSerial ellaborated = new ByteSerial(initPrtc, ByteSerial.TYPE_FORCE);
 
-            //send(ellaborated);
-
-            //System.out.println("INFO :: Initiating Flag Bits");
+            if(toSend) {
+                send(ellaborated);
+                System.out.println("INFO :: Initiating Flag Bits");
+            }else{
+                System.out.println("INFO :: Nothing Has been detected with changed-flags");
+            }
 
         }catch(Exception e){
             System.out.println("=============================================================");
             System.out.println("WARN :: An error occurred while Initiating Flag Bits");
+            System.out.println("Message :: " + e.getMessage());
             System.out.println("=============================================================");
+        }finally {
+            semaphore = false;
         }
+    }
+
+    private void readDailyAge(int order, String farmCode, String harvCode, int id) throws Exception{
+        List<ByteSerial> recvs;
+        byte[][] protocols;
+
+        Pair<Integer> range = ConstProtocol.RANGE_DAYAGE;
+        switch (order){
+            case 1: range = ConstProtocol.RANGE_DAYAGE_01; break;
+            case 2: range = ConstProtocol.RANGE_DAYAGE_02; break;
+            case 3: range = ConstProtocol.RANGE_DAYAGE_03; break;
+            case 4: range = ConstProtocol.RANGE_DAYAGE_04; break;
+            case 5: range = ConstProtocol.RANGE_DAYAGE_05; break;
+            case 6: range = ConstProtocol.RANGE_DAYAGE_06; break;
+            default: order = -1; break;
+        }
+
+        protocols = SohaProtocolUtil.makeReadProtocols(range.getHead(), range.getTail(), id, farmCode.getBytes(), harvCode.getBytes());
+
+        recvs = new ArrayList<>();
+        for(int e = 0; e < protocols.length; e++) {
+            ByteSerial entry = send(new ByteSerial(protocols[e], ByteSerial.TYPE_NONE));
+            if(entry != null) {
+                recvs.add(entry);
+            }else{
+                break;
+            }
+        }
+
+        if(recvs.size() <= 0) throw new Exception("auto reading error on daily age :: " + order);
+
+        CropSubPOJO cropPOJO = new CropSubPOJO(recvs, order, farmCode, harvCode);
+        cropPOJO.setByteSerial(null);
+
+        String sql = cropPOJO.getInsertSQL();
+        DBManager.getInstance().execute(sql);
     }
 
     /**
