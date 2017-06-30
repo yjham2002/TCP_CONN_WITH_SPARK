@@ -1,6 +1,8 @@
 package pojo;
 
 import models.ByteSerial;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import utils.SohaProtocolUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,57 @@ public class CropDaySubPOJO extends BasePOJO{
                     getBooleanValueFrom2ByteABS(offset + 10 + rev, 15)
             ));
         }
+    }
+
+    /**
+     * 일령 상세 정보 리스트 중 하나의 날짜에 대한 바이트를 반환하는 메소드
+     * @return 하나의 날짜에 대한 바이트
+     */
+    @JsonIgnore
+    public byte[] getUnitBytes(int order){
+        if(order < 0 || order > 2) return null;
+
+        CropDayDetailPOJO detail = cropDayDetailPOJOs.get(order);
+
+        int bitAggr1 =
+                getBitAggregation(
+                        detail.getIllum_timer_off_unit(),
+                        detail.getIllum_timer_on_unit(),
+                        getBitLhsFromDual(detail.getIllum_ctrl()),
+                        getBitRhsFromDual(detail.getIllum_ctrl()),
+
+
+
+                        detail.getHumid_timer_off_unit(),
+                        detail.getHumid_timer_on_unit(),
+                        getBitLhsFromDual(detail.getHumid_ctrl()),
+                        getBitRhsFromDual(detail.getHumid_ctrl())
+
+                );
+        int bitAggr2 =
+                getBitAggregation(
+                        detail.getTemp_timer_off_unit(),
+                        detail.getTemp_timer_on_unit(),
+                        getBitLhsFromDual(detail.getTemp_ctrl()),
+                        getBitRhsFromDual(detail.getTemp_ctrl()),
+
+                        detail.getCo2_timer_off_unit(),
+                        detail.getCo2_timer_on_unit(),
+                        getBitLhsFromDual(detail.getCo2_ctrl()),
+                        getBitRhsFromDual(detail.getCo2_ctrl())
+
+                );
+
+        byte[] retVal = SohaProtocolUtil.concat(
+                SohaProtocolUtil.getHexLocation(detail.getCo2_setting()),
+                SohaProtocolUtil.getHexLocation(detail.getTemp_setting()),
+                SohaProtocolUtil.getHexLocation(detail.getHumid_setting()),
+                SohaProtocolUtil.getHexLocation(detail.getIllum_setting()),
+                getValuePairFromString(detail.getStart_time()),
+                new byte[]{(byte)bitAggr1, (byte)bitAggr2}
+        );
+
+        return retVal;
     }
 
     private CropDaySubPOJO(){}

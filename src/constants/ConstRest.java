@@ -29,6 +29,7 @@ public class ConstRest {
     public static final String MODE_READ_SETTING = "read_setting";
     public static final String MODE_WRITE_TIMER = "write_timer";
     public static final String MODE_WRITE_DAYAGE = "write_dayage";
+    public static final String MODE_WRITE_DAYAGE_ONCE = "write_dayage_once";
     public static final String MODE_WRITE_SETTING = "write_setting";
     public static final String MODE_WRITE_REALTIME = "write_realtime";
 }

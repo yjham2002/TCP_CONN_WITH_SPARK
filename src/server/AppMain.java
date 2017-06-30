@@ -22,6 +22,9 @@ import utils.SohaProtocolUtil;
 import java.io.IOException;
 import java.util.*;
 
+import static constants.ConstProtocol.LENGTH_JUMP_DAYAGE_DETAIL;
+import static constants.ConstProtocol.LENGTH_JUMP_DAYAGE_NAME;
+
 /**
  * 서버 인스턴스 호출 및 실행을 위한 메인 클래스
  */
@@ -332,6 +335,71 @@ public class AppMain{
                         return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
                     }
                 }
+                case ConstRest.MODE_WRITE_DAYAGE_ONCE: {
+
+                    System.out.println("WRITING DAILY AGE ONCE " + rawFarm + ":" + rawHarv);
+                    try{
+                        if(map.get("order") == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
+                        if(map.get("day") == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
+                        if(map.get("index") == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
+
+                        int dayOrder = map.getInt("day");
+                        int index = map.getInt("index");
+
+                        if(dayOrder < 0 || dayOrder > 49 || index > 2 || index < 0) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_RANGE);
+
+                        Pair<Integer> range;
+                        int dailyFlag = -1;
+
+                        switch (order){
+                            case 1: range = ConstProtocol.RANGE_DAYAGE_01; dailyFlag = ConstProtocol.FLAG_DAILY_1; break;
+                            case 2: range = ConstProtocol.RANGE_DAYAGE_02; dailyFlag = ConstProtocol.FLAG_DAILY_2; break;
+                            case 3: range = ConstProtocol.RANGE_DAYAGE_03; dailyFlag = ConstProtocol.FLAG_DAILY_3; break;
+                            case 4: range = ConstProtocol.RANGE_DAYAGE_04; dailyFlag = ConstProtocol.FLAG_DAILY_4; break;
+                            case 5: range = ConstProtocol.RANGE_DAYAGE_05; dailyFlag = ConstProtocol.FLAG_DAILY_5; break;
+                            case 6: range = ConstProtocol.RANGE_DAYAGE_06; dailyFlag = ConstProtocol.FLAG_DAILY_6; break;
+                            default: range = null; order = -1; break;
+                        }
+
+                        if(order == -1 || range == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
+
+                        System.out.println(rawJson);
+
+                        CropSubPOJO cropSubPOJO = objectMapper.readValue(rawJson, CropSubPOJO.class);
+
+                        /**
+                         * dayOrder는 0~49 범위의 정수(의미상의 일령 순서가 아님)
+                         * index는 0~2 범위의 정수(의미상의 차수 정보가 아님)
+                         */
+                        CropDaySubPOJO cropUnit = cropSubPOJO.getCropDaySubPOJOs().get(dayOrder);
+                        byte[] unitByte = cropUnit.getUnitBytes(index);
+
+                        int toWrite = range.getHead() + LENGTH_JUMP_DAYAGE_NAME + (LENGTH_JUMP_DAYAGE_DETAIL * 3 * dayOrder) + (LENGTH_JUMP_DAYAGE_DETAIL * index);
+                        int wordLen = LENGTH_JUMP_DAYAGE_DETAIL / 2;
+
+                        protocol = SohaProtocolUtil.makeWriteProtocol(toWrite, wordLen, id, farmCode, harvCode, unitByte);
+                        recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+
+                        if(recv != null){
+                            System.out.println("WRITE ::::::::::::::::: DAILY AGE (UNIT) SUCCEEDED");
+                            protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, dailyFlag);
+                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+
+                            try {
+                                String sql = cropSubPOJO.getInsertSQL();
+                                DBManager.getInstance().execute(sql);
+                                return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
+                            }catch (IOException e){
+                                return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_FAILURE);
+                            }
+                        }
+                        else return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                        return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
+                    }
+                }
+
                 case ConstRest.MODE_WRITE_DAYAGE: {
 
                     System.out.println("WRITING DAILY AGE " + rawFarm + ":" + rawHarv);

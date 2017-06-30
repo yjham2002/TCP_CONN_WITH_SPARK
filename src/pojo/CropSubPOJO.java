@@ -87,23 +87,29 @@ public class CropSubPOJO extends BasePOJO{
                         getBitAggregation(
                                 detail.getIllum_timer_off_unit(),
                                 detail.getIllum_timer_on_unit(),
-                                getBitRhsFromDual(detail.getIllum_ctrl()),
                                 getBitLhsFromDual(detail.getIllum_ctrl()),
+                                getBitRhsFromDual(detail.getIllum_ctrl()),
+
+
+
                                 detail.getHumid_timer_off_unit(),
                                 detail.getHumid_timer_on_unit(),
-                                getBitRhsFromDual(detail.getHumid_ctrl()),
-                                getBitLhsFromDual(detail.getHumid_ctrl())
+                                getBitLhsFromDual(detail.getHumid_ctrl()),
+                                getBitRhsFromDual(detail.getHumid_ctrl())
+
                         );
                 int bitAggr2 =
                         getBitAggregation(
                                 detail.getTemp_timer_off_unit(),
                                 detail.getTemp_timer_on_unit(),
-                                getBitRhsFromDual(detail.getTemp_ctrl()),
                                 getBitLhsFromDual(detail.getTemp_ctrl()),
+                                getBitRhsFromDual(detail.getTemp_ctrl()),
+
                                 detail.getCo2_timer_off_unit(),
                                 detail.getCo2_timer_on_unit(),
-                                getBitRhsFromDual(detail.getCo2_ctrl()),
-                                getBitLhsFromDual(detail.getCo2_ctrl())
+                                getBitLhsFromDual(detail.getCo2_ctrl()),
+                                getBitRhsFromDual(detail.getCo2_ctrl())
+
                         );
                 set = SohaProtocolUtil.concat(set,
                         SohaProtocolUtil.getHexLocation(detail.getCo2_setting()),

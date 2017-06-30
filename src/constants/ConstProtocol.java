@@ -56,6 +56,9 @@ public class ConstProtocol {
     public static final Pair<Integer> RANGE_DAYAGE_05 = new Pair<>(7930, 910);
     public static final Pair<Integer> RANGE_DAYAGE_06 = new Pair<>(9750, 910);
 
+    public static final int LENGTH_JUMP_DAYAGE_NAME = 20;
+    public static final int LENGTH_JUMP_DAYAGE_DETAIL = 12;
+
     public static final Pair<Integer> RANGE_FLAG_BIT = new Pair<>(110, 1);
 
     public static final int FLAG_INIT = 0;
