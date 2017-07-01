@@ -1,6 +1,8 @@
 package mysql;
 
 import java.sql.*;
+import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -95,6 +97,34 @@ public class DBConstManager {
         }catch(SQLException e){
             e.printStackTrace();
             return 0;
+        }
+    }
+
+    public List<String> getStrings(String sql, String... column){
+        List<String> phones = new Vector<>();
+
+        try {
+            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
+            st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            String res = "";
+
+            while(rs.next()){
+                for(String col : column) {
+                    if(!rs.getString(col).equals("--")) phones.add(rs.getString(col));
+                }
+            }
+
+            rs.close();
+            st.close();
+
+            connection.close();
+
+            return phones;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return phones;
         }
     }
 

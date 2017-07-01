@@ -222,10 +222,13 @@ public class ProtocolResponder{
                         if(haveToSend) {
                             String farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farmString), ConstProtocol.SQL_COL_FARMNAME);
                             String harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
-                            String tel = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARM_TEL, farmString), ConstProtocol.SQL_COL_FARM_TEL);
+//                            String tel = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARM_TEL, farmString), ConstProtocol.SQL_COL_FARM_TEL);
 
                             String msg = SohaProtocolUtil.getErrorMessage(errSMSarray, farmName, harvName);
-                            smsService.sendSMS(tel, msg);
+
+                            List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='0078' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
+
+                            for(String tel : phones) smsService.sendSMS(tel, msg);
                         }
 
                         prevErrorData = errArray;
