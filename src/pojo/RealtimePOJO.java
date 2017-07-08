@@ -595,6 +595,7 @@ public class RealtimePOJO extends BasePOJO{
         this.mcnctrl_mv510_stat_reserve = getBooleanValueFrom2Byte(294, 15);
 
         this.mcnctrl_web_aggr = getSumWith2Bytes(296, SUM_MODE_P);
+
         this.mcnctrl_web_order_co2 = getBooleanValueFrom2Byte(296, 0);
         this.mcnctrl_web_order_temp = getBooleanValueFrom2Byte(296, 1);
         this.mcnctrl_web_order_humidity = getBooleanValueFrom2Byte(296, 2);

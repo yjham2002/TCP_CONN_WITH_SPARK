@@ -170,6 +170,12 @@ public class ServiceProvider extends ServerConfig{
                     Set<SelectionKey> selectedKeys = selector.selectedKeys();
                     Iterator<SelectionKey> iterator = selectedKeys.iterator();
 
+                    if(batch.isAlive()){
+                        System.out.println("Batch Thread is Running Normally :: " + getTime());
+                    }else{
+                        System.out.println("Batch Thread is not running - waiting for interruption :: "  + getTime());
+                    }
+
                     while (iterator.hasNext()) {
                         SelectionKey selectionKey = iterator.next();
 
