@@ -67,6 +67,7 @@ public class DBManager extends DBConstManager {
             }
             System.out.println("[Migrating DB Data from REDIS to MySQL] " + count++ + "/" + list.size() + " has newly inserted.");
         }catch(Exception e){
+            System.out.println("Error handled :: migrateFromRedis");
             return false;
         }finally {
             long delCount = getNumber("SELECT COUNT(*) AS num FROM tblRealTimeData WHERE (DATE_SUB(NOW(), INTERVAL 2 MONTH) > regDate)", "num");

@@ -53,8 +53,9 @@ public class DBConstManager {
             connection.close();
 
             return res;
-        }catch(SQLException e){
+        }catch(Exception e){
             e.printStackTrace();
+            System.out.println("Error Handled :: getLastInsertId");
             return 1;
         }
     }
@@ -70,8 +71,9 @@ public class DBConstManager {
             connection.close();
 
             return  retVal;
-        }catch(SQLException e){
+        }catch(Exception e){
             e.printStackTrace();
+            System.out.println("Error Handled :: execute");
             return false;
         }
     }
@@ -94,8 +96,9 @@ public class DBConstManager {
             connection.close();
 
             return res;
-        }catch(SQLException e){
+        }catch(Exception e){
             e.printStackTrace();
+            System.out.println("Error Handled :: getNumber");
             return 0;
         }
     }
@@ -122,8 +125,9 @@ public class DBConstManager {
             connection.close();
 
             return phones;
-        }catch(SQLException e){
+        }catch(Exception e){
             e.printStackTrace();
+            System.out.println("Error Handled :: getStrings");
             return phones;
         }
     }
@@ -146,8 +150,9 @@ public class DBConstManager {
             connection.close();
 
             return res;
-        }catch(SQLException e){
+        }catch(Exception e){
             e.printStackTrace();
+            System.out.println("Error Handled :: getString");
             return null;
         }
     }

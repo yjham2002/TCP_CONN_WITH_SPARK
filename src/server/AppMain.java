@@ -490,7 +490,7 @@ public class AppMain{
                             settingPOJO.setByteSerial(null);
                             DBManager.getInstance().execute(settingPOJO.getInsertSQL());
                             return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
-                        }catch (IOException e){
+                        }catch (Exception e){
                             return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_FAILURE);
                         }
 

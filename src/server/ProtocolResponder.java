@@ -201,22 +201,29 @@ public class ProtocolResponder{
 
                         boolean haveToSend = false;
 
-                        if(prevErrorData != null){
-                            for(int err = 0; err < errArray.length; err++){
-                                if(errArray[err] != prevErrorData[err]){
-                                    if(errArray[err] == ConstProtocol.TRUE) {
+                        try {
+                            if (prevErrorData != null) {
+                                for (int err = 0; err < errArray.length; err++) {
+                                    if (errArray[err] != prevErrorData[err]) {
+                                        if (errArray[err] == ConstProtocol.TRUE) {
 
-                                        haveToSend = true;
-                                        errSMSarray[err] = ConstProtocol.TRUE;
+                                            haveToSend = true;
+                                            errSMSarray[err] = ConstProtocol.TRUE;
 
-                                        String sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "Y");
-                                        DBManager.getInstance().execute(sql);
-                                    }else{
-                                        String sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "N");
-                                        DBManager.getInstance().execute(sql);
+                                            String sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "Y");
+                                            DBManager.getInstance().execute(sql);
+                                        } else {
+                                            String sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "N");
+                                            DBManager.getInstance().execute(sql);
+                                        }
                                     }
                                 }
                             }
+                        }catch(Exception e){
+                            e.printStackTrace();
+                            System.out.println("========================================================");
+                            System.out.println("Reinstanciating DBManager singleton instance. :: " + e.getMessage());
+                            System.out.println("========================================================");
                         }
 
                         if(haveToSend) {
