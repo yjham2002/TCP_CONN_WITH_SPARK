@@ -2,12 +2,14 @@ package utils;
 
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import constants.ConstProtocol;
+import mysql.DBManager;
 import pojo.RealtimePOJO;
 
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * @author 함의진
@@ -224,16 +226,6 @@ public class SohaProtocolUtil {
         System.out.println(bulk.length + " Protocol has been generated");
 
         return bulk;
-    }
-
-    public static void main(String... args){
-        byte[] arr = new byte[]{1,2,3,4,5,6,7,8,9,10, 11, 12, 13, 14, 15, 16, 17};
-
-        for(int i = 0; i < arr.length; i++) {
-            int cursor = 0;
-            DebugUtil.printArray(Arrays.copyOfRange(arr, cursor, cursor + 3));
-            cursor += 125;
-        }
     }
 
     /**
