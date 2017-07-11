@@ -274,89 +274,89 @@ public class ProtocolResponder{
         ByteSerial recv = null;
         byte[] protocol = null;
 
-//        try{
-//            String sqlNums = "SELECT \n" +
-//                    "(SELECT COUNT(*) FROM tblTimerData WHERE farmCode='"+ farmC +"' AND dongCode='" + harvC + "') AS timer,\n" +
-//                    "(SELECT COUNT(*) FROM tblSettingData WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"') AS setting,\n" +
-//                    "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=1) AS daily1,\n" +
-//                    "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=2) AS daily2,\n" +
-//                    "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=3) AS daily3,\n" +
-//                    "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=4) AS daily4,\n" +
-//                    "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=5) AS daily5,\n" +
-//                    "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=6) AS daily6;\n" +
-//                    "\n";
-//            List<String> sets = DBManager.getInstance().getStrings(sqlNums, "timer", "setting", "daily1", "daily2", "daily3", "daily4", "daily5", "daily6");
-//
-//            for(int sync = 0; sync < sets.size(); sync++){
-//                String str = sets.get(sync);
-//                int num = Integer.parseInt(str);
-//                if(num == 0){
-//                    switch (sync){
-//                        case 0 : // TIMER
-//                            System.out.println("INFO :: Initial Loading :: TIMER");
-//                            protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), idC, farmC.getBytes(), harvC.getBytes());
-//                            System.out.println(Arrays.toString(protocol));
-//
-//                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
-//
-//                            if(recv == null) throw new Exception("An error occurred while auto reading");
-//
-//                            TimerPOJO timerPOJO = new TimerPOJO(recv, ConstProtocol.RANGE_READ_START, farmC, harvC);
-//                            String sql = timerPOJO.getInsertSQL();
-//                            DBManager.getInstance().execute(sql);
-//                            break;
-//                        case 1 : // SETTING
-//                            System.out.println("INFO :: Initial Loading :: SETTING");
-//                            protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), idC, farmC.getBytes(), harvC.getBytes());
-//                            System.out.println("READING SETTINGS - " + Arrays.toString(protocol));
-//
-//                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
-//
-//                            if(recv == null) throw new Exception("An error occurred while auto reading");
-//
-//                            SettingPOJO settingPOJO = new SettingPOJO(recv, ConstProtocol.RANGE_READ_START, farmC, harvC);
-//
-//                            System.out.println("SETTING BYTES : " + Arrays.toString(recv.getProcessed()));
-//
-//                            protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), idC, farmC.getBytes(), harvC.getBytes());
-//                            System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
-//
-//                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
-//
-//                            if(recv == null) throw new Exception("An error occurred while auto reading");
-//
-//                            settingPOJO.initTails(recv, ConstProtocol.RANGE_READ_START);
-//
-//                            settingPOJO.setByteSerial(null);
-//                            DBManager.getInstance().execute(settingPOJO.getInsertSQL());
-//                            break;
-//                        case 2 : // DAILY 1
-//                            System.out.println("INFO :: Initial Loading :: DAILY 1");
-//                            readDailyAge(1, farmC, harvC, idC);
-//                        case 3 : // DAILY 2
-//                            System.out.println("INFO :: Initial Loading :: DAILY 2");
-//                            readDailyAge(2, farmC, harvC, idC);
-//                        case 4 : // DAILY 3
-//                            System.out.println("INFO :: Initial Loading :: DAILY 3");
-//                            readDailyAge(3, farmC, harvC, idC);
-//                        case 5 : // DAILY 4
-//                            System.out.println("INFO :: Initial Loading :: DAILY 4");
-//                            readDailyAge(4, farmC, harvC, idC);
-//                        case 6 : // DAILY 5
-//                            System.out.println("INFO :: Initial Loading :: DAILY 5");
-//                            readDailyAge(5, farmC, harvC, idC);
-//                        case 7 : // DAILY 6
-//                            System.out.println("INFO :: Initial Loading :: DAILY 6");
-//                            readDailyAge(6, farmC, harvC, idC);
-//                            break;
-//                        default: break;
-//                    }
-//                }
-//            }
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            System.out.println("Initial Load Failure :: Error Handled");
-//        }
+        try{
+            String sqlNums = "SELECT \n" +
+                    "(SELECT COUNT(*) FROM tblTimerData WHERE farmCode='"+ farmC +"' AND dongCode='" + harvC + "') AS timer,\n" +
+                    "(SELECT COUNT(*) FROM tblSettingData WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"') AS setting,\n" +
+                    "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=1) AS daily1,\n" +
+                    "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=2) AS daily2,\n" +
+                    "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=3) AS daily3,\n" +
+                    "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=4) AS daily4,\n" +
+                    "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=5) AS daily5,\n" +
+                    "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=6) AS daily6;\n" +
+                    "\n";
+            List<String> sets = DBManager.getInstance().getStrings(sqlNums, "timer", "setting", "daily1", "daily2", "daily3", "daily4", "daily5", "daily6");
+
+            for(int sync = 0; sync < sets.size(); sync++){
+                String str = sets.get(sync);
+                int num = Integer.parseInt(str);
+                if(num == 0){
+                    switch (sync){
+                        case 0 : // TIMER
+                            System.out.println("INFO :: Initial Loading :: TIMER");
+                            protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), idC, farmC.getBytes(), harvC.getBytes());
+                            System.out.println(Arrays.toString(protocol));
+
+                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
+
+                            if(recv == null) throw new Exception("An error occurred while auto reading");
+
+                            TimerPOJO timerPOJO = new TimerPOJO(recv, ConstProtocol.RANGE_READ_START, farmC, harvC);
+                            String sql = timerPOJO.getInsertSQL();
+                            DBManager.getInstance().execute(sql);
+                            break;
+                        case 1 : // SETTING
+                            System.out.println("INFO :: Initial Loading :: SETTING");
+                            protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), idC, farmC.getBytes(), harvC.getBytes());
+                            System.out.println("READING SETTINGS - " + Arrays.toString(protocol));
+
+                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
+
+                            if(recv == null) throw new Exception("An error occurred while auto reading");
+
+                            SettingPOJO settingPOJO = new SettingPOJO(recv, ConstProtocol.RANGE_READ_START, farmC, harvC);
+
+                            System.out.println("SETTING BYTES : " + Arrays.toString(recv.getProcessed()));
+
+                            protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), idC, farmC.getBytes(), harvC.getBytes());
+                            System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
+
+                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
+
+                            if(recv == null) throw new Exception("An error occurred while auto reading");
+
+                            settingPOJO.initTails(recv, ConstProtocol.RANGE_READ_START);
+
+                            settingPOJO.setByteSerial(null);
+                            DBManager.getInstance().execute(settingPOJO.getInsertSQL());
+                            break;
+                        case 2 : // DAILY 1
+                            System.out.println("INFO :: Initial Loading :: DAILY 1");
+                            readDailyAge(1, farmC, harvC, idC);
+                        case 3 : // DAILY 2
+                            System.out.println("INFO :: Initial Loading :: DAILY 2");
+                            readDailyAge(2, farmC, harvC, idC);
+                        case 4 : // DAILY 3
+                            System.out.println("INFO :: Initial Loading :: DAILY 3");
+                            readDailyAge(3, farmC, harvC, idC);
+                        case 5 : // DAILY 4
+                            System.out.println("INFO :: Initial Loading :: DAILY 4");
+                            readDailyAge(4, farmC, harvC, idC);
+                        case 6 : // DAILY 5
+                            System.out.println("INFO :: Initial Loading :: DAILY 5");
+                            readDailyAge(5, farmC, harvC, idC);
+                        case 7 : // DAILY 6
+                            System.out.println("INFO :: Initial Loading :: DAILY 6");
+                            readDailyAge(6, farmC, harvC, idC);
+                            break;
+                        default: break;
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Initial Load Failure :: Error Handled");
+        }
 
         boolean toSend = false;
 
