@@ -176,7 +176,7 @@ public class ByteSerial implements Serializable{
     public static byte[] getPureDataConcatForRealtime(List<ByteSerial> serials){
         if(serials.size() < 2) return null;
 
-        byte[] padding = new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        byte[] padding = new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         byte[] arr = SohaProtocolUtil.concat(serials.get(0).getPureBytes(), padding, serials.get(1).getPureBytes());
         return arr;
     }

@@ -134,7 +134,7 @@ public class AppMain{
                     else{
                         byte[] pure = ByteSerial.getPureDataConcatForRealtime(recvs);
 
-                        ByteSerial rSerial = new ByteSerial(SohaProtocolUtil.concat(ConstProtocol.STX, farmCode, harvCode, pure, new byte[]{ 0 }, ConstProtocol.ETX));
+                        ByteSerial rSerial = new ByteSerial(SohaProtocolUtil.concat(ConstProtocol.STX, farmCode, harvCode, pure, new byte[]{ 0 }, ConstProtocol.ETX), ByteSerial.TYPE_FORCE);
 
                         RealtimePOJO realtimePOJO = new RealtimePOJO(rSerial);
 
