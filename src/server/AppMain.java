@@ -282,6 +282,22 @@ public class AppMain{
                     try {
                         System.out.println("WRITING REALTIME " + rawFarm + ":" + rawHarv);
                         RealtimePOJO realPOJO = objectMapper.readValue(rawJson, RealtimePOJO.class);
+
+                        System.out.println("==============================================================================");
+                        System.out.println("MCN_CTRL_WEB_ORDER_CO2      : " + realPOJO.getMcnctrl_web_order_co2());
+                        System.out.println("MCN_CTRL_WEB_ORDER_TEMP     : " + realPOJO.getMcnctrl_web_order_temp());
+                        System.out.println("MCN_CTRL_WEB_ORDER_HUMID    : " + realPOJO.getMcnctrl_web_order_humidity());
+                        System.out.println("MCN_CTRL_WEB_ORDER_ILLUM    : " + realPOJO.getMcnctrl_web_order_ilum());
+                        System.out.println("==============================================================================");
+                        System.out.println("MCN_CTRL_WEB_STAT_FAN       : " + realPOJO.getMcnctrl_web_stat_fan());
+                        System.out.println("MCN_CTRL_WEB_STAT_HEATER    : " + realPOJO.getMcnctrl_web_stat_heater());
+                        System.out.println("MCN_CTRL_WEB_STAT_FREEZER   : " + realPOJO.getMcnctrl_web_stat_freezer());
+                        System.out.println("MCN_CTRL_WEB_STAT_HUMID     : " + realPOJO.getMcnctrl_web_stat_humidifier());
+                        System.out.println("MCN_CTRL_WEB_STAT_DEHUM     : " + realPOJO.getMcnctrl_web_stat_dehumidifier());
+                        System.out.println("MCN_CTRL_WEB_STAT_ILLUM     : " + realPOJO.getMcnctrl_web_stat_ilum());
+                        System.out.println("MCN_CTRL_WEB_STAT_ALARM     : " + realPOJO.getMcnctrl_web_stat_alarm());
+                        System.out.println("==============================================================================");
+
                         byte[] pure = realPOJO.getWritableData();
                         protocol = SohaProtocolUtil.makeWriteProtocol(ConstProtocol.RANGE_REALTIME_WRITABLE.getHead(), ConstProtocol.RANGE_REALTIME_WRITABLE.getTail(), id, farmCode, harvCode, pure);
                         recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
