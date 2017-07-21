@@ -226,6 +226,26 @@ public class ProtocolResponder{
                             System.out.println("========================================================");
                         }
 
+                        try {
+                            String sql = "SELECT * FROM sohatechfarmdb.farm_list WHERE farm_code = '" + farmString + "' LIMIT 1";
+                            List<String> sms_arr = DBManager.getInstance().getStrings(sql, ConstProtocol.SMS_COLS);
+
+                            int sendCnt = 0;
+
+                            for(int ee = 0; ee < sms_arr.size(); ee++) {
+                                if (sms_arr.get(ee).equals("0") || Integer.parseInt(sms_arr.get(ee)) == 0) {
+                                    errSMSarray[ee] = 0;
+                                    sendCnt++;
+                                }
+                            }
+
+                            haveToSend = (sendCnt == 16);
+
+                        }catch(Exception e){
+                            System.out.println("SMS Array Error");
+                            e.printStackTrace();
+                        }
+
                         if(haveToSend) {
                             String farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farmString), ConstProtocol.SQL_COL_FARMNAME);
                             String harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);

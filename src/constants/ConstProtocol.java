@@ -107,6 +107,25 @@ public class ConstProtocol {
             "VT250 #4 통신 이상"
     };
 
+    public static final String[] SMS_COLS = new String[]{
+            "alert_alarm_internal_co2",
+            "alert_alarm_internal_temp",
+            "alert_alarm_internal_humidity",
+            "alert_alarm_internal_ilum",
+            "alert_alarm_vent_relay",
+            "alert_alarm_heat_relay",
+            "alert_alarm_cool_relay",
+            "alert_alarm_humidify_relay",
+            "alert_alarm_dehumidify_relay",
+            "alert_alarm_ilum_relay",
+            "alert_alarm_rs485",
+            "alert_alarm_vt515",
+            "alert_alarm_vt250_1",
+            "alert_alarm_vt250_2",
+            "alert_alarm_vt250_3",
+            "alert_alarm_vt250_4"
+    };
+
     public static final String SQL_FARMNAME_FORMAT = "SELECT farm_name AS farmName FROM farm_list WHERE farm_code = '%s' LIMIT 1";
     public static final String SQL_DONGNAME_FORMAT = "SELECT dong_name AS dongName FROM dong_list WHERE farm_code = '%s' AND dong_code = '%s' LIMIT 1";
     public static final String SQL_FARM_TEL = "SELECT farm_tel AS tel FROM farm_list WHERE farm_code = '%s' LIMIT 1";

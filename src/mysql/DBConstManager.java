@@ -1,5 +1,7 @@
 package mysql;
 
+import constants.ConstProtocol;
+
 import java.sql.*;
 import java.util.List;
 import java.util.Vector;
@@ -15,7 +17,7 @@ public class DBConstManager {
 
     public static final String CONNECTOR = "jdbc";
     public static final String DBMS = "mysql";
-    public static final String HOST = "182.161.118.74";
+    public static final String HOST = "1.201.142.86";
     public static final String PORT = "3306";
     public static final String DBNAME = "sohatechfarmdb";
     public static final String USERNAME = "root";
