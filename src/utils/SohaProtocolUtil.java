@@ -315,6 +315,36 @@ public class SohaProtocolUtil {
         return sum;
     }
 
+    public static int[] getErrorArrayWithDB(String farmCode, String harvCode){
+        String sql = "SELECT \n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=0 ORDER BY regDate DESC LIMIT 1) AS err0,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=1 ORDER BY regDate DESC LIMIT 1) AS err1,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=2 ORDER BY regDate DESC LIMIT 1) AS err2,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=3 ORDER BY regDate DESC LIMIT 1) AS err3,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=4 ORDER BY regDate DESC LIMIT 1) AS err4,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=5 ORDER BY regDate DESC LIMIT 1) AS err5,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=6 ORDER BY regDate DESC LIMIT 1) AS err6,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=7 ORDER BY regDate DESC LIMIT 1) AS err7,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=8 ORDER BY regDate DESC LIMIT 1) AS err8,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=9 ORDER BY regDate DESC LIMIT 1) AS err9,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=10 ORDER BY regDate DESC LIMIT 1) AS err10,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=11 ORDER BY regDate DESC LIMIT 1) AS err11,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=12 ORDER BY regDate DESC LIMIT 1) AS err12,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=13 ORDER BY regDate DESC LIMIT 1) AS err13,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=14 ORDER BY regDate DESC LIMIT 1) AS err14,\n" +
+                "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=15 ORDER BY regDate DESC LIMIT 1) AS err15\n" +
+                ";\n";
+        List<String> arr = DBManager.getInstance().getStrings(sql, "err0", "err1", "err2", "err3", "err4", "err5", "err6", "err7", "err8", "err9", "err10", "err11", "err12", "err13", "err14", "err15");
+        int[] errArr = new int[16];
+
+        for(int i = 0; i < arr.size(); i++){
+            if(arr.get(i) != null && arr.get(i).equals("1")) errArr[i] = 1;
+            else errArr[i] = 0;
+        }
+
+        return errArr;
+    }
+
     public static int[] getErrorArray(RealtimePOJO realtimePOJO){
         int[] array = new int[]{
                 realtimePOJO.getErrdata_internal_co2(),

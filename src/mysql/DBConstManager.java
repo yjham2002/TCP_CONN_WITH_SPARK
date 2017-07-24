@@ -117,7 +117,11 @@ public class DBConstManager {
 
             while(rs.next()){
                 for(String col : column) {
-                    if(!rs.getString(col).equals("--")) phones.add(rs.getString(col));
+                    if(rs.getString(col) == null){
+                        phones.add(null);
+                    }else {
+                        if (!rs.getString(col).equals("--")) phones.add(rs.getString(col));
+                    }
                 }
             }
 

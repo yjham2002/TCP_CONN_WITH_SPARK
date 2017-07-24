@@ -196,6 +196,8 @@ public class ProtocolResponder{
                     String harvString = HexUtil.getNumericStringFromAscii(harvCodeTemp);
 
                     if(SohaProtocolUtil.getErrorCount(realtimePOJO) > 0){
+                        prevErrorData = SohaProtocolUtil.getErrorArrayWithDB(farmString, harvString);
+
                         int errArray[] = SohaProtocolUtil.getErrorArray(realtimePOJO);
                         int errSMSarray[] = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -258,7 +260,7 @@ public class ProtocolResponder{
                             for(String tel : phones) smsService.sendSMS(tel, msg);
                         }
 
-                        prevErrorData = errArray;
+//                        prevErrorData = errArray;
 
                     }
 
