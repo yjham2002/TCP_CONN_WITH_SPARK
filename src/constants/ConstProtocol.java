@@ -107,6 +107,8 @@ public class ConstProtocol {
             "VT250 #4 통신 이상 발생"
     };
 
+    public static final String CONNECTION_MESSAGE = "[%s]\nMV510_TCP\n연결끊김";
+
     public static final String[] SMS_COLS = new String[]{
             "alert_alarm_internal_co2",
             "alert_alarm_internal_temp",

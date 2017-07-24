@@ -63,6 +63,11 @@ public class ProtocolResponder{
     private SocketChannel socket; // ServiceProvider로부터 accept된 단위 소켓
     private HashMap<String, ProtocolResponder> clients; // ServiceProvider의 클라이언트 집합의 레퍼런스 포인터
 
+    private String farmString;
+    private String harvString;
+    private String farmName;
+    private String harvName;
+
     private int[] prevErrorData = null;
 
     /**
@@ -124,6 +129,14 @@ public class ProtocolResponder{
             buffer = byteBuffer.array();
 
             byteSerial = new ByteSerial(buffer); // 바이트 시리얼 객체로 트리밍과 분석을 위임하기 위한 인스턴스 생성
+
+            byte[] farmCodeTemp = SohaProtocolUtil.getFarmCodeByProtocol(buffer);
+            byte[] harvCodeTemp = SohaProtocolUtil.getHarvCodeByProtocol(buffer);
+
+            farmString = HexUtil.getNumericStringFromAscii(farmCodeTemp);
+            harvString = HexUtil.getNumericStringFromAscii(harvCodeTemp);
+            farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farmString), ConstProtocol.SQL_COL_FARMNAME);
+            harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
 
             if (!byteSerial.isLoss() && !byteSerial.startsWith(SohaProtocolUtil.concat(STX, INITIAL_PROTOCOL_START)))
                 started = true;
@@ -189,12 +202,6 @@ public class ProtocolResponder{
 
                     log.info("JEDIS REALTIME DATA PUT : " + succ);
 
-                    byte[] farmCodeTemp = SohaProtocolUtil.getFarmCodeByProtocol(buffer);
-                    byte[] harvCodeTemp = SohaProtocolUtil.getHarvCodeByProtocol(buffer);
-
-                    String farmString = HexUtil.getNumericStringFromAscii(farmCodeTemp);
-                    String harvString = HexUtil.getNumericStringFromAscii(harvCodeTemp);
-
                     if(SohaProtocolUtil.getErrorCount(realtimePOJO) > 0){
                         prevErrorData = SohaProtocolUtil.getErrorArrayWithDB(farmString, harvString);
 
@@ -249,13 +256,12 @@ public class ProtocolResponder{
                         }
 
                         if(haveToSend) {
-                            String farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farmString), ConstProtocol.SQL_COL_FARMNAME);
-                            String harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
+
 //                            String tel = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARM_TEL, farmString), ConstProtocol.SQL_COL_FARM_TEL);
 
                             String msg = SohaProtocolUtil.getErrorMessage(errSMSarray, farmName, harvName);
 
-                            List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='0078' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
+                            List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='"+farmString+"' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
 
                             for(String tel : phones) smsService.sendSMS(tel, msg);
                         }
@@ -277,7 +283,13 @@ public class ProtocolResponder{
             }
 
 
-        }catch(IOException e){ // 소켓 연결 두절의 경우, 연결을 종료할 경우, 흔히 발생하므로 에러 핸들링을 별도로 하지 않음
+        }catch(IOException e){ // Connection Finished OR Error Occurred
+            try {
+                List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='" + farmString + "' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
+                for (String tel : phones) smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName));
+            }catch(Exception e2){
+                System.out.println("통신 이상 SMS 전송 중 에러 :: \n" + e2.toString());
+            }
             e.printStackTrace();
             if(selectionKey.isValid()) selectionKey.cancel();
             selectionKey.channel().close();
