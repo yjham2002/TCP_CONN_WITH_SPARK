@@ -1,6 +1,8 @@
 package utils;
 
-import java.io.PrintStream;
+import java.io.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 /**
  * @author 함의진
@@ -85,5 +87,41 @@ public class DebugUtil {
         if(count == 0) System.out.println("[DebugUtil] Both arrays are same");
         else System.out.println("[DebugUtil] Both arrays are not same");
     }
+
+    public static void main(String[] args) {
+
+        try {
+            Socket socket = new Socket("localhost", 8000);
+
+            // 입력 스트림
+            // 서버에서 보낸 데이터를 받음
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    socket.getInputStream()));
+
+            // 출력 스트림
+            // 서버에 데이터를 송신
+            OutputStream out = socket.getOutputStream();
+
+            // 서버에 데이터 송신
+
+            for(int i = 0; i < 100; i++) {
+                out.write(new byte[]{83, 84, 48, 48, 55, 56, 48, 49, 2, -43, 8, 69, 0, 33, 2, -43, 8, 68, 0, 2, 2, -43, 8, 69, 0, 2, 2, -43, 8, 71, 0, 31, 2, -46, 6, -85, 0, 2, 2, -46, 6, -83, 17, -5, 2, -43, 8, 95, 0, 7, 2, -43, 8, 94, 0, 1, 2, -46, 6, -86, 0, 3, 2, -46, 6, -83, 17, -5, 2, -43, 8, 69, 0, 33, 2, -43, 8, 68, 0, 2, 2, -43, 8, 101, 0, 1, 2, -43, 8, 99, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, -26, 1, 18, 1, 125, 0, 9, 2, 105, 0, 0, 0, 1, 6, 11, 2, -43, 8, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, -26, 1, 18, 1, 125, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, -24, 0, -4, 3, 82, 0, 9, 7, -14, 0, 0, 0, 0, 4, -80, 0, -4, 3, 82, 2, 95, 0, -56, 0, 3, 0, 0, 0, 0, 0, -110, 0, 0, 0, 20, 8, 102, 2, -43, 0, 0, 7, -31, 2, -43, 7, -125, -1, -113, 0, 0, 0, 0, 83, 13, 10});
+                out.flush();
+                System.out.println("데이터를 송신 하였습니다.");
+            }
+
+            // 서버 접속 끊기
+            in.close();
+            out.close();
+            socket.close();
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 }

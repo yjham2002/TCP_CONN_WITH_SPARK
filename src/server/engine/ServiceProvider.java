@@ -158,6 +158,7 @@ public class ServiceProvider extends ServerConfig{
     }
 
     private Thread getProviderInstance(){
+
         Thread ret = new Thread(() -> {
             boolean recv = true;
             while(!Thread.currentThread().isInterrupted()){
@@ -177,19 +178,21 @@ public class ServiceProvider extends ServerConfig{
                     }
 
                     while (iterator.hasNext()) {
-                        SelectionKey selectionKey = iterator.next();
+                        synchronized (selectedKeys) {
+                            SelectionKey selectionKey = iterator.next();
 
-                        if (selectionKey.isAcceptable()) {
-                            accept(selectionKey);
-                            System.out.println("ServiceProvider :: [Accept]");
-                        } else if (selectionKey.isReadable()) {
-                            ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
-                            System.out.println("ServiceProvider :: [Receive]");
-                            recv = client.receive();
-                        } else if (selectionKey.isWritable()) {
-                            ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
-                            System.out.println("ServiceProvider :: [Write]");
-                            //client.send(selectionKey);
+                            if (selectionKey.isAcceptable()) {
+                                accept(selectionKey);
+                                System.out.println("ServiceProvider :: [Accept]");
+                            } else if (selectionKey.isReadable()) {
+                                ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
+                                System.out.println("ServiceProvider :: [Receive]");
+                                recv = client.receive();
+                            } else if (selectionKey.isWritable()) {
+                                ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
+                                System.out.println("ServiceProvider :: [Write]");
+                                //client.send(selectionKey);
+                            }
                         }
 
                         iterator.remove();

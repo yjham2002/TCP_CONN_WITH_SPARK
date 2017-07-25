@@ -81,10 +81,19 @@ public class ProtocolResponder{
         log = LoggerFactory.getLogger(this.getClass());
         this.socket = socket; // 멤버 세팅
 
-//        this.socket.socket().setReuseAddress(true);
+        try {
+            this.socket.socket().setTcpNoDelay(true);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         this.selector = selector;
         this.byteBuffer = ByteBuffer.allocate(POOL_SIZE);
+        this.byteBuffer.clear();
+        /**
+         * allocate 를 통해 새롭게 메모리를 할당함
+         */
+
         /**
          * SMS 전송 클래스 생성
          */
@@ -94,7 +103,10 @@ public class ProtocolResponder{
         try {
             socket.configureBlocking(false);
 
+            selector.wakeup();
+
             SelectionKey selectionKey = socket.register(selector, SelectionKey.OP_READ);
+
             selectionKey.attach(this);
             this.selectionKey = selectionKey;
 
@@ -105,20 +117,22 @@ public class ProtocolResponder{
         }
     }
 
-    private static boolean tempVar = false; // 디버깅용 변수
+    int aa = 0;
 
     public boolean receive() throws IOException{
+
 //        System.out.println("RECEIVE[ENTERED] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
         byteSerial = null;
 
         try{
-//          byteBuffer.clear();
 
             byteBuffer = ByteBuffer.allocate(POOL_SIZE); // ByteBuffer Limit has to be considered
+            byteBuffer.clear();
 
             System.out.println("RECEIVE[ALLOC] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
 
             int byteCount = socket.read(byteBuffer);
+
             if(byteCount == -1) {
                 System.out.println("RECEIVE[-1] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
                 throw new IOException();
@@ -130,6 +144,15 @@ public class ProtocolResponder{
 
             byteSerial = new ByteSerial(buffer); // 바이트 시리얼 객체로 트리밍과 분석을 위임하기 위한 인스턴스 생성
 
+            if(byteSerial.isLoss()) aa++;
+            System.out.println("########### 손상횟수 ############## :: " + aa);
+
+            try {
+                if (!byteSerial.isLoss() && !byteSerial.startsWith(SohaProtocolUtil.concat(STX, INITIAL_PROTOCOL_START))) started = true;
+                buffer = byteSerial.getProcessed(); // 처리된 트림 데이터 추출
+            }catch(NullPointerException e){
+                e.printStackTrace();
+            }
             byte[] farmCodeTemp = SohaProtocolUtil.getFarmCodeByProtocol(buffer);
             byte[] harvCodeTemp = SohaProtocolUtil.getHarvCodeByProtocol(buffer);
 
@@ -137,11 +160,6 @@ public class ProtocolResponder{
             harvString = HexUtil.getNumericStringFromAscii(harvCodeTemp);
             farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farmString), ConstProtocol.SQL_COL_FARMNAME);
             harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
-
-            if (!byteSerial.isLoss() && !byteSerial.startsWith(SohaProtocolUtil.concat(STX, INITIAL_PROTOCOL_START)))
-                started = true;
-
-            buffer = byteSerial.getProcessed(); // 처리된 트림 데이터 추출
 
             if(buffer.length != LENGTH_REALTIME && buffer.length != LENGTH_INIT){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
                 System.out.println("::::::::: Handler Escape :::::::::::");
@@ -158,6 +176,7 @@ public class ProtocolResponder{
             }
 
             if (!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
+
                 if (!started || buffer.length != LENGTH_REALTIME) { // 이니셜 프로토콜에 따른 처리 여부를 확인하여 최초 연결일 경우, 본 로직을 수행
                     started = true; // 이니셜 프로토콜 전송 여부 갱신
 
@@ -203,7 +222,7 @@ public class ProtocolResponder{
                     log.info("JEDIS REALTIME DATA PUT : " + succ);
 
                     if(SohaProtocolUtil.getErrorCount(realtimePOJO) > 0){
-                        prevErrorData = SohaProtocolUtil.getErrorArrayWithDB(farmString, harvString);
+//                        prevErrorData = SohaProtocolUtil.getErrorArrayWithDB(farmString, harvString);
 
                         int errArray[] = SohaProtocolUtil.getErrorArray(realtimePOJO);
                         int errSMSarray[] = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -266,7 +285,7 @@ public class ProtocolResponder{
                             for(String tel : phones) smsService.sendSMS(tel, msg);
                         }
 
-//                        prevErrorData = errArray;
+                        prevErrorData = errArray;
 
                     }
 
@@ -274,7 +293,11 @@ public class ProtocolResponder{
 
                     Thread synchronizer = new Thread(() -> {
                         semaphore = true;
-                        synchronizeStatus(realtimePOJO, farmString, harvString, HexUtil.getNumericValue(harvCodeTemp));
+                        try {
+                            synchronizeStatus(realtimePOJO, farmString, harvString, HexUtil.getNumericValue(harvCodeTemp));
+                        }catch(Exception e){
+                            System.out.println("Auto Reading handled");
+                        }
                     });
 
                     if(!semaphore) synchronizer.start();
@@ -283,22 +306,25 @@ public class ProtocolResponder{
             }
 
 
-        }catch(IOException e){ // Connection Finished OR Error Occurred
+        }catch(IOException e) { // Connection Finished OR Error Occurred
             try {
                 List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='" + farmString + "' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
-                for (String tel : phones) smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName));
-            }catch(Exception e2){
+                for (String tel : phones)
+                    smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName));
+            } catch (Exception e2) {
                 System.out.println("통신 이상 SMS 전송 중 에러 :: \n" + e2.toString());
             }
             e.printStackTrace();
-            if(selectionKey.isValid()) selectionKey.cancel();
+            if (selectionKey.isValid()) selectionKey.cancel();
             selectionKey.channel().close();
 //            socket.finishConnect();
             log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
             clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
             return false;
+        }catch(NullPointerException ne){
+            System.out.println("Null Pointer Handled");
         }finally {
-            // DO NOTHING
+            byteBuffer.compact();
         }
         return true;
     }
@@ -548,6 +574,7 @@ public class ProtocolResponder{
             while(true) {
 
                 socket.write(ByteBuffer.wrap(msg.getProcessed()));
+
                 selectionKey.interestOps(SelectionKey.OP_READ);
                 selector.wakeup();
 

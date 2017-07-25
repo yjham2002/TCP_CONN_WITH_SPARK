@@ -23,7 +23,7 @@ public class ByteSerial implements Serializable{
      */
     Logger log;
 
-    public static final int POOL_SIZE = 512; // 스트림 수신 버퍼 사이즈
+    public static final int POOL_SIZE = 311; // 스트림 수신 버퍼 사이즈
 
     public static final int TYPE_NONE = 0; // 미결정 타입 혹은 손상된 타입 (수신)
     public static final int TYPE_INIT = 10; // 전원 인가 시 접속되는 프로토콜 (수신)
@@ -113,7 +113,7 @@ public class ByteSerial implements Serializable{
             reason += "[no ETX found]\n";
         }
 
-        if(loss) log.info("Packet-Loss Occured or is empty data - Ignoring" + reason);
+        if(loss) log.info("Packet-Loss Occured or is empty data - Ignoring [" + processed.length + "] " + reason);
         else log.info("Packet has been arrived successfully [" + processed.length + ']');
 
         setTypeAutomatically();
