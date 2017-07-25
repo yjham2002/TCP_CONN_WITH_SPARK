@@ -558,11 +558,15 @@ public class ProtocolResponder{
             return;
         }
 
-        CropSubPOJO cropPOJO = new CropSubPOJO(recvs, order, farmCode, harvCode);
-        cropPOJO.setByteSerial(null);
+        try {
+            CropSubPOJO cropPOJO = new CropSubPOJO(recvs, order, farmCode, harvCode);
+            cropPOJO.setByteSerial(null);
 
-        String sql = cropPOJO.getInsertSQL();
-        DBManager.getInstance().execute(sql);
+            String sql = cropPOJO.getInsertSQL();
+            DBManager.getInstance().execute(sql);
+        }catch(Exception e){
+            System.out.println("Handled :: CROP");
+        }
     }
 
     /**

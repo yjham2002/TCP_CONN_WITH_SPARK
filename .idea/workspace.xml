@@ -83,8 +83,8 @@
       <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="361" column="0" lean-forward="false" selection-start-line="361" selection-start-column="0" selection-end-line="361" selection-end-column="0" />
+            <state relative-caret-position="328">
+              <caret line="567" column="47" lean-forward="false" selection-start-line="567" selection-start-column="47" selection-end-line="567" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1848,8 +1848,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="361" column="0" lean-forward="false" selection-start-line="361" selection-start-column="0" selection-end-line="361" selection-end-column="0" />
+        <state relative-caret-position="328">
+          <caret line="567" column="47" lean-forward="false" selection-start-line="567" selection-start-column="47" selection-end-line="567" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
