@@ -359,7 +359,10 @@ public class ProtocolResponder{
 
                             recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
 
-                            if(recv == null) throw new Exception("An error occurred while auto reading");
+                            if(recv == null) {
+                                System.out.println("An error occurred while auto reading");
+                                return;
+                            }
 
                             TimerPOJO timerPOJO = new TimerPOJO(recv, ConstProtocol.RANGE_READ_START, farmC, harvC);
                             String sql = timerPOJO.getInsertSQL();
@@ -550,7 +553,10 @@ public class ProtocolResponder{
             }
         }
 
-        if(recvs.size() <= 0) throw new Exception("auto reading error on daily age :: " + order);
+        if(recvs.size() <= 0) {
+            System.out.println("auto reading error on daily age :: " + order);
+            return;
+        }
 
         CropSubPOJO cropPOJO = new CropSubPOJO(recvs, order, farmCode, harvCode);
         cropPOJO.setByteSerial(null);

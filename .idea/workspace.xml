@@ -7,16 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/constants/ConstProtocol.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/constants/ConstProtocol.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/engine/ServiceProvider.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/engine/ServiceProvider.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/utils/DebugUtil.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/utils/DebugUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/constants/ConstProtocol.java" afterPath="$PROJECT_DIR$/src/constants/ConstProtocol.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/models/ByteSerial.java" afterPath="$PROJECT_DIR$/src/models/ByteSerial.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ProtocolResponder.java" afterPath="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" afterPath="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/utils/DebugUtil.java" afterPath="$PROJECT_DIR$/src/utils/DebugUtil.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -93,7 +84,7 @@
         <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="138">
-              <caret line="296" column="0" lean-forward="false" selection-start-line="296" selection-start-column="0" selection-end-line="296" selection-end-column="0" />
+              <caret line="361" column="0" lean-forward="false" selection-start-line="361" selection-start-column="0" selection-end-line="361" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -154,7 +145,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>errAr</find>
       <find>Invalid</find>
       <find>new ByteSerial</find>
       <find>TYPE_</find>
@@ -184,6 +174,7 @@
       <find>tempV</find>
       <find>NullPo</find>
       <find>null</find>
+      <find>handled</find>
     </findStrings>
     <replaceStrings>
       <replace>log.info</replace>
@@ -1858,7 +1849,7 @@
     <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
-          <caret line="296" column="0" lean-forward="false" selection-start-line="296" selection-start-column="0" selection-end-line="296" selection-end-column="0" />
+          <caret line="361" column="0" lean-forward="false" selection-start-line="361" selection-start-column="0" selection-end-line="361" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
