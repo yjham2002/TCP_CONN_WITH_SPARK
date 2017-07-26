@@ -117,7 +117,7 @@ public class ProtocolResponder{
 
     int aa = 0;
 
-    public boolean receive() throws IOException{
+    public boolean receive(){
 
 //        System.out.println("RECEIVE[ENTERED] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
         byteSerial = null;
@@ -133,7 +133,7 @@ public class ProtocolResponder{
 
             if(byteCount == -1) {
                 System.out.println("RECEIVE[-1] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
-                throw new IOException();
+                return false;
             }
 
             System.out.println("RECEIVE[READ] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
@@ -309,15 +309,16 @@ public class ProtocolResponder{
                 List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='" + farmString + "' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
                 for (String tel : phones)
                     smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName));
+                if (selectionKey.isValid()) selectionKey.cancel();
+                selectionKey.channel().close();
+//            socket.finishConnect();
+                log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
+                clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
             } catch (Exception e2) {
                 System.out.println("통신 이상 SMS 전송 중 에러 :: \n" + e2.toString());
             }
             e.printStackTrace();
-            if (selectionKey.isValid()) selectionKey.cancel();
-            selectionKey.channel().close();
-//            socket.finishConnect();
-            log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
-            clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
+
             return false;
         }catch(NullPointerException ne) {
             System.out.println("Null Pointer Handled");
@@ -519,7 +520,7 @@ public class ProtocolResponder{
         }catch(Exception e){
             System.out.println("=============================================================");
             System.out.println("WARN :: An error occurred while Initiating Flag Bits");
-            System.out.println("Message :: " + e.getMessage());
+            System.out.println("Message :: " + e.toString());
             System.out.println("=============================================================");
         }finally {
             semaphore = false;
