@@ -178,12 +178,14 @@ public class ServiceProvider extends ServerConfig{
                     }
 
                     while (iterator.hasNext()) {
+
                             SelectionKey selectionKey = iterator.next();
 
                             if (selectionKey.isAcceptable()) {
                                 accept(selectionKey);
                                 System.out.println("ServiceProvider :: [Accept]");
                             } else if (selectionKey.isReadable()) {
+
                                 ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
                                 if(client == null) {
                                     System.out.println(
