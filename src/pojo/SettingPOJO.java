@@ -196,18 +196,6 @@ public class SettingPOJO extends BasePOJO {
         setByteSerial(temp);
     }
 
-    public static void main(String... args){
-        byte[] arr = new byte[]{83, 84, 48, 48, 55, 56, 48, 49, 1, 3, -114, 0, 1, 35, -15, 1, 1, 4, 100, 4, -40, 0, -126, 0, 9, 0, -55, 1, -109, 3, -119, 0, 7, 0, 0, 0, 3, -52, -52, -2, 12, 1, -12, -1, -30, 0, 30, -1, -100, 0, 100, 0, 0, 0, 0, 1, 44, -61, 80, -1, -99, 2, 88, 0, 0, 3, -25, 0, 0, 0, 79, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 5, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 39, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, -1, -1, 56, 117, -82, 13, 10};
-        SettingPOJO sp = new SettingPOJO(new ByteSerial(arr), ConstProtocol.RANGE_READ_START, "0078", "01");
-
-        byte[] gen = sp.getBytes();
-
-        System.out.println(Arrays.toString(gen));
-        System.out.println(Arrays.toString(arr));
-
-        for(int i = 0; i < arr.length; i++) if(gen[i] != arr[i]) System.out.println(":::: " + i);
-    }
-
     @JsonIgnore
     public byte[] getTailBytes(){
         byte[] check = SohaProtocolUtil.concat(ConstProtocol.STX, this.farmCode.getBytes(), this.dongCode.getBytes());

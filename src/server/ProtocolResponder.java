@@ -103,8 +103,6 @@ public class ProtocolResponder{
         try {
             socket.configureBlocking(false);
 
-            selector.wakeup();
-
             SelectionKey selectionKey = socket.register(selector, SelectionKey.OP_READ);
 
             selectionKey.attach(this);
@@ -162,7 +160,7 @@ public class ProtocolResponder{
             harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
 
             if(buffer.length != LENGTH_REALTIME && buffer.length != LENGTH_INIT){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
-                System.out.println("::::::::: Handler Escape :::::::::::");
+                System.out.println("::::::::: Handler Escape ::::::::::: ");
                 return true;
             }
 
@@ -321,8 +319,10 @@ public class ProtocolResponder{
             log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
             clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
             return false;
-        }catch(NullPointerException ne){
+        }catch(NullPointerException ne) {
             System.out.println("Null Pointer Handled");
+        }catch(ArrayIndexOutOfBoundsException ae){
+            System.out.println("Array Index error handled");
         }finally {
             byteBuffer.compact();
         }
@@ -595,7 +595,7 @@ public class ProtocolResponder{
                 while (byteSerial == null || byteSerial.getProcessed().length == LENGTH_REALTIME) {
                     if ((System.currentTimeMillis() - startTime) > ServerConfig.REQUEST_TIMEOUT) {
                         succ = false;
-                        System.out.println("[INFO] READ TIMEOUT - " + timeouts);
+                        System.out.println("[INFO] READ TIMEOUT OCCURRED - " + timeouts + " TIME(S) FROM " + farmName);
                         timeouts++;
                         break;
                     }

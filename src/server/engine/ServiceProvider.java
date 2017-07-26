@@ -178,7 +178,6 @@ public class ServiceProvider extends ServerConfig{
                     }
 
                     while (iterator.hasNext()) {
-                        synchronized (selectedKeys) {
                             SelectionKey selectionKey = iterator.next();
 
                             if (selectionKey.isAcceptable()) {
@@ -186,6 +185,12 @@ public class ServiceProvider extends ServerConfig{
                                 System.out.println("ServiceProvider :: [Accept]");
                             } else if (selectionKey.isReadable()) {
                                 ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
+                                if(client == null) {
+                                    System.out.println(
+                                            "===============================================================================\n" +
+                                            "SELECTOR LEVEL ERROR :::::::::::::::::::::::::::::::: CRITICAL!!!!!!!!!!!!!!!!!\n" +
+                                            "===============================================================================");
+                                }
                                 System.out.println("ServiceProvider :: [Receive]");
                                 recv = client.receive();
                             } else if (selectionKey.isWritable()) {
@@ -196,7 +201,6 @@ public class ServiceProvider extends ServerConfig{
                         }
 
                         iterator.remove();
-                    }
 
 //                    if(!recv){
 //                        d("WARN :: [Connection Expired - Closing Remotely and Restarting :: " + getTime() + "]");

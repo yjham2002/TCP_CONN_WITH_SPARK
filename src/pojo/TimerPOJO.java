@@ -113,15 +113,6 @@ public class TimerPOJO extends BasePOJO{
         this.byteSerial = null;
     }
 
-    public static void main(String... args){
-        byte[] arr = new byte[]{83, 84, 48, 48, 55, 56, 48, 49, 1, 3, -62, -35, -35, 0, 0, 4, -46, 4, -46, 4, -57, 0, 0, 4, 87, 4, 97, 4, -57, 0, 0, 13, 5, 0, 2, 4, -57, 0, 0, 0, 21, 4, 97, 4, -57, 0, 0, 4, 87, 0, 0, 4, -57, 0, 0, 0, 0, 4, 97, 4, -57, 0, 10, 0, 21, 4, 97, 4, -57, 0, 0, 0, 21, 4, 97, 4, -57, 0, 0, 0, 21, 4, 97, 4, -57, 0, 0, 0, 21, 4, 97, 4, -57, 0, 0, 0, 21, 4, 97, 4, -57, 0, 0, 0, 21, 4, 97, 4, -57, 13, -49, 0, 21, 4, 97, 4, -57, 13, -49, 8, -82, 13, 5, 4, -57, 13, -49, 8, -82, 13, 5, 4, -57, 4, 87, 8, -82, 13, 5, 4, -57, 4, 87, 8, -82, 13, 5, 4, -57, 4, 87, 8, -82, 13, 5, 4, -57, 4, 87, 8, -82, 13, 5, 4, -57, 4, 87, 8, -82, 13, 5, 4, -57, 4, 87, 8, -82, 13, 5, 4, -57, 4, 87, 8, -82, 13, 5, 4, -57, 4, 87, 4, 88, 4, 89, 4, -57, 4, 87, 4, 88, 4, 89, 4, -57, -66, -6, 114, 13, 10};
-
-        TimerPOJO timerPOJO = new TimerPOJO(new ByteSerial(arr), ConstProtocol.RANGE_READ_START, "0078", "01");
-
-        DebugUtil.printAndCompare(arr, timerPOJO.getBytes());
-
-    }
-
     @JsonIgnore
     public byte[] getBytes(){
         byte[] check = SohaProtocolUtil.concat(ConstProtocol.STX, this.farmCode.getBytes(), this.dongCode.getBytes());
