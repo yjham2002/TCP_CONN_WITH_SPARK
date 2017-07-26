@@ -2326,7 +2326,8 @@ public class RealtimePOJO extends BasePOJO{
      */
     @JsonIgnore
     public String getInsertSQL(){
-        if(errorStatList == null || errorStatList.size() < 16) return "SELECT -1";
+        if(errorStatList == null || errorStatList.size() < 16) return "   " +
+                " -1";
 
         if(this.redisTime == null) this.redisTime = Calendar.getInstance().getTimeInMillis() + "";
 

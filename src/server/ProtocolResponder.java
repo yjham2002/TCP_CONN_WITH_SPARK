@@ -103,6 +103,7 @@ public class ProtocolResponder{
         try {
             socket.configureBlocking(false);
 
+            selector.wakeup();
             SelectionKey selectionKey = socket.register(selector, SelectionKey.OP_READ);
 
             selectionKey.attach(this);
@@ -123,9 +124,9 @@ public class ProtocolResponder{
         byteSerial = null;
 
         try{
+            byteBuffer.clear();
 
             byteBuffer = ByteBuffer.allocate(POOL_SIZE); // ByteBuffer Limit has to be considered
-            byteBuffer.clear();
 
             System.out.println("RECEIVE[ALLOC] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
 
@@ -133,7 +134,7 @@ public class ProtocolResponder{
 
             if(byteCount == -1) {
                 System.out.println("RECEIVE[-1] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
-                return false;
+                throw new IOException();
             }
 
             System.out.println("RECEIVE[READ] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
