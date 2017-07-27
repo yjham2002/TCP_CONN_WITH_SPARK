@@ -5,6 +5,7 @@ import com.sun.istack.internal.Nullable;
 import configs.ServerConfig;
 import constants.ConstProtocol;
 import models.ByteSerial;
+import models.DataMap;
 import models.Pair;
 import mysql.DBManager;
 import org.slf4j.Logger;
@@ -206,7 +207,19 @@ public class ProtocolResponder{
                     // 현재 연결된 클라이언트 소켓수와 유니크키를 디버깅을 위해 출력함
 
                 } else if(buffer.length == LENGTH_ALERT_PRTC){ // 경보 프로토콜 수신 시
-                    List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='"+farmString+"' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
+                    List<String> phones = new Vector<>();
+                    List<DataMap> pList = DBManager.getInstance().getList("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='"+farmString+"' OR user_auth='A'");
+
+                    for(DataMap dmap : pList){
+                        try {
+                            phones.add(dmap.getString("a_tel"));
+                            phones.add(dmap.getString("b_tel"));
+                            phones.add(dmap.getString("c_tel"));
+                            phones.add(dmap.getString("d_tel"));
+                        }catch(Exception e){
+                            System.out.println("WARN :: Phone LIst Error :: Skipping");
+                        }
+                    }
 
                     for(String tel : phones) {
                         smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName));

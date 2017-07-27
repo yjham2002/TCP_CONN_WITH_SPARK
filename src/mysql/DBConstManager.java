@@ -1,6 +1,7 @@
 package mysql;
 
 import constants.ConstProtocol;
+import models.DataMap;
 
 import java.sql.*;
 import java.util.List;
@@ -61,6 +62,36 @@ public class DBConstManager {
             return 1;
         }
     }
+
+
+    public List<DataMap> getList(String sql){
+        List<DataMap> list = new Vector<>();
+        try{
+            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
+            st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            ResultSetMetaData metaData = rs.getMetaData();
+
+            int cols = metaData.getColumnCount();
+
+            while(rs.next()){
+                DataMap dataMap = new DataMap();
+                for(int i = 1; i <= cols; i++){
+                    dataMap.put(metaData.getColumnLabel(i), rs.getObject(i));
+                }
+                list.add(dataMap);
+            }
+
+            rs.close();
+            st.close();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 
     public boolean execute(String sql){
         boolean retVal = false;
