@@ -201,7 +201,14 @@ public class ProtocolResponder{
 
                     log.info("Responder :: [" + uniqueKey + "] :: Totally " + clients.size() + " connections are being maintained");
                     // 현재 연결된 클라이언트 소켓수와 유니크키를 디버깅을 위해 출력함
-                } else {
+
+                } else if(buffer.length == LENGTH_ALERT_PRTC){ // 경보 프로토콜 수신 시
+                    List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='"+farmString+"' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
+
+                    for(String tel : phones) {
+                        smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName));
+                    }
+                }else {
                     if (!clients.containsKey(uniqueKey)) {
                         log.info("Unique Key inserted : " + uniqueKey);
                         clients.put(uniqueKey, this); // 클라이언트 해시맵에 상위에서 추출한 유니크키를 기준으로 삽입

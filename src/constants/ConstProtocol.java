@@ -22,8 +22,8 @@ public class ConstProtocol {
     public static final byte[] FUNCTION_WRITE = new byte[]{0x10};
 
     public static final int INIT_TERM_MIN10 = 0;
-    public static final int INIT_TERM_MIN = 1;
-    public static final int INIT_TERM_SEC10 = 0;
+    public static final int INIT_TERM_MIN = 0;
+    public static final int INIT_TERM_SEC10 = 3;
     public static final int INIT_TERM_SEC = 0;
 
     public static final int SOCKET_TIMEOUT_LIMIT = 60000;
@@ -31,6 +31,7 @@ public class ConstProtocol {
 
     public static final int READ_LIMIT = 125;
 
+    public static final int LENGTH_ALERT_PRTC = 11;
     public static final int LENGTH_REALTIME = 311;
 
     public static final int LENGTH_INIT = 20;

@@ -231,6 +231,8 @@ public class ServiceProvider extends ServerConfig{
 
             ProtocolResponder protocolResponder = new ProtocolResponder(socketChannel, clients, selector);
 
+        }catch (NullPointerException e){
+            d("WARN :: Couldn't get Remote Address");
         } catch (Exception e) {
             e.printStackTrace();
             d("ERROR :: NOT ABLE TO GENERATE SOCKET CHANNEL AND AN ERROR OCCURED WHILE ACCEPTING");
