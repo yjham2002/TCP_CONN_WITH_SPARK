@@ -380,11 +380,11 @@ public class SettingPOJO extends BasePOJO {
         this.machine_no = getSumWith2BytesABS(offset, SUM_MODE_P);
         this.crop_data_num_and_ctrl_aggr = getSumWith2BytesABS(offset + 2, SUM_MODE_P);
         this.sensor_quantity_and_selection_aggr = getSumWith2BytesABS(offset + 4, SUM_MODE_P);
-        this.sensor_quantity = getSingleByteABS(offset + 4);
-        this.sensor_selected_1 = getBooleanValueFrom2ByteABS(offset + 5, 8);
-        this.sensor_selected_2 = getBooleanValueFrom2ByteABS(offset + 5, 9);
-        this.sensor_selected_3 = getBooleanValueFrom2ByteABS(offset + 5, 10);
-        this.sensor_selected_4 = getBooleanValueFrom2ByteABS(offset + 5, 11);
+        this.sensor_quantity = getSingleByteABS(offset + 5);
+        this.sensor_selected_1 = getBooleanValueFrom2ByteABS(offset + 4, 0);
+        this.sensor_selected_2 = getBooleanValueFrom2ByteABS(offset + 4, 1);
+        this.sensor_selected_3 = getBooleanValueFrom2ByteABS(offset + 4, 2);
+        this.sensor_selected_4 = getBooleanValueFrom2ByteABS(offset + 4, 3);
         this.singular_ctrl_setting_co2 = getSumWith2BytesABS(offset + 6, SUM_MODE_P);
         this.singular_ctrl_setting_temp = getSumWith2BytesABS(offset + 8, SUM_MODE_TEMP);
         this.singular_ctrl_setting_humid = getSumWith2BytesABS(offset + 10, SUM_MODE_HUMID);

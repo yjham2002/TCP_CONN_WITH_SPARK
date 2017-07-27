@@ -172,6 +172,7 @@ public class ProtocolResponder{
                 uniqueKey = SohaProtocolUtil.getUniqueKeyByInit(buffer); // 유니크키를 농장코드로 설정하여 추출
                 if (uniqueKey.equals(SohaProtocolUtil.getMeaninglessUniqueKey()) || buffer.length != LENGTH_INIT)
                     uniqueKey = SohaProtocolUtil.getUniqueKeyByFarmCode(SohaProtocolUtil.getFarmCodeByProtocol(buffer));
+                clients.put(uniqueKey, this);
             }
 
             if (!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
@@ -180,6 +181,8 @@ public class ProtocolResponder{
                     started = true; // 이니셜 프로토콜 전송 여부 갱신
 
                     clients.put(uniqueKey, this); // 클라이언트 해시맵에 상위에서 추출한 유니크키를 기준으로 삽입
+
+                    System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: " + uniqueKey);
 
                     // 클라이언트 셋에서 키로 참조하여 이니셜 프로토콜을 전송 - 바이트 시리얼의 수신용 생성자가 아닌 이하의 생성자를 사용하여 자동으로 모드버스로 변환
                     ByteSerial init = new ByteSerial
@@ -583,6 +586,11 @@ public class ProtocolResponder{
      * @param msg
      */
     public synchronized ByteSerial send(ByteSerial msg){ // TODO 3회 반복
+
+        if(!clients.containsKey(uniqueKey) && uniqueKey != null && !uniqueKey.equals("") && !uniqueKey.equals(SohaProtocolUtil.getMeaninglessUniqueKey())) {
+            System.out.println("Key Reinserted :: " + uniqueKey);
+            clients.put(uniqueKey, this);
+        }
 
         byteSerial = null;
 
