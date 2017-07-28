@@ -221,6 +221,10 @@ public class ServiceProvider extends ServerConfig{
         return ret;
     }
 
+    public HashMap<String, ProtocolResponder> getClients() {
+        return clients;
+    }
+
     void accept(SelectionKey selectionKey) {
 
         try {

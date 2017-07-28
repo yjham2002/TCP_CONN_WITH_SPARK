@@ -1,7 +1,6 @@
 package server;
 
 import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import configs.ServerConfig;
 import constants.ConstProtocol;
 import models.ByteSerial;
@@ -15,11 +14,8 @@ import pojo.RealtimePOJO;
 import pojo.SettingPOJO;
 import pojo.TimerPOJO;
 import redis.RedisManager;
-import server.response.Response;
-import server.response.ResponseConst;
 import server.whois.SMSService;
 import utils.HexUtil;
-import utils.SerialUtil;
 import utils.SohaProtocolUtil;
 
 import java.io.*;
@@ -104,7 +100,6 @@ public class ProtocolResponder{
         try {
             socket.configureBlocking(false);
 
-            selector.wakeup();
             SelectionKey selectionKey = socket.register(selector, SelectionKey.OP_READ);
 
             selectionKey.attach(this);
@@ -145,7 +140,7 @@ public class ProtocolResponder{
             byteSerial = new ByteSerial(buffer); // 바이트 시리얼 객체로 트리밍과 분석을 위임하기 위한 인스턴스 생성
 
             if(byteSerial.isLoss()) aa++;
-            System.out.println("########### 손상횟수 ############## :: " + aa);
+            System.out.println("INFO :: PACKET LOSS OCCURED FOR [" + aa + "] TIME(S)");
 
             try {
                 if (!byteSerial.isLoss() && !byteSerial.startsWith(SohaProtocolUtil.concat(STX, INITIAL_PROTOCOL_START))) started = true;
@@ -153,6 +148,9 @@ public class ProtocolResponder{
             }catch(NullPointerException e){
                 e.printStackTrace();
             }
+
+            if(buffer.length == 0) throw new IOException();
+
             byte[] farmCodeTemp = SohaProtocolUtil.getFarmCodeByProtocol(buffer);
             byte[] harvCodeTemp = SohaProtocolUtil.getHarvCodeByProtocol(buffer);
 
@@ -222,7 +220,7 @@ public class ProtocolResponder{
                     }
 
                     for(String tel : phones) {
-                        smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName));
+                        smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
                     }
                 }else {
                     if (!clients.containsKey(uniqueKey)) {
@@ -332,7 +330,7 @@ public class ProtocolResponder{
             try {
                 List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='" + farmString + "' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
                 for (String tel : phones)
-                    smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName));
+                    smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
                 if (selectionKey.isValid()) selectionKey.cancel();
                 selectionKey.channel().close();
 //            socket.finishConnect();

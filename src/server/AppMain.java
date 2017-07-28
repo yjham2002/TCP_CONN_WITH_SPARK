@@ -73,11 +73,16 @@ public class AppMain{
         Spark.get(ConstRest.REST_CONNECT_TEST, (req, res) -> {
             DataMap map = RestProcessor.makeProcessData(req.raw());
 
-            for(String s : map.keySet()) System.out.println(s + " : " + map.get(s));
+            String rawFarm = map.getString(ConstRest.FARM_CODE);
+            String rawHarv = map.getString(ConstRest.HARV_CODE);
+            byte[] farmCode = rawFarm.getBytes();
 
-            log.info(ConstRest.REST_CONNECT_TEST);
+            if(serviceProvider.getClients().containsKey(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode))){
+                return RestProcessor.makeResultJson(1, "TRUE");
+            }else{
+                return RestProcessor.makeResultJson(0, "FALSE");
+            }
 
-            return RestProcessor.makeResultJson(0, "test", map);
         });
 
         /**
@@ -309,10 +314,10 @@ public class AppMain{
                         /**
                          * 110 Setting Flag 제거
                          */
-//                        else{
-//                            protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_SETTING);
-//                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
-//                        }
+                        else{
+                            protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_SETTING);
+                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                        }
 
                         System.out.println("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));
 

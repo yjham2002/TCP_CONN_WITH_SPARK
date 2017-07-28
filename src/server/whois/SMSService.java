@@ -34,7 +34,7 @@ public class SMSService extends ServerConfig implements ISMSSyncSVC {
 
     @Override
     public int sendSMS(String toPhone, String fromPhone, String msg) {
-
+        if(true) return 0;
         whoisSMS sms = new whoisSMS() ;
 
         try {
