@@ -184,6 +184,8 @@ public class ServiceProvider extends ServerConfig{
                             if (selectionKey.isAcceptable()) {
                                 accept(selectionKey);
                                 System.out.println("ServiceProvider :: [Accept]");
+
+
                             } else if (selectionKey.isReadable()) {
 
                                 ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();

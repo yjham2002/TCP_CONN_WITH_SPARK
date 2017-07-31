@@ -137,6 +137,8 @@ public class ProtocolResponder{
 
             buffer = byteBuffer.array();
 
+            
+
             byteSerial = new ByteSerial(buffer); // 바이트 시리얼 객체로 트리밍과 분석을 위임하기 위한 인스턴스 생성
 
             if(byteSerial.isLoss()) aa++;
