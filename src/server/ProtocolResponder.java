@@ -1,8 +1,16 @@
 package server;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import configs.ServerConfig;
 import constants.ConstProtocol;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandlerAdapter;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.Promise;
 import models.ByteSerial;
 import models.DataMap;
 import models.Pair;
@@ -19,14 +27,11 @@ import utils.HexUtil;
 import utils.SohaProtocolUtil;
 
 import java.io.*;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
+import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.SocketChannel;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import static constants.ConstProtocol.*;
 import static models.ByteSerial.POOL_SIZE;
@@ -38,7 +43,7 @@ import static models.ByteSerial.POOL_SIZE;
  * ServiceProvider는 해시맵으로 운영되며, 클라이언트마다 유니크한 값을 해싱하여 이를 키로 사용한다.
  * 또한, 이는 싱크로나이즈되어 운영되기에 이에 대해 레이스 컨디션이 발생하지 않도록 설계한다.
  */
-public class ProtocolResponder{
+public class ProtocolResponder extends ChannelHandlerAdapter{
 
     /**
      * SLF4J 로거
@@ -46,6 +51,9 @@ public class ProtocolResponder{
     Logger log;
 
     private ByteBuffer byteBuffer;
+    private ChannelHandlerContext ctx;
+
+    private volatile byte[] queue;
 
     private volatile boolean semaphore = false;
 
@@ -53,11 +61,9 @@ public class ProtocolResponder{
     private boolean started = false; // 이니셜 프로토콜이 전송되었는지의 여부를 갖는 로컬 변수
     private boolean generated = false; // 유니크키 생성 여부
     private volatile ByteSerial byteSerial;
-    private SelectionKey selectionKey;
-    private Selector selector;
     private byte[] buffer;
     private String uniqueKey = ""; // 유니크키 초기화 - 클라이언트 해시맵에서 유일성을 가지도록 관리하기 위한 문자열
-    private SocketChannel socket; // ServiceProvider로부터 accept된 단위 소켓
+
     private HashMap<String, ProtocolResponder> clients; // ServiceProvider의 클라이언트 집합의 레퍼런스 포인터
 
     private String farmString;
@@ -67,24 +73,17 @@ public class ProtocolResponder{
 
     private int[] prevErrorData = null;
 
+
+
     /**
      * 프로토콜에 따른 응답을 위한 클래스의 생성자로서 단위 소켓과 함께 클라이언트 레퍼런스 포인터를 수용
-     * @param socket
      * @param clients
      */
-    public ProtocolResponder(SocketChannel socket, HashMap clients, Selector selector){
+    public ProtocolResponder(HashMap clients){
         super();
 
         log = LoggerFactory.getLogger(this.getClass());
-        this.socket = socket; // 멤버 세팅
 
-        try {
-            this.socket.socket().setTcpNoDelay(true);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        this.selector = selector;
         this.byteBuffer = ByteBuffer.allocate(POOL_SIZE);
         this.byteBuffer.clear();
         /**
@@ -97,47 +96,43 @@ public class ProtocolResponder{
         this.smsService = new SMSService();
 
         this.clients = clients; // 멤버 세팅
-        try {
-            socket.configureBlocking(false);
 
-            SelectionKey selectionKey = socket.register(selector, SelectionKey.OP_READ);
-
-            selectionKey.attach(this);
-            this.selectionKey = selectionKey;
-
-            this.socket.socket().setKeepAlive(true);
-            this.socket.socket().setSoTimeout(ConstProtocol.SOCKET_TIMEOUT_LIMIT);
-        }catch (IOException e){
-            e.printStackTrace(); // 소켓 연결 실패
-        }
     }
 
     int aa = 0;
 
-    public boolean receive(){
+    // 채널 읽는 것을 완료했을 때 동작할 코드를 정의 합니다.
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        System.out.println(":::::::::::::::::::::::CONTEXT SWITCHED:::::::::::::::::::::::::::");
+        ctx.flush(); // 컨텍스트의 내용을 플러쉬합니다.
+    };
+
+    // 예외가 발생할 때 동작할 코드를 정의 합니다.
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+            throws Exception {
+        cause.printStackTrace(); // 쌓여있는 트레이스를 출력합니다.
+        ctx.close(); // 컨텍스트를 종료시킵니다.
+    }
+
+    public static byte[] trimLen(byte[] arr){
+        return SohaProtocolUtil.concat(ConstProtocol.STX, Arrays.copyOfRange(arr, LENGTH_LEN_RANGE, arr.length));
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msgObj) throws Exception {
 
 //        System.out.println("RECEIVE[ENTERED] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
         byteSerial = null;
 
         try{
-            byteBuffer.clear();
+            ByteBuf in = (ByteBuf) msgObj;
+            byte[] bytes = new byte[in.readableBytes()];
+            in.readBytes(bytes);
 
-            byteBuffer = ByteBuffer.allocate(POOL_SIZE); // ByteBuffer Limit has to be considered
+            in.release();
 
-            System.out.println("RECEIVE[ALLOC] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
-
-            int byteCount = socket.read(byteBuffer);
-
-            if(byteCount == -1) {
-                System.out.println("RECEIVE[-1] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
-                throw new IOException();
-            }
-
-            System.out.println("RECEIVE[READ] :: " + socket.isConnected() + " :: " + socket.isOpen() + " :: " + socket.getRemoteAddress() + " :: " + socket.getLocalAddress());
-
-            buffer = byteBuffer.array();
-
-            
+            buffer = bytes;
 
             byteSerial = new ByteSerial(buffer); // 바이트 시리얼 객체로 트리밍과 분석을 위임하기 위한 인스턴스 생성
 
@@ -151,6 +146,10 @@ public class ProtocolResponder{
                 e.printStackTrace();
             }
 
+            buffer = trimLen(buffer);
+            byteSerial.setProcessed(buffer);
+            byteSerial.setOriginal(buffer);
+
             if(buffer.length == 0) throw new IOException();
 
             byte[] farmCodeTemp = SohaProtocolUtil.getFarmCodeByProtocol(buffer);
@@ -162,8 +161,9 @@ public class ProtocolResponder{
             harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
 
             if(buffer.length != LENGTH_REALTIME && buffer.length != LENGTH_INIT){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
+                byteSerial = new ByteSerial(buffer);
                 System.out.println("::::::::: Handler Escape ::::::::::: ");
-                return true;
+                return;
             }
 
 //                if (buffer.length == 0) System.exit(122);// TODO 디버깅용
@@ -176,6 +176,7 @@ public class ProtocolResponder{
                 clients.put(uniqueKey, this);
             }
 
+            if(byteSerial == null) return;
             if (!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
 
                 if (!started || buffer.length != LENGTH_REALTIME) { // 이니셜 프로토콜에 따른 처리 여부를 확인하여 최초 연결일 경우, 본 로직을 수행
@@ -199,7 +200,7 @@ public class ProtocolResponder{
                                     ),
                                     ByteSerial.TYPE_SET
                             );
-                    sendOneWay(init);
+                    this.sendOneWay(init);
 
                     System.out.println(Arrays.toString(init.getProcessed()));
 
@@ -233,6 +234,8 @@ public class ProtocolResponder{
                     RedisManager redisManager = RedisManager.getInstance();
                     String farm = SohaProtocolUtil.getSimpleKey(SohaProtocolUtil.getFarmCodeByProtocol(buffer));
                     String key = farm + "@" + RedisManager.getTimestamp();
+
+                    System.out.println("KEY " + key);
 
                     String millis = Long.toString(RedisManager.getMillisFromRedisKey(key));
 
@@ -329,29 +332,62 @@ public class ProtocolResponder{
 
 
         }catch(IOException e) { // Connection Finished OR Error Occurred
-            try {
-                List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='" + farmString + "' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
-                for (String tel : phones)
-                    smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
-                if (selectionKey.isValid()) selectionKey.cancel();
-                selectionKey.channel().close();
-//            socket.finishConnect();
-                log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
-                clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
-            } catch (Exception e2) {
-                System.out.println("통신 이상 SMS 전송 중 에러 :: \n" + e2.toString());
-            }
+
             e.printStackTrace();
 
-            return false;
+            return;
         }catch(NullPointerException ne) {
             System.out.println("Null Pointer Handled");
+            ne.printStackTrace();
         }catch(ArrayIndexOutOfBoundsException ae){
             System.out.println("Array Index error handled");
         }finally {
             byteBuffer.compact();
         }
-        return true;
+        return;
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        System.out.println("Channel Inactivated");
+        try {
+            super.channelInactive(ctx);
+            synchronized (this) {
+                Promise<String> prom;
+                Exception err = null;
+                while ((prom = messageList.poll()) != null)
+                    if(err != null) prom.setFailure(err);
+                    else{
+                        err = new IOException("Connection lost");
+                        prom.setFailure(err);
+                        try {
+                            List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='" + farmString + "' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
+                            for (String tel : phones)
+                                smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
+//            socket.finishConnect();
+                            log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
+                            clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
+                        } catch (Exception e2) {
+                            System.out.println("통신 이상 SMS 전송 중 에러 :: \n" + e2.toString());
+                        }
+                    }
+                messageList = null;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private BlockingQueue<Promise<String>> messageList = new ArrayBlockingQueue<>(16);
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) {
+        try {
+            super.channelActive(ctx);
+            this.ctx = ctx;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void synchronizeStatus(RealtimePOJO realtimePOJO, String farmC, String harvC, int idC){
@@ -608,54 +644,41 @@ public class ProtocolResponder{
         byteSerial = null;
 
         log.info("Sending :: " + Arrays.toString(msg.getProcessed()));
-        try {
-            int timeouts = 0;
+        int timeouts = 0;
 
-            while(true) {
+        while(true) {
 
-                socket.write(ByteBuffer.wrap(msg.getProcessed()));
+            ByteBuf byteBuf = Unpooled.wrappedBuffer(msg.getProcessed());
 
-                selectionKey.interestOps(SelectionKey.OP_READ);
-                selector.wakeup();
+            ctx.writeAndFlush(byteBuf);
 
-                long startTime = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
 
-                boolean succ = true;
+            boolean succ = true;
 
-                while (byteSerial == null || byteSerial.getProcessed().length == LENGTH_REALTIME) {
-                    if ((System.currentTimeMillis() - startTime) > ServerConfig.REQUEST_TIMEOUT) {
-                        succ = false;
-                        System.out.println("[INFO] READ TIMEOUT OCCURRED - " + timeouts + " TIME(S) FROM " + farmName);
-                        timeouts++;
-                        break;
-                    }
+            while (byteSerial == null || byteSerial.getProcessed().length == LENGTH_REALTIME) {
+                if ((System.currentTimeMillis() - startTime) > ServerConfig.REQUEST_TIMEOUT) {
+                    succ = false;
+                    System.out.println("[INFO] READ TIMEOUT OCCURRED - " + timeouts + " TIME(S) FROM " + farmName);
+                    timeouts++;
+                    break;
                 }
-
-                if(timeouts >= ConstProtocol.RETRY){
-                    byte[] farmBytes = Arrays.copyOfRange(msg.getProcessed(), 2, 6);
-                    byte[] dongBytes = Arrays.copyOfRange(msg.getProcessed(), 6, 8);
-                    ByteSerial byteSerialAlert = new ByteSerial(SohaProtocolUtil.makeAlertProtocol(farmBytes, dongBytes));
-                    System.out.println("[INFO :: Sending Alert Protocol since Read Timeout has been occurred for 3 times]");
-                    sendOneWay(byteSerialAlert);
-                    return null;
-                }
-
-                if(timeouts >= ConstProtocol.RETRY || succ) break;
-
             }
 
-            return byteSerial;
+            if(timeouts >= ConstProtocol.RETRY){
+                byte[] farmBytes = Arrays.copyOfRange(msg.getProcessed(), 2, 6);
+                byte[] dongBytes = Arrays.copyOfRange(msg.getProcessed(), 6, 8);
+                ByteSerial byteSerialAlert = new ByteSerial(SohaProtocolUtil.makeAlertProtocol(farmBytes, dongBytes));
+                System.out.println("[INFO :: Sending Alert Protocol since Read Timeout has been occurred for 3 times]");
+                sendOneWay(byteSerialAlert);
+                return null;
+            }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(selectionKey.isValid()) selectionKey.cancel();
-            selectionKey.channel().close();
-//            socket.finishConnect();
-            log.info("Connection Finished - Send"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
-            clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
-        } finally {
-            return byteSerial;
+            if(timeouts >= ConstProtocol.RETRY || succ) break;
+
         }
+
+        return byteSerial;
 
     }
 
@@ -664,36 +687,11 @@ public class ProtocolResponder{
      * 단방향 전송 - 응답에 대해 대기하지 않음
      * @param msg
      */
-    public synchronized void sendOneWay(ByteSerial msg){ // TODO 3회 반복
-
-        byteSerial = null;
-
+    public synchronized void sendOneWay(ByteSerial msg){
         log.info("Sending :: " + Arrays.toString(msg.getProcessed()));
-        try {
+        ByteBuf byteBuf = Unpooled.wrappedBuffer(msg.getProcessed());
+        ChannelFuture cf = ctx.writeAndFlush(byteBuf);
 
-            socket.write(ByteBuffer.wrap(msg.getProcessed()));
-            selectionKey.interestOps(SelectionKey.OP_READ);
-            selector.wakeup();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(selectionKey.isValid()) selectionKey.cancel();
-            try{selectionKey.channel().close();}catch(Exception ee){ee.printStackTrace();}
-//            socket.finishConnect();
-            log.info("Connection Finished - Send Oneway"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
-            clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
-        }
-
-    }
-
-    @NotNull
-    public SocketChannel getSocket() {
-        return socket;
-    }
-
-    @NotNull
-    public void setSocket(SocketChannel socket) {
-        this.socket = socket;
     }
 
 }

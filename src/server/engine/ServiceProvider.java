@@ -1,12 +1,24 @@
 package server.engine;
 
 import configs.ServerConfig;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.*;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.Delimiters;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import javafx.application.Platform;
 import models.ByteSerial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.ICallback;
 import server.ProtocolResponder;
+import server.SohaDecoder;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -20,7 +32,7 @@ import java.net.Socket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+
 import java.util.*;
 
 import static constants.ConstProtocol.SOCKET_TIMEOUT_LIMIT;
@@ -79,17 +91,16 @@ public class ServiceProvider extends ServerConfig{
     private void startServer(){
         try {
             resetServer();
+/*
+		NioEventLoop는 I/O 동작을 다루는 멀티스레드 이벤트 루프입니다.
+		네티는 다양한 이벤트 루프를 제공합니다.
+		이 예제에서는 두개의 Nio 이벤트 루프를 사용합니다.
+		첫번째 'parent' 그룹은 인커밍 커넥션(incomming connection)을 액세스합니다.
+		두번째 'child' 그룹은 액세스한 커넥션의 트래픽을 처리합니다.
+		만들어진 채널에 매핑하고 스레드를 얼마나 사용할지는 EventLoopGroup 구현에 의존합니다.
+		그리고 생성자를 통해서도 구성할 수 있습니다.
+	*/
 
-            selector = Selector.open();
-
-            socket = ServerSocketChannel.open(); // 서버 소켓 인스턴스 생성
-
-            socket.configureBlocking(false);
-            socket.bind(new InetSocketAddress(port));
-            socket.register(selector, SelectionKey.OP_ACCEPT);
-
-            clients = new HashMap<>(); // 클라이언트 해시맵 생성
-            Collections.synchronizedMap(clients); // 가변 스레드 환경에서 아토믹하게 해시맵을 이용하기 위한 동기화 명시 호출
 
         }catch(IOException e){
             e.printStackTrace();
@@ -160,62 +171,44 @@ public class ServiceProvider extends ServerConfig{
     private Thread getProviderInstance(){
 
         Thread ret = new Thread(() -> {
-            boolean recv = true;
-            while(!Thread.currentThread().isInterrupted()){
-                try {
-                    int keyCount = selector.select(SOCKET_TIMEOUT_LIMIT);
-                    if(keyCount == 0) continue;
 
-                    d("STATUS :: [Channel is now Pending until Selector is inactive]");
+            if(clients == null) clients = new HashMap<>();
 
-                    Set<SelectionKey> selectedKeys = selector.selectedKeys();
-                    Iterator<SelectionKey> iterator = selectedKeys.iterator();
-
-                    if(batch.isAlive()){
-                        System.out.println("Batch Thread is Running Normally :: " + getTime());
-                    }else{
-                        System.out.println("Batch Thread is not running - waiting for interruption :: "  + getTime());
-                    }
-
-                    while (iterator.hasNext()) {
-
-                            SelectionKey selectionKey = iterator.next();
-
-                            if (selectionKey.isAcceptable()) {
-                                accept(selectionKey);
-                                System.out.println("ServiceProvider :: [Accept]");
-
-
-                            } else if (selectionKey.isReadable()) {
-
-                                ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
-                                if(client == null) {
-                                    System.out.println(
-                                            "===============================================================================\n" +
-                                            "SELECTOR LEVEL ERROR :::::::::::::::::::::::::::::::: CRITICAL!!!!!!!!!!!!!!!!!\n" +
-                                            "===============================================================================");
-                                }
-                                System.out.println("ServiceProvider :: [Receive]");
-                                recv = client.receive();
-                            } else if (selectionKey.isWritable()) {
-                                ProtocolResponder client = (ProtocolResponder) selectionKey.attachment();
-                                System.out.println("ServiceProvider :: [Write]");
-                                //client.send(selectionKey);
+            EventLoopGroup parentGroup = new NioEventLoopGroup(1);
+            EventLoopGroup childGroup = new NioEventLoopGroup();
+            try{
+                // 서버 부트스트랩을 만듭니다. 이 클래스는 일종의 헬퍼 클래스입니다.
+                // 이 클래스를 사용하면 서버에서 Channel을 직접 세팅 할 수 있습니다.
+                ServerBootstrap sb = new ServerBootstrap();
+                sb.group(parentGroup, childGroup)
+                        // 인커밍 커넥션을 액세스하기 위해 새로운 채널을 객체화 하는 클래스 지정합니다.
+                        .channel(NioServerSocketChannel.class)
+                        // 상세한 Channel 구현을 위해 옵션을 지정할 수 있습니다.
+                        .option(ChannelOption.SO_BACKLOG, 100)
+                        .handler(new LoggingHandler(LogLevel.DEBUG))
+                        // 새롭게 액세스된 Channel을 처리합니다.
+                        // ChannelInitializer는 특별한 핸들러로 새로운 Channel의
+                        // 환경 구성을 도와 주는 것이 목적입니다.
+                        .childHandler(new ChannelInitializer<SocketChannel>() {
+                            @Override
+                            protected void initChannel(SocketChannel sc) throws Exception {
+                                ChannelPipeline cp = sc.pipeline();
+                                cp.addLast("decoder", new SohaDecoder());
+                                cp.addLast(new ProtocolResponder(clients));
                             }
-                        }
+                        });
 
-                        iterator.remove();
+                // 인커밍 커넥션을 액세스하기 위해 바인드하고 시작합니다.
+                ChannelFuture cf = sb.bind(this.port).sync();
 
-//                    if(!recv){
-//                        d("WARN :: [Connection Expired - Closing Remotely and Restarting :: " + getTime() + "]");
-//                        startServer();
-//                    }
-
-                }catch(IOException e){
-                    e.printStackTrace();
-                    d("ERROR :: CHANNEL SELECTOR LEVEL ERROR");
-                }
-
+                // 서버 소켓이 닫힐때까지 대기합니다.
+                cf.channel().closeFuture().sync();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            finally{
+                parentGroup.shutdownGracefully();
+                childGroup.shutdownGracefully();
             }
 
         });
@@ -227,22 +220,22 @@ public class ServiceProvider extends ServerConfig{
         return clients;
     }
 
-    void accept(SelectionKey selectionKey) {
-
-        try {
-            ServerSocketChannel serverSocketChannel = (ServerSocketChannel) selectionKey.channel();
-            SocketChannel socketChannel = serverSocketChannel.accept();
-
-            d("STATUS :: [Connection Requested from [" + socketChannel.getRemoteAddress() + "]]");
-
-            ProtocolResponder protocolResponder = new ProtocolResponder(socketChannel, clients, selector);
-
-        }catch (NullPointerException e){
-            d("WARN :: Couldn't get Remote Address");
-        } catch (Exception e) {
-            e.printStackTrace();
-            d("ERROR :: NOT ABLE TO GENERATE SOCKET CHANNEL AND AN ERROR OCCURED WHILE ACCEPTING");
-        }
+    private void accept(SelectionKey selectionKey) {
+//
+//        try {
+//            ServerSocketChannel serverSocketChannel = (ServerSocketChannel) selectionKey.channel();
+//            SocketChannel socketChannel = serverSocketChannel.accept();
+//
+//            d("STATUS :: [Connection Requested from [" + socketChannel.getRemoteAddress() + "]]");
+//
+//            ProtocolResponder protocolResponder = new ProtocolResponder(socketChannel, clients, selector);
+//
+//        }catch (NullPointerException e){
+//            d("WARN :: Couldn't get Remote Address");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            d("ERROR :: NOT ABLE TO GENERATE SOCKET CHANNEL AND AN ERROR OCCURED WHILE ACCEPTING");
+//        }
     }
 
 
@@ -264,6 +257,7 @@ public class ServiceProvider extends ServerConfig{
     public ByteSerial send(String client, ByteSerial msg){
         ByteSerial ret = null;
         try {
+
             if(clients.containsKey(client)) ret = clients.get(client).send(msg);
             else{
                 log.info("Client just requested does not exist. [KEY : " + client + "]");

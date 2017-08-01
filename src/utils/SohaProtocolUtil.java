@@ -2,6 +2,7 @@ package utils;
 
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import constants.ConstProtocol;
+import models.ByteSerial;
 import mysql.DBManager;
 import pojo.RealtimePOJO;
 
@@ -10,6 +11,9 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+
+import static constants.ConstProtocol.LENGTH_LEN_PURE_RANGE;
+import static constants.ConstProtocol.LENGTH_LEN_RANGE;
 
 /**
  * @author 함의진
@@ -281,6 +285,43 @@ public class SohaProtocolUtil {
         }
 
         return concat;
+    }
+
+    public static int getLength(byte[] array) throws NumberFormatException{
+        int value = Integer.parseInt(HexUtil.getNumericStringFromAscii(array));
+        return value;
+    }
+
+    public static byte[] leftShift(byte[] array, int offset){
+        System.out.println(offset + "/" + array.length);
+        return Arrays.copyOfRange(array, offset, array.length);
+    }
+
+    public static void main(String... args){
+        System.out.println(new byte[]{83, 84, 48, 51, 48, 57, 49, 51, 53, 51, 48, 49, 2, -41, 3, 61, 5, -102, 2, -40, 3, 56, 22, -83, 2, -41, 3, 61, 5, -102, 2, -40, 3, 56, 22, -83, 2, -42, 2, -61, 0, 2, 2, -42, 2, -59, 34, 55, 2, -42, 2, -61, 0, 3, 2, -42, 2, -58, 34, 54, 2, -42, 2, -61, 0, 3, 2, -42, 2, -58, 34, 54, 2, -41, 3, 61, 5, -102, 2, -40, 3, 56, 22, -83, 2, -39, 4, 95, 16, 91, 2, -39, 4, 94, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 64, 0, 0, 0, 99, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, -39, 4, 95, 27, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -52, -52, 0, 0, 0, 0, 1, 48, 1, -6, 2, -60, 3, -123, 0, -56, 0, 1, 0, 0, 0, 0, 26, 116, -1, -60, 0, 47, 3, -118, 3, 33, 0, 0, 7, -31, 2, -44, 5, -33, -1, -113, 0, 113, 13, 10}.length);
+    }
+
+    public static byte[] take(byte[] array){
+        if(ByteSerial.startsWith(array, ConstProtocol.STX)){
+            try{
+                int len = getLength(Arrays.copyOfRange(array, 2, LENGTH_LEN_RANGE));
+                if(array.length < len + LENGTH_LEN_RANGE) {
+                    return null;
+                }
+
+                System.out.println(len + " ::: LEN");
+
+                byte[] narr = SohaProtocolUtil.concat(ConstProtocol.STX, Arrays.copyOfRange(array, LENGTH_LEN_RANGE, LENGTH_LEN_RANGE + len));
+
+                System.out.println(narr.length + " :: ");
+
+                return narr;
+            }catch (NumberFormatException e){
+                return null;
+            }
+        }
+
+        return null;
     }
 
     /**

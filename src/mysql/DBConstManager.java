@@ -97,13 +97,16 @@ public class DBConstManager {
         boolean retVal = false;
 
         try {
-            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
+            connection = DriverManager.getConnection(getConnectionInfo(), USERNAME, PASSWORD);
             st = connection.createStatement();
             retVal = st.execute(sql);
             st.close();
             connection.close();
 
-            return  retVal;
+            return retVal;
+        }catch (DataTruncation ee){
+            ee.printStackTrace();
+            return false;
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("Error Handled :: execute");

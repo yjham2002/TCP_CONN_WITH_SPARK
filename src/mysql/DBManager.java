@@ -62,7 +62,8 @@ public class DBManager extends DBConstManager {
             for (RealtimePOJO pojo : list) {
                 if(Long.parseLong(pojo.getRedisTime()) > maxTime) {
                     count++;
-                    execute(pojo.getInsertSQL());
+                    String sql = pojo.getInsertSQL();
+                    execute(sql);
                 }
             }
             System.out.println("[Migrating DB Data from REDIS to MySQL] " + count++ + "/" + list.size() + " has newly inserted.");

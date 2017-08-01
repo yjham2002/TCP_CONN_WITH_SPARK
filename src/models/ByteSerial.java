@@ -23,7 +23,7 @@ public class ByteSerial implements Serializable{
      */
     Logger log;
 
-    public static final int POOL_SIZE = 311; // 스트림 수신 버퍼 사이즈
+    public static final int POOL_SIZE = 256; // 스트림 수신 버퍼 사이즈
 
     public static final int TYPE_NONE = 0; // 미결정 타입 혹은 손상된 타입 (수신)
     public static final int TYPE_INIT = 10; // 전원 인가 시 접속되는 프로토콜 (수신)
@@ -72,6 +72,21 @@ public class ByteSerial implements Serializable{
 
     }
 
+    public static byte[] trim(byte[] bytes){
+        int newLen = bytes.length - 1;
+
+        byte[] arr;
+        for(; newLen >= 0; newLen--){
+            if(bytes[newLen] != 0) {
+                newLen += 1;
+                break;
+            }
+        }
+
+        arr = Arrays.copyOf(bytes.clone(), newLen >= 0 ? newLen : 0);
+        return arr;
+    }
+
     /**
      * 클라이언트로부터 수신된 시리얼을 읽기 위한 생성자
      * @param bytes
@@ -94,7 +109,7 @@ public class ByteSerial implements Serializable{
         String reason = "\n";
 
         log.info(Arrays.toString(processed));
-//        log.info(Arrays.toString(bytes));
+        log.info(Arrays.toString(bytes));
 
         if(!HexUtil.isCheckSumSound(this.processed)) {
             loss = true;
@@ -207,6 +222,16 @@ public class ByteSerial implements Serializable{
         else{
             for(int e = 0; e < bytes.length; e++){
                 if(bytes[e] != this.processed[e]) return false;
+            }
+            return true;
+        }
+    }
+
+    public static boolean startsWith(byte[] sample, byte[] bytes){
+        if(sample.length < bytes.length) return false;
+        else{
+            for(int e = 0; e < bytes.length; e++){
+                if(bytes[e] != sample[e]) return false;
             }
             return true;
         }
