@@ -151,7 +151,7 @@ public class ByteSerial implements Serializable{
 
     @JsonIgnore
     public byte[] getPureBytes(){
-        return Arrays.copyOfRange(processed, ConstProtocol.RANGE_READ_START + ConstProtocol.LENGTH_LEN_PURE_RANGE, processed.length - ConstProtocol.RANGE_READ_END);
+        return Arrays.copyOfRange(processed, ConstProtocol.RANGE_READ_START, processed.length - ConstProtocol.RANGE_READ_END);
     }
 
     /**
@@ -192,6 +192,8 @@ public class ByteSerial implements Serializable{
         if(serials.size() < 2) return null;
 
         byte[] padding = new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        System.out.println("### " + Arrays.toString(serials.get(0).getProcessed()));
+        System.out.println("### " + Arrays.toString(serials.get(1).getProcessed()));
         byte[] arr = SohaProtocolUtil.concat(serials.get(0).getPureBytes(), padding, serials.get(1).getPureBytes());
         return arr;
     }

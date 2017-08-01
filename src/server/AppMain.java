@@ -137,20 +137,25 @@ public class AppMain{
 
                     if(recvs.size() <= 0) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
                     else{
-                        byte[] pure = ByteSerial.getPureDataConcatForRealtime(recvs);
-
-                        ByteSerial rSerial = new ByteSerial(SohaProtocolUtil.concat(ConstProtocol.STX, farmCode, harvCode, pure, new byte[]{ 0 }, ConstProtocol.ETX), ByteSerial.TYPE_FORCE);
-
-                        System.out.println("-=============================================================");
-                        System.out.println("-===" + rSerial.getProcessed().length + " / " + Arrays.toString(rSerial.getProcessed()));
-                        System.out.println("-=============================================================");
-
-                        RealtimePOJO realtimePOJO = new RealtimePOJO(rSerial);
-
                         try {
-                            DBManager.getInstance().execute(realtimePOJO.getInsertSQL());
-                            return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
-                        }catch (Exception e){
+                            byte[] pure = ByteSerial.getPureDataConcatForRealtime(recvs);
+
+                            ByteSerial rSerial = new ByteSerial(SohaProtocolUtil.concat(ConstProtocol.STX, farmCode, harvCode, pure, new byte[]{0}, ConstProtocol.ETX), ByteSerial.TYPE_FORCE);
+
+
+                            System.out.println("-=============================================================");
+                            System.out.println("-===" + rSerial.getProcessed().length + " / " + Arrays.toString(rSerial.getProcessed()));
+                            System.out.println("-=============================================================");
+
+                            RealtimePOJO realtimePOJO = new RealtimePOJO(rSerial);
+                            try {
+                                DBManager.getInstance().execute(realtimePOJO.getInsertSQL());
+                                return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
+                            }catch (Exception e){
+                                return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
+                            }
+                        }catch (ArrayIndexOutOfBoundsException e){
+                            e.printStackTrace();
                             return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
                         }
 
@@ -173,6 +178,10 @@ public class AppMain{
                     recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
 
                     if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_FAILURE);
+
+                    System.out.println("============================================================================================");
+                    System.out.println(Arrays.toString(recv.getProcessed()));
+                    System.out.println("============================================================================================");
 
                     settingPOJO.initTails(recv, ConstProtocol.RANGE_READ_START);
 

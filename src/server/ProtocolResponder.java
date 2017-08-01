@@ -53,8 +53,6 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
     private ByteBuffer byteBuffer;
     private ChannelHandlerContext ctx;
 
-    private volatile byte[] queue;
-
     private volatile boolean semaphore = false;
 
     private SMSService smsService;
@@ -72,8 +70,6 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
     private String harvName;
 
     private int[] prevErrorData = null;
-
-
 
     /**
      * 프로토콜에 따른 응답을 위한 클래스의 생성자로서 단위 소켓과 함께 클라이언트 레퍼런스 포인터를 수용

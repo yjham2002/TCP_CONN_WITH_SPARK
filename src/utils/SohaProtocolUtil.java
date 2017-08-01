@@ -5,14 +5,8 @@ import constants.ConstProtocol;
 import models.ByteSerial;
 import mysql.DBManager;
 import pojo.RealtimePOJO;
-
-import java.lang.reflect.Array;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
-
-import static constants.ConstProtocol.LENGTH_LEN_PURE_RANGE;
 import static constants.ConstProtocol.LENGTH_LEN_RANGE;
 
 /**
