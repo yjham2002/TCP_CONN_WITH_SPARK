@@ -161,7 +161,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
 
             if(buffer.length != LENGTH_REALTIME && buffer.length != LENGTH_INIT){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
-                byteSerial = new ByteSerial(buffer);
+                byteSerial = new ByteSerial(buffer, ByteSerial.TYPE_NONE);
                 System.out.println("::::::::: Handler Escape ::::::::::: ");
                 return;
             }
