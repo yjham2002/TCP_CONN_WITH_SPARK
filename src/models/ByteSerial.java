@@ -151,7 +151,7 @@ public class ByteSerial implements Serializable{
 
     @JsonIgnore
     public byte[] getPureBytes(){
-        return Arrays.copyOfRange(processed, ConstProtocol.RANGE_READ_START, processed.length - ConstProtocol.RANGE_READ_END);
+        return Arrays.copyOfRange(processed, ConstProtocol.RANGE_READ_START + ConstProtocol.LENGTH_LEN_PURE_RANGE, processed.length - ConstProtocol.RANGE_READ_END);
     }
 
     /**

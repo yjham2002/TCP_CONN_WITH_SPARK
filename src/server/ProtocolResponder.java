@@ -147,6 +147,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             }
 
             buffer = trimLen(buffer);
+
             byteSerial.setProcessed(buffer);
             byteSerial.setOriginal(buffer);
 
@@ -160,7 +161,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farmString), ConstProtocol.SQL_COL_FARMNAME);
             harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
 
-            if(buffer.length != LENGTH_REALTIME && buffer.length != LENGTH_INIT){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
+            if(buffer.length != LENGTH_REALTIME && buffer.length != LENGTH_INIT && buffer.length != LENGTH_ALERT_PRTC){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
                 byteSerial = new ByteSerial(buffer, ByteSerial.TYPE_NONE);
                 System.out.println("::::::::: Handler Escape ::::::::::: ");
                 return;
@@ -170,7 +171,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
             if (!generated) {
                 generated = true;
-                uniqueKey = SohaProtocolUtil.getUniqueKeyByInit(buffer); // 유니크키를 농장코드로 설정하여 추출
+                if(buffer.length == LENGTH_INIT) uniqueKey = SohaProtocolUtil.getUniqueKeyByInit(buffer); // 유니크키를 농장코드로 설정하여 추출
                 if (uniqueKey.equals(SohaProtocolUtil.getMeaninglessUniqueKey()) || buffer.length != LENGTH_INIT)
                     uniqueKey = SohaProtocolUtil.getUniqueKeyByFarmCode(SohaProtocolUtil.getFarmCodeByProtocol(buffer));
                 clients.put(uniqueKey, this);
@@ -179,7 +180,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             if(byteSerial == null) return;
             if (!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
 
-                if (!started || buffer.length != LENGTH_REALTIME) { // 이니셜 프로토콜에 따른 처리 여부를 확인하여 최초 연결일 경우, 본 로직을 수행
+                if (!started || (buffer.length != LENGTH_ALERT_PRTC && buffer.length != LENGTH_REALTIME)) { // 이니셜 프로토콜에 따른 처리 여부를 확인하여 최초 연결일 경우, 본 로직을 수행
                     started = true; // 이니셜 프로토콜 전송 여부 갱신
 
                     clients.put(uniqueKey, this); // 클라이언트 해시맵에 상위에서 추출한 유니크키를 기준으로 삽입
@@ -340,6 +341,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             System.out.println("Null Pointer Handled");
             ne.printStackTrace();
         }catch(ArrayIndexOutOfBoundsException ae){
+            ae.printStackTrace();
             System.out.println("Array Index error handled");
         }finally {
             byteBuffer.compact();
@@ -691,7 +693,6 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
         log.info("Sending :: " + Arrays.toString(msg.getProcessed()));
         ByteBuf byteBuf = Unpooled.wrappedBuffer(msg.getProcessed());
         ChannelFuture cf = ctx.writeAndFlush(byteBuf);
-
     }
 
 }

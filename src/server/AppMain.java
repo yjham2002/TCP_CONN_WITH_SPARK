@@ -141,6 +141,10 @@ public class AppMain{
 
                         ByteSerial rSerial = new ByteSerial(SohaProtocolUtil.concat(ConstProtocol.STX, farmCode, harvCode, pure, new byte[]{ 0 }, ConstProtocol.ETX), ByteSerial.TYPE_FORCE);
 
+                        System.out.println("-=============================================================");
+                        System.out.println("-===" + rSerial.getProcessed().length + " / " + Arrays.toString(rSerial.getProcessed()));
+                        System.out.println("-=============================================================");
+
                         RealtimePOJO realtimePOJO = new RealtimePOJO(rSerial);
 
                         try {
