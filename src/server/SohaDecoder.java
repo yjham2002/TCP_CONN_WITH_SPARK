@@ -50,13 +50,8 @@ public class SohaDecoder extends ByteToMessageDecoder {
                 return ;
             }else {
                 in.resetReaderIndex();
-
                 ByteBuf byteBuf = in.readBytes(HEADER_PREFIX_LEN + HEADER_PREFIX_BODYLEN_LEN + blen);
-
-                System.out.println("LEN :: " + (HEADER_PREFIX_LEN + HEADER_PREFIX_BODYLEN_LEN + blen) + " :: BUF :: ");
-
                 out.add(byteBuf);
-
             }
 
             blen = 0 ;

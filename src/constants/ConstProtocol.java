@@ -39,6 +39,18 @@ public class ConstProtocol {
     public static final int RETRY = 3;
 
     /**
+     * 응답 프로토콜 길이 정의
+     */
+    public static final int RESPONSE_LEN_DAILY = 270 - 4;
+    public static final int RESPONSE_LEN_DAILY_TAIL = 90 - 4;
+    public static final int RESPONSE_LEN_SETTING = 162 - 4;
+    public static final int RESPONSE_LEN_SETTING_TAIL = 56 - 4;
+    public static final int RESPONSE_LEN_TIMER = 214 - 4;
+    public static final int RESPONSE_LEN_REAL = 220 - 4;
+    public static final int RESPONSE_LEN_REAL_SUB = 104 - 4;
+    public static final int RESPONSE_LEN_WRITE = 23 - 4;
+
+    /**
      * 메모리 참조 범위를 기술하기 위한 페어 상수
      * Head : 메모리 주소(Byte)
      * Tail : 메모리 참조 길이(Word)

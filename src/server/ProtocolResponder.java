@@ -416,7 +416,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                             protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                             System.out.println(Arrays.toString(protocol));
 
-                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
+                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_TIMER);
 
                             if(recv == null) {
                                 System.out.println("An error occurred while auto reading");
@@ -432,7 +432,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                             protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                             System.out.println("READING SETTINGS - " + Arrays.toString(protocol));
 
-                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
+                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_SETTING);
 
                             if(recv == null) throw new Exception("An error occurred while auto reading");
 
@@ -443,7 +443,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                             protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                             System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
 
-                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
+                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_SETTING_TAIL);
 
                             if(recv == null) throw new Exception("An error occurred while auto reading");
 
@@ -491,7 +491,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                 System.out.println("READING SETTINGS - " + Arrays.toString(protocol));
 
-                recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
+                recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_SETTING);
 
                 if(recv == null) throw new Exception("An error occurred while auto reading");
 
@@ -502,7 +502,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                 System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
 
-                recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
+                recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_SETTING_TAIL);
 
                 if(recv == null) throw new Exception("An error occurred while auto reading");
 
@@ -518,7 +518,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                 System.out.println(Arrays.toString(protocol));
 
-                recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE));
+                recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_TIMER);
 
                 if(recv == null) throw new Exception("An error occurred while auto reading");
 
@@ -569,7 +569,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             ByteSerial ellaborated = new ByteSerial(initPrtc, ByteSerial.TYPE_FORCE);
 
             if(toSend) {
-                send(ellaborated);
+                send(ellaborated, ConstProtocol.RESPONSE_LEN_WRITE);
                 System.out.println("INFO :: Initiating Flag Bits");
             }else{
                 System.out.println("INFO :: Nothing Has been detected with changed-flags");
@@ -604,7 +604,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
         recvs = new ArrayList<>();
         for(int e = 0; e < protocols.length; e++) {
-            ByteSerial entry = send(new ByteSerial(protocols[e], ByteSerial.TYPE_NONE));
+            ByteSerial entry = send(new ByteSerial(protocols[e], ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_DAILY);
             if(entry != null) {
                 recvs.add(entry);
             }else{
@@ -632,7 +632,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
      * 바이트 시리얼로부터 처리 이후의 바이트 패킷을 추출하여 바이트 기반으로 전송
      * @param msg
      */
-    public synchronized ByteSerial send(ByteSerial msg){ // TODO 3회 반복
+    public synchronized ByteSerial send(ByteSerial msg, int length){
 
         if(!clients.containsKey(uniqueKey) && uniqueKey != null && !uniqueKey.equals("") && !uniqueKey.equals(SohaProtocolUtil.getMeaninglessUniqueKey())) {
             System.out.println("Key Reinserted :: " + uniqueKey);
@@ -654,7 +654,8 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
             boolean succ = true;
 
-            while (byteSerial == null || byteSerial.getProcessed().length == LENGTH_REALTIME) {
+            while (byteSerial == null || byteSerial.getProcessed().length != length) {
+//                if(byteSerial != null && byteSerial.getProcessed().length != LENGTH_REALTIME && length == ConstProtocol.RESPONSE_LEN_WRITE) break;
                 if ((System.currentTimeMillis() - startTime) > ServerConfig.REQUEST_TIMEOUT) {
                     succ = false;
                     System.out.println("[INFO] READ TIMEOUT OCCURRED - " + timeouts + " TIME(S) FROM " + farmName);

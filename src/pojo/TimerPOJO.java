@@ -116,13 +116,6 @@ public class TimerPOJO extends BasePOJO{
     @JsonIgnore
     public byte[] getBytes(){
 
-        if(this.farmCode == null)
-            System.out.println("aaaaaaaaaaaaaaaaaaaa");
-
-        if(this.dongCode == null)
-            System.out.println("bbbbbbbbbbbbbbbbbbbb");
-
-
         byte[] check = SohaProtocolUtil.concat(ConstProtocol.STX, this.farmCode.getBytes(), this.dongCode.getBytes());
 
         int bitAggr_timerctrl_1 =

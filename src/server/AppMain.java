@@ -17,6 +17,7 @@ import server.engine.ServiceProvider;
 import server.response.Response;
 import server.response.ResponseConst;
 import spark.Spark;
+import utils.DataMapValidationUtil;
 import utils.SohaProtocolUtil;
 
 import java.io.IOException;
@@ -133,12 +134,13 @@ public class AppMain{
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_REALTIME_READABLE.getHead(), ConstProtocol.RANGE_REALTIME_READABLE.getTail(), id, farmCode, harvCode);
                     protocol_sub = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_REALTIME_READABLE_TAILS.getHead(), ConstProtocol.RANGE_REALTIME_READABLE_TAILS.getTail(), id, farmCode, harvCode);
                     protocols = new byte[][]{protocol_sub.clone(), protocol.clone()};
-                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
+                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols, new int[]{ConstProtocol.RESPONSE_LEN_REAL_SUB, ConstProtocol.RESPONSE_LEN_REAL});
 
                     if(recvs.size() <= 0) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
                     else{
                         try {
                             byte[] pure = ByteSerial.getPureDataConcatForRealtime(recvs);
+                            if(pure == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
 
                             ByteSerial rSerial = new ByteSerial(SohaProtocolUtil.concat(ConstProtocol.STX, farmCode, harvCode, pure, new byte[]{0}, ConstProtocol.ETX), ByteSerial.TYPE_FORCE);
 
@@ -166,7 +168,7 @@ public class AppMain{
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), id, farmCode, harvCode);
                     System.out.println("READING SETTINGS - " + Arrays.toString(protocol));
 
-                    recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                    recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_SETTING);
                     if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
                     SettingPOJO settingPOJO = new SettingPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
 
@@ -175,7 +177,7 @@ public class AppMain{
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), id, farmCode, harvCode);
                     System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
 
-                    recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                    recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_SETTING_TAIL);
 
                     if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_FAILURE);
 
@@ -198,7 +200,7 @@ public class AppMain{
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), id, farmCode, harvCode);
                     System.out.println(Arrays.toString(protocol));
 
-                    recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                    recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_TIMER);
                     if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
                     TimerPOJO timerPOJO = new TimerPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
 
@@ -227,7 +229,19 @@ public class AppMain{
 
                     protocols = SohaProtocolUtil.makeReadProtocols(range.getHead(), range.getTail(), id, farmCode, harvCode);
 
-                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols);
+                    int[] lens = new int[]{
+                            ConstProtocol.RESPONSE_LEN_DAILY,
+                            ConstProtocol.RESPONSE_LEN_DAILY,
+                            ConstProtocol.RESPONSE_LEN_DAILY,
+                            ConstProtocol.RESPONSE_LEN_DAILY,
+                            ConstProtocol.RESPONSE_LEN_DAILY,
+                            ConstProtocol.RESPONSE_LEN_DAILY,
+                            ConstProtocol.RESPONSE_LEN_DAILY,
+                            ConstProtocol.RESPONSE_LEN_DAILY_TAIL
+                    };
+
+                    recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols, lens);
+                    if(recvs == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
                     if(recvs.size() <= 0) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
 
                     CropSubPOJO cropPOJO = new CropSubPOJO(recvs, order, rawFarm, rawHarv);
@@ -318,7 +332,7 @@ public class AppMain{
 
                         byte[] pure = realPOJO.getWritableData();
                         protocol = SohaProtocolUtil.makeWriteProtocol(ConstProtocol.RANGE_REALTIME_WRITABLE.getHead(), ConstProtocol.RANGE_REALTIME_WRITABLE.getTail(), id, farmCode, harvCode, pure);
-                        recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                        recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
 
                         if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
                         if(recv.isLoss()) {
@@ -329,7 +343,7 @@ public class AppMain{
                          */
                         else{
                             protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_SETTING);
-                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
                         }
 
                         System.out.println("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));
@@ -355,14 +369,14 @@ public class AppMain{
                         TimerPOJO timerPOJO = objectMapper.readValue(rawJson, TimerPOJO.class);
                         byte[] pure = new ByteSerial(timerPOJO.getBytes(), ByteSerial.TYPE_FORCE).getPureBytes();
                         protocol = SohaProtocolUtil.makeWriteProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), id, farmCode, harvCode, pure);
-                        recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                        recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
 
                         if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
                         if(recv.isLoss()) {
                             return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
                         }else{
                             protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_TIMER);
-                            recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                            recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
                         }
 
                         System.out.println("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));
@@ -377,9 +391,7 @@ public class AppMain{
 
                     System.out.println("WRITING DAILY AGE ONCE " + rawFarm + ":" + rawHarv);
                     try{
-                        if(map.get("order") == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
-                        if(map.get("day") == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
-                        if(map.get("index") == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
+                        if(!DataMapValidationUtil.isValid(map, "order", "day", "index")) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
 
                         int dayOrder = map.getInt("day");
                         int index = map.getInt("index");
@@ -401,9 +413,10 @@ public class AppMain{
 
                         if(order == -1 || range == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
 
-                        System.out.println(rawJson);
-
                         CropSubPOJO cropSubPOJO = objectMapper.readValue(rawJson, CropSubPOJO.class);
+
+                        System.out.println("RAW :: " + rawJson);
+                        System.out.println("PARSE :: " + objectMapper.writeValueAsString(cropSubPOJO));
 
                         /**
                          * dayOrder는 0~49 범위의 정수(의미상의 일령 순서가 아님)
@@ -416,12 +429,12 @@ public class AppMain{
                         int wordLen = LENGTH_JUMP_DAYAGE_DETAIL / 2;
 
                         protocol = SohaProtocolUtil.makeWriteProtocol(toWrite, wordLen, id, farmCode, harvCode, unitByte);
-                        recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                        recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
 
                         if(recv != null){
                             System.out.println("WRITE ::::::::::::::::: DAILY AGE (UNIT) SUCCEEDED");
                             protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, dailyFlag);
-                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
 
                             try {
                                 String sql = cropSubPOJO.getInsertSQL();
@@ -459,9 +472,9 @@ public class AppMain{
 
                         if(order == -1 || range == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
 
-                        System.out.println(rawJson);
-
                         CropSubPOJO cropSubPOJO = objectMapper.readValue(rawJson, CropSubPOJO.class);
+
+//                        System.out.println("RAW :: " + rawJson);
 
                         int resCount = 0;
 
@@ -470,14 +483,14 @@ public class AppMain{
 
                         for(int c = 0; c < protocols.length; c++){
                             protocol = protocols[c];
-                            recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                            recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
                             if(recv != null) resCount++;
                         }
 
                         if(resCount == protocols.length){
                             System.out.println("WRITE ::::::::::::::::: DAILY AGE SUCC");
                             protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, dailyFlag);
-                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
 
                             try {
                                 String sql = cropSubPOJO.getInsertSQL();
@@ -504,13 +517,13 @@ public class AppMain{
 
                         byte[] pure = new ByteSerial(settingPOJO.getBytes(), ByteSerial.TYPE_FORCE).getPureBytes();
                         protocol = SohaProtocolUtil.makeWriteProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), id, farmCode, harvCode, pure);
-                        recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                        recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
 
                         if(recv != null && !recv.isLoss()) multiCount++;
 
                         pure = new ByteSerial(settingPOJO.getTailBytes(), ByteSerial.TYPE_FORCE).getPureBytes();
                         protocol = SohaProtocolUtil.makeWriteProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), id, farmCode, harvCode, pure);
-                        recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                        recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
 
                         if(recv != null && !recv.isLoss()) multiCount++;
 
@@ -519,7 +532,7 @@ public class AppMain{
                         }else{
                             protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_SETTING, ConstProtocol.FLAG_DAILY_6);
                             System.out.println("Sending Flag :::::::::::::::: " + Arrays.toString(protocol));
-                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol);
+                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
                         }
 
                         System.out.println("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));

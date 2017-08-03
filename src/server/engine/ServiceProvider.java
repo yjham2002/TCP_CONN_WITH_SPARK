@@ -254,11 +254,11 @@ public class ServiceProvider extends ServerConfig{
         return instance;
     }
 
-    public ByteSerial send(String client, ByteSerial msg){
+    public ByteSerial send(String client, ByteSerial msg, int length){
         ByteSerial ret = null;
         try {
 
-            if(clients.containsKey(client)) ret = clients.get(client).send(msg);
+            if(clients.containsKey(client)) ret = clients.get(client).send(msg, length);
             else{
                 log.info("Client just requested does not exist. [KEY : " + client + "]");
             }
@@ -269,19 +269,19 @@ public class ServiceProvider extends ServerConfig{
         }
     }
 
-    public ByteSerial send(String client, byte[] msg){
-        return send(client, new ByteSerial(msg, ByteSerial.TYPE_NONE));
+    public ByteSerial send(String client, byte[] msg, int length){
+        return send(client, new ByteSerial(msg, ByteSerial.TYPE_NONE), length);
     }
 
-    public List<ByteSerial> send(String client, byte[][] msgs){
+    public List<ByteSerial> send(String client, byte[][] msgs, int[] lengths){
 
         List<ByteSerial> byteSerials = new ArrayList<>();
         for(int e = 0; e < msgs.length; e++) {
-            ByteSerial entry = send(client, new ByteSerial(msgs[e], ByteSerial.TYPE_NONE));
+            ByteSerial entry = send(client, new ByteSerial(msgs[e], ByteSerial.TYPE_NONE), lengths[e]);
             if(entry != null) {
                 byteSerials.add(entry);
             }else{
-                break;
+                return null;
             }
         }
 
