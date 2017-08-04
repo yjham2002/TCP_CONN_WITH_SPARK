@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.Arrays;
+import java.util.Calendar;
 
 /**
  * @author 함의진
@@ -109,6 +110,10 @@ public class HexUtil {
         }
 
         return Integer.parseInt(str);
+    }
+
+    public static long timestamp(){
+        return Calendar.getInstance().getTimeInMillis();
     }
 
     public static String getNumericStringFromAscii(byte[] array){

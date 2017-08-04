@@ -112,7 +112,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
     }
 
     public static byte[] trimLen(byte[] arr){
-        return SohaProtocolUtil.concat(ConstProtocol.STX, Arrays.copyOfRange(arr, LENGTH_LEN_RANGE, arr.length));
+        return SohaProtocolUtil.concat(ConstProtocol.STX, Arrays.copyOfRange(arr, LENGTH_LEN_PREFIX, arr.length));
     }
 
     @Override
@@ -135,9 +135,18 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             if(byteSerial.isLoss()) aa++;
             System.out.println("INFO :: PACKET LOSS OCCURED FOR [" + aa + "] TIME(S)");
 
+            long tid = 0;
+            byte addr1 = 0;
+            byte addr2 = 0;
+
             try {
                 if (!byteSerial.isLoss() && !byteSerial.startsWith(SohaProtocolUtil.concat(STX, INITIAL_PROTOCOL_START))) started = true;
                 buffer = byteSerial.getProcessed(); // 처리된 트림 데이터 추출
+
+                tid = ByteSerial.bytesToLong(Arrays.copyOfRange(buffer, 6, 14));
+                addr1 = buffer[14];
+                addr2 = buffer[15];
+
             }catch(NullPointerException e){
                 e.printStackTrace();
             }
@@ -158,8 +167,8 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
 
             if(buffer.length != LENGTH_REALTIME && buffer.length != LENGTH_INIT && buffer.length != LENGTH_ALERT_PRTC){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
-                byteSerial = new ByteSerial(buffer, ByteSerial.TYPE_NONE);
-                System.out.println("::::::::: Handler Escape ::::::::::: ");
+                byteSerial = new ByteSerial(buffer, ByteSerial.TYPE_NONE, tid, addr1, addr2);
+                System.out.println("::::::::: Escaping From RealTime Handler - TID [" + tid + "] LOC ["+ addr1 + "/" + addr2 +"] ::::::::::: ");
                 return;
             }
 
@@ -654,7 +663,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
             boolean succ = true;
 
-            while (byteSerial == null || byteSerial.getProcessed().length != length) {
+            while (byteSerial == null || byteSerial.getTid() != msg.getTid()) {
 //                if(byteSerial != null && byteSerial.getProcessed().length != LENGTH_REALTIME && length == ConstProtocol.RESPONSE_LEN_WRITE) break;
                 if ((System.currentTimeMillis() - startTime) > ServerConfig.REQUEST_TIMEOUT) {
                     succ = false;

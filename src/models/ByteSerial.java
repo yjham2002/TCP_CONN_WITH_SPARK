@@ -8,8 +8,10 @@ import utils.HexUtil;
 import utils.SohaProtocolUtil;
 
 import java.io.Serializable;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -42,6 +44,10 @@ public class ByteSerial implements Serializable{
     private int length;
     private int type = TYPE_NONE;
 
+    private long tid;
+    private byte addr1;
+    private byte addr2;
+
     @Deprecated
     private ByteSerial(){}
 
@@ -70,6 +76,50 @@ public class ByteSerial implements Serializable{
 
         this.type = type;
 
+    }
+
+    public ByteSerial(byte[] bytes, int type, long tid, byte addr1, byte addr2){
+        this(bytes, type);
+        this.tid = tid;
+        this.addr1 = addr1;
+        this.addr2 = addr2;
+    }
+
+    public static byte[] longToBytes(long x) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(x);
+        return buffer.array();
+    }
+
+    public static long bytesToLong(byte[] bytes) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.put(bytes);
+        buffer.flip();//need flip
+        return buffer.getLong();
+    }
+
+    public long getTid() {
+        return tid;
+    }
+
+    public void setTid(long tid) {
+        this.tid = tid;
+    }
+
+    public byte getAddr1() {
+        return addr1;
+    }
+
+    public void setAddr1(byte addr1) {
+        this.addr1 = addr1;
+    }
+
+    public byte getAddr2() {
+        return addr2;
+    }
+
+    public void setAddr2(byte addr2) {
+        this.addr2 = addr2;
     }
 
     public static byte[] trim(byte[] bytes){

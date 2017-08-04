@@ -278,6 +278,13 @@ public class ServiceProvider extends ServerConfig{
         List<ByteSerial> byteSerials = new ArrayList<>();
         for(int e = 0; e < msgs.length; e++) {
             ByteSerial entry = send(client, new ByteSerial(msgs[e], ByteSerial.TYPE_NONE), lengths[e]);
+
+            try {
+                Thread.sleep(500);
+            }catch(InterruptedException e2){
+                e2.printStackTrace();
+            }
+
             if(entry != null && !entry.isLoss()) {
                 byteSerials.add(entry);
             }else{

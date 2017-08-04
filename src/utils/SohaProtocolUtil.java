@@ -120,7 +120,8 @@ public class SohaProtocolUtil {
         byte[] len = new byte[]{0x00, (byte)length, (byte)(length * 2)};
         byte[] deviceId = new byte[]{(byte)id};
         byte[] crc16 = modbus.fn_makeCRC16(concat(deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data));
-        byte[] checkSum = new byte[]{HexUtil.checkSum(concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data, crc16))};
+//        byte[] checkSum = new byte[]{HexUtil.checkSum(concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data, crc16))};
+        byte[] checkSum = new byte[]{HexUtil.checkSum(concat(ConstProtocol.STX, farmCode, harvCode, ByteSerial.longToBytes(HexUtil.timestamp()), deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data, crc16))};
         protocol = concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data, crc16, checkSum, ConstProtocol.ETX);
 
         return protocol;
@@ -164,7 +165,8 @@ public class SohaProtocolUtil {
         byte[] len = getHexLocation(length);
         byte[] deviceId = new byte[]{(byte)id};
         byte[] crc16 = modbus.fn_makeCRC16(concat(deviceId, ConstProtocol.FUNCTION_READ, loc, len));
-        byte[] checkSum = new byte[]{HexUtil.checkSum(concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_READ, loc, len, crc16))};
+//        byte[] checkSum = new byte[]{HexUtil.checkSum(concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_READ, loc, len, crc16))};
+        byte[] checkSum = new byte[]{HexUtil.checkSum(concat(ConstProtocol.STX, farmCode, harvCode, ByteSerial.longToBytes(HexUtil.timestamp()), deviceId, ConstProtocol.FUNCTION_READ, loc, len, crc16))};
         protocol = concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_READ, loc, len, crc16, checkSum, ConstProtocol.ETX);
 
         return protocol;

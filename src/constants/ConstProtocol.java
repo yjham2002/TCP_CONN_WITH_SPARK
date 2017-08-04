@@ -39,16 +39,23 @@ public class ConstProtocol {
     public static final int RETRY = 3;
 
     /**
+     * 0804
+     */
+    public static final int LENGTH_LEN_ST = 2;
+    public static final int LENGTH_LEN_PREFIX = 16;
+    public static final int LENGTH_OFFSET_PREFIX = LENGTH_LEN_PREFIX - LENGTH_LEN_ST;
+
+    /**
      * 응답 프로토콜 길이 정의
      */
-    public static final int RESPONSE_LEN_DAILY = 270 - 4;
-    public static final int RESPONSE_LEN_DAILY_TAIL = 90 - 4;
-    public static final int RESPONSE_LEN_SETTING = 162 - 4;
-    public static final int RESPONSE_LEN_SETTING_TAIL = 56 - 4;
-    public static final int RESPONSE_LEN_TIMER = 214 - 4;
-    public static final int RESPONSE_LEN_REAL = 220 - 4;
-    public static final int RESPONSE_LEN_REAL_SUB = 104 - 4;
-    public static final int RESPONSE_LEN_WRITE = 23 - 4;
+    public static final int RESPONSE_LEN_DAILY = 280 - LENGTH_OFFSET_PREFIX;
+    public static final int RESPONSE_LEN_DAILY_TAIL = 100 - LENGTH_OFFSET_PREFIX;
+    public static final int RESPONSE_LEN_SETTING = 172 - LENGTH_OFFSET_PREFIX;
+    public static final int RESPONSE_LEN_SETTING_TAIL = 66 - LENGTH_OFFSET_PREFIX;
+    public static final int RESPONSE_LEN_TIMER = 224 - LENGTH_OFFSET_PREFIX;
+    public static final int RESPONSE_LEN_REAL = 230 - LENGTH_OFFSET_PREFIX;
+    public static final int RESPONSE_LEN_REAL_SUB = 114 - LENGTH_OFFSET_PREFIX;
+    public static final int RESPONSE_LEN_WRITE = 33 - LENGTH_OFFSET_PREFIX;
 
     /**
      * 메모리 참조 범위를 기술하기 위한 페어 상수
