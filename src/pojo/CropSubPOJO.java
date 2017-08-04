@@ -34,6 +34,7 @@ public class CropSubPOJO extends BasePOJO{
 
     private static final int NAME_RANGE = 20;
 
+
     /**
      * 작물 데이터 범위를 한정하여 작물 정보를 추출하는 클래스 생성자
      * AddressPOJO와 CropWrappingPOJO에 대해 한정적 Aggregation 관계를 가짐
@@ -55,6 +56,9 @@ public class CropSubPOJO extends BasePOJO{
          */
 
         byte[] pure = ByteSerial.getPureDataConcat(recvs);
+
+        System.out.println(Arrays.toString(pure));
+
         ByteSerial bs = new ByteSerial(pure, ByteSerial.TYPE_FORCE);
         this.byteSerial = bs;
         this.order = order;
