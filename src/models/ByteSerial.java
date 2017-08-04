@@ -54,7 +54,7 @@ public class ByteSerial implements Serializable{
         log = LoggerFactory.getLogger(this.getClass());
         //bytes[bytes.length - 3] = (byte)HexUtil.checkSumByFull(bytes);
 
-        log.info(Arrays.toString(bytes));
+//        log.info(Arrays.toString(bytes));
 
         this.processed = bytes.clone();
         this.original = bytes.clone();

@@ -45,9 +45,9 @@ public class HexUtil {
     public static byte checkSum(byte[] bytes){
         int checkSum = 0;
         for(byte b : bytes) {
-            if(b < 0) checkSum += b & 0xff;
-            else checkSum += b;
-//            checkSum += b;
+//            if(b < 0) checkSum += b & 0xff;
+//            else checkSum += b;
+            checkSum += b;
         }
 
         return (byte)checkSum;
@@ -71,7 +71,7 @@ public class HexUtil {
     public static boolean isCheckSumSound(byte[] bytes){
         if(bytes.length - 3 < 0) return false;
         int chk = bytes[bytes.length - 3];
-        if(chk < 0) chk = chk & 0xff;
+//        if(chk < 0) chk = chk & 0xff;
         return checkSumByFull(bytes) == (byte)chk;
     }
 

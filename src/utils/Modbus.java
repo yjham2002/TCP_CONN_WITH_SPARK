@@ -9,7 +9,7 @@ public class Modbus  {
 
     public Modbus()
     {
-        System.out.println("Modbus instanciated.");
+
     }
 
     Htypecast htype = new Htypecast() ;

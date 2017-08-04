@@ -212,8 +212,6 @@ public class SohaProtocolUtil {
             if(e == ceil) jump = length - 1;
             int newLen = (jump - (ConstProtocol.READ_LIMIT * (e - 1)) + 1);
 
-            System.out.println("newlen :: " + newLen + " / start :: " + start);
-
             byte[] cropData = Arrays.copyOfRange(data, (start - location), (start - location + (newLen * 2)));
 
             bulk[e - 1] = makeWriteProtocol(start, newLen, id, farmCode, harvCode, cropData);

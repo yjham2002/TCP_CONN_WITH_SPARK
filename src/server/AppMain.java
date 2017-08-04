@@ -136,6 +136,7 @@ public class AppMain{
                     protocols = new byte[][]{protocol_sub.clone(), protocol.clone()};
                     recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols, new int[]{ConstProtocol.RESPONSE_LEN_REAL_SUB, ConstProtocol.RESPONSE_LEN_REAL});
 
+                    if(recvs == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
                     if(recvs.size() <= 0) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
                     else{
                         try {
