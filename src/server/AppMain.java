@@ -18,6 +18,7 @@ import server.response.Response;
 import server.response.ResponseConst;
 import spark.Spark;
 import utils.DataMapValidationUtil;
+import utils.HexUtil;
 import utils.SohaProtocolUtil;
 
 import java.io.IOException;
@@ -131,13 +132,12 @@ public class AppMain{
             switch(mode){
                 case ConstRest.MODE_READ_REALTIME:
 
-                    protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_REALTIME_READABLE.getHead(), ConstProtocol.RANGE_REALTIME_READABLE.getTail(), id, farmCode, harvCode);
-                    protocol_sub = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_REALTIME_READABLE_TAILS.getHead(), ConstProtocol.RANGE_REALTIME_READABLE_TAILS.getTail(), id, farmCode, harvCode);
+                    protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_REALTIME_READABLE.getHead(), ConstProtocol.RANGE_REALTIME_READABLE.getTail(), id, farmCode, harvCode, 1);
+                    protocol_sub = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_REALTIME_READABLE_TAILS.getHead(), ConstProtocol.RANGE_REALTIME_READABLE_TAILS.getTail(), id, farmCode, harvCode, 2);
                     protocols = new byte[][]{protocol_sub.clone(), protocol.clone()};
                     recvs = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocols, new int[]{ConstProtocol.RESPONSE_LEN_REAL_SUB, ConstProtocol.RESPONSE_LEN_REAL});
 
-                    if(recvs == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
-                    if(recvs.size() <= 0) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
+                    if(recvs == null || recvs.size() != 2) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
                     else{
                         try {
                             byte[] pure = ByteSerial.getPureDataConcatForRealtime(recvs);

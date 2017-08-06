@@ -76,6 +76,8 @@ public class DebugUtil {
     }
 
     public static void printAndCompare(byte[] array1, byte[] array2){
+        System.out.println(array1.length + " :: " + array2.length);
+
         int len = array1.length > array2.length ? array2.length : array1.length;
         int count = 0;
         for(int i = 0; i < len; i++){

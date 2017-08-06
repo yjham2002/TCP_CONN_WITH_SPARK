@@ -34,7 +34,7 @@ public class ConstProtocol {
     public static final int LENGTH_ALERT_PRTC = 11;
     public static final int LENGTH_REALTIME = 311;
 
-    public static final int LENGTH_INIT = 20;
+    public static final int LENGTH_INIT = 10;
 
     public static final int RETRY = 3;
 
@@ -44,6 +44,8 @@ public class ConstProtocol {
     public static final int LENGTH_LEN_ST = 2;
     public static final int LENGTH_LEN_PREFIX = 16;
     public static final int LENGTH_OFFSET_PREFIX = LENGTH_LEN_PREFIX - LENGTH_LEN_ST;
+    public static final int LENGTH_AFTER_TRIM = 8;
+    public static final int LENGTH_INFO = 10;
 
     /**
      * 응답 프로토콜 길이 정의

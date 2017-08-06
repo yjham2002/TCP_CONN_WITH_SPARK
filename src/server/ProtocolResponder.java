@@ -60,6 +60,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
     private boolean generated = false; // 유니크키 생성 여부
     private volatile ByteSerial byteSerial;
     private byte[] buffer;
+    private byte[] subBuffer;
     private String uniqueKey = ""; // 유니크키 초기화 - 클라이언트 해시맵에서 유일성을 가지도록 관리하기 위한 문자열
 
     private HashMap<String, ProtocolResponder> clients; // ServiceProvider의 클라이언트 집합의 레퍼런스 포인터
@@ -111,8 +112,13 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
         ctx.close(); // 컨텍스트를 종료시킵니다.
     }
 
-    public static byte[] trimLen(byte[] arr){
-        return SohaProtocolUtil.concat(ConstProtocol.STX, Arrays.copyOfRange(arr, LENGTH_LEN_PREFIX, arr.length));
+    public static byte[] trimLength(byte[] arr){
+        return SohaProtocolUtil.concat(ConstProtocol.STX, Arrays.copyOfRange(arr, LENGTH_LEN_RANGE, arr.length));
+    }
+
+    public static byte[] trimHead(byte[] arr){
+        byte[] temp = trimLength(arr);
+        return SohaProtocolUtil.concat(Arrays.copyOf(temp, LENGTH_AFTER_TRIM), Arrays.copyOfRange(temp, LENGTH_AFTER_TRIM + LENGTH_INFO, temp.length));
     }
 
     @Override
@@ -143,15 +149,20 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 if (!byteSerial.isLoss() && !byteSerial.startsWith(SohaProtocolUtil.concat(STX, INITIAL_PROTOCOL_START))) started = true;
                 buffer = byteSerial.getProcessed(); // 처리된 트림 데이터 추출
 
-                tid = ByteSerial.bytesToLong(Arrays.copyOfRange(buffer, 6, 14));
-                addr1 = buffer[14];
-                addr2 = buffer[15];
+                if(buffer.length >= 16) {
+                    tid = ByteSerial.bytesToLong(Arrays.copyOfRange(buffer, 12, 20));
+
+                    System.out.println("TRANSACTION ID :: " + tid);
+                    addr1 = buffer[14];
+                    addr2 = buffer[15];
+                }
 
             }catch(NullPointerException e){
                 e.printStackTrace();
             }
 
-            buffer = trimLen(buffer);
+            subBuffer = trimLength(buffer);
+            buffer = trimHead(buffer);
 
             byteSerial.setProcessed(buffer);
             byteSerial.setOriginal(buffer);
@@ -166,6 +177,8 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farmString), ConstProtocol.SQL_COL_FARMNAME);
             harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
 
+            System.out.println(buffer.length + "/" + subBuffer.length);
+
             if(buffer.length != LENGTH_REALTIME && buffer.length != LENGTH_INIT && buffer.length != LENGTH_ALERT_PRTC){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
                 byteSerial = new ByteSerial(buffer, ByteSerial.TYPE_NONE, tid, addr1, addr2);
                 System.out.println("::::::::: Escaping From RealTime Handler - TID [" + tid + "] LOC ["+ addr1 + "/" + addr2 +"] ::::::::::: ");
@@ -176,9 +189,9 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
             if (!generated) {
                 generated = true;
-                if(buffer.length == LENGTH_INIT) uniqueKey = SohaProtocolUtil.getUniqueKeyByInit(buffer); // 유니크키를 농장코드로 설정하여 추출
+                if(buffer.length == LENGTH_INIT) uniqueKey = SohaProtocolUtil.getUniqueKeyByInit(subBuffer); // 유니크키를 농장코드로 설정하여 추출
                 if (uniqueKey.equals(SohaProtocolUtil.getMeaninglessUniqueKey()) || buffer.length != LENGTH_INIT)
-                    uniqueKey = SohaProtocolUtil.getUniqueKeyByFarmCode(SohaProtocolUtil.getFarmCodeByProtocol(buffer));
+                    uniqueKey = SohaProtocolUtil.getUniqueKeyByFarmCode(SohaProtocolUtil.getFarmCodeByProtocol(subBuffer));
                 clients.put(uniqueKey, this);
             }
 
@@ -196,7 +209,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     ByteSerial init = new ByteSerial
                             (
                                     SohaProtocolUtil.getInitProtocol(
-                                            buffer,
+                                            subBuffer,
                                             0,
                                             0,
                                             ConstProtocol.INIT_TERM_MIN10,
@@ -325,7 +338,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     Thread synchronizer = new Thread(() -> {
                         semaphore = true;
                         try {
-                            synchronizeStatus(realtimePOJO, farmString, harvString, HexUtil.getNumericValue(harvCodeTemp));
+//                            synchronizeStatus(realtimePOJO, farmString, harvString, HexUtil.getNumericValue(harvCodeTemp));
                         }catch(Exception e){
                             System.out.println("Auto Reading handled");
                         }
@@ -643,14 +656,19 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
      */
     public synchronized ByteSerial send(ByteSerial msg, int length){
 
+        if(msg.getTid() == 0){
+            System.out.println("No TID SET");
+            return null;
+        }
+
         if(!clients.containsKey(uniqueKey) && uniqueKey != null && !uniqueKey.equals("") && !uniqueKey.equals(SohaProtocolUtil.getMeaninglessUniqueKey())) {
             System.out.println("Key Reinserted :: " + uniqueKey);
             clients.put(uniqueKey, this);
         }
 
-        byteSerial = null;
+//        byteSerial = null;
 
-        log.info("Sending :: " + Arrays.toString(msg.getProcessed()));
+        log.info("Sending [" + msg.getTid() + "]:: " + Arrays.toString(msg.getProcessed()));
         int timeouts = 0;
 
         while(true) {
@@ -674,11 +692,8 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             }
 
             if(timeouts >= ConstProtocol.RETRY){
-                byte[] farmBytes = Arrays.copyOfRange(msg.getProcessed(), 2, 6);
-                byte[] dongBytes = Arrays.copyOfRange(msg.getProcessed(), 6, 8);
-                ByteSerial byteSerialAlert = new ByteSerial(SohaProtocolUtil.makeAlertProtocol(farmBytes, dongBytes));
-                System.out.println("[INFO :: Sending Alert Protocol since Read Timeout has been occurred for 3 times]");
-                sendOneWay(byteSerialAlert);
+                System.out.println("[INFO] READ TIMEOUT OCCURRED FOR 3 TIMES - HALTING SEND REQUEST");
+//                sendOneWay(byteSerialAlert);
                 return null;
             }
 

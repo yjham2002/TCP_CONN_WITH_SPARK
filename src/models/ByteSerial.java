@@ -58,6 +58,7 @@ public class ByteSerial implements Serializable{
      */
     public ByteSerial(byte[] bytes, int type){
         log = LoggerFactory.getLogger(this.getClass());
+        this.tid = ByteSerial.bytesToLong(Arrays.copyOfRange(bytes, 8, 16));
         //bytes[bytes.length - 3] = (byte)HexUtil.checkSumByFull(bytes);
 
 //        log.info(Arrays.toString(bytes));
@@ -76,6 +77,14 @@ public class ByteSerial implements Serializable{
 
         this.type = type;
 
+    }
+
+    public static void main(String... args){
+
+        byte[] a = longToBytes(Calendar.getInstance().getTimeInMillis());
+
+
+        System.out.println(bytesToLong(new byte[]{0, 0, 1, 93, -79, -117, 22, -70}));
     }
 
     public ByteSerial(byte[] bytes, int type, long tid, byte addr1, byte addr2){
@@ -242,8 +251,6 @@ public class ByteSerial implements Serializable{
         if(serials.size() < 2) return null;
 
         byte[] padding = new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        System.out.println("### " + Arrays.toString(serials.get(0).getProcessed()));
-        System.out.println("### " + Arrays.toString(serials.get(1).getProcessed()));
         byte[] arr = SohaProtocolUtil.concat(serials.get(0).getPureBytes(), padding, serials.get(1).getPureBytes());
         return arr;
     }
