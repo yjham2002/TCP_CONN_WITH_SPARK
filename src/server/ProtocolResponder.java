@@ -12,6 +12,7 @@ import io.netty.util.concurrent.Promise;
 import models.ByteSerial;
 import models.DataMap;
 import models.Pair;
+import models.TIDBlock;
 import mysql.DBManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import pojo.RealtimePOJO;
 import pojo.SettingPOJO;
 import pojo.TimerPOJO;
 import redis.RedisManager;
+import server.engine.ServiceProvider;
 import server.whois.SMSService;
 import utils.HexUtil;
 import utils.SohaProtocolUtil;
@@ -129,7 +131,6 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             ByteBuf in = (ByteBuf) msgObj;
             byte[] bytes = new byte[in.readableBytes()];
             in.readBytes(bytes);
-
             in.release();
 
             buffer = bytes;
@@ -179,6 +180,21 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
             if(buffer.length != LENGTH_REALTIME && buffer.length != LENGTH_INIT && buffer.length != LENGTH_ALERT_PRTC){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
                 byteSerial = new ByteSerial(buffer, ByteSerial.TYPE_NONE, tid, addr1, addr2);
+                System.out.println("############################################ TID START");
+
+                if(ServiceProvider.blockMap.containsKey(tid)){
+                    System.out.println("###################################### :: CONTAINS TRUE");
+                    TIDBlock tidBlock = ServiceProvider.blockMap.get(tid);
+
+                    synchronized (tidBlock) {
+                        ServiceProvider.blockMap.get(tid).setByteSerial(byteSerial.clone());
+                        tidBlock.notifyAll();
+                        ServiceProvider.blockMap.remove(tid);
+                    }
+                }else{
+                    System.out.println("###################################### :: CONTAINS FALSE");
+                }
+
                 System.out.println("::::::::: Escaping From RealTime Handler - TID [" + tid + "] LOC ["+ addr1 + "/" + addr2 +"] ::::::::::: ");
                 return;
             }
@@ -648,11 +664,39 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
         }
     }
 
+    public void sendBlock(ByteSerial msg, int length) throws Exception{
+        if(msg.getTid() == 0){
+            System.out.println("No TID SET");
+            return;
+        }
+
+        if(!clients.containsKey(uniqueKey) && uniqueKey != null && !uniqueKey.equals("") && !uniqueKey.equals(SohaProtocolUtil.getMeaninglessUniqueKey())) {
+            System.out.println("Key Reinserted :: " + uniqueKey);
+            clients.put(uniqueKey, this);
+        }
+
+        log.info("Sending (BLOCKED)[" + msg.getTid() + "]:: " + Arrays.toString(msg.getProcessed()));
+
+        ByteBuf byteBuf = Unpooled.wrappedBuffer(msg.getProcessed());
+        ChannelFuture channelFuture = ctx.writeAndFlush(byteBuf);
+
+        System.out.println(channelFuture);
+
+        channelFuture.addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                System.out.println("OP :: " + channelFuture.toString());
+            }
+        });
+
+        System.out.println("SENDING END ###############################################");
+    }
+
     /**
      * 바이트 시리얼로부터 처리 이후의 바이트 패킷을 추출하여 바이트 기반으로 전송
      * @param msg
      */
-    public ByteSerial send(ByteSerial msg, int length){
+    public ByteSerial send(ByteSerial msg, int length) throws Exception{
 
         if(msg.getTid() == 0){
             System.out.println("No TID SET");
@@ -669,23 +713,20 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
         log.info("Sending [" + msg.getTid() + "]:: " + Arrays.toString(msg.getProcessed()));
         int timeouts = 0;
 
+        ByteSerial retVal = null;
+
         while(true) {
 
             ByteBuf byteBuf = Unpooled.wrappedBuffer(msg.getProcessed());
 
             ChannelFuture channelFuture = ctx.writeAndFlush(byteBuf);
 
-            channelFuture.addListener(new ChannelFutureListener(){
-                public void operationComplete(ChannelFuture future){
-
-                }
-            });
-
             long startTime = System.currentTimeMillis();
 
             boolean succ = true;
 
             while (byteSerial == null || byteSerial.getTid() != msg.getTid()) {
+
 //                if(byteSerial != null && byteSerial.getProcessed().length != LENGTH_REALTIME && length == ConstProtocol.RESPONSE_LEN_WRITE) break;
                 if ((System.currentTimeMillis() - startTime) > ServerConfig.REQUEST_TIMEOUT) {
                     succ = false;
@@ -695,6 +736,8 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 }
             }
 
+            retVal = byteSerial.clone();
+
             if(timeouts >= ConstProtocol.RETRY){
                 System.out.println("[INFO] READ TIMEOUT OCCURRED FOR 3 TIMES - HALTING SEND REQUEST");
 //                sendOneWay(byteSerialAlert);
@@ -703,13 +746,14 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
             /**
              * 2017-08-06
+             * 타임아웃 시 정상적이지 않은 값을 반환하던 버그 수정
              */
             if(timeouts >= ConstProtocol.RETRY) return null;
             if(succ) break;
 
         }
 
-        return byteSerial;
+        return retVal;
 
     }
 

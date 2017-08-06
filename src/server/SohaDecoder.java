@@ -28,6 +28,8 @@ public class SohaDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 
+        System.out.println(":: DECODER SCOPE ::");
+
         try {
             final int HEADER_PREFIX_LEN = 2 ; // ST
             final int HEADER_PREFIX_BODYLEN_LEN = 4 ; // 바디 길이값(4byte)

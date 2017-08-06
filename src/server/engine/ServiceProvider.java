@@ -3,6 +3,7 @@ package server.engine;
 import configs.ServerConfig;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -14,6 +15,7 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import javafx.application.Platform;
 import models.ByteSerial;
+import models.TIDBlock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.ICallback;
@@ -35,6 +37,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static constants.ConstProtocol.SOCKET_TIMEOUT_LIMIT;
 import static spark.route.HttpMethod.get;
@@ -178,18 +181,19 @@ public class ServiceProvider extends ServerConfig{
             EventLoopGroup parentGroup = new NioEventLoopGroup(1);
             EventLoopGroup childGroup = new NioEventLoopGroup();
             try{
-                // 서버 부트스트랩을 만듭니다. 이 클래스는 일종의 헬퍼 클래스입니다.
-                // 이 클래스를 사용하면 서버에서 Channel을 직접 세팅 할 수 있습니다.
                 ServerBootstrap sb = new ServerBootstrap();
+
+                sb.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT) ;
+                sb.option(ChannelOption.TCP_NODELAY,true) ;
+                sb.option(ChannelOption.SO_KEEPALIVE ,true) ;    // 소켓 KEEP ALIVE
+                sb.option(ChannelOption.SO_RCVBUF, Integer.MAX_VALUE);
+
+                sb.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT) ;
+
                 sb.group(parentGroup, childGroup)
-                        // 인커밍 커넥션을 액세스하기 위해 새로운 채널을 객체화 하는 클래스 지정합니다.
                         .channel(NioServerSocketChannel.class)
-                        // 상세한 Channel 구현을 위해 옵션을 지정할 수 있습니다.
                         .option(ChannelOption.SO_BACKLOG, 100)
                         .handler(new LoggingHandler(LogLevel.DEBUG))
-                        // 새롭게 액세스된 Channel을 처리합니다.
-                        // ChannelInitializer는 특별한 핸들러로 새로운 Channel의
-                        // 환경 구성을 도와 주는 것이 목적입니다.
                         .childHandler(new ChannelInitializer<SocketChannel>() {
                             @Override
                             protected void initChannel(SocketChannel sc) throws Exception {
@@ -255,18 +259,50 @@ public class ServiceProvider extends ServerConfig{
         return instance;
     }
 
+    public static ConcurrentHashMap<Long, TIDBlock> blockMap = new ConcurrentHashMap<>();
+
     public ByteSerial send(String client, ByteSerial msg, int length){
+        final long tid = ByteSerial.bytesToLong(Arrays.copyOfRange(msg.getProcessed(), 8, 16));
+        TIDBlock tidBlock = new TIDBlock(tid);
+        blockMap.put(tid, tidBlock);
         ByteSerial ret = null;
         try {
 
-            if(clients.containsKey(client)) ret = clients.get(client).send(msg, length);
+            if(clients.containsKey(client)) {
+               clients.get(client).sendBlock(msg, length);
+                try{
+                    synchronized (tidBlock){
+                        final long now = Calendar.getInstance().getTimeInMillis();
+//                        new Thread(){
+//                            @Override
+//                            public void run(){
+//                                while(true){
+//                                    if(Calendar.getInstance().getTimeInMillis() - now > REQUEST_TIMEOUT){
+//                                        System.out.println("TID ::: "+tid);
+//                                        TIDBlock.blockMap.get(tid).notifyAll();
+//                                        TIDBlock.blockMap.get(tid).setByteSerial(null);
+//                                        TIDBlock.blockMap.remove(tid);
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }.start();
+                        tidBlock.wait();
+                    }
+                }catch (InterruptedException ee){
+                    blockMap.remove(tid);
+                    ee.printStackTrace();
+                }
+            }
             else{
                 log.info("Client just requested does not exist. [KEY : " + client + "]");
             }
         }catch(Exception e){
-            // DO NOTHING
+            e.printStackTrace();
+            blockMap.remove(tid);
         }finally {
-            return ret;
+
+            return tidBlock.getByteSerial();
         }
     }
 
@@ -277,16 +313,20 @@ public class ServiceProvider extends ServerConfig{
     public List<ByteSerial> send(String client, byte[][] msgs, int[] lengths){
 
         List<ByteSerial> byteSerials = new ArrayList<>();
+
         for(int e = 0; e < msgs.length; e++) {
+
             ByteSerial entry = send(client, new ByteSerial(msgs[e], ByteSerial.TYPE_NONE), lengths[e]);
 
-            if(entry != null && !entry.isLoss()) {
-                byteSerials.add(entry);
-            }else{
+            if( entry != null && !entry.isLoss() ) {
+                byteSerials.add(entry) ;
+            }
+            else
+            {
                 if(entry == null) {
-                    System.out.println("IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #");
+                    System.out.println("[WARN] BULK SEND RECV IS NULL :: [" + Thread.currentThread().getName() + "]");
                 }else {
-                    if (entry.isLoss()) System.out.println("entry  LOSS :::: " + Arrays.toString(entry.getProcessed()));
+                    if (entry.isLoss()) System.out.println("[WARN] ENTRY LOSS :::: " + Arrays.toString(entry.getProcessed()));
                 }
                 return null;
             }

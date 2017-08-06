@@ -44,9 +44,9 @@ public class ByteSerial implements Serializable{
     private int length;
     private int type = TYPE_NONE;
 
-    private long tid;
-    private byte addr1;
-    private byte addr2;
+    private long tid = 0;
+    private byte addr1 = 0;
+    private byte addr2 = 0;
 
     @Deprecated
     private ByteSerial(){}
@@ -79,11 +79,24 @@ public class ByteSerial implements Serializable{
 
     }
 
+    public ByteSerial clone(){
+        ByteSerial byteSerial = new ByteSerial();
+        byteSerial.setOriginal(this.getOriginal());
+        byteSerial.setProcessed(this.getProcessed());
+        byteSerial.setLoss(this.isLoss());
+        byteSerial.setTid(this.getTid());
+        byteSerial.setType(this.getType());
+        byteSerial.setAddr1(this.getAddr1());
+        byteSerial.setAddr2(this.getAddr2());
+        byteSerial.setLength(this.getLength());
+
+        return byteSerial;
+    }
+
     public static void main(String... args){
 
-        byte[] a = new byte[]{0x53, 0x54, 0x31, 0x33, 0x35, 0x33, 0x30, 0x31, 0x00, 0x00, 0x01, 0x5d, (byte)0xb6, (byte)0x81, 0x0f, (byte)0xdc, 0x02, (byte)0x8a, 0x01, 0x03, 0x02, (byte)0x8a, 0x00, 0x7d, (byte)0xa5, (byte)0xb9, 0x4b, 0x0d, 0x0a};
-        System.out.println(a.length + "::" +
-                "" + Arrays.toString(a));
+        ByteSerial b = null;
+        if(b == null || b.getTid() == b.getTid()) System.exit(100);
 
     }
 
