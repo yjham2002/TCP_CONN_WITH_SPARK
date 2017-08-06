@@ -288,7 +288,9 @@ public class SettingPOJO extends BasePOJO {
 
         int bitAggr_alt =
                 getBitAggregation(
-                        0,0,0,
+                        0,
+                        0,
+                        0,
                         this.alert_alarm_time_select_timeset,
                         getBitLhsFromDual(this.alert_alarm_time_select_lamp_unit),
                         getBitRhsFromDual(this.alert_alarm_time_select_lamp_unit),

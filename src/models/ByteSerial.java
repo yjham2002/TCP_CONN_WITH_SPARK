@@ -81,10 +81,10 @@ public class ByteSerial implements Serializable{
 
     public static void main(String... args){
 
-        byte[] a = longToBytes(Calendar.getInstance().getTimeInMillis());
+        byte[] a = new byte[]{0x53, 0x54, 0x31, 0x33, 0x35, 0x33, 0x30, 0x31, 0x00, 0x00, 0x01, 0x5d, (byte)0xb6, (byte)0x81, 0x0f, (byte)0xdc, 0x02, (byte)0x8a, 0x01, 0x03, 0x02, (byte)0x8a, 0x00, 0x7d, (byte)0xa5, (byte)0xb9, 0x4b, 0x0d, 0x0a};
+        System.out.println(a.length + "::" +
+                "" + Arrays.toString(a));
 
-
-        System.out.println(bytesToLong(new byte[]{0, 0, 1, 93, -79, -117, 22, -70}));
     }
 
     public ByteSerial(byte[] bytes, int type, long tid, byte addr1, byte addr2){

@@ -283,6 +283,11 @@ public class ServiceProvider extends ServerConfig{
             if(entry != null && !entry.isLoss()) {
                 byteSerials.add(entry);
             }else{
+                if(entry == null) {
+                    System.out.println("IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #IS NULL #");
+                }else {
+                    if (entry.isLoss()) System.out.println("entry  LOSS :::: " + Arrays.toString(entry.getProcessed()));
+                }
                 return null;
             }
         }

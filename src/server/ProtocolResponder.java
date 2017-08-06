@@ -6,9 +6,7 @@ import configs.ServerConfig;
 import constants.ConstProtocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandlerAdapter;
-import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.*;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.Promise;
 import models.ByteSerial;
@@ -654,7 +652,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
      * 바이트 시리얼로부터 처리 이후의 바이트 패킷을 추출하여 바이트 기반으로 전송
      * @param msg
      */
-    public synchronized ByteSerial send(ByteSerial msg, int length){
+    public ByteSerial send(ByteSerial msg, int length){
 
         if(msg.getTid() == 0){
             System.out.println("No TID SET");
@@ -675,7 +673,13 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
             ByteBuf byteBuf = Unpooled.wrappedBuffer(msg.getProcessed());
 
-            ctx.writeAndFlush(byteBuf);
+            ChannelFuture channelFuture = ctx.writeAndFlush(byteBuf);
+
+            channelFuture.addListener(new ChannelFutureListener(){
+                public void operationComplete(ChannelFuture future){
+
+                }
+            });
 
             long startTime = System.currentTimeMillis();
 
@@ -697,7 +701,11 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 return null;
             }
 
-            if(timeouts >= ConstProtocol.RETRY || succ) break;
+            /**
+             * 2017-08-06
+             */
+            if(timeouts >= ConstProtocol.RETRY) return null;
+            if(succ) break;
 
         }
 
@@ -710,7 +718,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
      * 단방향 전송 - 응답에 대해 대기하지 않음
      * @param msg
      */
-    public synchronized void sendOneWay(ByteSerial msg){
+    public void sendOneWay(ByteSerial msg){
         log.info("Sending :: " + Arrays.toString(msg.getProcessed()));
         ByteBuf byteBuf = Unpooled.wrappedBuffer(msg.getProcessed());
         ChannelFuture cf = ctx.writeAndFlush(byteBuf);

@@ -130,7 +130,8 @@ public class DebugUtil {
 
             while ((inp.read(buffer)) != -1)
             {
-                out.write(arr);
+                System.out.println(in.readLine());
+                out.write(0);
             }
 
             // 서버 접속 끊기
