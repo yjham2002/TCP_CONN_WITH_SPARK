@@ -452,7 +452,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                             protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                             System.out.println(Arrays.toString(protocol));
 
-                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_TIMER);
+                            recv = ServiceProvider.getInstance().send(uniqueKey, new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_TIMER);
 
                             if(recv == null) {
                                 System.out.println("An error occurred while auto reading");
@@ -468,7 +468,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                             protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                             System.out.println("READING SETTINGS - " + Arrays.toString(protocol));
 
-                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_SETTING);
+                            recv = ServiceProvider.getInstance().send(uniqueKey, new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_SETTING);
 
                             if(recv == null) throw new Exception("An error occurred while auto reading");
 
@@ -479,7 +479,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                             protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                             System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
 
-                            recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_SETTING_TAIL);
+                            recv = ServiceProvider.getInstance().send(uniqueKey, new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_SETTING_TAIL);
 
                             if(recv == null) throw new Exception("An error occurred while auto reading");
 
@@ -527,7 +527,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                 System.out.println("READING SETTINGS - " + Arrays.toString(protocol));
 
-                recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_SETTING);
+                recv = ServiceProvider.getInstance().send(uniqueKey, new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_SETTING);
 
                 if(recv == null) throw new Exception("An error occurred while auto reading");
 
@@ -538,7 +538,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                 System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
 
-                recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_SETTING_TAIL);
+                recv = ServiceProvider.getInstance().send(uniqueKey, new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_SETTING_TAIL);
 
                 if(recv == null) throw new Exception("An error occurred while auto reading");
 
@@ -554,7 +554,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                 System.out.println(Arrays.toString(protocol));
 
-                recv = send(new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_TIMER);
+                recv = ServiceProvider.getInstance().send(uniqueKey, new ByteSerial(protocol, ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_TIMER);
 
                 if(recv == null) throw new Exception("An error occurred while auto reading");
 
@@ -605,7 +605,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             ByteSerial ellaborated = new ByteSerial(initPrtc, ByteSerial.TYPE_FORCE);
 
             if(toSend) {
-                send(ellaborated, ConstProtocol.RESPONSE_LEN_WRITE);
+                ServiceProvider.getInstance().send(uniqueKey, ellaborated, ConstProtocol.RESPONSE_LEN_WRITE);
                 System.out.println("INFO :: Initiating Flag Bits");
             }else{
                 System.out.println("INFO :: Nothing Has been detected with changed-flags");
@@ -640,7 +640,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
         recvs = new ArrayList<>();
         for(int e = 0; e < protocols.length; e++) {
-            ByteSerial entry = send(new ByteSerial(protocols[e], ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_DAILY);
+            ByteSerial entry = ServiceProvider.getInstance().send(uniqueKey, new ByteSerial(protocols[e], ByteSerial.TYPE_NONE), ConstProtocol.RESPONSE_LEN_DAILY);
             if(entry != null) {
                 recvs.add(entry);
             }else{
@@ -696,7 +696,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
      * 바이트 시리얼로부터 처리 이후의 바이트 패킷을 추출하여 바이트 기반으로 전송
      * @param msg
      */
-    public ByteSerial send(ByteSerial msg, int length) throws Exception{
+    public ByteSerial send0(ByteSerial msg, int length) throws Exception{
 
         if(msg.getTid() == 0){
             System.out.println("No TID SET");

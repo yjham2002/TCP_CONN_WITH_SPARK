@@ -79,6 +79,7 @@ public class ByteSerial implements Serializable{
 
     }
 
+
     public ByteSerial clone(){
         ByteSerial byteSerial = new ByteSerial();
         byteSerial.setOriginal(this.getOriginal());
@@ -91,13 +92,6 @@ public class ByteSerial implements Serializable{
         byteSerial.setLength(this.getLength());
 
         return byteSerial;
-    }
-
-    public static void main(String... args){
-
-        ByteSerial b = null;
-        if(b == null || b.getTid() == b.getTid()) System.exit(100);
-
     }
 
     public ByteSerial(byte[] bytes, int type, long tid, byte addr1, byte addr2){

@@ -264,6 +264,7 @@ public class ServiceProvider extends ServerConfig{
     public ByteSerial send(String client, ByteSerial msg, int length){
         final long tid = ByteSerial.bytesToLong(Arrays.copyOfRange(msg.getProcessed(), 8, 16));
         TIDBlock tidBlock = new TIDBlock(tid);
+        tidBlock.setByteSerial(null);
         blockMap.put(tid, tidBlock);
         ByteSerial ret = null;
         try {
@@ -272,25 +273,14 @@ public class ServiceProvider extends ServerConfig{
                clients.get(client).sendBlock(msg, length);
                 try{
                     synchronized (tidBlock){
-                        final long now = Calendar.getInstance().getTimeInMillis();
-//                        new Thread(){
-//                            @Override
-//                            public void run(){
-//                                while(true){
-//                                    if(Calendar.getInstance().getTimeInMillis() - now > REQUEST_TIMEOUT){
-//                                        System.out.println("TID ::: "+tid);
-//                                        TIDBlock.blockMap.get(tid).notifyAll();
-//                                        TIDBlock.blockMap.get(tid).setByteSerial(null);
-//                                        TIDBlock.blockMap.remove(tid);
-//                                        break;
-//                                    }
-//                                }
-//                            }
-//                        }.start();
-                        tidBlock.wait();
+                        tidBlock.wait(REQUEST_TIMEOUT * 100);
+
+                        if(tidBlock.getByteSerial() == null) throw new InterruptedException();
                     }
                 }catch (InterruptedException ee){
+                    System.out.println("SEND BLOCK IS INTERRUPTED ::::::::::::::::::::::::::::::::::::::::::::::::");
                     blockMap.remove(tid);
+                    tidBlock.setByteSerial(null);
                     ee.printStackTrace();
                 }
             }
@@ -298,8 +288,12 @@ public class ServiceProvider extends ServerConfig{
                 log.info("Client just requested does not exist. [KEY : " + client + "]");
             }
         }catch(Exception e){
+            if(e instanceof InterruptedException){
+                System.out.println("SEND BLOCK IS INTERRUPTED ::::::::::::::::::::::::::::::::::::::::::::::::");
+            }
             e.printStackTrace();
             blockMap.remove(tid);
+            tidBlock.setByteSerial(null);
         }finally {
 
             return tidBlock.getByteSerial();

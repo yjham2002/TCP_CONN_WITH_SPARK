@@ -7,17 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/models/TIDBlock.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/AppMain.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/engine/ServiceProvider$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/engine/ServiceProvider.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/models/ByteSerial.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/models/ByteSerial.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/SohaDecoder.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/SohaDecoder.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/configs/ServerConfig.java" afterPath="$PROJECT_DIR$/src/configs/ServerConfig.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/models/ByteSerial.java" afterPath="$PROJECT_DIR$/src/models/ByteSerial.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/AppMain.java" afterPath="$PROJECT_DIR$/src/server/AppMain.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ProtocolResponder.java" afterPath="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/SohaDecoder.java" afterPath="$PROJECT_DIR$/src/server/SohaDecoder.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" afterPath="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" />
@@ -56,8 +47,8 @@
       <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="688" column="13" lean-forward="true" selection-start-line="688" selection-start-column="13" selection-end-line="688" selection-end-column="13" />
+            <state relative-caret-position="193">
+              <caret line="458" column="39" lean-forward="true" selection-start-line="458" selection-start-column="39" selection-end-line="458" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -98,8 +89,8 @@
       <file leaf-file-name="ServiceProvider.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/engine/ServiceProvider.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="271" column="39" lean-forward="false" selection-start-line="271" selection-start-column="39" selection-end-line="271" selection-end-column="39" />
+            <state relative-caret-position="155">
+              <caret line="274" column="44" lean-forward="false" selection-start-line="274" selection-start-column="44" selection-end-line="274" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -127,36 +118,26 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SohaDecoder.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/SohaDecoder.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ByteSerial.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/models/ByteSerial.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="65" column="39" lean-forward="true" selection-start-line="65" selection-start-column="39" selection-end-line="65" selection-end-column="39" />
+            <state relative-caret-position="188">
+              <caret line="94" column="5" lean-forward="false" selection-start-line="94" selection-start-column="5" selection-end-line="94" selection-end-column="5" />
               <folding>
+                <element signature="e#3448#3449#0" expanded="true" />
+                <element signature="e#3474#3475#0" expanded="true" />
+                <element signature="e#3510#3511#0" expanded="true" />
+                <element signature="e#3540#3541#0" expanded="true" />
+                <element signature="e#3570#3571#0" expanded="true" />
                 <element signature="e#3598#3599#0" expanded="true" />
-                <element signature="e#3624#3625#0" expanded="true" />
-                <element signature="e#3660#3661#0" expanded="true" />
-                <element signature="e#3690#3691#0" expanded="true" />
-                <element signature="e#3720#3721#0" expanded="true" />
-                <element signature="e#3748#3749#0" expanded="true" />
-                <element signature="e#3788#3789#0" expanded="true" />
-                <element signature="e#3822#3823#0" expanded="true" />
-                <element signature="e#3852#3853#0" expanded="true" />
-                <element signature="e#3880#3881#0" expanded="true" />
-                <element signature="e#3920#3921#0" expanded="true" />
-                <element signature="e#3954#3955#0" expanded="true" />
-                <element signature="e#9380#9381#0" expanded="true" />
-                <element signature="e#9422#9423#0" expanded="true" />
+                <element signature="e#3638#3639#0" expanded="true" />
+                <element signature="e#3672#3673#0" expanded="true" />
+                <element signature="e#3702#3703#0" expanded="true" />
+                <element signature="e#3730#3731#0" expanded="true" />
+                <element signature="e#3770#3771#0" expanded="true" />
+                <element signature="e#3804#3805#0" expanded="true" />
+                <element signature="e#9230#9231#0" expanded="true" />
+                <element signature="e#9272#9273#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -173,23 +154,16 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>###############################################################################################</find>
-      <find>time</find>
-      <find>send</find>
       <find>###</find>
       <find>decoder</find>
       <find>####</find>
       <find>nullp</find>
       <find>send(B</find>
       <find>byteSerial</find>
-      <find>main</find>
       <find>channelread</find>
-      <find>sendBl</find>
-      <find>read_timer</find>
       <find>#########</find>
       <find>sending</find>
       <find>channelF</find>
-      <find>OP</find>
       <find>[244]</find>
       <find>does</find>
       <find>OP ::</find>
@@ -200,8 +174,15 @@
       <find>channelR\</find>
       <find>channelR</find>
       <find>channelRead</find>
-      <find>sendBlock</find>
       <find>[224]</find>
+      <find>sendBlock</find>
+      <find>OP</find>
+      <find>INTERR</find>
+      <find>error</find>
+      <find>CONTAINS</find>
+      <find>main</find>
+      <find>read_timer</find>
+      <find>sendBl</find>
       <find>bootS</find>
     </findStrings>
     <replaceStrings>
@@ -272,17 +253,17 @@
         <option value="$PROJECT_DIR$/src/utils/Modbus.java" />
         <option value="$PROJECT_DIR$/src/constants/ConstProtocol.java" />
         <option value="$PROJECT_DIR$/src/utils/HexUtil.java" />
-        <option value="$PROJECT_DIR$/src/configs/ServerConfig.java" />
         <option value="$PROJECT_DIR$/src/pojo/CropSubPOJO.java" />
         <option value="$PROJECT_DIR$/src/utils/SohaProtocolUtil.java" />
         <option value="$PROJECT_DIR$/src/pojo/SettingPOJO.java" />
         <option value="$PROJECT_DIR$/src/utils/DebugUtil.java" />
-        <option value="$PROJECT_DIR$/src/server/SohaDecoder.java" />
-        <option value="$PROJECT_DIR$/src/models/ByteSerial.java" />
         <option value="$PROJECT_DIR$/src/server/AppMain.java" />
         <option value="$PROJECT_DIR$/src/models/TIDBlock.java" />
-        <option value="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
+        <option value="$PROJECT_DIR$/src/configs/ServerConfig.java" />
+        <option value="$PROJECT_DIR$/src/models/ByteSerial.java" />
+        <option value="$PROJECT_DIR$/src/server/SohaDecoder.java" />
         <option value="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" />
+        <option value="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
       </list>
     </option>
   </component>
@@ -532,7 +513,7 @@
       <recent name="C:\Users\a\IdeaProjects\sohaTech_serial\src\server" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.AppMain">
+  <component name="RunManager" selected="Application.ByteSerial">
     <configuration default="false" name="AppMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -1269,7 +1250,7 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38219896" sideWeight="0.7864583" order="2" side_tool="false" content_ui="tabs" x="156" y="547" width="1398" height="359" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36020944" sideWeight="0.7864583" order="2" side_tool="false" content_ui="tabs" x="156" y="547" width="1398" height="359" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.178125" sideWeight="0.49317738" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.46666667" order="1" side_tool="false" content_ui="tabs" />
@@ -1726,37 +1707,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/SohaDecoder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/models/ByteSerial.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="65" column="39" lean-forward="true" selection-start-line="65" selection-start-column="39" selection-end-line="65" selection-end-column="39" />
-          <folding>
-            <element signature="e#3598#3599#0" expanded="true" />
-            <element signature="e#3624#3625#0" expanded="true" />
-            <element signature="e#3660#3661#0" expanded="true" />
-            <element signature="e#3690#3691#0" expanded="true" />
-            <element signature="e#3720#3721#0" expanded="true" />
-            <element signature="e#3748#3749#0" expanded="true" />
-            <element signature="e#3788#3789#0" expanded="true" />
-            <element signature="e#3822#3823#0" expanded="true" />
-            <element signature="e#3852#3853#0" expanded="true" />
-            <element signature="e#3880#3881#0" expanded="true" />
-            <element signature="e#3920#3921#0" expanded="true" />
-            <element signature="e#3954#3955#0" expanded="true" />
-            <element signature="e#9380#9381#0" expanded="true" />
-            <element signature="e#9422#9423#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="287">
@@ -1768,14 +1718,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/configs/ServerConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="32" column="44" lean-forward="false" selection-start-line="32" selection-start-column="29" selection-end-line="32" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/models/TIDBlock.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
@@ -1784,10 +1726,49 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/models/ByteSerial.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="94" column="5" lean-forward="false" selection-start-line="94" selection-start-column="5" selection-end-line="94" selection-end-column="5" />
+          <folding>
+            <element signature="e#3448#3449#0" expanded="true" />
+            <element signature="e#3474#3475#0" expanded="true" />
+            <element signature="e#3510#3511#0" expanded="true" />
+            <element signature="e#3540#3541#0" expanded="true" />
+            <element signature="e#3570#3571#0" expanded="true" />
+            <element signature="e#3598#3599#0" expanded="true" />
+            <element signature="e#3638#3639#0" expanded="true" />
+            <element signature="e#3672#3673#0" expanded="true" />
+            <element signature="e#3702#3703#0" expanded="true" />
+            <element signature="e#3730#3731#0" expanded="true" />
+            <element signature="e#3770#3771#0" expanded="true" />
+            <element signature="e#3804#3805#0" expanded="true" />
+            <element signature="e#9230#9231#0" expanded="true" />
+            <element signature="e#9272#9273#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/SohaDecoder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="35" column="55" lean-forward="false" selection-start-line="35" selection-start-column="55" selection-end-line="35" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/configs/ServerConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="32" column="44" lean-forward="false" selection-start-line="32" selection-start-column="29" selection-end-line="32" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/engine/ServiceProvider.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="271" column="39" lean-forward="false" selection-start-line="271" selection-start-column="39" selection-end-line="271" selection-end-column="39" />
+        <state relative-caret-position="155">
+          <caret line="274" column="44" lean-forward="false" selection-start-line="274" selection-start-column="44" selection-end-line="274" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1796,8 +1777,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="688" column="13" lean-forward="true" selection-start-line="688" selection-start-column="13" selection-end-line="688" selection-end-column="13" />
+        <state relative-caret-position="193">
+          <caret line="458" column="39" lean-forward="true" selection-start-line="458" selection-start-column="39" selection-end-line="458" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
