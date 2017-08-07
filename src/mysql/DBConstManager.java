@@ -29,6 +29,16 @@ public class DBConstManager {
         return CONNECTOR + ":" + DBMS + "://" + HOST + ":" + PORT + "/" + DBNAME + "?useUnicode=yes&amp;characterEncoding=UTF-8&amp;autoReconnect=" + autoConnect;
     }
 
+    protected boolean debug = false;
+
+    public boolean isDebug() {
+        return debug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
     public boolean setAutoConnect(boolean value){
         this.autoConnect = value;
         return this.autoConnect;
@@ -65,7 +75,9 @@ public class DBConstManager {
 
 
     public List<DataMap> getList(String sql){
-
+        if(debug){
+            System.out.println("getList");
+        }
         List<DataMap> list = new Vector<>();
         try{
             connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
@@ -95,6 +107,9 @@ public class DBConstManager {
 
 
     public boolean execute(String sql){
+        if(debug){
+            System.out.println("execute :: " + sql.replaceAll("\n", ""));
+        }
         boolean retVal = false;
 
         try {
@@ -116,6 +131,9 @@ public class DBConstManager {
     }
 
     public long getNumber(String sql, String column){
+        if(debug){
+            System.out.println("getNumber");
+        }
         try {
             connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
             st = connection.createStatement();
@@ -141,6 +159,9 @@ public class DBConstManager {
     }
 
     public List<String> getStrings(String sql, String... column){
+        if(debug){
+            System.out.println("getStrings :: " + sql.replaceAll("\n", ""));
+        }
         List<String> phones = new Vector<>();
 
         try {
@@ -174,6 +195,9 @@ public class DBConstManager {
     }
 
     public String getString(String sql, String column){
+        if(debug){
+            System.out.println("getString");
+        }
         try {
             connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
             st = connection.createStatement();

@@ -51,13 +51,14 @@ public class AppMain{
          */
         log = LoggerFactory.getLogger("TCP/IP ServerEngine App");
         dbManager = DBManager.getInstance();
+//        dbManager.setDebug(true);
         cache = Cache.getInstance();
         /**
          * 서비스 프로바이더 인스턴스 할당 및 시동
          */
         serviceProvider = ServiceProvider.getInstance(); // 인스턴스 할당
 
-        serviceProvider.setCustomTime(1000 * 10);
+        serviceProvider.setCustomTime(1000 * 30);
         /**
          * 주기성 배치 작업 콜백 인터페이스 위임
          */
@@ -74,6 +75,11 @@ public class AppMain{
          * 스파크 프레임워크를 이용하여 경량 REST를 이용함으로써 WAS와 연동하도록 함
          */
         Spark.port(ConstRest.REST_PORT);
+
+        Spark.get(ConstRest.REST_CACHE, (req, res) -> {
+            Cache.getInstance().recache();
+            return RestProcessor.makeResultJson(1, "Cache Done.");
+        });
 
         Spark.get(ConstRest.REST_CONNECT_TEST, (req, res) -> {
             DataMap map = RestProcessor.makeProcessData(req.raw());

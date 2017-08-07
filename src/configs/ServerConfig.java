@@ -30,7 +30,7 @@ public class ServerConfig {
     /**
      * REQUEST TIMEOUT
      */
-    public static final long REQUEST_TIMEOUT = 1000 * 9;
+    public static final long REQUEST_TIMEOUT = 1000 * 20;
 
     /**
      * 서버 소켓 포트

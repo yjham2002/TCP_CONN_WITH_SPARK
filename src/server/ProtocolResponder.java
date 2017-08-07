@@ -68,7 +68,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
     private String farmName;
     private String harvName;
 
-    private int[] prevErrorData = null;
+    private HashMap<String, int[]> prevErrorData = null;
 
     /**
      * 프로토콜에 따른 응답을 위한 클래스의 생성자로서 단위 소켓과 함께 클라이언트 레퍼런스 포인터를 수용
@@ -97,7 +97,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
     int aa = 0;
 
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        System.out.println(":::::::::::::::::::::::CONTEXT SWITCHED:::::::::::::::::::::::::::");
+//        System.out.println(":::::::::::::::::::::::CONTEXT SWITCHED:::::::::::::::::::::::::::");
         ctx.flush(); // 컨텍스트의 내용을 플러쉬합니다.
     };
 
@@ -286,10 +286,13 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
                         boolean haveToSend = false;
 
+                        if(prevErrorData == null) prevErrorData = new HashMap<>();
+                        int[] thisPrev = prevErrorData.get(harvString);
+
                         try {
-                            if (prevErrorData != null) {
+                            if (thisPrev != null) {
                                 for (int err = 0; err < errArray.length; err++) {
-                                    if (errArray[err] != prevErrorData[err]) {
+                                    if (errArray[err] != thisPrev[err]) {
                                         if (errArray[err] == ConstProtocol.TRUE) {
 
                                             haveToSend = true;
@@ -340,7 +343,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                             for(String tel : phones) smsService.sendSMS(tel, msg);
                         }
 
-                        prevErrorData = errArray;
+                        prevErrorData.put(harvString, errArray);
 
                     }
 
@@ -595,7 +598,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 ServiceProvider.getInstance().send(uniqueKey, ellaborated, ConstProtocol.RESPONSE_LEN_WRITE);
                 System.out.println("INFO :: Initiating Flag Bits");
             }else{
-                System.out.println("INFO :: Nothing Has been detected with changed-flags");
+//                System.out.println("INFO :: Nothing Has been detected with changed-flags");
             }
 
         }catch(Exception e){

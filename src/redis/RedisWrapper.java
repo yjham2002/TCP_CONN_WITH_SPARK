@@ -70,7 +70,7 @@ public class RedisWrapper extends ServerConfig{
 
         try {
             jedis.connect();
-            log.info("[JEDIS] PUT OPERATION INVOKED WITH [KEY:" + key + "] => " + object.toString() + "]");
+//            log.info("[JEDIS] PUT OPERATION INVOKED WITH [KEY:" + key + "] => " + object.toString() + "]");
 
             ObjectMapper mapper = new ObjectMapper();
 

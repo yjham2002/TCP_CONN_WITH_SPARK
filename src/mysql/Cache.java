@@ -20,14 +20,14 @@ public class Cache {
     private static final String QUERY_HARV_NAMES = "SELECT farm_code, dong_code, dong_name FROM dong_list;";
 
     private Cache(){
-        farmNames = new ConcurrentHashMap<>();
-        harvNames = new ConcurrentHashMap<>();
-        phones = new ConcurrentHashMap<>();
-
         init();
     }
 
     public void init(){
+        farmNames = new ConcurrentHashMap<>();
+        harvNames = new ConcurrentHashMap<>();
+        phones = new ConcurrentHashMap<>();
+
         System.out.println("[INFO] Cache DB Started");
         List<DataMap> farmNamesDB = DBManager.getInstance().getList(QUERY_FARM_NAMES);
         for(DataMap map : farmNamesDB) farmNames.put(map.getString("farm_code"), map.getString("farm_name"));
@@ -41,6 +41,10 @@ public class Cache {
     public static Cache getInstance(){
         if(instance == null) instance = new Cache();
         return instance;
+    }
+
+    public void recache(){
+        init();
     }
 
     public static String getHarvKey(String farm, String harv){

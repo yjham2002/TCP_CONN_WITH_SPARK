@@ -120,7 +120,7 @@ public class SohaProtocolUtil {
         byte[] protocol;
         byte[] loc = getHexLocation(location);
         byte[] len = new byte[]{0x00, (byte)length, (byte)(length * 2)};
-        byte[] deviceId = new byte[]{(byte)id};
+        byte[] deviceId = new byte[]{(byte)parseValue(harvCode)};
         byte[] crc16 = modbus.fn_makeCRC16(concat(deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data));
 //        byte[] checkSum = new byte[]{HexUtil.checkSum(concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_WRITE, loc, len, data, crc16))};
         byte[] time = ByteSerial.longToBytes(HexUtil.timestamp());
@@ -166,7 +166,7 @@ public class SohaProtocolUtil {
         byte[] protocol = null;
         byte[] loc = getHexLocation(location);
         byte[] len = getHexLocation(length);
-        byte[] deviceId = new byte[]{(byte)id};
+        byte[] deviceId = new byte[]{(byte)parseValue(harvCode)};
         byte[] crc16 = modbus.fn_makeCRC16(concat(deviceId, ConstProtocol.FUNCTION_READ, loc, len));
 //        byte[] checkSum = new byte[]{HexUtil.checkSum(concat(ConstProtocol.STX, farmCode, harvCode, deviceId, ConstProtocol.FUNCTION_READ, loc, len, crc16))};
         byte[] time = ByteSerial.longToBytes(HexUtil.timestamp() - extra);
@@ -180,11 +180,13 @@ public class SohaProtocolUtil {
         return makeReadProtocol(location, length, id, farmCode, harvCode, 0);
     }
 
-    public static void main(String... args){
-        byte[] arr1 = new byte[]{83, 84, 49, 51, 53, 51, 48, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26, -35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26, -35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26, -35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26, -35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26, -35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26, -35, 3, 34, 4, 16, 0, 89, 3, 34, 4, -71, 22, 125, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 4, -122, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -52, -52, 0, 0, 0, 0, 1, -6, 2, -60, 3, -114, 4, 88, 0, -56, -128, 1, 0, 0, 0, 0, 17, -43, 0, 0, 0, 18, 4, -74, 3, 38, 0, 0, 7, -31, 3, 35, 3, -117, -1, -113, 0, 0, 0, 0, 0, 13, 10};
-        byte[] arr2 = new byte[]{83, 84, 49, 51, 53, 51, 48, 49, 16, 71, 4, -25, -125, -109, -118, -1, 102, 47, 66, -38, 4, -68, 16, -75, 17, -21, 82, 127, 25, -38, -31, -3, 25, -118, 0, -18, -116, 115, 60, -25, 68, -18, 18, -119, 18, 94, -127, -35, -108, 89, -39, 51, -64, -48, -63, -9, 48, 14, 68, 108, -52, -10, -107, -3, -106, -1, -117, 32, -123, 93, 74, -32, -128, -25, 55, -97, -36, 7, 19, -55, -85, 102, -75, 37, -60, 71, 16, -102, 45, 50, 38, -84, -36, 50, 83, 79, 86, 125, 7, -98, 9, -66, -104, -13, 2, 16, 25, -116, -64, -46, 87, -16, 90, -2, -120, -83, 65, -6, 40, -6, -112, 90, 3, 33, 0, 7, 34, -3, -104, -74, -110, -65, 4, 63, 32, -2, -108, -56, -116, -19, 66, -113, 6, 39, 14, -65, 4, 93, 68, 115, 10, -68, -128, -9, 1, 110, 0, 77, 36, -1, -56, -22, -93, 95, 113, 50, -120, -26, 39, -120, 54, 121, 44, 55, -104, -50, -26, 92, 16, 46, -124, -83, -95, -93, 17, -55, 40, 66, 54, 103, 66, -89, -55, -28, 39, 40, 33, 104, 16, -61, 32, 114, 28, -100, 26, 31, 29, -13, -127, -61, -127, -75, 37, 28, 4, 112, -72, -110, 22, 9, 26, -13, 16, 79, -96, -87, 0, 62, 9, -51, 4, -65, 0, 47, 1, -97, -113, -47, 35, -11, 81, 127, -92, 112, 36, 126, 8, 25, 72, 95, 1, 59, 13, -4, -120, -73, -104, -5, -92, -19, 24, -15, 16, -4, 16, 118, -128, 80, 18, 107, 0, -26, -126, -11, -64, 127, 3, 59, 71, -1, 37, -6, 0, -36, 1, -1, -8, 95, -30, 108, 72, -41, -91, -99, -66, -66, 122, 23, 10, -20, 104, -84, -111, -95, -117, -5, -83, 66, -6, 13, 10};
+    public static byte parseValue(byte[] array){
+        String serial = "";
+        for(int i = 0; i < array.length; i++){
+            serial += array[i] - '0';
+        }
 
-        DebugUtil.printAndCompare(arr1, arr2);
+        return (byte)Integer.parseInt(serial);
     }
 
     public static byte[] makeAlertProtocol(byte[] farmCode, byte[] harvCode){

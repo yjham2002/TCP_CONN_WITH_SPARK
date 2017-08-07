@@ -286,7 +286,7 @@ public class ServiceProvider extends ServerConfig{
                clients.get(client).sendBlock(msg, length);
                 try{
                     synchronized (tidBlock){
-                        tidBlock.wait(REQUEST_TIMEOUT * 100);
+                        tidBlock.wait(REQUEST_TIMEOUT);
 
                         if(tidBlock.getByteSerial() == null) throw new InterruptedException();
                     }
@@ -294,7 +294,7 @@ public class ServiceProvider extends ServerConfig{
                     System.out.println("SEND BLOCK IS INTERRUPTED ::::::::::::::::::::::::::::::::::::::::::::::::");
                     blockMap.remove(tid);
                     tidBlock.setByteSerial(null);
-                    ee.printStackTrace();
+//                    ee.printStackTrace();
                 }
             }
             else{
@@ -304,7 +304,7 @@ public class ServiceProvider extends ServerConfig{
             if(e instanceof InterruptedException){
                 System.out.println("SEND BLOCK IS INTERRUPTED ::::::::::::::::::::::::::::::::::::::::::::::::");
             }
-            e.printStackTrace();
+//            e.printStackTrace();
             blockMap.remove(tid);
             tidBlock.setByteSerial(null);
         }finally {
