@@ -9,6 +9,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
 import io.netty.handler.logging.LogLevel;
@@ -185,8 +186,20 @@ public class ServiceProvider extends ServerConfig{
 
                 sb.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT) ;
                 sb.option(ChannelOption.TCP_NODELAY,true) ;
+
+                sb.option(ChannelOption.SO_REUSEADDR, true);
+                sb.option(ChannelOption.SO_LINGER, 0);
+                sb.childOption(ChannelOption.SO_LINGER, 0);
+                sb.childOption(ChannelOption.SO_REUSEADDR, true);
+                sb.childOption(ChannelOption.SO_KEEPALIVE, true);
+                sb.childOption(ChannelOption.WRITE_BUFFER_HIGH_WATER_MARK, 10*65536);
+                sb.childOption(ChannelOption.WRITE_BUFFER_LOW_WATER_MARK, 2*65536);
+
                 sb.option(ChannelOption.SO_KEEPALIVE ,true) ;    // 소켓 KEEP ALIVE
                 sb.option(ChannelOption.SO_RCVBUF, Integer.MAX_VALUE);
+
+                sb.childOption(ChannelOption.SO_RCVBUF, 1048576);
+                sb.childOption(ChannelOption.SO_SNDBUF, 1048576);
 
                 sb.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT) ;
 

@@ -8,6 +8,7 @@ import models.ByteSerial;
 import models.DataMap;
 import models.Pair;
 import models.RestProcessor;
+import mysql.Cache;
 import mysql.DBManager;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ public class AppMain{
     private static Logger log;
     private static ServiceProvider serviceProvider;
     private static DBManager dbManager;
+    private static Cache cache;
 
     /**
      * 정적으로 설정된 소켓 포트를 기반으로 싱글턴 패턴 서버 인스턴스를 할당 후 실행
@@ -49,6 +51,7 @@ public class AppMain{
          */
         log = LoggerFactory.getLogger("TCP/IP ServerEngine App");
         dbManager = DBManager.getInstance();
+        cache = Cache.getInstance();
         /**
          * 서비스 프로바이더 인스턴스 할당 및 시동
          */

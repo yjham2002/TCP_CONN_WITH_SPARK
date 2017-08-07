@@ -356,7 +356,7 @@ public class SohaProtocolUtil {
         int sum = 0;
         for(int i = 0; i < args.length; i++) sum += args[i];
 
-        System.out.println("[REALTIME ERROR COUNT] :: " + sum);
+//        System.out.println("[REALTIME ERROR COUNT] :: " + sum);
 
         return sum;
     }

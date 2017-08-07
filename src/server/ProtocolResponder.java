@@ -1,18 +1,16 @@
 package server;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import configs.ServerConfig;
 import constants.ConstProtocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
-import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.Promise;
 import models.ByteSerial;
 import models.DataMap;
 import models.Pair;
 import models.TIDBlock;
+import mysql.Cache;
 import mysql.DBManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,18 +96,15 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
     int aa = 0;
 
-    // 채널 읽는 것을 완료했을 때 동작할 코드를 정의 합니다.
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         System.out.println(":::::::::::::::::::::::CONTEXT SWITCHED:::::::::::::::::::::::::::");
         ctx.flush(); // 컨텍스트의 내용을 플러쉬합니다.
     };
 
-    // 예외가 발생할 때 동작할 코드를 정의 합니다.
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
-            throws Exception {
-        cause.printStackTrace(); // 쌓여있는 트레이스를 출력합니다.
-        ctx.close(); // 컨텍스트를 종료시킵니다.
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
+        ctx.close();
     }
 
     public static byte[] trimLength(byte[] arr){
@@ -137,8 +132,8 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
             byteSerial = new ByteSerial(buffer); // 바이트 시리얼 객체로 트리밍과 분석을 위임하기 위한 인스턴스 생성
 
-            if(byteSerial.isLoss()) aa++;
-            System.out.println("INFO :: PACKET LOSS OCCURED FOR [" + aa + "] TIME(S)");
+//            if(byteSerial.isLoss()) aa++;
+//            System.out.println("INFO :: PACKET LOSS OCCURED FOR [" + aa + "] TIME(S)");
 
             long tid = 0;
             byte addr1 = 0;
@@ -151,7 +146,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 if(buffer.length >= 16) {
                     tid = ByteSerial.bytesToLong(Arrays.copyOfRange(buffer, 12, 20));
 
-                    System.out.println("TRANSACTION ID :: " + tid);
+//                    System.out.println("TRANSACTION ID :: " + tid);
                     addr1 = buffer[14];
                     addr2 = buffer[15];
                 }
@@ -173,10 +168,14 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
             farmString = HexUtil.getNumericStringFromAscii(farmCodeTemp);
             harvString = HexUtil.getNumericStringFromAscii(harvCodeTemp);
-            farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farmString), ConstProtocol.SQL_COL_FARMNAME);
-            harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
 
-            System.out.println(buffer.length + "/" + subBuffer.length);
+            farmName = Cache.getInstance().farmNames.get(farmString);
+            harvName = Cache.getInstance().harvNames.get(Cache.getHarvKey(farmString, harvString));
+
+//            farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farmString), ConstProtocol.SQL_COL_FARMNAME);
+//            harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
+
+//            System.out.println(buffer.length + "/" + subBuffer.length);
 
             if(buffer.length != LENGTH_REALTIME && buffer.length != LENGTH_INIT && buffer.length != LENGTH_ALERT_PRTC){ // 실시간 데이터가 아닌 경우, 동기화 전송 메소드가 이를 참조할 수 있도록 스코프에서 벗어난다
                 byteSerial = new ByteSerial(buffer, ByteSerial.TYPE_NONE, tid, addr1, addr2);
@@ -268,7 +267,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     String farm = SohaProtocolUtil.getSimpleKey(SohaProtocolUtil.getFarmCodeByProtocol(buffer));
                     String key = farm + "@" + RedisManager.getTimestamp();
 
-                    System.out.println("KEY " + key);
+//                    System.out.println("KEY " + key);
 
                     String millis = Long.toString(RedisManager.getMillisFromRedisKey(key));
 
@@ -277,7 +276,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
                     boolean succ = redisManager.put(key, realtimePOJO);
 
-                    log.info("JEDIS REALTIME DATA PUT : " + succ);
+//                    log.info("JEDIS REALTIME DATA PUT : " + succ);
 
                     if(SohaProtocolUtil.getErrorCount(realtimePOJO) > 0){
 //                        prevErrorData = SohaProtocolUtil.getErrorArrayWithDB(farmString, harvString);
@@ -312,34 +311,32 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                             System.out.println("========================================================");
                         }
 
-                        try {
-                            String sql = "SELECT * FROM sohatechfarmdb.farm_list WHERE farm_code = '" + farmString + "' LIMIT 1";
-                            List<String> sms_arr = DBManager.getInstance().getStrings(sql, ConstProtocol.SMS_COLS);
+                        if(haveToSend){
+                            try {
+                                String sql = "SELECT * FROM sohatechfarmdb.farm_list WHERE farm_code = '" + farmString + "' LIMIT 1";
+                                List<String> sms_arr = DBManager.getInstance().getStrings(sql, ConstProtocol.SMS_COLS);
 
-                            int sendCnt = 0;
+                                int sendCnt = 0;
 
-                            for(int ee = 0; ee < sms_arr.size(); ee++) {
-                                if (sms_arr.get(ee).equals("0") || Integer.parseInt(sms_arr.get(ee)) == 0) {
-                                    errSMSarray[ee] = 0;
-                                    sendCnt++;
+                                for(int ee = 0; ee < sms_arr.size(); ee++) {
+                                    if (sms_arr.get(ee).equals("0") || Integer.parseInt(sms_arr.get(ee)) == 0) {
+                                        errSMSarray[ee] = 0;
+                                        sendCnt++;
+                                    }
                                 }
+
+                                haveToSend = (sendCnt == 16);
+
+                            }catch(Exception e){
+                                System.out.println("SMS Array Error");
+                                e.printStackTrace();
                             }
-
-                            haveToSend = (sendCnt == 16);
-
-                        }catch(Exception e){
-                            System.out.println("SMS Array Error");
-                            e.printStackTrace();
                         }
 
                         if(haveToSend) {
 
-//                            String tel = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARM_TEL, farmString), ConstProtocol.SQL_COL_FARM_TEL);
-
                             String msg = SohaProtocolUtil.getErrorMessage(errSMSarray, farmName, harvName);
-
                             List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='"+farmString+"' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
-
                             for(String tel : phones) smsService.sendSMS(tel, msg);
                         }
 
@@ -347,12 +344,12 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
                     }
 
-                    log.info("Farm Code :: " + Arrays.toString(farmCodeTemp) + " / HarvCode :: " + Arrays.toString(harvCodeTemp));
+//                    log.info("Farm Code :: " + Arrays.toString(farmCodeTemp) + " / HarvCode :: " + Arrays.toString(harvCodeTemp));
 
                     Thread synchronizer = new Thread(() -> {
                         semaphore = true;
                         try {
-//                            synchronizeStatus(realtimePOJO, farmString, harvString, HexUtil.getNumericValue(harvCodeTemp));
+                            synchronizeStatus(realtimePOJO, farmString, harvString, HexUtil.getNumericValue(harvCodeTemp));
                         }catch(Exception e){
                             System.out.println("Auto Reading handled");
                         }
@@ -386,26 +383,15 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
         System.out.println("Channel Inactivated");
         try {
             super.channelInactive(ctx);
-            synchronized (this) {
-                Promise<String> prom;
-                Exception err = null;
-                while ((prom = messageList.poll()) != null)
-                    if(err != null) prom.setFailure(err);
-                    else{
-                        err = new IOException("Connection lost");
-                        prom.setFailure(err);
-                        try {
-                            List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='" + farmString + "' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
-                            for (String tel : phones)
-                                smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
+            try {
+                List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='" + farmString + "' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
+                for (String tel : phones)
+                    smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
 //            socket.finishConnect();
-                            log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
-                            clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
-                        } catch (Exception e2) {
-                            System.out.println("통신 이상 SMS 전송 중 에러 :: \n" + e2.toString());
-                        }
-                    }
-                messageList = null;
+                log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
+                clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
+            } catch (Exception e2) {
+                System.out.println("통신 이상 SMS 전송 중 에러 :: \n" + e2.toString());
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -424,6 +410,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
         }
     }
 
+    // TODO 주석처리 해제
     public void synchronizeStatus(RealtimePOJO realtimePOJO, String farmC, String harvC, int idC){
 
         ByteSerial recv = null;
@@ -678,18 +665,27 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
         log.info("Sending (BLOCKED)[" + msg.getTid() + "]:: " + Arrays.toString(msg.getProcessed()));
 
         ByteBuf byteBuf = Unpooled.wrappedBuffer(msg.getProcessed());
-        ChannelFuture channelFuture = ctx.writeAndFlush(byteBuf);
 
-        System.out.println(channelFuture);
+        final ChannelHandlerContext tempCtx = this.ctx;
+        ctx.flush();
 
-        channelFuture.addListener(new ChannelFutureListener() {
+        Thread senderThread = new Thread(){
             @Override
-            public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                System.out.println("OP :: " + channelFuture.toString());
-            }
-        });
+            public void run(){
+                ChannelFuture channelFuture = tempCtx.writeAndFlush(byteBuf);
+                System.out.println(channelFuture);
+                channelFuture.addListener(new ChannelFutureListener() {
+                    @Override
+                    public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                        System.out.println("operationComplete :: " + channelFuture.toString());
+                    }
+                });
 
-        System.out.println("SENDING END ###############################################");
+            }
+        };
+
+        senderThread.start();
+
     }
 
     /**

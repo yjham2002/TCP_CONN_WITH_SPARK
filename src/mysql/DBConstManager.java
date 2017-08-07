@@ -21,8 +21,8 @@ public class DBConstManager {
     public static final String HOST = "1.201.142.86";
     public static final String PORT = "3306";
     public static final String DBNAME = "sohatechfarmdb";
-    public static final String USERNAME = "root";
-    public static final String PASSWORD = "$#@!richware7";
+    public static final String USERNAME = "sohatechfarmdb";
+    public static final String PASSWORD = "1!sohatechfarmdb";
     public boolean autoConnect = true;
 
     public String getConnectionInfo(){
@@ -65,6 +65,7 @@ public class DBConstManager {
 
 
     public List<DataMap> getList(String sql){
+
         List<DataMap> list = new Vector<>();
         try{
             connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);

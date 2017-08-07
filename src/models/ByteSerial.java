@@ -1,5 +1,6 @@
 package models;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import constants.ConstProtocol;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.slf4j.Logger;
@@ -68,12 +69,14 @@ public class ByteSerial implements Serializable{
 
         boolean sound = HexUtil.isCheckSumSound(bytes);
 
-        if(type != TYPE_FORCE) {
-            if (sound) System.out.println("Protocol Generated And It is sound");
-            else System.out.println("Protocol Generated But it is not sound");
-        }else{
-            System.out.println("ByteSerial Generated Forcely");
-        }
+        System.out.println("TID [" + this.tid + "]");
+
+//        if(type != TYPE_FORCE) {
+//            if (sound) System.out.println("Protocol Generated And It is sound");
+//            else System.out.println("Protocol Generated But it is not sound");
+//        }else{
+//            System.out.println("ByteSerial Generated Forcely");
+//        }
 
         this.type = type;
 
@@ -174,8 +177,8 @@ public class ByteSerial implements Serializable{
 
         String reason = "\n";
 
-        log.info(Arrays.toString(processed));
-        log.info(Arrays.toString(bytes));
+//        log.info(Arrays.toString(processed));
+//        log.info(Arrays.toString(bytes));
 
         if(!HexUtil.isCheckSumSound(this.processed)) {
             loss = true;
@@ -194,8 +197,11 @@ public class ByteSerial implements Serializable{
             reason += "[no ETX found]\n";
         }
 
+        long tempId = ByteSerial.bytesToLong(Arrays.copyOfRange(bytes, 8, 16));
+        if(processed.length == ConstProtocol.LENGTH_REALTIME + 14) tempId = ByteSerial.bytesToLong(Arrays.copyOfRange(bytes, 12, 20));
+
         if(loss) log.info("Packet-Loss Occured or is empty data - Ignoring [" + processed.length + "] " + reason);
-        else log.info("Packet has been arrived successfully [" + processed.length + ']');
+        else log.info("Packet has been arrived successfully [" + processed.length + "] AS TID [" + tempId + "]");
 
         setTypeAutomatically();
     }
