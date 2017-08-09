@@ -201,8 +201,6 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 return;
             }
 
-//                if (buffer.length == 0) System.exit(122);// TODO 디버깅용
-
             if (!generated) {
                 generated = true;
                 if(buffer.length == LENGTH_INIT) uniqueKey = SohaProtocolUtil.getUniqueKeyByInit(subBuffer); // 유니크키를 농장코드로 설정하여 추출
@@ -289,8 +287,10 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
                         boolean haveToSend = false;
 
+                        String mapKey = farmString + "_" + harvString;
+
                         if(prevErrorData == null) prevErrorData = new ConcurrentHashMap<>();
-                        int[] thisPrev = prevErrorData.get(harvString);
+                        int[] thisPrev = prevErrorData.get(mapKey);
 
                         try {
                             if (thisPrev != null) {
@@ -344,7 +344,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                             for(String tel : phones) smsService.sendSMS(tel, msg);
                         }
 
-                        prevErrorData.put(harvString, errArray);
+                        prevErrorData.put(mapKey, errArray);
 
                     }
 
