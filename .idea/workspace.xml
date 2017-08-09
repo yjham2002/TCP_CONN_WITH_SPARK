@@ -12,12 +12,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/mysql/DBConstManager.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/mysql/DBConstManager.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sohaTech_serial.iml" afterPath="$PROJECT_DIR$/sohaTech_serial.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/constants/ConstRest.java" afterPath="$PROJECT_DIR$/src/constants/ConstRest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/mysql/DBConstManager.java" afterPath="$PROJECT_DIR$/src/mysql/DBConstManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ProtocolResponder.java" afterPath="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -40,8 +38,8 @@
       <file leaf-file-name="AppMain.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="76" column="33" lean-forward="false" selection-start-line="76" selection-start-column="33" selection-end-line="76" selection-end-column="33" />
+            <state relative-caret-position="171">
+              <caret line="78" column="55" lean-forward="true" selection-start-line="78" selection-start-column="55" selection-end-line="78" selection-end-column="55" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <marker date="1502167002116" expanded="true" signature="12453:13018" ph="..." />
@@ -50,21 +48,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ConstRest.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ConstRest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/constants/ConstRest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="11" column="58" lean-forward="true" selection-start-line="11" selection-start-column="58" selection-end-line="11" selection-end-column="58" />
+            <state relative-caret-position="133">
+              <caret line="7" column="45" lean-forward="true" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SohaProtocolUtil.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/utils/SohaProtocolUtil.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="650">
+              <caret line="410" column="51" lean-forward="true" selection-start-line="410" selection-start-column="51" selection-end-line="410" selection-end-column="51" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="205">
-              <caret line="168" column="73" lean-forward="false" selection-start-line="168" selection-start-column="73" selection-end-line="168" selection-end-column="73" />
+            <state relative-caret-position="4346">
+              <caret line="290" column="0" lean-forward="true" selection-start-line="290" selection-start-column="0" selection-end-line="290" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -75,18 +83,9 @@
       <file leaf-file-name="ServiceProvider.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/engine/ServiceProvider.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4769">
+            <state relative-caret-position="4712">
               <caret line="296" column="43" lean-forward="false" selection-start-line="296" selection-start-column="43" selection-end-line="296" selection-end-column="43" />
-              <folding>
-                <element signature="e#7042#7043#0" expanded="false" />
-                <element signature="e#7072#7073#0" expanded="false" />
-                <element signature="e#7873#7874#0" expanded="false" />
-                <element signature="e#7912#7913#0" expanded="false" />
-                <element signature="e#11022#11023#0" expanded="false" />
-                <element signature="e#11069#11070#0" expanded="false" />
-                <element signature="e#11380#11381#0" expanded="false" />
-                <element signature="e#11424#11425#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -94,7 +93,7 @@
       <file leaf-file-name="SettingPOJO.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/pojo/SettingPOJO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
+            <state relative-caret-position="7258">
               <caret line="397" column="78" lean-forward="false" selection-start-line="397" selection-start-column="78" selection-end-line="397" selection-end-column="78" />
               <folding />
             </state>
@@ -104,9 +103,13 @@
       <file leaf-file-name="RedisWrapper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/redis/RedisWrapper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
+            <state relative-caret-position="855">
               <caret line="57" column="56" lean-forward="false" selection-start-line="57" selection-start-column="56" selection-end-line="57" selection-end-column="56" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#2648#2649#0" expanded="false" />
+                <element signature="e#2693#2694#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -114,25 +117,9 @@
       <file leaf-file-name="ServerConfig.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/configs/ServerConfig.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
+            <state relative-caret-position="304">
               <caret line="19" column="53" lean-forward="false" selection-start-line="19" selection-start-column="53" selection-end-line="19" selection-end-column="53" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HexUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/utils/HexUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2793">
-              <caret line="152" column="0" lean-forward="false" selection-start-line="152" selection-start-column="0" selection-end-line="152" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#1611#1612#0" expanded="false" />
-                <element signature="e#1682#1683#0" expanded="false" />
-                <element signature="e#3296#3297#0" expanded="false" />
-                <element signature="e#3359#3360#0" expanded="false" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -140,8 +127,8 @@
       <file leaf-file-name="DBConstManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/mysql/DBConstManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="269">
-              <caret line="21" column="52" lean-forward="true" selection-start-line="21" selection-start-column="52" selection-end-line="21" selection-end-column="52" />
+            <state relative-caret-position="288">
+              <caret line="22" column="45" lean-forward="true" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -152,9 +139,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="266">
               <caret line="23" column="56" lean-forward="false" selection-start-line="23" selection-start-column="56" selection-end-line="23" selection-end-column="56" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -276,10 +261,10 @@
         <option value="$PROJECT_DIR$/src/utils/Htypecast.java" />
         <option value="$PROJECT_DIR$/src/mysql/DBManager.java" />
         <option value="$PROJECT_DIR$/src/server/AppMain.java" />
-        <option value="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
         <option value="$PROJECT_DIR$/src/pojo/SettingPOJO.java" />
-        <option value="$PROJECT_DIR$/src/mysql/DBConstManager.java" />
+        <option value="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
         <option value="$PROJECT_DIR$/src/constants/ConstRest.java" />
+        <option value="$PROJECT_DIR$/src/mysql/DBConstManager.java" />
       </list>
     </option>
   </component>
@@ -307,9 +292,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -548,6 +532,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1380,10 +1365,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="209">
           <caret line="17" column="20" lean-forward="true" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
-          <folding>
-            <element signature="e#256#257#0" expanded="false" />
-            <element signature="e#283#284#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1415,7 +1396,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="17" column="5" lean-forward="true" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1521,7 +1501,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2299">
           <caret line="145" column="0" lean-forward="false" selection-start-line="145" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1551,7 +1530,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="156">
           <caret line="59" column="50" lean-forward="true" selection-start-line="59" selection-start-column="50" selection-end-line="59" selection-end-column="50" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1559,7 +1537,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-496">
           <caret line="9" column="36" lean-forward="false" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1655,18 +1632,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utils/SohaProtocolUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2527">
-          <caret line="142" column="36" lean-forward="false" selection-start-line="142" selection-start-column="36" selection-end-line="142" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#9244#9245#0" expanded="false" />
-            <element signature="e#9306#9307#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/utils/Modbus.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="209">
@@ -1701,42 +1666,21 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
           <caret line="23" column="56" lean-forward="false" selection-start-line="23" selection-start-column="56" selection-end-line="23" selection-end-column="56" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/engine/ServiceProvider.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4769">
+        <state relative-caret-position="4712">
           <caret line="296" column="43" lean-forward="false" selection-start-line="296" selection-start-column="43" selection-end-line="296" selection-end-column="43" />
-          <folding>
-            <element signature="e#7042#7043#0" expanded="false" />
-            <element signature="e#7072#7073#0" expanded="false" />
-            <element signature="e#7873#7874#0" expanded="false" />
-            <element signature="e#7912#7913#0" expanded="false" />
-            <element signature="e#11022#11023#0" expanded="false" />
-            <element signature="e#11069#11070#0" expanded="false" />
-            <element signature="e#11380#11381#0" expanded="false" />
-            <element signature="e#11424#11425#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="168" column="73" lean-forward="false" selection-start-line="168" selection-start-column="73" selection-end-line="168" selection-end-column="73" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/pojo/SettingPOJO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
+        <state relative-caret-position="7258">
           <caret line="397" column="78" lean-forward="false" selection-start-line="397" selection-start-column="78" selection-end-line="397" selection-end-column="78" />
           <folding />
         </state>
@@ -1744,15 +1688,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/redis/RedisWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
+        <state relative-caret-position="855">
           <caret line="57" column="56" lean-forward="false" selection-start-line="57" selection-start-column="56" selection-end-line="57" selection-end-column="56" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#2648#2649#0" expanded="false" />
+            <element signature="e#2693#2694#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/configs/ServerConfig.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
+        <state relative-caret-position="304">
           <caret line="19" column="53" lean-forward="false" selection-start-line="19" selection-start-column="53" selection-end-line="19" selection-end-column="53" />
           <folding />
         </state>
@@ -1760,8 +1708,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="76" column="33" lean-forward="false" selection-start-line="76" selection-start-column="33" selection-end-line="76" selection-end-column="33" />
+        <state relative-caret-position="171">
+          <caret line="78" column="55" lean-forward="true" selection-start-line="78" selection-start-column="55" selection-end-line="78" selection-end-column="55" />
           <folding>
             <element signature="imports" expanded="true" />
             <marker date="1502167002116" expanded="true" signature="12453:13018" ph="..." />
@@ -1769,19 +1717,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/mysql/DBConstManager.java">
+    <entry file="file://$PROJECT_DIR$/src/utils/SohaProtocolUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="21" column="52" lean-forward="true" selection-start-line="21" selection-start-column="52" selection-end-line="21" selection-end-column="52" />
+        <state relative-caret-position="650">
+          <caret line="410" column="51" lean-forward="true" selection-start-line="410" selection-start-column="51" selection-end-line="410" selection-end-column="51" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/constants/ConstRest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="11" column="58" lean-forward="true" selection-start-line="11" selection-start-column="58" selection-end-line="11" selection-end-column="58" />
+        <state relative-caret-position="133">
+          <caret line="7" column="45" lean-forward="true" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/mysql/DBConstManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="22" column="45" lean-forward="true" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4346">
+          <caret line="290" column="0" lean-forward="true" selection-start-line="290" selection-start-column="0" selection-end-line="290" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

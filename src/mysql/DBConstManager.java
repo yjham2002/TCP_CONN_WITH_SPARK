@@ -18,8 +18,8 @@ public class DBConstManager {
 
     public static final String CONNECTOR = "jdbc";
     public static final String DBMS = "mysql";
-    public static final String HOST = "1.201.142.86";
-//    public static final String HOST = "localhost";
+//    public static final String HOST = "1.201.142.86";
+    public static final String HOST = "localhost";
     public static final String PORT = "3306";
     public static final String DBNAME = "sohatechfarmdb";
     public static final String USERNAME = "sohatechfarmdb";

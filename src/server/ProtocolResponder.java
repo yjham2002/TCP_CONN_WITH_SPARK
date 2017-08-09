@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static constants.ConstProtocol.*;
 import static models.ByteSerial.POOL_SIZE;
@@ -68,7 +69,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
     private String farmName;
     private String harvName;
 
-    private HashMap<String, int[]> prevErrorData = null;
+    private static ConcurrentHashMap<String, int[]> prevErrorData = null;
 
     /**
      * 프로토콜에 따른 응답을 위한 클래스의 생성자로서 단위 소켓과 함께 클라이언트 레퍼런스 포인터를 수용
@@ -288,24 +289,22 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
                         boolean haveToSend = false;
 
-                        if(prevErrorData == null) prevErrorData = new HashMap<>();
+                        if(prevErrorData == null) prevErrorData = new ConcurrentHashMap<>();
                         int[] thisPrev = prevErrorData.get(harvString);
 
                         try {
                             if (thisPrev != null) {
                                 for (int err = 0; err < errArray.length; err++) {
                                     if (errArray[err] != thisPrev[err]) {
+                                        String sql;
                                         if (errArray[err] == ConstProtocol.TRUE) {
-
                                             haveToSend = true;
                                             errSMSarray[err] = ConstProtocol.TRUE;
-
-                                            String sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "Y");
-                                            DBManager.getInstance().execute(sql);
+                                            sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "Y");
                                         } else {
-                                            String sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "N");
-                                            DBManager.getInstance().execute(sql);
+                                            sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "N");
                                         }
+                                        DBManager.getInstance().execute(sql);
                                     }
                                 }
                             }
