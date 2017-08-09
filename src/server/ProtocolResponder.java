@@ -172,6 +172,8 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             farmName = Cache.getInstance().farmNames.get(farmString);
             harvName = Cache.getInstance().harvNames.get(Cache.getHarvKey(farmString, harvString));
 
+//            System.out.println(Arrays.toString(buffer));
+
 //            farmName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_FARMNAME_FORMAT, farmString), ConstProtocol.SQL_COL_FARMNAME);
 //            harvName = DBManager.getInstance().getString(String.format(ConstProtocol.SQL_DONGNAME_FORMAT, farmString, harvString), ConstProtocol.SQL_COL_DONGNAME);
 
@@ -352,7 +354,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     Thread synchronizer = new Thread(() -> {
                         semaphore = true;
                         try {
-                            synchronizeStatus(realtimePOJO, farmString, harvString, HexUtil.getNumericValue(harvCodeTemp));
+//                            synchronizeStatus(realtimePOJO, farmString, harvString, HexUtil.getNumericValue(harvCodeTemp));
                         }catch(Exception e){
                             System.out.println("Auto Reading handled");
                         }
@@ -681,6 +683,9 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     @Override
                     public void operationComplete(ChannelFuture channelFuture) throws Exception {
                         System.out.println("operationComplete :: " + channelFuture.toString());
+                        if(!channelFuture.isSuccess()){
+                            System.out.println("FAILED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        }
                     }
                 });
 
