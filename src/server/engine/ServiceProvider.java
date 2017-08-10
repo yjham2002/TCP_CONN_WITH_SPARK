@@ -286,7 +286,7 @@ public class ServiceProvider extends ServerConfig{
      */
     public ServiceProvider start(){
         thread.start();
-//        batch.start();
+        batch.start();
 
         return instance;
     }
