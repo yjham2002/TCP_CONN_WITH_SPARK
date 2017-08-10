@@ -275,6 +275,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     RealtimePOJO realtimePOJO = new RealtimePOJO(byteSerial);
                     realtimePOJO.setRedisTime(millis);
 
+                    ServiceProvider.offerList.put(realtimePOJO);
                     boolean succ = redisManager.put(key, realtimePOJO);
 
 //                    log.info("JEDIS REALTIME DATA PUT : " + succ);

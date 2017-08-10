@@ -17,8 +17,10 @@ import io.netty.handler.logging.LoggingHandler;
 import javafx.application.Platform;
 import models.ByteSerial;
 import models.TIDBlock;
+import mysql.DBManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pojo.RealtimePOJO;
 import redis.ICallback;
 import server.ProtocolResponder;
 import server.SohaDecoder;
@@ -38,7 +40,9 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import static constants.ConstProtocol.SOCKET_TIMEOUT_LIMIT;
 import static spark.route.HttpMethod.get;
@@ -147,22 +151,23 @@ public class ServiceProvider extends ServerConfig{
         startServer();
 
         batch = new Thread(() -> {
+            migrateDirectly();
             // Test
-            while(true) {
-                try {
-                    int time = BATCH_TIME;
-                    if(customTime != -1 && customTime > 0) time = customTime;
-                    Thread.sleep(time);
-                    for(ICallback callback : jobs){
-                        callback.postExecuted();
-                    }
-                } catch (InterruptedException e) {
-                    d("Batch Thread Interrupted");
-                }
-
-                d("Batch Executed");
-
-            }
+//            while(true) {
+//                try {
+//                    int time = BATCH_TIME;
+//                    if(customTime != -1 && customTime > 0) time = customTime;
+//                    Thread.sleep(time);
+//                    for(ICallback callback : jobs){
+//                        callback.postExecuted();
+//                    }
+//                } catch (InterruptedException e) {
+//                    d("Batch Thread Interrupted");
+//                }
+//
+//                d("Batch Executed");
+//
+//            }
         });
 
         batch.setPriority(Thread.NORM_PRIORITY);
@@ -171,6 +176,20 @@ public class ServiceProvider extends ServerConfig{
 
         d("Server is ready to respond");
 
+    }
+
+    public static BlockingQueue<RealtimePOJO> offerList = new LinkedBlockingQueue<>();
+
+    public boolean migrateDirectly(){
+        while(true){
+            try {
+                RealtimePOJO r = offerList.take();
+                String sql = r.getInsertSQL();
+                DBManager.getInstance().execute(sql);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     private Thread getProviderInstance(){
@@ -267,7 +286,7 @@ public class ServiceProvider extends ServerConfig{
      */
     public ServiceProvider start(){
         thread.start();
-        batch.start();
+//        batch.start();
 
         return instance;
     }
