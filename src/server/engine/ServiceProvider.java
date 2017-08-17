@@ -352,6 +352,7 @@ public class ServiceProvider extends ServerConfig{
             {
                 if(entry == null) {
                     System.out.println("[WARN] BULK SEND RECV IS NULL :: [" + Thread.currentThread().getName() + "]");
+                    log.info("[WARN] ERROR OCCURRED ON " + Arrays.toString(msgs[e]));
                 }else {
                     if (entry.isLoss()) System.out.println("[WARN] ENTRY LOSS :::: " + Arrays.toString(entry.getProcessed()));
                 }

@@ -132,6 +132,64 @@ public class SohaProtocolUtil {
         return protocol;
     }
 
+    public static String getErrorDataSQL(String farmString, String harvString){
+        String sql = "" +
+                "SELECT\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=0 ORDER BY regDate DESC LIMIT 1) AS E0,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=1 ORDER BY regDate DESC LIMIT 1) AS E1,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=2 ORDER BY regDate DESC LIMIT 1) AS E2,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=3 ORDER BY regDate DESC LIMIT 1) AS E3,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=4 ORDER BY regDate DESC LIMIT 1) AS E4,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=5 ORDER BY regDate DESC LIMIT 1) AS E5,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=6 ORDER BY regDate DESC LIMIT 1) AS E6,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=7 ORDER BY regDate DESC LIMIT 1) AS E7,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=8 ORDER BY regDate DESC LIMIT 1) AS E8,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=9 ORDER BY regDate DESC LIMIT 1) AS E9,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=10 ORDER BY regDate DESC LIMIT 1) AS E10,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=11 ORDER BY regDate DESC LIMIT 1) AS E11,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=12 ORDER BY regDate DESC LIMIT 1) AS E12,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=13 ORDER BY regDate DESC LIMIT 1) AS E13,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=14 ORDER BY regDate DESC LIMIT 1) AS E14,\n" +
+                "(SELECT flag FROM tblError WHERE farmCode='" + farmString + "' AND dongCode='" + harvString + "' AND errCode=15 ORDER BY regDate DESC LIMIT 1) AS E15";
+
+        return sql;
+    }
+
+    public static int[] getErrorDataArrayBySQL(String farmString, String harvString){
+        String sql = getErrorDataSQL(farmString, harvString);
+        String codeNames[] = new String[]{
+                "E0",
+                "E1",
+                "E2",
+                "E3",
+                "E4",
+                "E5",
+                "E6",
+                "E7",
+                "E8",
+                "E9",
+                "E10",
+                "E11",
+                "E12",
+                "E13",
+                "E14",
+                "E15",
+        };
+        List<String> errStrs = DBManager.getInstance().getStrings(sql, codeNames);
+        int err[] = new int[16];
+
+        for(int i = 0; i < 16; i++) {
+            if(errStrs.get(i) == null) {
+                err[i] = 0;
+            }else{
+                if(errStrs.get(i).equals("Y")) err[i] = 1;
+                else err[i] = 0;
+            }
+        }
+
+        return err;
+    }
+
     /**
      * 플래그 비트를 세팅하기 위한 프로토콜을 생성하는 메소드이다.
      * 본 메소드는 서버로부터 기기에 변경을 알리기 위한 프로토콜을 생성하며, 기기로부터 변경 플래그를 받기 위한 비트를 모두 클리어한다.

@@ -1,5 +1,6 @@
 package server;
 
+import agent.AlertAgent;
 import configs.ServerConfig;
 import constants.ConstProtocol;
 import io.netty.buffer.ByteBuf;
@@ -14,10 +15,7 @@ import mysql.Cache;
 import mysql.DBManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.CropSubPOJO;
-import pojo.RealtimePOJO;
-import pojo.SettingPOJO;
-import pojo.TimerPOJO;
+import pojo.*;
 import redis.RedisManager;
 import server.engine.ServiceProvider;
 import server.whois.SMSService;
@@ -68,8 +66,6 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
     private String harvString;
     private String farmName;
     private String harvName;
-
-    private static ConcurrentHashMap<String, int[]> prevErrorData = null;
 
     /**
      * 프로토콜에 따른 응답을 위한 클래스의 생성자로서 단위 소켓과 함께 클라이언트 레퍼런스 포인터를 수용
@@ -282,81 +278,19 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
 //                    log.info("JEDIS REALTIME DATA PUT : " + succ);
 
-                    if(SohaProtocolUtil.getErrorCount(realtimePOJO) > 0){
-//                        prevErrorData = SohaProtocolUtil.getErrorArrayWithDB(farmString, harvString);
+                    /**
+                     * 경보내역 조건 검사를 에이전트에 위임
+                     */
 
-                        String errStartTime[] = SohaProtocolUtil.getStartTimes(realtimePOJO);
-                        int errArray[] = SohaProtocolUtil.getErrorArray(realtimePOJO);
-                        int errSMSarray[] = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-                        boolean haveToSend = false;
-
-                        String mapKey = farmString + "_" + harvString;
-
-                        if(prevErrorData == null) prevErrorData = new ConcurrentHashMap<>();
-                        int[] thisPrev = prevErrorData.get(mapKey);
-
-                        try {
-                            if (thisPrev != null) {
-                                for (int err = 0; err < errArray.length; err++) {
-                                    if (errArray[err] != thisPrev[err]) {
-                                        String sql;
-                                        if (errArray[err] == ConstProtocol.TRUE) {
-                                            haveToSend = true;
-                                            errSMSarray[err] = ConstProtocol.TRUE;
-                                            sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "Y", errStartTime[err]);
-                                        } else {
-                                            sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "N", errStartTime[err]);
-                                        }
-                                        DBManager.getInstance().execute(sql);
-                                    }
-                                }
-                            }
-                        }catch(Exception e){
-                            e.printStackTrace();
-                            System.out.println("========================================================");
-                            System.out.println("Reinstanciating DBManager singleton instance. :: " + e.getMessage());
-                            System.out.println("========================================================");
-                        }
-
-                        if(haveToSend){
-                            try {
-                                String sql = "SELECT * FROM sohatechfarmdb.farm_list WHERE farm_code = '" + farmString + "' LIMIT 1";
-                                List<String> sms_arr = DBManager.getInstance().getStrings(sql, ConstProtocol.SMS_COLS);
-
-                                int sendCnt = 0;
-
-                                for(int ee = 0; ee < sms_arr.size(); ee++) {
-                                    if (sms_arr.get(ee).equals("0") || Integer.parseInt(sms_arr.get(ee)) == 0) {
-                                        errSMSarray[ee] = 0;
-                                        sendCnt++;
-                                    }
-                                }
-
-                                haveToSend = (sendCnt == 16);
-
-                            }catch(Exception e){
-                                System.out.println("SMS Array Error");
-                                e.printStackTrace();
-                            }
-                        }
-
-                        if(haveToSend) {
-
-                            String msg = SohaProtocolUtil.getErrorMessage(errSMSarray, farmName, harvName);
-                            List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='"+farmString+"' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
-                            for(String tel : phones) smsService.sendSMS(tel, msg);
-                        }
-
-                        prevErrorData.put(mapKey, errArray);
-
-                    }
+                    WrappedPOJO wrappedPOJO = new WrappedPOJO(realtimePOJO, farmString, harvString);
+                    AlertAgent.getBlockingQueue().put(wrappedPOJO);
 
 //                    log.info("Farm Code :: " + Arrays.toString(farmCodeTemp) + " / HarvCode :: " + Arrays.toString(harvCodeTemp));
 
                     Thread synchronizer = new Thread(() -> {
                         semaphore = true;
                         try {
+                            // TODO 주석처리 해제 필히 해야 함
 //                            synchronizeStatus(realtimePOJO, farmString, harvString, HexUtil.getNumericValue(harvCodeTemp));
                         }catch(Exception e){
                             System.out.println("Auto Reading handled");

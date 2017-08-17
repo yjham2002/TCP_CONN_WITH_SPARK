@@ -1,5 +1,11 @@
 package constants;
 
+import models.ByteSerial;
+import utils.HexUtil;
+import utils.SohaProtocolUtil;
+
+import java.util.Arrays;
+
 /**
  * Created by a on 2017-05-30.
  */
@@ -34,4 +40,5 @@ public class ConstRest {
     public static final String MODE_WRITE_DAYAGE_ONCE = "write_dayage_once";
     public static final String MODE_WRITE_SETTING = "write_setting";
     public static final String MODE_WRITE_REALTIME = "write_realtime";
+
 }
