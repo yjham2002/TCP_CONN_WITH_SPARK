@@ -133,6 +133,8 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
             byteSerial = new ByteSerial(buffer); // 바이트 시리얼 객체로 트리밍과 분석을 위임하기 위한 인스턴스 생성
 
+            System.out.println("RECV [" + Arrays.toString(byteSerial.getProcessed())  + "]");
+
 //            if(byteSerial.isLoss()) aa++;
 //            System.out.println("INFO :: PACKET LOSS OCCURED FOR [" + aa + "] TIME(S)");
 
@@ -283,6 +285,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     if(SohaProtocolUtil.getErrorCount(realtimePOJO) > 0){
 //                        prevErrorData = SohaProtocolUtil.getErrorArrayWithDB(farmString, harvString);
 
+                        String errStartTime[] = SohaProtocolUtil.getStartTimes(realtimePOJO);
                         int errArray[] = SohaProtocolUtil.getErrorArray(realtimePOJO);
                         int errSMSarray[] = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -301,9 +304,9 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                                         if (errArray[err] == ConstProtocol.TRUE) {
                                             haveToSend = true;
                                             errSMSarray[err] = ConstProtocol.TRUE;
-                                            sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "Y");
+                                            sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "Y", errStartTime[err]);
                                         } else {
-                                            sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "N");
+                                            sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "N", errStartTime[err]);
                                         }
                                         DBManager.getInstance().execute(sql);
                                     }

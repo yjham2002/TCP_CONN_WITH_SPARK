@@ -333,6 +333,7 @@ public class ServiceProvider extends ServerConfig{
     }
 
     public ByteSerial send(String client, byte[] msg, int length){
+        System.out.println("SEND :: " + Arrays.toString(msg));
         return send(client, new ByteSerial(msg, ByteSerial.TYPE_NONE), length);
     }
 

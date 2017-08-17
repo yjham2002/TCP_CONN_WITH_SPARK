@@ -322,6 +322,17 @@ public class AppMain{
 
             switch(mode) {
                 case ConstRest.MODE_WRITE_REALTIME:{
+
+                    boolean initExist = false;
+                    int initFlag = 0;
+
+                    if(DataMapValidationUtil.isValid(map, "init")){
+                        initExist = true;
+                        initFlag = map.getInt("init");
+                    }
+
+                    boolean isIcon = (initExist) && (initFlag == 1);
+
                     try {
                         System.out.println("WRITING REALTIME " + rawFarm + ":" + rawHarv);
                         RealtimePOJO realPOJO = objectMapper.readValue(rawJson, RealtimePOJO.class);
@@ -353,8 +364,10 @@ public class AppMain{
                          * 110 Setting Flag 제거
                          */
                         else{
-                            protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_SETTING);
-                            serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
+                            if(!isIcon) {
+                                protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_SETTING);
+                                serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
+                            }
                         }
 
                         System.out.println("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));

@@ -4,8 +4,10 @@ import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import constants.ConstProtocol;
 import models.ByteSerial;
 import mysql.DBManager;
+import pojo.ErrorStatusPOJO;
 import pojo.RealtimePOJO;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -363,6 +365,19 @@ public class SohaProtocolUtil {
         return sum;
     }
 
+    public static String[] getStartTimes(RealtimePOJO realtimePOJO){
+        String year = Integer.toString(Calendar.getInstance().get(Calendar.YEAR)) + "-";
+        List<ErrorStatusPOJO> errLIst = realtimePOJO.getErrorStatList();
+
+        String arr[] = new String[16];
+
+        for(int i = 0; i < arr.length; i++){
+            arr[i] = year + errLIst.get(i).getErrstat_start_md() + " " + errLIst.get(i).getErrstat_start_time() + ":00";
+        }
+
+        return arr;
+    }
+
     public static int[] getErrorArrayWithDB(String farmCode, String harvCode){
         String sql = "SELECT \n" +
                 "(SELECT CASE WHEN flag='Y' THEN 1 ELSE 0 END AS flagNum FROM tblError WHERE farmCode='" + farmCode + "' AND dongCode='" + harvCode + "' AND `errCode`=0 ORDER BY regDate DESC LIMIT 1) AS err0,\n" +
@@ -416,7 +431,7 @@ public class SohaProtocolUtil {
         return array;
     }
 
-    public static String getErrorSQL(String farm, String harv, int errCode, String flag){
+    public static String getErrorSQL(String farm, String harv, int errCode, String flag, String time){
 
         if(flag.length() > 1) return "SELECT -1";
 
