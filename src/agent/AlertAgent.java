@@ -127,6 +127,8 @@ public class AlertAgent {
                 }
             }
         });
+
+        process.start();
     }
 
 }

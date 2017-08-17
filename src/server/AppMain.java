@@ -1,5 +1,6 @@
 package server;
 
+import agent.AlertAgent;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import configs.ServerConfig;
 import constants.ConstProtocol;
@@ -37,6 +38,7 @@ public class AppMain{
     private static ServiceProvider serviceProvider;
     private static DBManager dbManager;
     private static Cache cache;
+    private static AlertAgent alertAgent;
 
     /**
      * 정적으로 설정된 소켓 포트를 기반으로 싱글턴 패턴 서버 인스턴스를 할당 후 실행
@@ -53,6 +55,7 @@ public class AppMain{
         dbManager = DBManager.getInstance();
 //        dbManager.setDebug(true);
         cache = Cache.getInstance();
+        alertAgent = AlertAgent.getInstance();
         /**
          * 서비스 프로바이더 인스턴스 할당 및 시동
          */
