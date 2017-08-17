@@ -54,7 +54,7 @@ public class AlertAgent {
                     String farmName = Cache.getInstance().farmNames.get(farmString);
                     String harvName = Cache.getInstance().harvNames.get(Cache.getHarvKey(farmString, harvString));
 
-                    if(SohaProtocolUtil.getErrorCount(realtimePOJO) > 0){
+//                    if(SohaProtocolUtil.getErrorCount(realtimePOJO) > 0){
 
 //                        prevErrorData = SohaProtocolUtil.getErrorArrayWithDB(farmString, harvString);
 
@@ -121,7 +121,7 @@ public class AlertAgent {
                             for(String tel : phones) smsService.sendSMS(tel, msg);
                         }
 
-                    }
+//                    }
                 }catch (InterruptedException e){
                     e.printStackTrace();
                 }

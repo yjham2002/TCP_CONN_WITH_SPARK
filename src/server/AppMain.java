@@ -163,6 +163,10 @@ public class AppMain{
                             System.out.println("=============================================================");
 
                             RealtimePOJO realtimePOJO = new RealtimePOJO(rSerial);
+
+                            WrappedPOJO wrappedPOJO = new WrappedPOJO(realtimePOJO, rawFarm, rawHarv);
+
+                            AlertAgent.getBlockingQueue().put(wrappedPOJO);
                             try {
                                 DBManager.getInstance().execute(realtimePOJO.getInsertSQL());
                                 return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);

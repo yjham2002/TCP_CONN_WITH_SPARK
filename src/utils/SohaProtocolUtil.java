@@ -190,6 +190,10 @@ public class SohaProtocolUtil {
         return err;
     }
 
+    public static void main(String... args){
+        System.out.println(Arrays.toString(getErrorDataArrayBySQL("0078", "01")));
+    }
+
     /**
      * 플래그 비트를 세팅하기 위한 프로토콜을 생성하는 메소드이다.
      * 본 메소드는 서버로부터 기기에 변경을 알리기 위한 프로토콜을 생성하며, 기기로부터 변경 플래그를 받기 위한 비트를 모두 클리어한다.
