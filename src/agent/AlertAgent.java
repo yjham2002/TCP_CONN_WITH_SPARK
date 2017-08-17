@@ -21,6 +21,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class AlertAgent {
 
+    private static final int[] ZERO_ARRAY = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     private static BlockingQueue<WrappedPOJO> blockingQueue = new LinkedBlockingQueue<>();
 
     private static AlertAgent ourInstance = new AlertAgent();
@@ -58,68 +59,75 @@ public class AlertAgent {
 
 //                        prevErrorData = SohaProtocolUtil.getErrorArrayWithDB(farmString, harvString);
 
-                        String errStartTime[] = SohaProtocolUtil.getStartTimes(realtimePOJO);
-                        int errArray[] = SohaProtocolUtil.getErrorArray(realtimePOJO);
-                        int errSMSarray[] = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                    String errStartTime[] = SohaProtocolUtil.getStartTimes(realtimePOJO);
+                    int errArray[] = SohaProtocolUtil.getErrorArray(realtimePOJO);
+                    int errSMSarray[] = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-                        System.out.println("[AlertAgent] Error Detected - Processing " + Arrays.toString(errArray));
+                    System.out.println("[AlertAgent] Error Detected - Processing " + Arrays.toString(errArray));
 
-                        boolean haveToSend = false;
+                    boolean haveToSend = false;
 
-                        String mapKey = farmString + "_" + harvString;
-                        int[] thisPrev = SohaProtocolUtil.getErrorDataArrayBySQL(farmString, harvString);
+                    String mapKey = farmString + "_" + harvString;
 
+                    int[] thisPrev = null;
+
+                    if(realtimePOJO.getMcnctrl_web_stat_alarm() == 1) {
+                        thisPrev = SohaProtocolUtil.getErrorDataArrayBySQL(farmString, harvString);
+                    }else{
+                        thisPrev = ZERO_ARRAY;
+                    }
+
+                    try {
+                        if (thisPrev != null) {
+                            for (int err = 0; err < errArray.length; err++) {
+                                if (errArray[err] != thisPrev[err]) {
+                                    String sql;
+                                    if (errArray[err] == ConstProtocol.TRUE) {
+                                        haveToSend = true;
+                                        errSMSarray[err] = ConstProtocol.TRUE;
+                                        sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "Y", errStartTime[err]);
+                                    } else {
+                                        sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "N", errStartTime[err]);
+                                    }
+                                    DBManager.getInstance().execute(sql);
+                                }
+                            }
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                        System.out.println("========================================================");
+                        System.out.println("Reinstanciating DBManager singleton instance. :: " + e.getMessage());
+                        System.out.println("========================================================");
+                    }
+
+                    if(haveToSend){
                         try {
-                            if (thisPrev != null) {
-                                for (int err = 0; err < errArray.length; err++) {
-                                    if (errArray[err] != thisPrev[err]) {
-                                        String sql;
-                                        if (errArray[err] == ConstProtocol.TRUE) {
-                                            haveToSend = true;
-                                            errSMSarray[err] = ConstProtocol.TRUE;
-                                            sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "Y", errStartTime[err]);
-                                        } else {
-                                            sql = SohaProtocolUtil.getErrorSQL(farmString, harvString, err, "N", errStartTime[err]);
-                                        }
-                                        DBManager.getInstance().execute(sql);
-                                    }
+                            String sql = "SELECT * FROM sohatechfarmdb.farm_list WHERE farm_code = '" + farmString + "' LIMIT 1";
+                            List<String> sms_arr = DBManager.getInstance().getStrings(sql, ConstProtocol.SMS_COLS);
+
+                            int sendCnt = 0;
+
+                            for(int ee = 0; ee < sms_arr.size(); ee++) {
+                                if (sms_arr.get(ee).equals("0") || Integer.parseInt(sms_arr.get(ee)) == 0) {
+                                    errSMSarray[ee] = 0;
+                                    sendCnt++;
                                 }
                             }
+
+                            haveToSend = (sendCnt == 16);
+
                         }catch(Exception e){
+                            System.out.println("SMS Array Error");
                             e.printStackTrace();
-                            System.out.println("========================================================");
-                            System.out.println("Reinstanciating DBManager singleton instance. :: " + e.getMessage());
-                            System.out.println("========================================================");
                         }
+                    }
 
-                        if(haveToSend){
-                            try {
-                                String sql = "SELECT * FROM sohatechfarmdb.farm_list WHERE farm_code = '" + farmString + "' LIMIT 1";
-                                List<String> sms_arr = DBManager.getInstance().getStrings(sql, ConstProtocol.SMS_COLS);
+                    if(haveToSend) {
 
-                                int sendCnt = 0;
-
-                                for(int ee = 0; ee < sms_arr.size(); ee++) {
-                                    if (sms_arr.get(ee).equals("0") || Integer.parseInt(sms_arr.get(ee)) == 0) {
-                                        errSMSarray[ee] = 0;
-                                        sendCnt++;
-                                    }
-                                }
-
-                                haveToSend = (sendCnt == 16);
-
-                            }catch(Exception e){
-                                System.out.println("SMS Array Error");
-                                e.printStackTrace();
-                            }
-                        }
-
-                        if(haveToSend) {
-
-                            String msg = SohaProtocolUtil.getErrorMessage(errSMSarray, farmName, harvName);
-                            List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='"+farmString+"' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
-                            for(String tel : phones) smsService.sendSMS(tel, msg);
-                        }
+                        String msg = SohaProtocolUtil.getErrorMessage(errSMSarray, farmName, harvName);
+                        List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='"+farmString+"' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
+                        for(String tel : phones) smsService.sendSMS(tel, msg);
+                    }
 
 //                    }
                 }catch (InterruptedException e){
