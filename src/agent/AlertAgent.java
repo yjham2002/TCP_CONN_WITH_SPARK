@@ -69,12 +69,10 @@ public class AlertAgent {
 
                     String mapKey = farmString + "_" + harvString;
 
-                    int[] thisPrev = null;
+                    int[] thisPrev = SohaProtocolUtil.getErrorDataArrayBySQL(farmString, harvString);
 
-                    if(realtimePOJO.getMcnctrl_web_stat_alarm() == 1) {
-                        thisPrev = SohaProtocolUtil.getErrorDataArrayBySQL(farmString, harvString);
-                    }else{
-                        thisPrev = ZERO_ARRAY;
+                    if(realtimePOJO.getMcnctrl_web_stat_alarm() == 0) {
+                        errArray = ZERO_ARRAY;
                     }
 
                     try {
