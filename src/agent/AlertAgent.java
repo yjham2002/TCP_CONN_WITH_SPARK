@@ -130,6 +130,8 @@ public class AlertAgent {
 //                    }
                 }catch (InterruptedException e){
                     e.printStackTrace();
+                }catch(Exception e){
+                    e.printStackTrace();
                 }
             }
         });
