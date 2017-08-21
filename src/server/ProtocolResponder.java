@@ -291,7 +291,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                         semaphore = true;
                         try {
                             // TODO 주석처리 해제 필히 해야 함
-//                            synchronizeStatus(realtimePOJO, farmString, harvString, HexUtil.getNumericValue(harvCodeTemp));
+                            synchronizeStatus(realtimePOJO, farmString, harvString, HexUtil.getNumericValue(harvCodeTemp));
                         }catch(Exception e){
                             System.out.println("Auto Reading handled");
                         }

@@ -4,6 +4,7 @@ import constants.ConstProtocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import models.ByteSerial;
 import utils.HexUtil;
 import utils.SohaProtocolUtil;
 
@@ -37,7 +38,15 @@ public class SohaDecoder extends ByteToMessageDecoder {
 
             in.markReaderIndex() ;
 
-            in.readShort() ; 	// ST
+//            in.readShort() ;     // ST
+            byte ch1 = in.readByte();
+            byte ch2;
+
+            if(ch1 == 0x53){
+                ch2 = in.readByte();
+            }else{
+                return;
+            }
 
             ByteBuf bbLen = in.readBytes(HEADER_PREFIX_BODYLEN_LEN) ;
             byte[] bytes = new byte[HEADER_PREFIX_BODYLEN_LEN];
