@@ -28,6 +28,8 @@ public class ConstRest {
     public static final String HARV_CODE = "s_dong_code";
     public static final String JSON_CODE = "json";
 
+    public static final int REQUEST_RETRY_COUNT = 2;
+
     /**
      * API Parameters
      */

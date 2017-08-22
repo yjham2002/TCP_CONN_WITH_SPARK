@@ -45,6 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static constants.ConstProtocol.SOCKET_TIMEOUT_LIMIT;
+import static constants.ConstRest.REQUEST_RETRY_COUNT;
 import static spark.route.HttpMethod.get;
 
 /**
@@ -304,10 +305,23 @@ public class ServiceProvider extends ServerConfig{
             if(clients.containsKey(client)) {
                clients.get(client).sendBlock(msg, length);
                 try{
-                    synchronized (tidBlock){
-                        tidBlock.wait(REQUEST_TIMEOUT);
+                    for(int e = 0; e < REQUEST_RETRY_COUNT; e++) {
+                        System.out.println("SENDING TRY COUNT :: " + (e + 1));
+                        clients.get(client).sendBlock(msg, length);
+                        synchronized (tidBlock) {
+                            tidBlock.wait(REQUEST_TIMEOUT);
+                            if (tidBlock.getByteSerial() == null) {
+                                if(e + 1 >= REQUEST_RETRY_COUNT){
+                                    throw new InterruptedException();
+                                }else{
+                                    continue;
+                                }
 
-                        if(tidBlock.getByteSerial() == null) throw new InterruptedException();
+                            }
+                            else {
+                                break;
+                            }
+                        }
                     }
                 }catch (InterruptedException ee){
                     System.out.println("SEND BLOCK IS INTERRUPTED ::::::::::::::::::::::::::::::::::::::::::::::::");
