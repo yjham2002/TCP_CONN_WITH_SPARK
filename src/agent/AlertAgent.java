@@ -71,7 +71,7 @@ public class AlertAgent {
 
                     int[] thisPrev = SohaProtocolUtil.getErrorDataArrayBySQL(farmString, harvString);
 
-                    if(realtimePOJO.getMcnctrl_web_stat_alarm() == 0) {
+                    if(realtimePOJO.getMcnctrl_mv510_stat_alarm() == 0) {
                         errArray = ZERO_ARRAY;
                     }
 
