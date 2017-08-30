@@ -11,14 +11,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/redis/RedisWrapper.java" line="79" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/sohaTech_serial.jar" afterPath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/sohaTech_serial.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/agent/AlertAgent.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/agent/AlertAgent.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" afterPath="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/WrappedPOJO.java" afterPath="$PROJECT_DIR$/src/pojo/WrappedPOJO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ProtocolResponder.java" afterPath="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
-    </list>
+    <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -107,8 +100,8 @@
       <file leaf-file-name="ServiceProvider.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/engine/ServiceProvider.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="309">
-              <caret line="187" column="46" lean-forward="true" selection-start-line="187" selection-start-column="46" selection-end-line="187" selection-end-column="46" />
+            <state relative-caret-position="93">
+              <caret line="308" column="78" lean-forward="true" selection-start-line="308" selection-start-column="78" selection-end-line="308" selection-end-column="78" />
               <folding />
             </state>
           </provider>
@@ -1470,8 +1463,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/engine/ServiceProvider.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="187" column="46" lean-forward="true" selection-start-line="187" selection-start-column="46" selection-end-line="187" selection-end-column="46" />
+        <state relative-caret-position="93">
+          <caret line="308" column="78" lean-forward="true" selection-start-line="308" selection-start-column="78" selection-end-line="308" selection-end-column="78" />
           <folding />
         </state>
       </provider>
