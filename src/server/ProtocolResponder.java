@@ -154,6 +154,8 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 e.printStackTrace();
             }
 
+            byte[] origin = buffer.clone();
+
             subBuffer = trimLength(buffer);
             buffer = trimHead(buffer);
 
@@ -271,6 +273,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     String millis = Long.toString(RedisManager.getMillisFromRedisKey(key));
 
                     RealtimePOJO realtimePOJO = new RealtimePOJO(byteSerial);
+                    realtimePOJO.setOrigin(Arrays.toString(origin));
                     realtimePOJO.setRedisTime(millis);
 
                     ServiceProvider.offerList.put(realtimePOJO);
@@ -283,6 +286,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                      */
 
                     WrappedPOJO wrappedPOJO = new WrappedPOJO(realtimePOJO, farmString, harvString);
+
                     AlertAgent.getBlockingQueue().put(wrappedPOJO);
 
 //                    log.info("Farm Code :: " + Arrays.toString(farmCodeTemp) + " / HarvCode :: " + Arrays.toString(harvCodeTemp));

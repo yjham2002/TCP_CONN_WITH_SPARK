@@ -315,6 +315,9 @@ public class RealtimePOJO extends BasePOJO{
     private String farmString = "";
     private String harvString = "";
 
+    @JsonIgnore
+    private String origin = "";
+
     public RealtimePOJO(ByteSerial byteSerial){
         this.byteSerial = byteSerial;
         this.classType = this.getClass();
@@ -330,6 +333,16 @@ public class RealtimePOJO extends BasePOJO{
         }
 
         ellaborate();
+    }
+
+    @JsonIgnore
+    public String getOrigin() {
+        return origin;
+    }
+
+    @JsonIgnore
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 
     /**
@@ -2334,6 +2347,7 @@ public class RealtimePOJO extends BasePOJO{
        String sql = "INSERT INTO `sohatechfarmdb`.`tblRealTimeData` \n" +
                "\t(" +
                "`farmCode`, \n" +
+               "\t`origin`, \n" +
                "\t`dongCode`, \n" +
                "\t`co2_sr`, \n" +
                "\t`temp_sr`, \n" +
@@ -2592,6 +2606,7 @@ public class RealtimePOJO extends BasePOJO{
                "\tVALUES\n" +
                "\t(" +
                "'" + farmString + "'," +
+               "'" + origin + "'," +
                "'" + harvString + "'," +
                "'" + co2_sr + "'," +
                "'" + temp_sr + "'," +

@@ -7,6 +7,7 @@ public class WrappedPOJO {
     private RealtimePOJO realtimePOJO;
     private String farmString;
     private String harvString;
+    private String origin;
 
     public WrappedPOJO(RealtimePOJO realtimePOJO, String farmString, String harvString) {
         this.realtimePOJO = realtimePOJO;
@@ -16,6 +17,14 @@ public class WrappedPOJO {
 
     public RealtimePOJO getRealtimePOJO() {
         return realtimePOJO;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 
     public void setRealtimePOJO(RealtimePOJO realtimePOJO) {
