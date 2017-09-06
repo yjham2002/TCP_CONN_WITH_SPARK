@@ -190,7 +190,8 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
                     synchronized (tidBlock) {
                         ServiceProvider.blockMap.get(tid).setByteSerial(byteSerial.clone());
-                        tidBlock.notifyAll();
+                        if (byteSerial.isLoss()) ServiceProvider.blockMap.get(tid).setByteSerial(null);
+                        tidBlock.notify();
                         ServiceProvider.blockMap.remove(tid);
                     }
                 }else{
