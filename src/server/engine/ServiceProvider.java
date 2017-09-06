@@ -303,7 +303,7 @@ public class ServiceProvider extends ServerConfig{
         try {
 
             if(clients.containsKey(client)) {
-               clients.get(client).sendBlock(msg, length);
+
                 try{
                     for(int e = 0; e < REQUEST_RETRY_COUNT; e++) {
                         System.out.println("SENDING TRY COUNT :: " + (e + 1));
