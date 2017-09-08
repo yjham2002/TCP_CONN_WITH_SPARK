@@ -372,6 +372,11 @@ public class AppMain{
                          */
                         else{
                             if(!isIcon) {
+                                try{
+                                    Thread.sleep(2 * (protocol.length - 19));
+                                }catch (InterruptedException e){
+                                    e.printStackTrace();
+                                }
                                 protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_SETTING);
                                 serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
                             }
@@ -406,6 +411,11 @@ public class AppMain{
                         if(recv.isLoss()) {
                             return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
                         }else{
+                            try{
+                                Thread.sleep(2 * (protocol.length - 19));
+                            }catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
                             protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_TIMER);
                             recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
                         }
@@ -464,6 +474,11 @@ public class AppMain{
 
                         if(recv != null){
                             System.out.println("WRITE ::::::::::::::::: DAILY AGE (UNIT) SUCCEEDED");
+                            try{
+                                Thread.sleep(2 * (protocol.length - 19));
+                            }catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
                             protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, dailyFlag);
                             serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
 
@@ -557,11 +572,23 @@ public class AppMain{
 
                         if(recv != null && !recv.isLoss()) multiCount++;
 
+                        try{
+                            Thread.sleep(2 * (protocol.length - 19));
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
+
                         pure = new ByteSerial(settingPOJO.getTailBytes(), ByteSerial.TYPE_FORCE).getPureBytes();
                         protocol = SohaProtocolUtil.makeWriteProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), id, farmCode, harvCode, pure);
                         recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
 
                         if(recv != null && !recv.isLoss()) multiCount++;
+
+                        try{
+                            Thread.sleep(2 * (protocol.length - 19));
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
 
                         if(multiCount != confirmCount) {
                             return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
