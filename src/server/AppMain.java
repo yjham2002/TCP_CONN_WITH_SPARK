@@ -373,7 +373,7 @@ public class AppMain{
                         else{
                             if(!isIcon) {
                                 try{
-                                    Thread.sleep(2 * (protocol.length - 19));
+                                    Thread.sleep(1 * (protocol.length - 19));
                                 }catch (InterruptedException e){
                                     e.printStackTrace();
                                 }
@@ -412,7 +412,7 @@ public class AppMain{
                             return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
                         }else{
                             try{
-                                Thread.sleep(2 * (protocol.length - 19));
+                                Thread.sleep(1 * (protocol.length - 19));
                             }catch (InterruptedException e){
                                 e.printStackTrace();
                             }
@@ -475,7 +475,7 @@ public class AppMain{
                         if(recv != null){
                             System.out.println("WRITE ::::::::::::::::: DAILY AGE (UNIT) SUCCEEDED");
                             try{
-                                Thread.sleep(2 * (protocol.length - 19));
+                                Thread.sleep(1 * (protocol.length - 19));
                             }catch (InterruptedException e){
                                 e.printStackTrace();
                             }
@@ -531,7 +531,7 @@ public class AppMain{
                             protocol = protocols[c];
                             recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
                             try{
-                                Thread.sleep(2 * (protocol.length - 19));
+                                Thread.sleep(1 * (protocol.length - 19));
                             }catch (InterruptedException e){
                                 e.printStackTrace();
                             }
@@ -573,7 +573,7 @@ public class AppMain{
                         if(recv != null && !recv.isLoss()) multiCount++;
 
                         try{
-                            Thread.sleep(2 * (protocol.length - 19));
+                            Thread.sleep(1 * (protocol.length - 19));
                         }catch (InterruptedException e){
                             e.printStackTrace();
                         }
@@ -585,7 +585,7 @@ public class AppMain{
                         if(recv != null && !recv.isLoss()) multiCount++;
 
                         try{
-                            Thread.sleep(2 * (protocol.length - 19));
+                            Thread.sleep(1 * (protocol.length - 19));
                         }catch (InterruptedException e){
                             e.printStackTrace();
                         }
