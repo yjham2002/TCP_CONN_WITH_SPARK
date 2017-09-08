@@ -129,6 +129,8 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
             byteSerial = new ByteSerial(buffer); // 바이트 시리얼 객체로 트리밍과 분석을 위임하기 위한 인스턴스 생성
 
+            String originText = Arrays.toString(byteSerial.getProcessed());
+
             System.out.println("RECV [" + Arrays.toString(byteSerial.getProcessed())  + "]");
 
 //            if(byteSerial.isLoss()) aa++;
@@ -274,7 +276,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     String millis = Long.toString(RedisManager.getMillisFromRedisKey(key));
 
                     RealtimePOJO realtimePOJO = new RealtimePOJO(byteSerial);
-                    realtimePOJO.setOrigin(Arrays.toString(origin));
+                    realtimePOJO.setOrigin(originText);
                     realtimePOJO.setRedisTime(millis);
 
                     ServiceProvider.offerList.put(realtimePOJO);
