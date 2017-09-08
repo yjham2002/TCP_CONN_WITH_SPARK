@@ -223,16 +223,64 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: " + uniqueKey);
 
                     // 클라이언트 셋에서 키로 참조하여 이니셜 프로토콜을 전송 - 바이트 시리얼의 수신용 생성자가 아닌 이하의 생성자를 사용하여 자동으로 모드버스로 변환
+
+                    long interval = DBManager.getInstance().getNumber("SELECT inter_time FROM farm_list WHERE farm_code = '0078'", "inter_time");
+
+                    int initM10 = ConstProtocol.INIT_TERM_MIN10;
+                    int initM = ConstProtocol.INIT_TERM_MIN;
+                    int initS10 = ConstProtocol.INIT_TERM_SEC10;
+                    int initS = ConstProtocol.INIT_TERM_SEC;
+
+                    switch ((int)interval){
+                        case 30:
+                            initM10 = 0;
+                            initM = 0;
+                            initS10 = 3;
+                            initS = 0;
+                            break;
+                        case 60:
+                            initM10 = 0;
+                            initM = 0;
+                            initS10 = 6;
+                            initS = 0;
+                            break;
+                        case 300:
+                            initM10 = 0;
+                            initM = 5;
+                            initS10 = 0;
+                            initS = 0;
+                            break;
+                        case 600:
+                            initM10 = 0;
+                            initM = 10;
+                            initS10 = 0;
+                            initS = 0;
+                            break;
+                        case 1200:
+                            initM10 = 2;
+                            initM = 0;
+                            initS10 = 0;
+                            initS = 0;
+                            break;
+                        case 1800:
+                            initM10 = 3;
+                            initM = 0;
+                            initS10 = 0;
+                            initS = 0;
+                            break;
+                        default: break;
+                    }
+
                     ByteSerial init = new ByteSerial
                             (
                                     SohaProtocolUtil.getInitProtocol(
                                             subBuffer,
                                             0,
                                             0,
-                                            ConstProtocol.INIT_TERM_MIN10,
-                                            ConstProtocol.INIT_TERM_MIN,
-                                            ConstProtocol.INIT_TERM_SEC10,
-                                            ConstProtocol.INIT_TERM_SEC
+                                            initM10,
+                                            initM,
+                                            initS10,
+                                            initS
                                     ),
                                     ByteSerial.TYPE_SET
                             );
