@@ -515,6 +515,11 @@ public class AppMain{
                         for(int c = 0; c < protocols.length; c++){
                             protocol = protocols[c];
                             recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
+                            try{
+                                Thread.sleep(2 * (protocol.length - 19));
+                            }catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
                             if(recv != null) resCount++;
                         }
 

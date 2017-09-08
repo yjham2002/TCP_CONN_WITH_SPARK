@@ -299,7 +299,6 @@ public class ServiceProvider extends ServerConfig{
         TIDBlock tidBlock = new TIDBlock(tid);
         tidBlock.setByteSerial(null);
         blockMap.put(tid, tidBlock);
-        ByteSerial ret = null;
         try {
 
             if(clients.containsKey(client)) {
@@ -318,9 +317,7 @@ public class ServiceProvider extends ServerConfig{
                                 }
 
                             }
-                            else {
-                                break;
-                            }
+                            else break;
                         }
                     }
                 }catch (InterruptedException ee){

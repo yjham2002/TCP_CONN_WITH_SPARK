@@ -616,10 +616,9 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
         final ChannelHandlerContext tempCtx = this.ctx;
         ctx.flush();
 
-        Thread senderThread = new Thread(){
-            @Override
-            public void run(){
+        Thread senderThread = new Thread(() -> {
                 ChannelFuture channelFuture = tempCtx.writeAndFlush(byteBuf);
+
                 System.out.println(channelFuture);
                 channelFuture.addListener(new ChannelFutureListener() {
                     @Override
@@ -630,9 +629,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                         }
                     }
                 });
-
-            }
-        };
+        });
 
         senderThread.start();
 
