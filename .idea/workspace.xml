@@ -11,10 +11,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/redis/RedisWrapper.java" line="79" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ProtocolResponder.java" afterPath="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/utils/SohaProtocolUtil.java" afterPath="$PROJECT_DIR$/src/utils/SohaProtocolUtil.java" />
-    </list>
+    <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -89,8 +86,8 @@
       <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="228" column="69" lean-forward="false" selection-start-line="228" selection-start-column="69" selection-end-line="228" selection-end-column="69" />
+            <state relative-caret-position="114">
+              <caret line="220" column="86" lean-forward="true" selection-start-line="220" selection-start-column="86" selection-end-line="220" selection-end-column="86" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1475,8 +1472,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="228" column="69" lean-forward="false" selection-start-line="228" selection-start-column="69" selection-end-line="228" selection-end-column="69" />
+        <state relative-caret-position="114">
+          <caret line="220" column="86" lean-forward="true" selection-start-line="220" selection-start-column="86" selection-end-line="220" selection-end-column="86" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
