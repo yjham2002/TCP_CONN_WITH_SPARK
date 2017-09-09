@@ -224,7 +224,11 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
                     // 클라이언트 셋에서 키로 참조하여 이니셜 프로토콜을 전송 - 바이트 시리얼의 수신용 생성자가 아닌 이하의 생성자를 사용하여 자동으로 모드버스로 변환
 
-                    long interval = DBManager.getInstance().getNumber("SELECT inter_time FROM farm_list WHERE farm_code = '0078'", "inter_time");
+                    String farmInit = SohaProtocolUtil.getFarmCodeFromInit(subBuffer);
+
+                    System.out.println("[FARM CONNECTED] " + farmInit);
+
+                    long interval = DBManager.getInstance().getNumber("SELECT inter_time FROM farm_list WHERE farm_code = '" + farmInit + "'", "inter_time");
 
                     int initM10 = ConstProtocol.INIT_TERM_MIN10;
                     int initM = ConstProtocol.INIT_TERM_MIN;

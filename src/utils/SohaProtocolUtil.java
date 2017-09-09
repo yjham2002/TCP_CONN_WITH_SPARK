@@ -29,6 +29,16 @@ public class SohaProtocolUtil {
         return getUniqueKeyByFarmCode(farm);
     }
 
+    public static String getFarmCodeFromInit(byte[] bytes){
+        byte[] farm = getFarmCodeByInit(bytes);
+        String farmCode = "";
+        for(int e = 0; e < farm.length; e++){
+            farmCode += (farm[e] - 48) + "";
+        }
+
+        return farmCode;
+    }
+
     public static String getMeaninglessUniqueKey(){
         return getUniqueKeyByInit(new byte[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
     }
