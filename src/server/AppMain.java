@@ -5,12 +5,12 @@ import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import configs.ServerConfig;
 import constants.ConstProtocol;
 import constants.ConstRest;
+import databases.DBManager;
 import models.ByteSerial;
 import models.DataMap;
 import models.Pair;
 import models.RestProcessor;
 import mysql.Cache;
-import mysql.DBManager;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +20,7 @@ import server.response.Response;
 import server.response.ResponseConst;
 import spark.Spark;
 import utils.DataMapValidationUtil;
-import utils.HexUtil;
 import utils.SohaProtocolUtil;
-
-import java.io.IOException;
 import java.util.*;
 
 import static constants.ConstProtocol.LENGTH_JUMP_DAYAGE_DETAIL;
@@ -67,7 +64,7 @@ public class AppMain{
          */
         serviceProvider.offer(() -> {
             System.out.println("[DB Migration has started]");
-            DBManager.getInstance().migrateFromRedis();
+//            DBManager.getInstance().migrateFromRedis();
             System.out.println("[DB Migration has done]");
         });
 

@@ -1,8 +1,8 @@
 package agent;
 
 import constants.ConstProtocol;
+import databases.DBManager;
 import mysql.Cache;
-import mysql.DBManager;
 import pojo.RealtimePOJO;
 import pojo.WrappedPOJO;
 import server.whois.SMSService;
@@ -100,7 +100,7 @@ public class AlertAgent {
 
                     if(haveToSend){
                         try {
-                            String sql = "SELECT * FROM sohatechfarmdb.farm_list WHERE farm_code = '" + farmString + "' LIMIT 1";
+                            String sql = "SELECT * FROM sohatechfarmdb.tblSettingData WHERE farmCode = '" + farmString + "' LIMIT 1";
                             List<String> sms_arr = DBManager.getInstance().getStrings(sql, ConstProtocol.SMS_COLS);
 
                             int sendCnt = 0;
@@ -112,7 +112,7 @@ public class AlertAgent {
                                 }
                             }
 
-                            haveToSend = (sendCnt == 16);
+                            haveToSend = !(sendCnt == 16);
 
                         }catch(Exception e){
                             System.out.println("SMS Array Error");

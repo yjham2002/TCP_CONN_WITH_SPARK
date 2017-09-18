@@ -1,15 +1,13 @@
 package utils;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import constants.ConstProtocol;
+import databases.DBManager;
 import models.ByteSerial;
-import mysql.DBManager;
 import pojo.ErrorStatusPOJO;
 import pojo.RealtimePOJO;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 import static constants.ConstProtocol.LENGTH_LEN_RANGE;
 

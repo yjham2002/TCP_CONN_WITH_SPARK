@@ -1,6 +1,7 @@
 package server.engine;
 
 import configs.ServerConfig;
+import databases.DBManager;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -9,15 +10,11 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
-import io.netty.handler.codec.Delimiters;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import javafx.application.Platform;
 import models.ByteSerial;
 import models.TIDBlock;
-import mysql.DBManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.RealtimePOJO;

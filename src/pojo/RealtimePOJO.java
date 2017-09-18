@@ -2,7 +2,6 @@ package pojo;
 
 import constants.ConstProtocol;
 import models.ByteSerial;
-import mysql.DBManager;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.util.JSONPObject;
