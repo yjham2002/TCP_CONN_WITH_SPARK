@@ -1,35 +1,20 @@
 package databases;
 
-import constants.ConstProtocol;
+import databases.exception.NothingToTakeException;
 import models.DataMap;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by a on 2017-04-03.
  */
 public class DBConstManager {
 
-    protected Connection connection = null;
-    protected Statement st = null;
-
-    public static final String CONNECTOR = "jdbc";
-    public static final String DBMS = "mysql";
-//    public static final String HOST = "1.201.142.86";
-    public static final String HOST = "localhost";
-    public static final String PORT = "3306";
-    public static final String DBNAME = "sohatechfarmdb";
-    public static final String USERNAME = "sohatechfarmdb";
-    public static final String PASSWORD = "1!sohatechfarmdb";
-    public boolean autoConnect = true;
-
-    public String getConnectionInfo(){
-        return CONNECTOR + ":" + DBMS + "://" + HOST + ":" + PORT + "/" + DBNAME + "?useUnicode=yes&amp;characterEncoding=UTF-8&amp;autoReconnect=" + autoConnect;
-    }
-
+    public static final String STANDARD_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     protected boolean debug = false;
 
     public boolean isDebug() {
@@ -40,18 +25,19 @@ public class DBConstManager {
         this.debug = debug;
     }
 
-    public boolean setAutoConnect(boolean value){
-        this.autoConnect = value;
-        return this.autoConnect;
-    }
-
     // TODO PrimaryKey Constraint Violation
     public int getLastInsertId(String table){
+        Connection connection = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
         try {
-            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
-            st = connection.createStatement();
+            BasicDataSource bds = DBConnectionPool.getInstance().getBds();
+            connection = bds.getConnection();
+
             String sql = "SELECT LAST_INSERT_ID() AS number FROM " + table + " LIMIT 1";
-            ResultSet rs = st.executeQuery(sql);
+            st = connection.prepareStatement(sql);
+
+            rs = st.executeQuery();
 
             int res = 1;
 
@@ -71,6 +57,17 @@ public class DBConstManager {
             e.printStackTrace();
             System.out.println("Error Handled :: getLastInsertId");
             return 1;
+        }finally {
+            try {
+                if (rs != null)
+                    rs.close();
+                if (st != null)
+                    st.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -79,11 +76,17 @@ public class DBConstManager {
         if(debug){
             System.out.println("getList");
         }
+        Connection connection = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
         List<DataMap> list = new Vector<>();
         try{
-            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
-            st = connection.createStatement();
-            ResultSet rs = st.executeQuery(sql);
+            BasicDataSource bds = DBConnectionPool.getInstance().getBds();
+            connection = bds.getConnection();
+
+            st = connection.prepareStatement(sql);
+            rs = st.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
 
             int cols = metaData.getColumnCount();
@@ -101,11 +104,70 @@ public class DBConstManager {
 
         }catch(SQLException e){
             e.printStackTrace();
+        }finally {
+            try {
+                if (rs != null)
+                    rs.close();
+                if (st != null)
+                    st.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return list;
     }
 
+    public DataMap getRow(String sql) throws NothingToTakeException {
+        Connection connection = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        DataMap dataMap = new DataMap();
+        DBConnectionPool db = DBConnectionPool.getInstance();
+        try {
+            BasicDataSource bds = DBConnectionPool.getInstance().getBds();
+            connection = bds.getConnection();
+            st = connection.prepareStatement(sql);
+
+            rs = st.executeQuery();
+            ResultSetMetaData metaData = rs.getMetaData();
+
+            int cols = metaData.getColumnCount();
+
+            rs.next();
+            for(int i = 1; i <= cols; i++){
+                Object obj = rs.getObject(i);
+                if(obj instanceof java.sql.Timestamp){
+                    obj = new SimpleDateFormat(STANDARD_DATE_FORMAT).format(obj).toString();
+                }
+                dataMap.put(metaData.getColumnLabel(i), obj);
+            }
+
+            rs.close();
+            st.close();
+
+            return dataMap;
+        }catch (SQLException e){
+            throw new NothingToTakeException();
+        }catch(Exception e){
+            System.out.println("Error Handled :: getRow");
+            return dataMap;
+        }finally {
+            try {
+                if (rs != null)
+                    rs.close();
+                if (st != null)
+                    st.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public boolean execute(String sql){
         if(debug){
@@ -113,10 +175,16 @@ public class DBConstManager {
         }
         boolean retVal = false;
 
+        Connection connection = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
         try {
-            connection = DriverManager.getConnection(getConnectionInfo(), USERNAME, PASSWORD);
-            st = connection.createStatement();
-            retVal = st.execute(sql);
+            BasicDataSource bds = DBConnectionPool.getInstance().getBds();
+            connection = bds.getConnection();
+
+            st = connection.prepareStatement(sql);
+            retVal = st.execute();
             st.close();
             connection.close();
 
@@ -128,17 +196,35 @@ public class DBConstManager {
             e.printStackTrace();
             System.out.println("Error Handled :: execute");
             return false;
+        }finally {
+            try {
+                if (rs != null)
+                    rs.close();
+                if (st != null)
+                    st.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public long getNumber(String sql, String column){
+    public long getNumber(String sql, String column) throws NothingToTakeException{
         if(debug){
             System.out.println("getNumber");
         }
+
+        Connection connection = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
         try {
-            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
-            st = connection.createStatement();
-            ResultSet rs = st.executeQuery(sql);
+            BasicDataSource bds = DBConnectionPool.getInstance().getBds();
+            connection = bds.getConnection();
+
+            st = connection.prepareStatement(sql);
+            rs = st.executeQuery();
 
             long res = 0;
 
@@ -152,10 +238,23 @@ public class DBConstManager {
             connection.close();
 
             return res;
+        }catch (SQLException e){
+            throw new NothingToTakeException();
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("Error Handled :: getNumber");
             return 0;
+        }finally {
+            try {
+                if (rs != null)
+                    rs.close();
+                if (st != null)
+                    st.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -165,10 +264,16 @@ public class DBConstManager {
         }
         List<String> phones = new Vector<>();
 
+        Connection connection = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
         try {
-            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
-            st = connection.createStatement();
-            ResultSet rs = st.executeQuery(sql);
+            BasicDataSource bds = DBConnectionPool.getInstance().getBds();
+            connection = bds.getConnection();
+
+            st = connection.prepareStatement(sql);
+            rs = st.executeQuery();
 
             String res = "";
 
@@ -192,6 +297,17 @@ public class DBConstManager {
             e.printStackTrace();
             System.out.println("Error Handled :: getStrings");
             return phones;
+        }finally {
+            try {
+                if (rs != null)
+                    rs.close();
+                if (st != null)
+                    st.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -199,10 +315,17 @@ public class DBConstManager {
         if(debug){
             System.out.println("getString");
         }
+
+        Connection connection = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
         try {
-            connection = DriverManager.getConnection( getConnectionInfo() , USERNAME, PASSWORD);
-            st = connection.createStatement();
-            ResultSet rs = st.executeQuery(sql);
+            BasicDataSource bds = DBConnectionPool.getInstance().getBds();
+            connection = bds.getConnection();
+
+            st = connection.prepareStatement(sql);
+            rs = st.executeQuery();
 
             String res = "";
 
@@ -220,6 +343,17 @@ public class DBConstManager {
             e.printStackTrace();
             System.out.println("Error Handled :: getString");
             return null;
+        }finally {
+            try {
+                if (rs != null)
+                    rs.close();
+                if (st != null)
+                    st.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

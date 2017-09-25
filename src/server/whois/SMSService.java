@@ -1,12 +1,6 @@
 package server.whois;
 
 import configs.ServerConfig;
-import constants.ConstProtocol;
-import mysql.DBManager;
-import utils.HexUtil;
-import utils.SohaProtocolUtil;
-
-import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.logging.Logger;
