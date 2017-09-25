@@ -4,6 +4,7 @@ import agent.AlertAgent;
 import configs.ServerConfig;
 import constants.ConstProtocol;
 import databases.DBManager;
+import databases.exception.NothingToTakeException;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -228,7 +229,11 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
                     System.out.println("[FARM CONNECTED] " + farmInit);
 
-                    long interval = DBManager.getInstance().getNumber("SELECT inter_time FROM farm_list WHERE farm_code = '" + farmInit + "'", "inter_time");
+                    long interval = 0;
+
+                    try {
+                        interval = DBManager.getInstance().getNumber("SELECT inter_time FROM farm_list WHERE farm_code = '" + farmInit + "'", "inter_time");
+                    }catch(NothingToTakeException e){}
 
                     int initM10 = ConstProtocol.INIT_TERM_MIN10;
                     int initM = ConstProtocol.INIT_TERM_MIN;
