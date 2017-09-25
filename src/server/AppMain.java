@@ -68,6 +68,7 @@ public class AppMain{
             System.out.println("[DB Migration has done]");
         });
 
+        alertAgent.start(20);
         serviceProvider.start(); // 인스턴스 시동
 
         /**
@@ -163,7 +164,7 @@ public class AppMain{
 
                             WrappedPOJO wrappedPOJO = new WrappedPOJO(realtimePOJO, rawFarm, rawHarv);
 
-                            AlertAgent.getBlockingQueue().put(wrappedPOJO);
+                            AlertAgent.getInstance().getBlockingQueue().put(wrappedPOJO);
                             try {
                                 DBManager.getInstance().execute(realtimePOJO.getInsertSQL());
                                 return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);

@@ -1,5 +1,6 @@
 package server.engine;
 
+import agent.RealtimeAgent;
 import configs.ServerConfig;
 import databases.DBManager;
 import io.netty.bootstrap.ServerBootstrap;
@@ -149,7 +150,7 @@ public class ServiceProvider extends ServerConfig{
         startServer();
 
         batch = new Thread(() -> {
-            migrateDirectly();
+//            migrateDirectly();
             // Test
 //            while(true) {
 //                try {
@@ -174,20 +175,6 @@ public class ServiceProvider extends ServerConfig{
 
         d("Server is ready to respond");
 
-    }
-
-    public static BlockingQueue<RealtimePOJO> offerList = new LinkedBlockingQueue<>();
-
-    public boolean migrateDirectly(){
-        while(true){
-            try {
-                RealtimePOJO r = offerList.take();
-                String sql = r.getInsertSQL();
-                DBManager.getInstance().execute(sql);
-            }catch (InterruptedException e){
-                e.printStackTrace();
-            }
-        }
     }
 
     private Thread getProviderInstance(){
@@ -284,7 +271,8 @@ public class ServiceProvider extends ServerConfig{
      */
     public ServiceProvider start(){
         thread.start();
-        batch.start();
+//        batch.start();
+        RealtimeAgent.getInstance().start(20);
 
         return instance;
     }

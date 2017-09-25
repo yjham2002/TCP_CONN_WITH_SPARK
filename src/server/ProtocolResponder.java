@@ -1,6 +1,7 @@
 package server;
 
 import agent.AlertAgent;
+import agent.RealtimeAgent;
 import configs.ServerConfig;
 import constants.ConstProtocol;
 import databases.DBManager;
@@ -336,7 +337,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     realtimePOJO.setOrigin(originText);
                     realtimePOJO.setRedisTime(millis);
 
-                    ServiceProvider.offerList.put(realtimePOJO);
+                    RealtimeAgent.getInstance().getOfferList().put(realtimePOJO);
                     boolean succ = redisManager.put(key, realtimePOJO);
 
 //                    log.info("JEDIS REALTIME DATA PUT : " + succ);
@@ -347,7 +348,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
                     WrappedPOJO wrappedPOJO = new WrappedPOJO(realtimePOJO, farmString, harvString);
 
-                    AlertAgent.getBlockingQueue().put(wrappedPOJO);
+                    AlertAgent.getInstance().getBlockingQueue().put(wrappedPOJO);
 
 //                    log.info("Farm Code :: " + Arrays.toString(farmCodeTemp) + " / HarvCode :: " + Arrays.toString(harvCodeTemp));
 
