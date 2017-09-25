@@ -340,7 +340,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     RealtimeAgent.getInstance().getOfferList().put(realtimePOJO);
                     boolean succ = redisManager.put(key, realtimePOJO);
 
-//                    log.info("JEDIS REALTIME DATA PUT : " + succ);
+                    log.info("JEDIS REALTIME DATA PUT : " + succ);
 
                     /**
                      * 경보내역 조건 검사를 에이전트에 위임

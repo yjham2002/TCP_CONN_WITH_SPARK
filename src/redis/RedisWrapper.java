@@ -35,7 +35,6 @@ public class RedisWrapper extends ServerConfig{
      */
     private static JedisPoolConfig jedisPoolConfig;
     private static JedisPool jedisPool;
-    private static Jedis jedis;
 
     /**
      * 기본 내부 생성자로 직접 호출해서는 안 됨
@@ -47,8 +46,8 @@ public class RedisWrapper extends ServerConfig{
 
     public void init(){
         jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxIdle(400);
-        jedisPoolConfig.setMinIdle(1);
+        jedisPoolConfig.setMaxIdle(100);
+        jedisPoolConfig.setMinIdle(10);
         jedisPoolConfig.setTestOnBorrow(true);
         jedisPoolConfig.setTestOnReturn(true);
         jedisPoolConfig.setTestWhileIdle(true);
@@ -56,7 +55,7 @@ public class RedisWrapper extends ServerConfig{
         jedisPoolConfig.setTimeBetweenEvictionRunsMillis(60000);
 
         jedisPool = new JedisPool(jedisPoolConfig, REDIS_HOST, REDIS_PORT, REDIS_TIMEOUT, REDIS_PASSWORD);
-        jedis = jedisPool.getResource();
+
     }
 
     /**
@@ -67,8 +66,9 @@ public class RedisWrapper extends ServerConfig{
      * @return 정상 삽입 여부
      */
     public boolean put(String key, Object object, ICallback postProcess){
-
+        Jedis jedis = null;
         try {
+            jedis = jedisPool.getResource();
             jedis.connect();
 //            log.info("[JEDIS] PUT OPERATION INVOKED WITH [KEY:" + key + "] => " + object.toString() + "]");
 
@@ -84,6 +84,8 @@ public class RedisWrapper extends ServerConfig{
 
         }catch (Exception e){
             log.info("Put Request is not sound - Skipping");
+        }finally {
+            if(jedis != null) jedis.close();
         }
 
         return true;
@@ -108,8 +110,9 @@ public class RedisWrapper extends ServerConfig{
     public Object get(String key, Class type){
 
         Object retVal = null;
-
+        Jedis jedis = null;
         try {
+            jedis = jedisPool.getResource();
             jedis.connect();
             log.info("[JEDIS] GET OPERATION INVOKED WITH [KEY:" + key + "]");
 
@@ -122,6 +125,7 @@ public class RedisWrapper extends ServerConfig{
 
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
             if(jedis != null) jedis.close();
         }
 
@@ -146,10 +150,11 @@ public class RedisWrapper extends ServerConfig{
      */
     public <T>List<T> getList(String pattern, Class type){
         List<T> retVal = new ArrayList<T>();
-
+        Jedis jedis = null;
         pattern = replaceRedisRegex(pattern);
 
         try {
+            jedis = jedisPool.getResource();
             jedis.connect();
             log.info("[JEDIS] GET_LIST OPERATION INVOKED WITH [Pattern:" + pattern + "]");
 
@@ -185,6 +190,7 @@ public class RedisWrapper extends ServerConfig{
 
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
             if(jedis != null) jedis.close();
         }
 
