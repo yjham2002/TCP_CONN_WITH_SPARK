@@ -129,7 +129,7 @@ public class AlertAgent implements IAgent{
                         if (haveToSend) {
 
                             String msg = SohaProtocolUtil.getErrorMessage(errSMSarray, farmName, harvName);
-                            List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='" + farmString + "' OR user_auth='A'", "a_tel", "b_tel", "c_tel", "d_tel");
+                            List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='" + farmString + "' OR user_auth='A' OR manage_farm LIKE '%" + farmString + "%'", "a_tel", "b_tel", "c_tel", "d_tel");
                             for (String tel : phones) smsService.sendSMS(tel, msg);
                         }
 
