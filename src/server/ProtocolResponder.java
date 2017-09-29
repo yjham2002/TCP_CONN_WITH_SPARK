@@ -304,6 +304,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     // 현재 연결된 클라이언트 소켓수와 유니크키를 디버깅을 위해 출력함
 
                 } else if(buffer.length == LENGTH_ALERT_PRTC){ // 경보 프로토콜 수신 시
+                    System.err.println("[ALERT PROTOCOL] : " + farmString + ":" + harvString);
                     List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE (farm_code='" + farmString + "' OR user_auth='A' OR manage_farm LIKE '%" + farmString + "%') AND delete_flag = 'N'", "a_tel", "b_tel", "c_tel", "d_tel");
 
                     if(harvName == null || harvName.equals("null") || harvName.equals("")) {
@@ -680,18 +681,18 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
         ctx.flush();
 
         Thread senderThread = new Thread(() -> {
-                ChannelFuture channelFuture = tempCtx.writeAndFlush(byteBuf);
+            ChannelFuture channelFuture = tempCtx.writeAndFlush(byteBuf);
 
-                System.out.println(channelFuture);
-                channelFuture.addListener(new ChannelFutureListener() {
-                    @Override
-                    public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                        System.out.println("operationComplete :: " + channelFuture.toString());
-                        if(!channelFuture.isSuccess()){
-                            System.out.println("FAILED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                        }
+            System.out.println(channelFuture);
+            channelFuture.addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                    System.out.println("operationComplete :: " + channelFuture.toString());
+                    if(!channelFuture.isSuccess()){
+                        System.out.println("FAILED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     }
-                });
+                }
+            });
         });
 
         senderThread.start();
