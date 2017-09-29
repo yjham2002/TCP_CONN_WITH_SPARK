@@ -12,6 +12,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/sohaTech_serial.jar" afterPath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/sohaTech_serial.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder$1.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ProtocolResponder.java" afterPath="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -35,7 +39,7 @@
         <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="109">
-              <caret line="66" column="43" lean-forward="true" selection-start-line="66" selection-start-column="43" selection-end-line="66" selection-end-column="43" />
+              <caret line="66" column="43" lean-forward="false" selection-start-line="66" selection-start-column="43" selection-end-line="66" selection-end-column="43" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -46,8 +50,8 @@
       <file leaf-file-name="ConstProtocol.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/constants/ConstProtocol.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="134" column="66" lean-forward="true" selection-start-line="134" selection-start-column="66" selection-end-line="134" selection-end-column="66" />
+            <state relative-caret-position="169">
+              <caret line="134" column="38" lean-forward="false" selection-start-line="134" selection-start-column="38" selection-end-line="134" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -57,7 +61,7 @@
         <entry file="file://$PROJECT_DIR$/src/agent/AlertAgent.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="340">
-              <caret line="135" column="23" lean-forward="true" selection-start-line="135" selection-start-column="23" selection-end-line="135" selection-end-column="23" />
+              <caret line="135" column="23" lean-forward="false" selection-start-line="135" selection-start-column="23" selection-end-line="135" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -75,24 +79,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RedisWrapper.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/redis/RedisWrapper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="931">
-              <caret line="61" column="35" lean-forward="false" selection-start-line="61" selection-start-column="35" selection-end-line="61" selection-end-column="35" />
-              <folding>
-                <element signature="e#2713#2714#0" expanded="true" />
-                <element signature="e#2758#2759#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="DBConstManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/databases/DBConstManager.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="432">
-              <caret line="347" column="31" lean-forward="true" selection-start-line="347" selection-start-column="31" selection-end-line="347" selection-end-column="31" />
+              <caret line="347" column="31" lean-forward="false" selection-start-line="347" selection-start-column="31" selection-end-line="347" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -113,8 +104,8 @@
       <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="393" column="293" lean-forward="false" selection-start-line="393" selection-start-column="293" selection-end-line="393" selection-end-column="293" />
+            <state relative-caret-position="190">
+              <caret line="403" column="56" lean-forward="true" selection-start-line="403" selection-start-column="56" selection-end-line="403" selection-end-column="56" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -132,11 +123,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="Cache.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/mysql/Cache.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="109">
+              <caret line="36" column="39" lean-forward="true" selection-start-line="36" selection-start-column="39" selection-end-line="36" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="DBConnectionPool.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/databases/DBConnectionPool.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="133">
-              <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -154,14 +155,10 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>send(</find>
-      <find>smsServi</find>
-      <find>farmString</find>
       <find>'1353'</find>
       <find>'01'</find>
       <find>prev</find>
       <find>() -&gt;</find>
-      <find>cache</find>
       <find>null</find>
       <find>alarm</find>
       <find>INTERRUP</find>
@@ -184,6 +181,10 @@
       <find>offerList</find>
       <find>batch.s</find>
       <find>batchS</find>
+      <find>재배동</find>
+      <find>CONNECTION_MESSAGE</find>
+      <find>cache</find>
+      <find>CONNECTION_M</find>
     </findStrings>
     <replaceStrings>
       <replace>log.info</replace>
@@ -255,7 +256,6 @@
         <option value="$PROJECT_DIR$/src/mysql/DBManager.java" />
         <option value="$PROJECT_DIR$/src/utils/SohaProtocolUtil.java" />
         <option value="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" />
-        <option value="$PROJECT_DIR$/src/mysql/Cache.java" />
         <option value="$PROJECT_DIR$/src/databases/DBManager.java" />
         <option value="$PROJECT_DIR$/src/databases/DBConstManager.java" />
         <option value="$PROJECT_DIR$/src/agent/IAgent.java" />
@@ -266,15 +266,16 @@
         <option value="$PROJECT_DIR$/src/server/whois/SMSService.java" />
         <option value="$PROJECT_DIR$/src/databases/DBConnectionPool.java" />
         <option value="$PROJECT_DIR$/src/agent/AlertAgent.java" />
+        <option value="$PROJECT_DIR$/src/mysql/Cache.java" />
         <option value="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1066" />
+    <option name="x" value="-164" />
+    <option name="y" value="84" />
+    <option name="width" value="1934" />
+    <option name="height" value="1044" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -1127,6 +1128,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1141,7 +1143,8 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1433902" sideWeight="0.49317738" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1433902" sideWeight="0.49317738" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.46666667" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1158,7 +1161,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Salesforce" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.46666667" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -1391,17 +1393,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/mysql/Cache.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="532">
-          <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-          <folding>
-            <element signature="e#1595#1596#0" expanded="false" />
-            <element signature="e#1617#1618#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../backup/DBManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1486,7 +1477,7 @@
     <entry file="file://$PROJECT_DIR$/src/databases/DBConnectionPool.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
-          <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1494,7 +1485,7 @@
     <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="109">
-          <caret line="66" column="43" lean-forward="true" selection-start-line="66" selection-start-column="43" selection-end-line="66" selection-end-column="43" />
+          <caret line="66" column="43" lean-forward="false" selection-start-line="66" selection-start-column="43" selection-end-line="66" selection-end-column="43" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1512,7 +1503,17 @@
     <entry file="file://$PROJECT_DIR$/src/databases/DBConstManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="432">
-          <caret line="347" column="31" lean-forward="true" selection-start-line="347" selection-start-column="31" selection-end-line="347" selection-end-column="31" />
+          <caret line="347" column="31" lean-forward="false" selection-start-line="347" selection-start-column="31" selection-end-line="347" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/agent/AlertAgent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="135" column="23" lean-forward="false" selection-start-line="135" selection-start-column="23" selection-end-line="135" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1521,26 +1522,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/constants/ConstProtocol.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="134" column="66" lean-forward="true" selection-start-line="134" selection-start-column="66" selection-end-line="134" selection-end-column="66" />
+        <state relative-caret-position="169">
+          <caret line="134" column="38" lean-forward="false" selection-start-line="134" selection-start-column="38" selection-end-line="134" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/agent/AlertAgent.java">
+    <entry file="file://$PROJECT_DIR$/src/mysql/Cache.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="135" column="23" lean-forward="true" selection-start-line="135" selection-start-column="23" selection-end-line="135" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="109">
+          <caret line="36" column="39" lean-forward="true" selection-start-line="36" selection-start-column="39" selection-end-line="36" selection-end-column="39" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="393" column="293" lean-forward="false" selection-start-line="393" selection-start-column="293" selection-end-line="393" selection-end-column="293" />
+        <state relative-caret-position="190">
+          <caret line="403" column="56" lean-forward="true" selection-start-line="403" selection-start-column="56" selection-end-line="403" selection-end-column="56" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

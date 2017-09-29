@@ -68,6 +68,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
     private String harvString;
     private String farmName;
     private String harvName;
+    private String info = "";
 
     /**
      * 프로토콜에 따른 응답을 위한 클래스의 생성자로서 단위 소켓과 함께 클라이언트 레퍼런스 포인터를 수용
@@ -173,6 +174,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
             farmString = HexUtil.getNumericStringFromAscii(farmCodeTemp);
             harvString = HexUtil.getNumericStringFromAscii(harvCodeTemp);
+            info = "[농가코드 정보] : " + farmString + ":" + Arrays.toString(farmCodeTemp) + "\n" + "[재배동 코드 정보] : " + harvString + ":" + Arrays.toString(harvCodeTemp);
 
             farmName = Cache.getInstance().farmNames.get(farmString);
             harvName = Cache.getInstance().harvNames.get(Cache.getHarvKey(farmString, harvString));
@@ -316,6 +318,11 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                         }
                     }
 
+                    if(harvName == null || harvName.equals("null") || harvName.equals("")) {
+                        System.err.println(info);
+                        harvName = "단말기 ID : " + harvString;
+                    }
+
                     for(String tel : phones) {
                         smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
                     }
@@ -392,6 +399,10 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             super.channelInactive(ctx);
             try {
                 List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE (farm_code='" + farmString + "' OR user_auth='A' OR manage_farm LIKE '%" + farmString + "%') AND delete_flag = 'N'", "a_tel", "b_tel", "c_tel", "d_tel");
+                if(harvName == null || harvName.equals("null") || harvName.equals("")) {
+                    System.err.println(info);
+                    harvName = "단말기 ID : " + harvString;
+                }
                 for (String tel : phones)
                     smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
 //            socket.finishConnect();
