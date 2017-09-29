@@ -323,8 +323,10 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                         harvName = "단말기 ID : " + harvString;
                     }
 
-                    for(String tel : phones) {
-                        smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
+                    if(harvString.trim().length() == 2 || farmString.trim().length() == 4){
+                        for (String tel : phones) {
+                            smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
+                        }
                     }
                 }else {
                     if (!clients.containsKey(uniqueKey)) {
@@ -403,8 +405,10 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     System.err.println(info);
                     harvName = "단말기 ID : " + harvString;
                 }
-                for (String tel : phones)
-                    smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
+                if(harvString.trim().length() == 2 || farmString.trim().length() == 4) {
+                    for (String tel : phones)
+                        smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
+                }
 //            socket.finishConnect();
                 log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
                 clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
