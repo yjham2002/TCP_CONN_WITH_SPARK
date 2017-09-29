@@ -396,7 +396,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        System.out.println("Channel Inactivated");
+        if(farmString.length() == 4 && harvString.length() == 2) System.out.println("Channel Inactivated - FARM : " + farmString + "/" + harvString);
         try {
             super.channelInactive(ctx);
             try {
