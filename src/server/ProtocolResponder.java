@@ -136,6 +136,31 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
             System.out.println("RECV [" + Arrays.toString(byteSerial.getProcessed())  + "]");
 
+            if(byteSerial.getProcessed().length == 15){
+                byte[] d = byteSerial.getProcessed();
+                byte[] fmarr = Arrays.copyOfRange(d, 6, 10);
+                byte[] hvarr = Arrays.copyOfRange(d, 10, 12);
+                String fStr = HexUtil.getNumericStringFromAscii(fmarr);
+                String hStr = HexUtil.getNumericStringFromAscii(hvarr);
+                String tFName = Cache.getInstance().farmNames.get(fStr);
+                String tName = null;
+
+                System.err.println("[ALERT PROTOCOL] : " + fStr + ":" + hStr);
+                List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE (farm_code='" + fStr + "' OR user_auth='A' OR manage_farm LIKE '%" + hStr + "%') AND delete_flag = 'N'", "a_tel", "b_tel", "c_tel", "d_tel");
+                tName = Cache.getInstance().harvNames.get(Cache.getHarvKey(fStr, hStr));
+                if(tName == null || tName.equals("null") || tName.equals("")) {
+                    if(fStr.length() == 4 && hStr.length() == 2) System.err.println(info);
+                    tName = "단말기 ID : " + hStr;
+                }
+
+                if(hStr.trim().length() == 2 || fStr.trim().length() == 4){
+                    for (String tel : phones) {
+                        if(tel != null && !tel.trim().equals("") && !tel.trim().equals("--")) smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, tFName, tName));
+                    }
+                }
+
+            }
+
 //            if(byteSerial.isLoss()) aa++;
 //            System.out.println("INFO :: PACKET LOSS OCCURED FOR [" + aa + "] TIME(S)");
 
@@ -215,6 +240,8 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     uniqueKey = SohaProtocolUtil.getUniqueKeyByFarmCode(SohaProtocolUtil.getFarmCodeByProtocol(subBuffer));
                 clients.put(uniqueKey, this);
             }
+
+            System.out.println(buffer.length);
 
             if(byteSerial == null) return;
             if (!byteSerial.isLoss()) { // 바이트 시리얼 내에서 인스턴스 할당 시 작동한 손실 여부 파악 로직에 따라 패킷 손실 여부를 파악
