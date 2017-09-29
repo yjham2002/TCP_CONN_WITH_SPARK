@@ -304,19 +304,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     // 현재 연결된 클라이언트 소켓수와 유니크키를 디버깅을 위해 출력함
 
                 } else if(buffer.length == LENGTH_ALERT_PRTC){ // 경보 프로토콜 수신 시
-                    List<String> phones = new Vector<>();
-                    List<DataMap> pList = DBManager.getInstance().getList("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE farm_code='"+farmString+"' OR user_auth='A'");
-
-                    for(DataMap dmap : pList){
-                        try {
-                            phones.add(dmap.getString("a_tel"));
-                            phones.add(dmap.getString("b_tel"));
-                            phones.add(dmap.getString("c_tel"));
-                            phones.add(dmap.getString("d_tel"));
-                        }catch(Exception e){
-                            System.out.println("WARN :: Phone LIst Error :: Skipping");
-                        }
-                    }
+                    List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE (farm_code='" + farmString + "' OR user_auth='A' OR manage_farm LIKE '%" + farmString + "%') AND delete_flag = 'N'", "a_tel", "b_tel", "c_tel", "d_tel");
 
                     if(harvName == null || harvName.equals("null") || harvName.equals("")) {
                         if(farmString.length() == 4 && harvString.length() == 2) System.err.println(info);

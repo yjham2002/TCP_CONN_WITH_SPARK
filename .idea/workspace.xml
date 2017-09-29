@@ -100,8 +100,8 @@
       <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="407" column="88" lean-forward="true" selection-start-line="407" selection-start-column="88" selection-end-line="407" selection-end-column="88" />
+            <state relative-caret-position="285">
+              <caret line="316" column="25" lean-forward="true" selection-start-line="316" selection-start-column="25" selection-end-line="316" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -151,8 +151,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>INTERRUP</find>
-      <find>queue</find>
       <find>take</find>
       <find>wrapped</find>
       <find>.wait</find>
@@ -181,6 +179,8 @@
       <find>Inactivated</find>
       <find>info)</find>
       <find>== 2</find>
+      <find>inacti</find>
+      <find>LENGTH_ALERT_PRTC</find>
     </findStrings>
     <replaceStrings>
       <replace>log.info</replace>
@@ -300,24 +300,6 @@
             <path>
               <item name="SOHATECH_TCP" type="b2602c69:ProjectViewProjectNode" />
               <item name="SOHATECH_TCP" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SOHATECH_TCP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SOHATECH_TCP" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SOHATECH_TCP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SOHATECH_TCP" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SOHATECH_TCP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SOHATECH_TCP" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-              <item name="sohaTech_serial_jar" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SOHATECH_TCP" type="b2602c69:ProjectViewProjectNode" />
@@ -1534,8 +1516,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="407" column="88" lean-forward="true" selection-start-line="407" selection-start-column="88" selection-end-line="407" selection-end-column="88" />
+        <state relative-caret-position="285">
+          <caret line="316" column="25" lean-forward="true" selection-start-line="316" selection-start-column="25" selection-end-line="316" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
