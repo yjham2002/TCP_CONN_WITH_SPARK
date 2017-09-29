@@ -319,7 +319,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                     }
 
                     if(harvName == null || harvName.equals("null") || harvName.equals("")) {
-                        System.err.println(info);
+                        if(farmString.length() == 4 && harvString.length() == 2) System.err.println(info);
                         harvName = "단말기 ID : " + harvString;
                     }
 
@@ -402,7 +402,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
             try {
                 List<String> phones = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE (farm_code='" + farmString + "' OR user_auth='A' OR manage_farm LIKE '%" + farmString + "%') AND delete_flag = 'N'", "a_tel", "b_tel", "c_tel", "d_tel");
                 if(harvName == null || harvName.equals("null") || harvName.equals("")) {
-                    System.err.println(info);
+                    if(farmString.length() == 4 && harvString.length() == 2) System.err.println(info);
                     harvName = "단말기 ID : " + harvString;
                 }
                 if(harvString.trim().length() == 2 || farmString.trim().length() == 4) {

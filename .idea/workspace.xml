@@ -100,8 +100,8 @@
       <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="395" column="0" lean-forward="true" selection-start-line="395" selection-start-column="0" selection-end-line="395" selection-end-column="0" />
+            <state relative-caret-position="190">
+              <caret line="407" column="88" lean-forward="true" selection-start-line="407" selection-start-column="88" selection-end-line="407" selection-end-column="88" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -151,10 +151,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>prev</find>
-      <find>() -&gt;</find>
-      <find>null</find>
-      <find>alarm</find>
       <find>INTERRUP</find>
       <find>queue</find>
       <find>take</find>
@@ -181,6 +177,10 @@
       <find>CONNECTION_M</find>
       <find>농가</find>
       <find>Connection_</find>
+      <find>Channel In</find>
+      <find>Inactivated</find>
+      <find>info)</find>
+      <find>== 2</find>
     </findStrings>
     <replaceStrings>
       <replace>log.info</replace>
@@ -1534,8 +1534,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="395" column="0" lean-forward="true" selection-start-line="395" selection-start-column="0" selection-end-line="395" selection-end-column="0" />
+        <state relative-caret-position="190">
+          <caret line="407" column="88" lean-forward="true" selection-start-line="407" selection-start-column="88" selection-end-line="407" selection-end-column="88" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
