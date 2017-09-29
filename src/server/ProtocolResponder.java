@@ -314,7 +314,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
 
                     if(harvString.trim().length() == 2 || farmString.trim().length() == 4){
                         for (String tel : phones) {
-                            smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
+                            if(tel != null && !tel.trim().equals("") && !tel.trim().equals("--")) smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
                         }
                     }
                 }else {
@@ -396,7 +396,7 @@ public class ProtocolResponder extends ChannelHandlerAdapter{
                 }
                 if(harvString.trim().length() == 2 || farmString.trim().length() == 4) {
                     for (String tel : phones)
-                        smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
+                        if(tel != null && !tel.trim().equals("") && !tel.trim().equals("--")) smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName, harvName));
                 }
 //            socket.finishConnect();
                 log.info("Connection Finished"); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
