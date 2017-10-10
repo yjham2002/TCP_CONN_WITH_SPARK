@@ -204,8 +204,7 @@ public class ServiceProvider extends ServerConfig{
                     tidBlock.setByteSerial(null);
 //                    ee.printStackTrace();
                 }
-            }
-            else{
+            } else{
                 log.info("Client just requested does not exist. [KEY : " + client + "]");
             }
         }catch(Exception e){

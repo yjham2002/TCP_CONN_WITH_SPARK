@@ -18,6 +18,7 @@ import server.response.Response;
 import server.response.ResponseConst;
 import spark.Spark;
 import utils.DataMapValidationUtil;
+import utils.Log;
 import utils.SohaProtocolUtil;
 import java.util.*;
 
@@ -86,8 +87,6 @@ public class AppMain{
             DataMap map = RestProcessor.makeProcessData(req.raw());
             log.info(ConstRest.REST_READ_REQUEST);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-
             String mode = map.getString("mode");
             String rawFarm = map.getString(ConstRest.FARM_CODE);
             String rawHarv = map.getString(ConstRest.HARV_CODE);
@@ -96,10 +95,10 @@ public class AppMain{
             else id = map.getInt("id");
 
             if(id == 0){
-                System.out.println("No appropriate machine code for " + rawFarm + ":" + rawHarv);
+                Log.i("No appropriate machine code for " + rawFarm + ":" + rawHarv);
                 return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
             }else{
-                System.out.println("Machine Code :: " + id);
+                Log.i("Machine Code :: " + id);
             }
 
             byte[] farmCode = rawFarm.getBytes();
@@ -134,9 +133,9 @@ public class AppMain{
                             ByteSerial rSerial = new ByteSerial(SohaProtocolUtil.concat(ConstProtocol.STX, farmCode, harvCode, pure, new byte[]{0}, ConstProtocol.ETX), ByteSerial.TYPE_FORCE);
 
 
-                            System.out.println("=============================================================");
-                            System.out.println("REALTIME DATA :: " + rSerial.getProcessed().length + " / " + Arrays.toString(rSerial.getProcessed()));
-                            System.out.println("=============================================================");
+                            Log.i("=============================================================");
+                            Log.i("REALTIME DATA :: " + rSerial.getProcessed().length + " / " + Arrays.toString(rSerial.getProcessed()));
+                            Log.i("=============================================================");
 
                             RealtimePOJO realtimePOJO = new RealtimePOJO(rSerial);
 
@@ -159,24 +158,24 @@ public class AppMain{
                 case ConstRest.MODE_READ_SETTING:
 
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), id, farmCode, harvCode);
-                    System.out.println("READING SETTINGS - " + Arrays.toString(protocol));
+                    Log.i("READING SETTINGS - " + Arrays.toString(protocol));
 
                     recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_SETTING);
                     if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_NONE);
                     SettingPOJO settingPOJO = new SettingPOJO(recv, ConstProtocol.RANGE_READ_START, rawFarm, rawHarv);
 
-                    System.out.println("SETTING BYTES : " + Arrays.toString(recv.getProcessed()));
+                    Log.i("SETTING BYTES : " + Arrays.toString(recv.getProcessed()));
 
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING_TAILS.getHead(), ConstProtocol.RANGE_SETTING_TAILS.getTail(), id, farmCode, harvCode);
-                    System.out.println("READING SETTING TAILS - " + Arrays.toString(protocol));
+                    Log.i("READING SETTING TAILS - " + Arrays.toString(protocol));
 
                     recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_SETTING_TAIL);
 
                     if(recv == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_FAILURE);
 
-                    System.out.println("============================================================================================");
-                    System.out.println(Arrays.toString(recv.getProcessed()));
-                    System.out.println("============================================================================================");
+                    Log.i("============================================================================================");
+                    Log.i(Arrays.toString(recv.getProcessed()));
+                    Log.i("============================================================================================");
 
                     settingPOJO.initTails(recv, ConstProtocol.RANGE_READ_START);
 
@@ -191,7 +190,7 @@ public class AppMain{
                     break;
                 case ConstRest.MODE_READ_TIMER:
                     protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), id, farmCode, harvCode);
-                    System.out.println(Arrays.toString(protocol));
+                    Log.i(Arrays.toString(protocol));
 
                     recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_TIMER);
 
@@ -317,23 +316,23 @@ public class AppMain{
                     boolean isIcon = (initExist) && (initFlag == 1);
 
                     try {
-                        System.out.println("WRITING REALTIME " + rawFarm + ":" + rawHarv);
+                        Log.i("WRITING REALTIME " + rawFarm + ":" + rawHarv);
                         RealtimePOJO realPOJO = objectMapper.readValue(rawJson, RealtimePOJO.class);
 
-                        System.out.println("==============================================================================");
-                        System.out.println("MCN_CTRL_WEB_ORDER_CO2      : " + realPOJO.getMcnctrl_web_order_co2());
-                        System.out.println("MCN_CTRL_WEB_ORDER_TEMP     : " + realPOJO.getMcnctrl_web_order_temp());
-                        System.out.println("MCN_CTRL_WEB_ORDER_HUMID    : " + realPOJO.getMcnctrl_web_order_humidity());
-                        System.out.println("MCN_CTRL_WEB_ORDER_ILLUM    : " + realPOJO.getMcnctrl_web_order_ilum());
-                        System.out.println("==============================================================================");
-                        System.out.println("MCN_CTRL_WEB_STAT_FAN       : " + realPOJO.getMcnctrl_web_stat_fan());
-                        System.out.println("MCN_CTRL_WEB_STAT_HEATER    : " + realPOJO.getMcnctrl_web_stat_heater());
-                        System.out.println("MCN_CTRL_WEB_STAT_FREEZER   : " + realPOJO.getMcnctrl_web_stat_freezer());
-                        System.out.println("MCN_CTRL_WEB_STAT_HUMID     : " + realPOJO.getMcnctrl_web_stat_humidifier());
-                        System.out.println("MCN_CTRL_WEB_STAT_DEHUM     : " + realPOJO.getMcnctrl_web_stat_dehumidifier());
-                        System.out.println("MCN_CTRL_WEB_STAT_ILLUM     : " + realPOJO.getMcnctrl_web_stat_ilum());
-                        System.out.println("MCN_CTRL_WEB_STAT_ALARM     : " + realPOJO.getMcnctrl_web_stat_alarm());
-                        System.out.println("==============================================================================");
+                        Log.i("==============================================================================");
+                        Log.i("MCN_CTRL_WEB_ORDER_CO2      : " + realPOJO.getMcnctrl_web_order_co2());
+                        Log.i("MCN_CTRL_WEB_ORDER_TEMP     : " + realPOJO.getMcnctrl_web_order_temp());
+                        Log.i("MCN_CTRL_WEB_ORDER_HUMID    : " + realPOJO.getMcnctrl_web_order_humidity());
+                        Log.i("MCN_CTRL_WEB_ORDER_ILLUM    : " + realPOJO.getMcnctrl_web_order_ilum());
+                        Log.i("==============================================================================");
+                        Log.i("MCN_CTRL_WEB_STAT_FAN       : " + realPOJO.getMcnctrl_web_stat_fan());
+                        Log.i("MCN_CTRL_WEB_STAT_HEATER    : " + realPOJO.getMcnctrl_web_stat_heater());
+                        Log.i("MCN_CTRL_WEB_STAT_FREEZER   : " + realPOJO.getMcnctrl_web_stat_freezer());
+                        Log.i("MCN_CTRL_WEB_STAT_HUMID     : " + realPOJO.getMcnctrl_web_stat_humidifier());
+                        Log.i("MCN_CTRL_WEB_STAT_DEHUM     : " + realPOJO.getMcnctrl_web_stat_dehumidifier());
+                        Log.i("MCN_CTRL_WEB_STAT_ILLUM     : " + realPOJO.getMcnctrl_web_stat_ilum());
+                        Log.i("MCN_CTRL_WEB_STAT_ALARM     : " + realPOJO.getMcnctrl_web_stat_alarm());
+                        Log.i("==============================================================================");
 
                         byte[] pure = realPOJO.getWritableData();
                         protocol = SohaProtocolUtil.makeWriteProtocol(ConstProtocol.RANGE_REALTIME_WRITABLE.getHead(), ConstProtocol.RANGE_REALTIME_WRITABLE.getTail(), id, farmCode, harvCode, pure);
@@ -358,7 +357,7 @@ public class AppMain{
                             }
                         }
 
-                        System.out.println("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));
+                        Log.i("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));
 
                         return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SAVE_SUCC);
                     } catch (Exception e) {
@@ -377,7 +376,7 @@ public class AppMain{
                      */
 
                     try {
-                        System.out.println("WRITING TIMER " + rawFarm + ":" + rawHarv);
+                        Log.i("WRITING TIMER " + rawFarm + ":" + rawHarv);
                         TimerPOJO timerPOJO = objectMapper.readValue(rawJson, TimerPOJO.class);
                         byte[] pure = new ByteSerial(timerPOJO.getBytes(), ByteSerial.TYPE_FORCE).getPureBytes();
                         protocol = SohaProtocolUtil.makeWriteProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), id, farmCode, harvCode, pure);
@@ -396,7 +395,7 @@ public class AppMain{
                             recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
                         }
 
-                        System.out.println("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));
+                        Log.i("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));
 
                         return Response.response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SAVE_SUCC);
                     } catch (Exception e) {
@@ -406,7 +405,7 @@ public class AppMain{
                 }
                 case ConstRest.MODE_WRITE_DAYAGE_ONCE: {
 
-                    System.out.println("WRITING DAILY AGE ONCE " + rawFarm + ":" + rawHarv);
+                    Log.i("WRITING DAILY AGE ONCE " + rawFarm + ":" + rawHarv);
                     try{
                         if(!DataMapValidationUtil.isValid(map, "order", "day", "index")) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
 
@@ -432,8 +431,8 @@ public class AppMain{
 
                         CropSubPOJO cropSubPOJO = objectMapper.readValue(rawJson, CropSubPOJO.class);
 
-                        System.out.println("RAW :: " + rawJson);
-                        System.out.println("PARSE :: " + objectMapper.writeValueAsString(cropSubPOJO));
+                        Log.i("RAW :: " + rawJson);
+                        Log.i("PARSE :: " + objectMapper.writeValueAsString(cropSubPOJO));
 
                         /**
                          * dayOrder는 0~49 범위의 정수(의미상의 일령 순서가 아님)
@@ -449,7 +448,7 @@ public class AppMain{
                         recv = serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
 
                         if(recv != null){
-                            System.out.println("WRITE ::::::::::::::::: DAILY AGE (UNIT) SUCCEEDED");
+                            Log.i("WRITE ::::::::::::::::: DAILY AGE (UNIT) SUCCEEDED");
                             try{
                                 Thread.sleep(1 * (protocol.length - 19));
                             }catch (InterruptedException e){
@@ -475,7 +474,7 @@ public class AppMain{
 
                 case ConstRest.MODE_WRITE_DAYAGE: {
 
-                    System.out.println("WRITING DAILY AGE " + rawFarm + ":" + rawHarv);
+                    Log.i("WRITING DAILY AGE " + rawFarm + ":" + rawHarv);
                     try{
                         if(map.get("order") == null) return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_INVALID_PARAM);
 
@@ -496,7 +495,7 @@ public class AppMain{
 
                         CropSubPOJO cropSubPOJO = objectMapper.readValue(rawJson, CropSubPOJO.class);
 
-//                        System.out.println("RAW :: " + rawJson);
+//                        Log.i("RAW :: " + rawJson);
 
                         int resCount = 0;
 
@@ -515,7 +514,7 @@ public class AppMain{
                         }
 
                         if(resCount == protocols.length){
-                            System.out.println("WRITE ::::::::::::::::: DAILY AGE SUCC");
+                            Log.i("WRITE ::::::::::::::::: DAILY AGE SUCC");
                             protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, dailyFlag);
                             serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
 
@@ -535,7 +534,7 @@ public class AppMain{
                 }
                 case ConstRest.MODE_WRITE_SETTING:{
 
-                    System.out.println("WRITING SETTING " + rawFarm + ":" + rawHarv);
+                    Log.i("WRITING SETTING " + rawFarm + ":" + rawHarv);
                     try{
                         int confirmCount = 2;
                         int multiCount = 0;
@@ -570,11 +569,11 @@ public class AppMain{
                             return Response.response(ResponseConst.CODE_FAILURE, ResponseConst.MSG_SAVE_FAIL);
                         }else{
                             protocol = SohaProtocolUtil.makeFlagNotifyProtocol(id, farmCode, harvCode, ConstProtocol.FLAG_SETTING, ConstProtocol.FLAG_DAILY_6);
-                            System.out.println("Sending Flag :::::::::::::::: " + Arrays.toString(protocol));
+                            Log.i("Sending Flag :::::::::::::::: " + Arrays.toString(protocol));
                             serviceProvider.send(SohaProtocolUtil.getUniqueKeyByFarmCode(farmCode), protocol, ConstProtocol.RESPONSE_LEN_WRITE);
                         }
 
-                        System.out.println("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));
+                        Log.i("WRITE ::::::::::::::::: " + Arrays.toString(recv.getProcessed()));
 
                         try {
                             settingPOJO.setByteSerial(null);
