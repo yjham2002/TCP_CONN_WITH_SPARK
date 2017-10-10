@@ -12,16 +12,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/server/Responder.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/utils/Log.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder$1.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/sohaTech_serial.jar" afterPath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/sohaTech_serial.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/AppMain.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/AppMain.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/server/ProtocolResponder.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/AppMain.java" afterPath="$PROJECT_DIR$/src/server/AppMain.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ProtocolResponder.java" afterPath="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" afterPath="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/Responder.java" afterPath="$PROJECT_DIR$/src/server/Responder.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -92,13 +84,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="36" column="5" lean-forward="true" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
+            <state relative-caret-position="374">
+              <caret line="31" column="23" lean-forward="false" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#743#744#0" expanded="true" />
+                <element signature="e#773#774#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -143,11 +137,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Responder.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Responder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/Responder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="314">
-              <caret line="53" column="31" lean-forward="true" selection-start-line="53" selection-start-column="31" selection-end-line="53" selection-end-column="31" />
+            <state relative-caret-position="478">
+              <caret line="60" column="31" lean-forward="false" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -283,8 +277,8 @@
         <option value="$PROJECT_DIR$/src/utils/Log.java" />
         <option value="$PROJECT_DIR$/src/redis/RedisWrapper.java" />
         <option value="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" />
-        <option value="$PROJECT_DIR$/src/server/Responder.java" />
         <option value="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
+        <option value="$PROJECT_DIR$/src/server/Responder.java" />
       </list>
     </option>
   </component>
@@ -332,12 +326,6 @@
               <item name="SOHATECH_TCP" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="agent" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SOHATECH_TCP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SOHATECH_TCP" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="redis" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SOHATECH_TCP" type="b2602c69:ProjectViewProjectNode" />
@@ -1522,20 +1510,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/Responder.java">
+    <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="53" column="31" lean-forward="true" selection-start-line="53" selection-start-column="31" selection-end-line="53" selection-end-column="31" />
+        <state relative-caret-position="374">
+          <caret line="31" column="23" lean-forward="false" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#743#744#0" expanded="true" />
+            <element signature="e#773#774#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
+    <entry file="file://$PROJECT_DIR$/src/server/Responder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="36" column="5" lean-forward="true" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
+        <state relative-caret-position="478">
+          <caret line="60" column="31" lean-forward="false" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

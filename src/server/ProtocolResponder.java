@@ -30,10 +30,6 @@ public class ProtocolResponder extends Responder{
 
     public ProtocolResponder(HashMap clients){
         super(clients);
-        this.byteBuffer = ByteBuffer.allocate(POOL_SIZE);
-        this.byteBuffer.clear();
-        this.smsService = new SMSService();
-        this.clients = clients;
     }
 
     @Override
@@ -240,7 +236,7 @@ public class ProtocolResponder extends Responder{
             Log.e("통신 이상 SMS 전송 중 에러 : " + e.getMessage());
         }finally {
             Log.i("Connection Finished."); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
-//            clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
+            clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
         }
     }
 
