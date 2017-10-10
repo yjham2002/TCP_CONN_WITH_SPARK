@@ -64,21 +64,10 @@ public class ServiceProvider extends ServerConfig{
      */
     private static ServiceProvider instance;
 
-    private int customTime = -1;
-
     /**
      * 메인 서버 소켓 운영을 위한 스레드
      */
     private Thread thread;
-
-    /**
-     * 서버 소켓 채널 인스턴스
-     */
-    private ServerSocketChannel socket;
-
-    private Selector selector;
-
-    private List<ICallback> jobs;
 
     /**
      * 클라이언트 소켓 집합
@@ -86,53 +75,9 @@ public class ServiceProvider extends ServerConfig{
     private HashMap<String, ProtocolResponder> clients;
 
     /**
-     * 간단한 배치 작업을 위한 스레드로 이후 설계 변경 시 삭제 예정
-     * @deprecated
-     */
-    private Thread batch;
-
-    /**
      * 서버 소켓 채널 바인딩 포트
      */
     private int port;
-
-    private void startServer(){
-        try {
-            resetServer();
-/*
-		NioEventLoop는 I/O 동작을 다루는 멀티스레드 이벤트 루프입니다.
-		네티는 다양한 이벤트 루프를 제공합니다.
-		이 예제에서는 두개의 Nio 이벤트 루프를 사용합니다.
-		첫번째 'parent' 그룹은 인커밍 커넥션(incomming connection)을 액세스합니다.
-		두번째 'child' 그룹은 액세스한 커넥션의 트래픽을 처리합니다.
-		만들어진 채널에 매핑하고 스레드를 얼마나 사용할지는 EventLoopGroup 구현에 의존합니다.
-		그리고 생성자를 통해서도 구성할 수 있습니다.
-	*/
-
-
-        }catch(IOException e){
-            e.printStackTrace();
-            d("Socket Creation failed - The port set in const is in use or internet connection is not established.");
-        }
-    }
-
-    private void resetServer() throws IOException{
-//        if(clients != null){
-//            Iterator<String> iterator = clients.keySet().iterator();
-//            while(iterator.hasNext()){
-//                String key = iterator.next();
-//                clients.get(key).getSocket().close();
-//            }
-//        }
-        if(socket != null){
-            if(socket.isOpen()) {
-                socket.close();
-            }
-        }
-        if(selector != null){
-            if(selector.isOpen()) selector.close();
-        }
-    }
 
     /**
      * 포트를 매개변수로 입력받아 인스턴스를 생성하는 내부 접근 지정 생성자
@@ -141,38 +86,9 @@ public class ServiceProvider extends ServerConfig{
     private ServiceProvider(int port){
         this.port = port;
 
-        jobs = new ArrayList<>();
-
         log = LoggerFactory.getLogger(this.getClass());
-
         log.info("Initiating Service Provider");
-
-        startServer();
-
-        batch = new Thread(() -> {
-//            migrateDirectly();
-            // Test
-//            while(true) {
-//                try {
-//                    int time = BATCH_TIME;
-//                    if(customTime != -1 && customTime > 0) time = customTime;
-//                    Thread.sleep(time);
-//                    for(ICallback callback : jobs){
-//                        callback.postExecuted();
-//                    }
-//                } catch (InterruptedException e) {
-//                    d("Batch Thread Interrupted");
-//                }
-//
-//                d("Batch Executed");
-//
-//            }
-        });
-
-        batch.setPriority(Thread.NORM_PRIORITY);
-
         thread = getProviderInstance();
-
         d("Server is ready to respond");
 
     }
@@ -240,29 +156,6 @@ public class ServiceProvider extends ServerConfig{
 
     public HashMap<String, ProtocolResponder> getClients() {
         return clients;
-    }
-
-    private void accept(SelectionKey selectionKey) {
-//
-//        try {
-//            ServerSocketChannel serverSocketChannel = (ServerSocketChannel) selectionKey.channel();
-//            SocketChannel socketChannel = serverSocketChannel.accept();
-//
-//            d("STATUS :: [Connection Requested from [" + socketChannel.getRemoteAddress() + "]]");
-//
-//            ProtocolResponder protocolResponder = new ProtocolResponder(socketChannel, clients, selector);
-//
-//        }catch (NullPointerException e){
-//            d("WARN :: Couldn't get Remote Address");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            d("ERROR :: NOT ABLE TO GENERATE SOCKET CHANNEL AND AN ERROR OCCURED WHILE ACCEPTING");
-//        }
-    }
-
-
-    public void offer(ICallback callback){
-        this.jobs.add(callback);
     }
 
     /**
@@ -383,11 +276,4 @@ public class ServiceProvider extends ServerConfig{
         }
     }
 
-    /**
-     * 배치 작업 주기 시간을 커스텀 설정함
-    * @param customTime
-     */
-    public void setCustomTime(int customTime) {
-        this.customTime = customTime;
-    }
 }

@@ -2,6 +2,7 @@ package utils;
 
 import constants.ConstProtocol;
 import databases.DBManager;
+import databases.exception.NothingToTakeException;
 import models.ByteSerial;
 import pojo.ErrorStatusPOJO;
 import pojo.RealtimePOJO;
@@ -198,8 +199,92 @@ public class SohaProtocolUtil {
         return err;
     }
 
-    public static void main(String... args){
-        System.out.println(Arrays.toString(getErrorDataArrayBySQL("0078", "01")));
+    public static List<String> countExistingData(String farmC, String harvC){
+        String sqlNums = "SELECT \n" +
+                "(SELECT COUNT(*) FROM tblTimerData WHERE farmCode='"+ farmC +"' AND dongCode='" + harvC + "') AS timer,\n" +
+                "(SELECT COUNT(*) FROM tblSettingData WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"') AS setting,\n" +
+                "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=1) AS daily1,\n" +
+                "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=2) AS daily2,\n" +
+                "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=3) AS daily3,\n" +
+                "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=4) AS daily4,\n" +
+                "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=5) AS daily5,\n" +
+                "(SELECT COUNT(*) FROM tblDaily WHERE farmCode='"+ farmC +"' AND dongCode='"+ harvC +"' AND `order`=6) AS daily6;\n" +
+                "\n";
+        return DBManager.getInstance().getStrings(sqlNums, "timer", "setting", "daily1", "daily2", "daily3", "daily4", "daily5", "daily6");
+    }
+
+    public static ByteSerial makeIntervalProtocol(String farmInit, byte[] subBuffer){
+        long interval = 0;
+
+        try {
+            interval = DBManager.getInstance().getNumber("SELECT inter_time FROM farm_list WHERE farm_code = '" + farmInit + "'", "inter_time");
+        }catch(NothingToTakeException e){}
+
+        int initM10 = ConstProtocol.INIT_TERM_MIN10;
+        int initM = ConstProtocol.INIT_TERM_MIN;
+        int initS10 = ConstProtocol.INIT_TERM_SEC10;
+        int initS = ConstProtocol.INIT_TERM_SEC;
+
+        switch ((int)interval){
+            case 30:
+                initM10 = 0;
+                initM = 0;
+                initS10 = 3;
+                initS = 0;
+                break;
+            case 60:
+                initM10 = 0;
+                initM = 0;
+                initS10 = 6;
+                initS = 0;
+                break;
+            case 300:
+                initM10 = 0;
+                initM = 5;
+                initS10 = 0;
+                initS = 0;
+                break;
+            case 600:
+                initM10 = 0;
+                initM = 10;
+                initS10 = 0;
+                initS = 0;
+                break;
+            case 1200:
+                initM10 = 2;
+                initM = 0;
+                initS10 = 0;
+                initS = 0;
+                break;
+            case 1800:
+                initM10 = 3;
+                initM = 0;
+                initS10 = 0;
+                initS = 0;
+                break;
+            default: break;
+        }
+
+        ByteSerial init = new ByteSerial
+                (
+                        SohaProtocolUtil.getInitProtocol(
+                                subBuffer,
+                                0,
+                                0,
+                                initM10,
+                                initM,
+                                initS10,
+                                initS
+                        ),
+                        ByteSerial.TYPE_SET
+                );
+
+        return init;
+    }
+
+    public static List<String> getPhoneNumbers(String fStr, String hStr){
+        List<String> list = DBManager.getInstance().getStrings("SELECT farm_code, a_tel, b_tel, c_tel, d_tel FROM user_list WHERE (farm_code='" + fStr + "' OR user_auth='A' OR manage_farm LIKE '%" + hStr + "%') AND delete_flag = 'N'", "a_tel", "b_tel", "c_tel", "d_tel");
+        return list;
     }
 
     /**
