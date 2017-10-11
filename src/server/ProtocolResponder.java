@@ -36,9 +36,9 @@ public class ProtocolResponder extends Responder{
                 try{
                     if(this.ctx != null){
                         ByteBuf byteBuf = Unpooled.wrappedBuffer(new byte[]{0});
-                        System.out.println(this.ctx.writeAndFlush(byteBuf));
+                        this.ctx.writeAndFlush(byteBuf);
+                        Log.i("Sending An HeartBeat [두근두근 내 심장을 전송해요 ~ 뀨뀨꺄꺄?!♡]");
                     }
-                    Log.i("Sending An HeartBeat [두근두근 내 심장을 전송해요 ~ 뀨뀨꺄꺄?!♡]");
                     Thread.sleep(10000);
                 }catch (Exception e){
                     e.printStackTrace();
@@ -63,7 +63,8 @@ public class ProtocolResponder extends Responder{
             buffer = bytes;
             byteSerial = new ByteSerial(buffer);
             final String originText = Arrays.toString(byteSerial.getProcessed());
-            Log.i("RealTime Data received. [" + Arrays.toString(byteSerial.getProcessed())  + "]");
+            final String shorten = originText.length() > 50 ? originText.substring(0, 50) : originText;
+            Log.i("RealTime Data received. [" + shorten  + " ..... ]");
 
             if(byteSerial.getProcessed().length == 15){
                 byte[] d = byteSerial.getProcessed();

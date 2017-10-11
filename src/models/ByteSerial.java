@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.HexUtil;
+import utils.Log;
 import utils.SohaProtocolUtil;
 
 import java.io.Serializable;
@@ -69,7 +70,7 @@ public class ByteSerial implements Serializable{
 
         boolean sound = HexUtil.isCheckSumSound(bytes);
 
-        System.out.println("TID [" + this.tid + "]");
+        Log.i("TID [" + this.tid + "]");
 
 //        if(type != TYPE_FORCE) {
 //            if (sound) System.out.println("Protocol Generated And It is sound");
