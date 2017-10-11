@@ -133,6 +133,7 @@ public class ConstProtocol {
     };
 
     public static final String CONNECTION_MESSAGE = "[%s]\n[%s] 재배동\n연결끊김";
+    public static final String CONNECTION_MESSAGE_FARM = "[%s]\n농가 연결끊김";
 
     public static final String[] SMS_COLS = new String[]{
             "alert_alarm_internal_co2",
