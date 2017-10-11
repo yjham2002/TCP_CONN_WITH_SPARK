@@ -229,7 +229,7 @@ public class ProtocolResponder extends Responder{
             }
             if(harvString.trim().length() == 2 || farmString.trim().length() == 4) {
                 for (String tel : phones)
-                    if(tel != null && !tel.trim().equals("") && !tel.trim().equals("--")) smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE, farmName));
+                    if(tel != null && !tel.trim().equals("") && !tel.trim().equals("--")) smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE_FARM, farmName));
             }
         }catch(Exception e){
             e.printStackTrace();
