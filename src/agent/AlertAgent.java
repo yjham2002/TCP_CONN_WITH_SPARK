@@ -6,6 +6,7 @@ import mysql.Cache;
 import pojo.RealtimePOJO;
 import pojo.WrappedPOJO;
 import server.whois.SMSService;
+import utils.Log;
 import utils.SohaProtocolUtil;
 
 import java.util.Arrays;
@@ -46,7 +47,7 @@ public class AlertAgent implements IAgent{
         for(int eq = 0; eq < poolSize; eq++) {
             final int temp = eq;
             Thread process = new Thread(() -> {
-                System.out.println("[AlertAgent] Stand-By - Thread[" + temp + "]");
+                Log.i("[AlertAgent] Stand-By - Thread[" + temp + "]");
 
                 final SMSService smsService = new SMSService();
 
@@ -69,7 +70,7 @@ public class AlertAgent implements IAgent{
                         int errArray[] = SohaProtocolUtil.getErrorArray(realtimePOJO);
                         int errSMSarray[] = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-                        System.out.println("[AlertAgent] Error Detected - Processing " + Arrays.toString(errArray));
+                        Log.i("[AlertAgent] Error Detected - Processing " + Arrays.toString(errArray));
 
                         boolean haveToSend = false;
 
@@ -99,9 +100,9 @@ public class AlertAgent implements IAgent{
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                            System.out.println("========================================================");
-                            System.out.println("Reinstanciating DBManager singleton instance. :: " + e.getMessage());
-                            System.out.println("========================================================");
+                            Log.i("========================================================");
+                            Log.i("Reinstanciating DBManager singleton instance. :: " + e.getMessage());
+                            Log.i("========================================================");
                         }
 
                         if (haveToSend) {
@@ -121,7 +122,7 @@ public class AlertAgent implements IAgent{
                                 haveToSend = !(sendCnt == 16);
 
                             } catch (Exception e) {
-                                System.out.println("SMS Array Error");
+                                Log.i("SMS Array Error");
                                 e.printStackTrace();
                             }
                         }
@@ -144,7 +145,7 @@ public class AlertAgent implements IAgent{
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    System.out.println("[AlertAgent] POOL SIZE : " + poolSize + " / Queued : " + blockingQueue.size());
+                    Log.i("[AlertAgent] POOL SIZE : " + poolSize + " / Queued : " + blockingQueue.size());
                 }
             });
 

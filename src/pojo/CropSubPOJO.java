@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.ObjectMapper;
 import utils.DebugUtil;
 import utils.HexUtil;
+import utils.Log;
 import utils.SohaProtocolUtil;
 
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class CropSubPOJO extends BasePOJO{
 
         byte[] pure = ByteSerial.getPureDataConcat(recvs);
 
-        System.out.println(Arrays.toString(pure));
+        Log.i(Arrays.toString(pure));
 
         ByteSerial bs = new ByteSerial(pure, ByteSerial.TYPE_FORCE);
         this.byteSerial = bs;
@@ -211,7 +212,7 @@ public class CropSubPOJO extends BasePOJO{
                     "  `regDate` = NOW()";
             return sql;
         }catch(IOException e){
-            System.out.println("WARN ::: [CropSubPOJO :: Parse Error]");
+            Log.i("WARN ::: [CropSubPOJO :: Parse Error]");
             throw new IOException();
         }
     }

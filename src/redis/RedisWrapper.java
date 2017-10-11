@@ -9,6 +9,7 @@ import pojo.RealtimePOJO;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import utils.Log;
 import utils.SerialUtil;
 
 import java.io.Serializable;
@@ -70,7 +71,7 @@ public class RedisWrapper extends ServerConfig{
         try {
             jedis = jedisPool.getResource();
             jedis.connect();
-//            log.info("[JEDIS] PUT OPERATION INVOKED WITH [KEY:" + key + "] => " + object.toString() + "]");
+//            Log.i("[JEDIS] PUT OPERATION INVOKED WITH [KEY:" + key + "] => " + object.toString() + "]");
 
             ObjectMapper mapper = new ObjectMapper();
 
@@ -83,7 +84,7 @@ public class RedisWrapper extends ServerConfig{
             }
 
         }catch (Exception e){
-            log.info("Put Request is not sound - Skipping");
+            Log.i("Put Request is not sound - Skipping");
         }finally {
             if(jedis != null) jedis.close();
         }
@@ -114,7 +115,7 @@ public class RedisWrapper extends ServerConfig{
         try {
             jedis = jedisPool.getResource();
             jedis.connect();
-            log.info("[JEDIS] GET OPERATION INVOKED WITH [KEY:" + key + "]");
+            Log.i("[JEDIS] GET OPERATION INVOKED WITH [KEY:" + key + "]");
 
             ObjectMapper mapper = new ObjectMapper();
 
@@ -156,7 +157,7 @@ public class RedisWrapper extends ServerConfig{
         try {
             jedis = jedisPool.getResource();
             jedis.connect();
-            log.info("[JEDIS] GET_LIST OPERATION INVOKED WITH [Pattern:" + pattern + "]");
+            Log.i("[JEDIS] GET_LIST OPERATION INVOKED WITH [Pattern:" + pattern + "]");
 
             ObjectMapper mapper = new ObjectMapper();
 
@@ -165,7 +166,7 @@ public class RedisWrapper extends ServerConfig{
             try {
                 object = jedis.keys("*" + pattern + "*");
             }catch(Exception e){
-                System.out.println("Key Execution Error :: Skipping");
+                Log.i("Key Execution Error :: Skipping");
                 init();
                 return retVal;
             }
@@ -186,7 +187,7 @@ public class RedisWrapper extends ServerConfig{
                 }
             }
 
-            if(errorCount > 0) System.out.println("Parsing Error :: " + errorCount + " items have been Skipped");
+            if(errorCount > 0) Log.i("Parsing Error :: " + errorCount + " items have been Skipped");
 
         }catch (Exception e){
             e.printStackTrace();

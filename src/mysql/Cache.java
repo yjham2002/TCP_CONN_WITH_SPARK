@@ -2,6 +2,7 @@ package mysql;
 
 import databases.DBManager;
 import models.DataMap;
+import utils.Log;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,14 +30,14 @@ public class Cache {
         harvNames = new ConcurrentHashMap<>();
         phones = new ConcurrentHashMap<>();
 
-        System.out.println("[INFO] Cache DB Started");
+        Log.i("Cache DB Started.");
         List<DataMap> farmNamesDB = DBManager.getInstance().getList(QUERY_FARM_NAMES);
         for(DataMap map : farmNamesDB) farmNames.put(map.getString("farm_code"), map.getString("farm_name"));
 
         List<DataMap> harvNamesDB = DBManager.getInstance().getList(QUERY_HARV_NAMES);
         for(DataMap map : harvNamesDB) harvNames.put(map.getString("farm_code") + "_" + map.getString("dong_code"), map.getString("dong_name"));
 
-        System.out.println("[INFO] Cache DB Done");
+        Log.i("Cache DB Done.");
     }
 
     public static Cache getInstance(){

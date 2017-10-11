@@ -1,6 +1,7 @@
 package server.response;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import utils.Log;
 
 import java.io.IOException;
 
@@ -20,7 +21,7 @@ public class Response {
         this.returnMessage = message;
         this.data = object;
 
-        System.out.println("Response Generated [" + this.returnCode + "/" + this.returnMessage + "/ Data Attached :" + (this.data != null) + "]");
+        Log.i("Response Generated [" + this.returnCode + "/" + this.returnMessage + "/ Data Attached :" + (this.data != null) + "]");
     }
 
     public static String response(int code, String message, Object object) throws IOException{

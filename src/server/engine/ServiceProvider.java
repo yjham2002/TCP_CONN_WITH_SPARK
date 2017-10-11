@@ -27,6 +27,7 @@ import spark.Response;
 import spark.Route;
 import spark.Spark;
 import utils.HexUtil;
+import utils.Log;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -87,7 +88,7 @@ public class ServiceProvider extends ServerConfig{
         this.port = port;
 
         log = LoggerFactory.getLogger(this.getClass());
-        log.info("Initiating Service Provider");
+        Log.i("Initiating Service Provider");
         thread = getProviderInstance();
         d("Server is ready to respond");
 
@@ -183,7 +184,7 @@ public class ServiceProvider extends ServerConfig{
 
                 try{
                     for(int e = 0; e < REQUEST_RETRY_COUNT; e++) {
-                        System.out.println("SENDING TRY COUNT :: " + (e + 1));
+                        Log.i("SENDING TRY COUNT :: " + (e + 1));
                         clients.get(client).sendBlock(msg, length);
                         synchronized (tidBlock) {
                             tidBlock.wait(REQUEST_TIMEOUT);
@@ -199,17 +200,17 @@ public class ServiceProvider extends ServerConfig{
                         }
                     }
                 }catch (InterruptedException ee){
-                    System.out.println("SEND BLOCK IS INTERRUPTED ::::::::::::::::::::::::::::::::::::::::::::::::");
+                    Log.i("SEND BLOCK IS INTERRUPTED ::::::::::::::::::::::::::::::::::::::::::::::::");
                     blockMap.remove(tid);
                     tidBlock.setByteSerial(null);
 //                    ee.printStackTrace();
                 }
             } else{
-                log.info("Client just requested does not exist. [KEY : " + client + "]");
+                Log.i("Client just requested does not exist. [KEY : " + client + "]");
             }
         }catch(Exception e){
             if(e instanceof InterruptedException){
-                System.out.println("SEND BLOCK IS INTERRUPTED ::::::::::::::::::::::::::::::::::::::::::::::::");
+                Log.i("SEND BLOCK IS INTERRUPTED ::::::::::::::::::::::::::::::::::::::::::::::::");
             }
 //            e.printStackTrace();
             blockMap.remove(tid);
@@ -221,7 +222,7 @@ public class ServiceProvider extends ServerConfig{
     }
 
     public ByteSerial send(String client, byte[] msg, int length){
-        System.out.println("SEND :: " + Arrays.toString(msg));
+        Log.i("SEND :: " + Arrays.toString(msg));
         return send(client, new ByteSerial(msg, ByteSerial.TYPE_NONE), length);
     }
 
@@ -239,10 +240,10 @@ public class ServiceProvider extends ServerConfig{
             else
             {
                 if(entry == null) {
-                    System.out.println("[WARN] BULK SEND RECV IS NULL :: [" + Thread.currentThread().getName() + "]");
-                    log.info("[WARN] ERROR OCCURRED ON " + Arrays.toString(msgs[e]));
+                    Log.i("[WARN] BULK SEND RECV IS NULL :: [" + Thread.currentThread().getName() + "]");
+                    Log.i("ERROR OCCURRED ON " + Arrays.toString(msgs[e]));
                 }else {
-                    if (entry.isLoss()) System.out.println("[WARN] ENTRY LOSS :::: " + Arrays.toString(entry.getProcessed()));
+                    if (entry.isLoss()) Log.i("[WARN] ENTRY LOSS :::: " + Arrays.toString(entry.getProcessed()));
                 }
                 return null;
             }
@@ -271,7 +272,7 @@ public class ServiceProvider extends ServerConfig{
      */
     private void d(String message){
         if(DEBUG_MODE) {
-            log.info(getTime() + " " + message);
+            Log.i(getTime() + " " + message);
         }
     }
 

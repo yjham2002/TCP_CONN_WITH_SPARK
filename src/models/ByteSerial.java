@@ -63,7 +63,7 @@ public class ByteSerial implements Serializable{
         this.tid = ByteSerial.bytesToLong(Arrays.copyOfRange(bytes, 8, 16));
         //bytes[bytes.length - 3] = (byte)HexUtil.checkSumByFull(bytes);
 
-//        log.info(Arrays.toString(bytes));
+//        Log.i(Arrays.toString(bytes));
 
         this.processed = bytes.clone();
         this.original = bytes.clone();
@@ -73,10 +73,10 @@ public class ByteSerial implements Serializable{
         Log.i("TID [" + this.tid + "]");
 
 //        if(type != TYPE_FORCE) {
-//            if (sound) System.out.println("Protocol Generated And It is sound");
-//            else System.out.println("Protocol Generated But it is not sound");
+//            if (sound) Log.i("Protocol Generated And It is sound");
+//            else Log.i("Protocol Generated But it is not sound");
 //        }else{
-//            System.out.println("ByteSerial Generated Forcely");
+//            Log.i("ByteSerial Generated Forcely");
 //        }
 
         this.type = type;
@@ -178,8 +178,8 @@ public class ByteSerial implements Serializable{
 
         String reason = "\n";
 
-//        log.info(Arrays.toString(processed));
-//        log.info(Arrays.toString(bytes));
+//        Log.i(Arrays.toString(processed));
+//        Log.i(Arrays.toString(bytes));
 
         if(!HexUtil.isCheckSumSound(this.processed)) {
             loss = true;
@@ -201,8 +201,8 @@ public class ByteSerial implements Serializable{
         long tempId = ByteSerial.bytesToLong(Arrays.copyOfRange(bytes, 8, 16));
         if(processed.length == ConstProtocol.LENGTH_REALTIME + 14) tempId = ByteSerial.bytesToLong(Arrays.copyOfRange(bytes, 12, 20));
 
-        if(loss) log.info("Packet-Loss Occured or is empty data - Ignoring [" + processed.length + "] " + reason);
-        else log.info("Packet has been arrived successfully [" + processed.length + "] AS TID [" + tempId + "]");
+        if(loss) Log.i("Packet-Loss Occured or is empty data - Ignoring [" + processed.length + "] " + reason);
+        else Log.i("Packet has been arrived successfully [" + processed.length + "] AS TID [" + tempId + "]");
 
         setTypeAutomatically();
     }
@@ -239,7 +239,7 @@ public class ByteSerial implements Serializable{
         byte temp;
         for(int i = 0; i < serials.length; i++){
             if(arr.length > 0){
-                if(serials[i].getPureBytes()[0] == arr[arr.length - 1]) System.out.println("WARNING ::::::: [Check if there is any Data Redundancy while Concatenation]");
+                if(serials[i].getPureBytes()[0] == arr[arr.length - 1]) Log.i("WARNING ::::::: [Check if there is any Data Redundancy while Concatenation]");
             }
             arr = SohaProtocolUtil.concat(arr, serials[i].getPureBytes());
         }
@@ -252,7 +252,7 @@ public class ByteSerial implements Serializable{
         byte[] arr = new byte[]{};
         for(int i = 0; i < serials.size(); i++){
             if(arr.length > 0){
-                if(serials.get(i).getPureBytes()[0] == arr[arr.length - 1]) System.out.println("WARNING ::::::: [Data Redundancy occurred while Concatenation]");
+                if(serials.get(i).getPureBytes()[0] == arr[arr.length - 1]) Log.i("WARNING ::::::: [Data Redundancy occurred while Concatenation]");
             }
             arr = SohaProtocolUtil.concat(arr, serials.get(i).getPureBytes());
         }

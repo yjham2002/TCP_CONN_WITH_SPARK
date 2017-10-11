@@ -3,6 +3,7 @@ package pojo;
 import constants.ConstProtocol;
 import models.ByteSerial;
 import utils.HexUtil;
+import utils.Log;
 import utils.SohaProtocolUtil;
 
 import java.io.Serializable;
@@ -91,7 +92,7 @@ public class BasePOJO implements Serializable{
 
             return total;
         }catch(ArrayIndexOutOfBoundsException e){
-            System.out.println("The size of array was " + byteSerial.getProcessed().length + " and tried to refer an offset[" + (offset + 1) + "]");
+            Log.i("The size of array was " + byteSerial.getProcessed().length + " and tried to refer an offset[" + (offset + 1) + "]");
             e.printStackTrace();
             return 0;
         }
@@ -336,7 +337,7 @@ public class BasePOJO implements Serializable{
         BasePOJO basePOJO = new BasePOJO();
         basePOJO.byteSerial = new ByteSerial(arr);
 
-        System.out.println(basePOJO.getSumWith2Bytes(294, SUM_MODE_P));
+        Log.i(basePOJO.getSumWith2Bytes(294, SUM_MODE_P));
         for(int i = 0; i < 8; i++)
             System.out.print(basePOJO.getBooleanValueFromByte(294, i) + " ");
 

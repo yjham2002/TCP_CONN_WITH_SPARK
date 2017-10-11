@@ -365,14 +365,14 @@ public class SohaProtocolUtil {
             if(e == ceil) jump = length - 1;
             int newLen = (jump - (ConstProtocol.READ_LIMIT * (e - 1)) + 1);
 
-            System.out.println("newlen :: " + newLen + " / start :: " + start);
+            Log.i("newlen :: " + newLen + " / start :: " + start);
 
             bulk[e - 1] = makeReadProtocol(start, newLen, id, farmCode, harvCode, e);
 
             start += newLen * 2;
         }
 
-        System.out.println(bulk.length + " Protocol has been generated");
+        Log.i(bulk.length + " Protocol has been generated");
 
         return bulk;
     }
@@ -395,7 +395,7 @@ public class SohaProtocolUtil {
             start += newLen * 2;
         }
 
-        System.out.println(bulk.length + " Protocol has been generated");
+        Log.i(bulk.length + " Protocol has been generated");
 
         return bulk;
     }
@@ -461,7 +461,7 @@ public class SohaProtocolUtil {
     }
 
     public static byte[] leftShift(byte[] array, int offset){
-        System.out.println(offset + "/" + array.length);
+        Log.i(offset + "/" + array.length);
         return Arrays.copyOfRange(array, offset, array.length);
     }
 
@@ -473,11 +473,11 @@ public class SohaProtocolUtil {
                     return null;
                 }
 
-                System.out.println(len + " ::: LEN");
+                Log.i(len + " ::: LEN");
 
                 byte[] narr = SohaProtocolUtil.concat(ConstProtocol.STX, Arrays.copyOfRange(array, LENGTH_LEN_RANGE, LENGTH_LEN_RANGE + len));
 
-                System.out.println(narr.length + " :: ");
+                Log.i(narr.length + " :: ");
 
                 return narr;
             }catch (NumberFormatException e){
@@ -515,7 +515,7 @@ public class SohaProtocolUtil {
         int sum = 0;
         for(int i = 0; i < args.length; i++) sum += args[i];
 
-//        System.out.println("[REALTIME ERROR COUNT] :: " + sum);
+//        Log.i("[REALTIME ERROR COUNT] :: " + sum);
 
         return sum;
     }

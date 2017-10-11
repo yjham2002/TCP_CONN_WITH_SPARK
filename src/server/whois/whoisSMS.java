@@ -2,6 +2,7 @@ package server.whois;
 
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
+import utils.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -222,17 +223,17 @@ public class whoisSMS {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
         Date cNow = new Date();
         String toDayTime = sdf.format(cNow);
-        System.out.println(toDayTime);
+        Log.i(toDayTime);
         whois_sms.login("smstest", "smstest");
         whois_sms.setParams("01065134259", "15884259", "SMS JSPAPI TEST", toDayTime);
         whois_sms.setUtf8();
         whois_sms.emmaSend();
-        System.out.println("getRetCode : " + whois_sms.getRetCode());
-        System.out.println("getRetMessage : " + whois_sms.getRetMessage());
-        System.out.println("getLastPoint : " + whois_sms.getLastPoint());
+        Log.i("getRetCode : " + whois_sms.getRetCode());
+        Log.i("getRetMessage : " + whois_sms.getRetMessage());
+        Log.i("getLastPoint : " + whois_sms.getLastPoint());
         whois_sms.emmaPoint();
-        System.out.println("getRetCode : " + whois_sms.getRetCode());
-        System.out.println("getRetMessage : " + whois_sms.getRetMessage());
-        System.out.println("getLastPoint : " + whois_sms.getLastPoint());
+        Log.i("getRetCode : " + whois_sms.getRetCode());
+        Log.i("getRetMessage : " + whois_sms.getRetMessage());
+        Log.i("getLastPoint : " + whois_sms.getLastPoint());
     }
 }

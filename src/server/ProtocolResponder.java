@@ -63,7 +63,7 @@ public class ProtocolResponder extends Responder{
             buffer = bytes;
             byteSerial = new ByteSerial(buffer);
             final String originText = Arrays.toString(byteSerial.getProcessed());
-            final String shorten = originText.length() > 50 ? originText.substring(0, 50) : originText;
+            final String shorten = originText.length() > 50 ? originText.substring(0, 51) : originText;
             Log.i("RealTime Data received. [" + shorten  + " ..... ]");
 
             if(byteSerial.getProcessed().length == 15){

@@ -85,7 +85,7 @@ public class AppMain{
             Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 
             DataMap map = RestProcessor.makeProcessData(req.raw());
-            log.info(ConstRest.REST_READ_REQUEST);
+            Log.i(ConstRest.REST_READ_REQUEST);
 
             String mode = map.getString("mode");
             String rawFarm = map.getString(ConstRest.FARM_CODE);
@@ -253,7 +253,7 @@ public class AppMain{
             }
 
             if((protocols == null && protocol == null) || retVal == null){
-                log.info("Mode has not been designated - Do nothing");
+                Log.i("Mode has not been designated - Do nothing");
                 return Response.response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
             }else{
                 return retVal;
@@ -271,7 +271,7 @@ public class AppMain{
 
             DataMap map = RestProcessor.makeProcessData(req.raw());
 
-            log.info(ConstRest.REST_WRITE_REQUEST);
+            Log.i(ConstRest.REST_WRITE_REQUEST);
 
             ObjectMapper objectMapper = new ObjectMapper();
 

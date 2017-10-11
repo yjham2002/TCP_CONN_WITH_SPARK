@@ -1,6 +1,8 @@
 package server.whois;
 
 import configs.ServerConfig;
+import utils.Log;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.logging.Logger;
@@ -69,7 +71,7 @@ public class SMSService extends ServerConfig implements ISMSSyncSVC {
 
     @Override
     public int sendSMS(String toPhone, String msg) {
-        System.out.println("Sending SMS :: " + toPhone + " :: msg ::" + msg);
+        Log.i("Sending SMS :: " + toPhone + " :: msg ::" + msg);
         return sendSMS(toPhone,this.defaultFromPhone, msg) ;
     }
 

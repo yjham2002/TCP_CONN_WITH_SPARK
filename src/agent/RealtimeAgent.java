@@ -3,6 +3,7 @@ package agent;
 import databases.DBManager;
 import pojo.RealtimePOJO;
 import server.engine.ServiceProvider;
+import utils.Log;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -26,14 +27,14 @@ public class RealtimeAgent implements IAgent {
         for(int e = 0; e < poolSize; e++){
             final int temp = e;
             new Thread(() -> {
-                System.out.println("[RealtimeAgent] Stand-By - Thread[" + temp + "]");
+                Log.i("[RealtimeAgent] Stand-By - Thread[" + temp + "]");
 
                 while(true){
                     try {
                         RealtimePOJO r = offerList.take();
                         String sql = r.getInsertSQL();
                         DBManager.getInstance().execute(sql);
-                        System.out.println("[RealtimeAgent] POOL SIZE : " + poolSize + " / Queued : " + offerList.size());
+                        Log.i("[RealtimeAgent] POOL SIZE : " + poolSize + " / Queued : " + offerList.size());
                     }catch (Exception ex){
                         ex.printStackTrace();
                     }

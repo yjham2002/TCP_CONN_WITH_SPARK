@@ -3,6 +3,7 @@ package databases;
 import databases.exception.NothingToTakeException;
 import models.DataMap;
 import org.apache.commons.dbcp2.BasicDataSource;
+import utils.Log;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -55,7 +56,7 @@ public class DBConstManager {
             return res;
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("Error Handled :: getLastInsertId");
+            Log.i("Error Handled :: getLastInsertId");
             return 1;
         }finally {
             try {
@@ -74,7 +75,7 @@ public class DBConstManager {
 
     public List<DataMap> getList(String sql){
         if(debug){
-            System.out.println("getList");
+            Log.i("getList");
         }
         Connection connection = null;
         PreparedStatement st = null;
@@ -153,7 +154,7 @@ public class DBConstManager {
         }catch (SQLException e){
             throw new NothingToTakeException();
         }catch(Exception e){
-            System.out.println("Error Handled :: getRow");
+            Log.i("Error Handled :: getRow");
             return dataMap;
         }finally {
             try {
@@ -171,7 +172,7 @@ public class DBConstManager {
 
     public boolean execute(String sql){
         if(debug){
-            System.out.println("execute :: " + sql.replaceAll("\n", ""));
+            Log.i("execute :: " + sql.replaceAll("\n", ""));
         }
         boolean retVal = false;
 
@@ -194,7 +195,7 @@ public class DBConstManager {
             return false;
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("Error Handled :: execute");
+            Log.i("Error Handled :: execute");
             return false;
         }finally {
             try {
@@ -212,7 +213,7 @@ public class DBConstManager {
 
     public long getNumber(String sql, String column) throws NothingToTakeException{
         if(debug){
-            System.out.println("getNumber");
+            Log.i("getNumber");
         }
 
         Connection connection = null;
@@ -242,7 +243,7 @@ public class DBConstManager {
             throw new NothingToTakeException();
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("Error Handled :: getNumber");
+            Log.i("Error Handled :: getNumber");
             return 0;
         }finally {
             try {
@@ -260,7 +261,7 @@ public class DBConstManager {
 
     public List<String> getStrings(String sql, String... column){
         if(debug){
-            System.out.println("getStrings :: " + sql.replaceAll("\n", ""));
+            Log.i("getStrings :: " + sql.replaceAll("\n", ""));
         }
         List<String> phones = new Vector<>();
 
@@ -295,7 +296,7 @@ public class DBConstManager {
             return phones;
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("Error Handled :: getStrings");
+            Log.i("Error Handled :: getStrings");
             return phones;
         }finally {
             try {
@@ -313,7 +314,7 @@ public class DBConstManager {
 
     public String getString(String sql, String column){
         if(debug){
-            System.out.println("getString");
+            Log.i("getString");
         }
 
         Connection connection = null;
@@ -341,7 +342,7 @@ public class DBConstManager {
             return res;
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("Error Handled :: getString");
+            Log.i("Error Handled :: getString");
             return null;
         }finally {
             try {

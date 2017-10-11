@@ -70,7 +70,7 @@ public class Modbus  {
             icrc = (icrc >>> 8) ^ table[(icrc ^ b) & 0xff];
         }
         //bytes = new byte[bytes.length];
-        //System.out.println("Integer " + Integer.toHexString(icrc)); // test
+        //Log.i("Integer " + Integer.toHexString(icrc)); // test
         return htype.fnShortToBytes((short)icrc,0);//HtypeCast의 short를 byte로 변환해주는 함수
         //byte[] results = Integer.toHexString(icrc).getBytes();
         //return results;
@@ -126,7 +126,7 @@ public class Modbus  {
         for(int i=0;i<6;i++) rbyte[i] = bytes[i];
         rbyte[6] = btmp[0];
         rbyte[7] = btmp[1];
-        //System.out.println("CRC16 = " + Integer.toHexString(btmp[0])); //test
+        //Log.i("CRC16 = " + Integer.toHexString(btmp[0])); //test
         return rbyte;
     }
     /** *********************************************************************************
@@ -179,18 +179,18 @@ public class Modbus  {
         Modbus t = new Modbus();
 
 
-        System.out.println("[유닛번호:1, 펑션코드:3, 레지스터시작:100, 레지스터갯수:6개 일때] ");
-        System.out.println("Modbus프로토콜의 헥사코드는 아래와 같다.");
+        Log.i("[유닛번호:1, 펑션코드:3, 레지스터시작:100, 레지스터갯수:6개 일때] ");
+        Log.i("Modbus프로토콜의 헥사코드는 아래와 같다.");
         byte r[] = t.fn_makePTcom(1,3,100,1);
         for(byte b:r) {
             System.out.format("0x%02X ", b);
         }
 
         byte crc1[] = t.fn_makeCRC16(bytes);
-        System.out.println("\n\n[CRC16 예]");
+        Log.i("\n\n[CRC16 예]");
         System.out.format("byte[0] = %02X\n",crc1[0]);
         System.out.format("byte[1] = %02X\n",crc1[1]);
-        System.out.println(crc1[1]);
+        Log.i(crc1[1]);
 
         short crc2 = t.fn_makeCRC16toShort(bytes);
         System.out.format("\nshort = %02X\n",crc2);

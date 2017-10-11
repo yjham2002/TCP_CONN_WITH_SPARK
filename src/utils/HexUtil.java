@@ -140,7 +140,7 @@ public class HexUtil {
             HexaID = "0" + Integer.toHexString(0xff & data[x]);
             sb.append(HexaID.substring(HexaID.length()-2));
         }
-        //System.out.println("변형 태스트 : "+sb);
+        //Log.i("변형 태스트 : "+sb);
         return sb.toString();
     }
 

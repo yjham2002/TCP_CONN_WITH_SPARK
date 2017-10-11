@@ -352,11 +352,11 @@ public class DataMap extends HashMap<String, Object>
 
         // if(value != null)
         // {
-        // System.out.println("getIntArr - valArr class : " + value.getClass());
+        // Log.i("getIntArr - valArr class : " + value.getClass());
         // }
         // else
         // {
-        // System.out.println("getIntArr - valArr class null : " + value);
+        // Log.i("getIntArr - valArr class null : " + value);
         // }
 
         if(value == null)
@@ -371,7 +371,7 @@ public class DataMap extends HashMap<String, Object>
             for (int i = 0; i < valArr.length; i++)
             {
 
-                // System.out.println("getIntArr - valArr[" + i + "] : " + valArr[i]);
+                // Log.i("getIntArr - valArr[" + i + "] : " + valArr[i]);
                 if(this.checkNumberFormat(valArr[i]))
                 {
                     retVal[i] = Integer.parseInt(String.valueOf(valArr[i]));
