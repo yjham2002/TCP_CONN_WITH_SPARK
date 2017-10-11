@@ -38,7 +38,7 @@ public class ProtocolResponder extends Responder{
                         ByteBuf byteBuf = Unpooled.wrappedBuffer(new byte[]{0});
                         System.out.println(this.ctx.writeAndFlush(byteBuf));
                     }
-                    Log.i("Sending A HeartBeat [두근두근 내 심장을 전송해요 ~ 뀨뀨꺄꺄?!♡]");
+                    Log.i("Sending An HeartBeat [두근두근 내 심장을 전송해요 ~ 뀨뀨꺄꺄?!♡]");
                     Thread.sleep(10000);
                 }catch (Exception e){
                     e.printStackTrace();
