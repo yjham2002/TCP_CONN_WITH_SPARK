@@ -207,17 +207,18 @@ public class ProtocolResponder extends Responder{
 
                 }
             }
+        }catch (IOException e){
+            sendDisconnectionSMS();
         }catch(Exception e) {
             e.printStackTrace();
             Log.e("Exception Handled - " + e.getMessage());
-        }finally {
+        } finally {
             byteBuffer.compact();
         }
         return;
     }
 
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) {
+    private void sendDisconnectionSMS(){
         try {
             super.channelInactive(ctx);
             if(farmString.length() == 4 && harvString.length() == 2) Log.i("Channel Inactivated at [" + farmString + "/" + harvString + "].");
@@ -238,6 +239,11 @@ public class ProtocolResponder extends Responder{
             Log.i("Connection Finished."); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
             clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
         }
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        sendDisconnectionSMS();
     }
 
 }
