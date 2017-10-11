@@ -613,9 +613,16 @@ public class SohaProtocolUtil {
 
         if(errorArray.length <= 0) return null;
 
+        int count = 0;
+
         for(int i = 0; i < errorArray.length; i++){
-            if(errorArray[i] != ConstProtocol.FALSE) errorMsg += ConstProtocol.ERROR_MSG[i] + "\n";
+            if(errorArray[i] != ConstProtocol.FALSE) {
+                errorMsg += ConstProtocol.ERROR_MSG[i] + "\n";
+                count++;
+            }
         }
+
+        if(count == 0) return null;
 
         errorMsg = errorMsg.trim();
 
