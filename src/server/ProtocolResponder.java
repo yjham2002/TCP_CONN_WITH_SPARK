@@ -4,6 +4,7 @@ import agent.AlertAgent;
 import agent.RealtimeAgent;
 import constants.ConstProtocol;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import models.ByteSerial;
 import models.TIDBlock;
@@ -11,15 +12,12 @@ import mysql.Cache;
 import pojo.*;
 import redis.RedisManager;
 import server.engine.ServiceProvider;
-import server.whois.SMSService;
 import utils.HexUtil;
 import utils.Log;
 import utils.SohaProtocolUtil;
 import java.io.*;
-import java.nio.ByteBuffer;
 import java.util.*;
 import static constants.ConstProtocol.*;
-import static models.ByteSerial.POOL_SIZE;
 
 /**
  * @author EuiJin.Ham
@@ -28,8 +26,27 @@ import static models.ByteSerial.POOL_SIZE;
  */
 public class ProtocolResponder extends Responder{
 
+    private int flag = 0;
+
     public ProtocolResponder(HashMap clients){
         super(clients);
+        Thread thread = new Thread(()->{
+            while(true){
+                if(flag != 0) break;
+                try{
+                    if(this.ctx != null){
+                        ByteBuf byteBuf = Unpooled.wrappedBuffer(new byte[]{0});
+                        System.out.println(this.ctx.writeAndFlush(byteBuf));
+                    }
+                    Log.i("Sending A HeartBeat [두근두근 내 심장을 전송해요 ~ 뀨뀨꺄꺄?!♡]");
+                    Thread.sleep(10000);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
     }
 
     @Override
@@ -243,6 +260,7 @@ public class ProtocolResponder extends Responder{
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
+        flag = 1;
         sendDisconnectionSMS();
     }
 
