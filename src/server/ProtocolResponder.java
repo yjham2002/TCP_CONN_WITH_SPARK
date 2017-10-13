@@ -35,9 +35,12 @@ public class ProtocolResponder extends Responder{
             while(true){
                 if(flag != 0) break;
                 try{
-                    if(idleStateTime != 0 && Calendar.getInstance().getTimeInMillis() - idleStateTime > 300000){
+                    final long idleTime =  Calendar.getInstance().getTimeInMillis() - idleStateTime;
+                    Log.e("Current Idle Time : " + idleTime);
+                    if(idleStateTime != 0 && idleTime > 300000){
                         sendDisconnectionSMS();
                     }
+                    Thread.sleep(IDLE_CHECK_INTERVAL);
 //                    if(this.ctx != null){
 //                        ByteBuf byteBuf = Unpooled.wrappedBuffer(new byte[]{0});
 //                        this.ctx.writeAndFlush(byteBuf);
@@ -246,22 +249,19 @@ public class ProtocolResponder extends Responder{
     private void sendDisconnectionSMS(){
         try {
 //            super.channelInactive(ctx);
-            if(farmString.length() == 4 && harvString.length() == 2) Log.i("Channel Inactivated at [" + farmString + "/" + harvString + "].");
+            if(farmString.length() == 4) Log.i("Channel Inactivated at [" + farmString + "/" + harvString + "].");
 
             List<String> phones = SohaProtocolUtil.getPhoneNumbers(farmString, farmString);
-            if(harvName == null || harvName.equals("null") || harvName.equals("")) {
-                if(farmString.length() == 4 && harvString.length() == 2) Log.e(info);
-                harvName = "단말기 ID : " + harvString;
-            }
-            if(harvString.trim().length() == 2 || farmString.trim().length() == 4) {
+
+            if(farmString.trim().length() == 4) {
                 for (String tel : phones)
                     if(tel != null && !tel.trim().equals("") && !tel.trim().equals("--")) smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE_FARM, farmName));
-                flag = 1;
             }
         }catch(Exception e){
             e.printStackTrace();
             Log.e("통신 이상 SMS 전송 중 에러 : " + e.getMessage());
         }finally {
+            flag = 1;
             Log.i("Connection Finished."); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
             clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
         }

@@ -162,4 +162,6 @@ public class ConstProtocol {
     public static final String SQL_COL_DONGNAME = "dongName";
     public static final String SQL_COL_FARM_TEL = "tel";
 
+    public static final int IDLE_CHECK_INTERVAL = 5000;
+
 }
