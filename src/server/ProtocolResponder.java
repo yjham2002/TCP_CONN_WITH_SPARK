@@ -180,6 +180,9 @@ public class ProtocolResponder extends Responder{
                     Log.e("IdleTime : " + idleStateTime + " / Farm : " + farmInit);
                     idleStateTime = Calendar.getInstance().getTimeInMillis();
 
+                    farmString = farmInit;
+                    farmName = Cache.getInstance().farmNames.get(farmString);
+
                     Log.i("Connected Farm - " + farmInit + "[" + uniqueKey + "] :: Totally " + clients.size() + " connections are being maintained.");
 
                 } else if(buffer.length == LENGTH_ALERT_PRTC){ // 경보 프로토콜 수신 시
@@ -261,9 +264,9 @@ public class ProtocolResponder extends Responder{
             e.printStackTrace();
             Log.e("통신 이상 SMS 전송 중 에러 : " + e.getMessage());
         }finally {
-            flag = 1;
             Log.i("Connection Finished."); // 커넥션이 마무리 되었음을 디버깅을 위해 출력
             clients.remove(uniqueKey); // 클라이언트 해시맵으로부터 소거함
+            this.channelInactive(ctx);
         }
     }
 
