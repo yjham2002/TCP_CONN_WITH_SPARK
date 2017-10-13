@@ -80,6 +80,8 @@ public class ServiceProvider extends ServerConfig{
      */
     private int port;
 
+    public static ConcurrentHashMap<String, Long> idleStateTime = new ConcurrentHashMap<>();
+
     /**
      * 포트를 매개변수로 입력받아 인스턴스를 생성하는 내부 접근 지정 생성자
      * @param port

@@ -17,7 +17,10 @@ import utils.Log;
 import utils.SohaProtocolUtil;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 import static constants.ConstProtocol.*;
+import static server.engine.ServiceProvider.idleStateTime;
 
 /**
  * @author EuiJin.Ham
@@ -27,17 +30,26 @@ import static constants.ConstProtocol.*;
 public class ProtocolResponder extends Responder{
 
     private int flag = 0;
-    private long idleStateTime = 0;
 
     public ProtocolResponder(HashMap clients){
         super(clients);
+
+        if(idleStateTime == null) idleStateTime = new ConcurrentHashMap<>();
+
         Thread thread = new Thread(()->{
             while(true){
                 if(flag != 0) break;
                 try{
-                    final long idleTime =  Calendar.getInstance().getTimeInMillis() - idleStateTime;
-                    Log.e("Current Idle Time : " + idleTime);
-                    if(idleStateTime != 0 && idleTime > 300000){
+                    long idleState;
+                    if(idleStateTime != null && farmString != null
+                            && idleStateTime.containsKey(farmString))
+                        idleState = idleStateTime.get(farmString);
+                    else idleState = 0;
+                    final long idleTime =  Calendar.getInstance().getTimeInMillis() - idleState;
+
+                    if(idleState != 0) Log.e("Current Idle Time : " + idleTime);
+
+                    if(idleState != 0 && idleTime > 300000){
                         sendDisconnectionSMS();
                     }
                     Thread.sleep(IDLE_CHECK_INTERVAL);
@@ -177,10 +189,11 @@ public class ProtocolResponder extends Responder{
 
                     Log.i(Arrays.toString(init.getProcessed()));
 
-                    Log.e("IdleTime : " + idleStateTime + " / Farm : " + farmInit);
-                    idleStateTime = Calendar.getInstance().getTimeInMillis();
-
                     farmString = farmInit;
+                    idleStateTime.put(farmString, Calendar.getInstance().getTimeInMillis());
+
+                    Log.e("IdleTime initialized : " + farmInit);
+
                     farmName = Cache.getInstance().farmNames.get(farmString);
 
                     Log.i("Connected Farm - " + farmInit + "[" + uniqueKey + "] :: Totally " + clients.size() + " connections are being maintained.");
