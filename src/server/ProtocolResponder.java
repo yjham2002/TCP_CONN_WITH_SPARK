@@ -27,6 +27,7 @@ import static constants.ConstProtocol.*;
 public class ProtocolResponder extends Responder{
 
     private int flag = 0;
+    private long idleStateTime = 0;
 
     public ProtocolResponder(HashMap clients){
         super(clients);
@@ -34,12 +35,15 @@ public class ProtocolResponder extends Responder{
             while(true){
                 if(flag != 0) break;
                 try{
-                    if(this.ctx != null){
-                        ByteBuf byteBuf = Unpooled.wrappedBuffer(new byte[]{0});
-                        this.ctx.writeAndFlush(byteBuf);
-                        Log.i("Sending An HeartBeat [두근두근 내 심장을 전송해요 ~ 뀨뀨꺄꺄?!♡]");
+                    if(idleStateTime != 0 && Calendar.getInstance().getTimeInMillis() - idleStateTime > 300000){
+                        sendDisconnectionSMS();
                     }
-                    Thread.sleep(10000);
+//                    if(this.ctx != null){
+//                        ByteBuf byteBuf = Unpooled.wrappedBuffer(new byte[]{0});
+//                        this.ctx.writeAndFlush(byteBuf);
+//                        Log.i("Sending An HeartBeat [두근두근 내 심장을 전송해요 ~ 뀨뀨꺄꺄?!♡]");
+//                    }
+//                    Thread.sleep(10000);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -170,6 +174,9 @@ public class ProtocolResponder extends Responder{
 
                     Log.i(Arrays.toString(init.getProcessed()));
 
+                    Log.e("IdleTime : " + idleStateTime + " / Farm : " + farmInit);
+                    idleStateTime = Calendar.getInstance().getTimeInMillis();
+
                     Log.i("Connected Farm - " + farmInit + "[" + uniqueKey + "] :: Totally " + clients.size() + " connections are being maintained.");
 
                 } else if(buffer.length == LENGTH_ALERT_PRTC){ // 경보 프로토콜 수신 시
@@ -226,7 +233,7 @@ public class ProtocolResponder extends Responder{
                 }
             }
         }catch (IOException e){
-            sendDisconnectionSMS();
+//            sendDisconnectionSMS();
         }catch(Exception e) {
             e.printStackTrace();
             Log.e("Exception Handled - " + e.getMessage());
@@ -238,7 +245,7 @@ public class ProtocolResponder extends Responder{
 
     private void sendDisconnectionSMS(){
         try {
-            super.channelInactive(ctx);
+//            super.channelInactive(ctx);
             if(farmString.length() == 4 && harvString.length() == 2) Log.i("Channel Inactivated at [" + farmString + "/" + harvString + "].");
 
             List<String> phones = SohaProtocolUtil.getPhoneNumbers(farmString, farmString);
@@ -249,6 +256,7 @@ public class ProtocolResponder extends Responder{
             if(harvString.trim().length() == 2 || farmString.trim().length() == 4) {
                 for (String tel : phones)
                     if(tel != null && !tel.trim().equals("") && !tel.trim().equals("--")) smsService.sendSMS(tel, String.format(ConstProtocol.CONNECTION_MESSAGE_FARM, farmName));
+                flag = 1;
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -262,7 +270,12 @@ public class ProtocolResponder extends Responder{
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         flag = 1;
-        sendDisconnectionSMS();
+        try {
+            super.channelInactive(ctx);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+//        sendDisconnectionSMS();
     }
 
 }

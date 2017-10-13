@@ -218,7 +218,9 @@ public class SohaProtocolUtil {
 
         try {
             interval = DBManager.getInstance().getNumber("SELECT inter_time FROM farm_list WHERE farm_code = '" + farmInit + "'", "inter_time");
-        }catch(NothingToTakeException e){}
+        }catch(NothingToTakeException e){
+            Log.e("Cannot Get interval from database : " + farmInit);
+        }
 
         int initM10 = ConstProtocol.INIT_TERM_MIN10;
         int initM = ConstProtocol.INIT_TERM_MIN;
@@ -262,8 +264,12 @@ public class SohaProtocolUtil {
                 initS10 = 0;
                 initS = 0;
                 break;
-            default: break;
+            default:
+                Log.e("Interval Setting Failed : " + farmInit);
+                break;
         }
+
+        Log.e("Setting interval : " + interval + " / " + farmInit);
 
         ByteSerial init = new ByteSerial
                 (
