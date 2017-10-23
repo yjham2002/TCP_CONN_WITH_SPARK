@@ -76,8 +76,8 @@
       <file leaf-file-name="BasePOJO.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/pojo/BasePOJO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="184" column="0" lean-forward="true" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
+            <state relative-caret-position="515">
+              <caret line="203" column="152" lean-forward="false" selection-start-line="203" selection-start-column="152" selection-end-line="203" selection-end-column="152" />
               <folding />
             </state>
           </provider>
@@ -771,7 +771,7 @@
       <workItem from="1508202735687" duration="8000" />
       <workItem from="1508202777462" duration="18000" />
       <workItem from="1508302690928" duration="681000" />
-      <workItem from="1508732644572" duration="2738000" />
+      <workItem from="1508732644572" duration="3113000" />
     </task>
     <task id="LOCAL-00011" summary="Design Description added on README">
       <created>1496130276017</created>
@@ -1120,7 +1120,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3445000" />
+    <option name="totallyTimeSpent" value="3820000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1560,8 +1560,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/pojo/BasePOJO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="184" column="0" lean-forward="true" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
+        <state relative-caret-position="515">
+          <caret line="203" column="152" lean-forward="false" selection-start-line="203" selection-start-column="152" selection-end-line="203" selection-end-column="152" />
           <folding />
         </state>
       </provider>

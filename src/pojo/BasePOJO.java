@@ -200,6 +200,9 @@ public class BasePOJO implements Serializable{
             Log.e("Error occurred on getBitAggregationWithHint(" + hint + ", " + Arrays.toString(bits) + ")");
             return getBitAggregation(bits);
         }
+
+        Log.e("Bit Restored :: " + getBitAggregation(bits) + " / " + "getBitAggregationWithHint(" + hint + ", " + Arrays.toString(bits) + ") = " + total);
+
         return total;
     }
 
