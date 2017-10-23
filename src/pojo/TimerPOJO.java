@@ -113,32 +113,35 @@ public class TimerPOJO extends BasePOJO{
         this.byteSerial = null;
     }
 
+    // TODO
     @JsonIgnore
     public byte[] getBytes(){
 
         byte[] check = SohaProtocolUtil.concat(ConstProtocol.STX, this.farmCode.getBytes(), this.dongCode.getBytes());
 
         int bitAggr_timerctrl_1 =
-                getBitAggregation(
+                getBitAggregationWithHint(
+                        timer_ctrl_aggr,
                         timer_ctrl_ilum_off,
                         timer_ctrl_ilum_on,
-                        0,
+                        -1,
                         timer_ctrl_ilum_type,
                         timer_ctrl_humidity_off,
                         timer_ctrl_humidity_on,
-                        0,
+                        -1,
                         timer_ctrl_humidity_type
                 );
 
         int bitAggr_timerctrl_2 =
-                getBitAggregation(
+                getBitAggregationWithHint(
+                        timer_ctrl_aggr,
                         timer_ctrl_temp_off,
                         timer_ctrl_temp_on,
-                        0,
+                        -1,
                         timer_ctrl_temp_type,
                         timer_ctrl_co2_off,
                         timer_ctrl_co2_on,
-                        0,
+                        -1,
                         timer_ctrl_co2_type
                 );
 

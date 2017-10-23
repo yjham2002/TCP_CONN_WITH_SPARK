@@ -630,7 +630,7 @@ public class RealtimePOJO extends BasePOJO{
     public byte[] getWritableData(){
         byte[] check = SohaProtocolUtil.concat(
                 new byte[]{(byte)getBitAggregation(this.mcnctrl_web_stat_reserve, this.mcnctrl_web_stat_alarm, this.mcnctrl_web_stat_ilum, this.mcnctrl_web_stat_dehumidifier, this.mcnctrl_web_stat_humidifier, this.mcnctrl_web_stat_freezer, this.mcnctrl_web_stat_heater, this.mcnctrl_web_stat_fan)},
-                new byte[]{(byte)getBitAggregation(this.mcnctrl_web_order_main2, this.mcnctrl_web_order_main1, 0, this.mcnctrl_web_pause, this.mcnctrl_web_order_ilum, this.mcnctrl_web_order_humidity, this.mcnctrl_web_order_temp, this.getMcnctrl_web_order_co2())}
+                new byte[]{(byte)getBitAggregationWithHint(mcnctrl_web_aggr, this.mcnctrl_web_order_main2, this.mcnctrl_web_order_main1, -1, this.mcnctrl_web_pause, this.mcnctrl_web_order_ilum, this.mcnctrl_web_order_humidity, this.mcnctrl_web_order_temp, this.getMcnctrl_web_order_co2())}
 
         );
         return check;

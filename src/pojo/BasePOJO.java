@@ -183,6 +183,25 @@ public class BasePOJO implements Serializable{
         return total;
     }
 
+    public static int getBitAggregationWithHint(int hint, int... bits){
+        int total = 0;
+        try {
+            String[] binStr = Integer.toBinaryString(hint).replaceAll("", " ").trim().split(" ");
+
+            for (int e = 0; e < bits.length; e++) {
+                if (bits[e] != 0 && bits[e] != 1) {
+                    total += Integer.parseInt(binStr[bits.length - e - 1]) << (bits.length - e - 1);
+                } else {
+                    total += bits[e] << (bits.length - e - 1);
+                }
+            }
+        }catch (Exception e){
+            Log.e("Error occurred on getBitAggregationWithHint(" + hint + ", " + Arrays.toString(bits) + ")");
+            return getBitAggregation(bits);
+        }
+        return total;
+    }
+
     // TODO getBitAggr - 일반화
 
     public static byte[] getValuePairFromString(String str){
@@ -330,17 +349,6 @@ public class BasePOJO implements Serializable{
         }else{
             return getBooleanValueFromByte(offset + 1, bitIndex);
         }
-    }
-
-    public static void main(String... args){
-        byte[] arr = new byte[]{83, 84, 48, 48, 55, 56, 48, 49, 2, 107, 6, 93, 0, 7, 0, 0, 0, 0, -111, -19, 2, 107, 6, 93, 0, 7, 0, 0, 0, 0, -111, -19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -111, -12, 2, 107, 6, 93, 0, 7, 0, 0, 0, 0, -111, -19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -111, -12, 2, 107, 6, 93, 0, 7, 0, 0, 0, 0, -111, -19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -111, -12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44, -102, 1, -65, 1, 28, 0, 9, 0, 43, 0, 0, 0, 99, 6, 5, 40, -10, 64, 60, 61, 113, 64, 74, -103, -102, 64, 89, 61, 113, 64, 106, -123, 31, 64, 123, 10, 61, 64, -121, -93, -41, 64, -112, 51, 51, 64, -101, 20, 123, 64, -90, -21, -123, 64, -79, 102, 102, 64, -66, 51, 51, 64, -53, -103, -102, 64, -39, 81, -20, 64, -24, 0, 0, 64, -8, 81, -20, 65, 4, 30, -72, 65, 13, 102, 102, 65, 22, 0, 0, 65, 32, -103, -102, 65, 41, -52, -51, 65, 52, -103, -102, 65, 65, -52, -51, 65, 76, -103, -102, 65, 89, 0, 0, 44, -102, 1, -65, 1, 28, 0, 9, 65, -126, 102, 102, 65, -118, 102, 102, 65, -110, 51, 51, 65, -101, -52, -51, 65, -92, 102, 102, 65, -82, 0, 0, 4, -80, 0, -6, 1, -62, 0, 9, -35, -35, -103, -102, 65, 25, 4, 87, 8, -82, 13, 5, 4, -57, 0, -56, 0, 5, 0, 0, 0, 0, 9, -63, -1, -60, 0, 44, 6, 100, 2, 107, 0, 0, 7, -31, 2, 107, 6, 93, -1, 15, 0, 0, 0, 0, 86, 13, 10};
-        BasePOJO basePOJO = new BasePOJO();
-        basePOJO.byteSerial = new ByteSerial(arr);
-
-        Log.i(basePOJO.getSumWith2Bytes(294, SUM_MODE_P));
-        for(int i = 0; i < 8; i++)
-            System.out.print(basePOJO.getBooleanValueFromByte(294, i) + " ");
-
     }
 
     protected int toDecimalFromBinaryValue(int offset, int bitBeginIndex, int length){

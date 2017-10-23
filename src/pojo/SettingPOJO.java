@@ -252,11 +252,12 @@ public class SettingPOJO extends BasePOJO {
                 );
 
         int bitAggr_sr =
-                getBitAggregation(
-                        0,
-                        0,
-                        0,
-                        0,
+                getBitAggregationWithHint(
+                        sensor_quantity_and_selection_aggr,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
                         sensor_selected_4,
                         sensor_selected_3,
                         sensor_selected_2,
@@ -286,11 +287,13 @@ public class SettingPOJO extends BasePOJO {
                         getBitRhsFromDual(cthi_ctrl_stat_co2_ctrl)
                 );
 
+        // TODO
         int bitAggr_alt =
-                getBitAggregation(
-                        0,
-                        0,
-                        0,
+                getBitAggregationWithHint(
+                        alert_alarm_time_select_aggr,
+                        -1,
+                        -1,
+                        -1,
                         this.alert_alarm_time_select_timeset,
                         getBitLhsFromDual(this.alert_alarm_time_select_lamp_unit),
                         getBitRhsFromDual(this.alert_alarm_time_select_lamp_unit),
