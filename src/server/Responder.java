@@ -187,6 +187,8 @@ public class Responder  extends ChannelHandlerAdapter {
 
     protected void synchronizeStatus(RealtimePOJO realtimePOJO, String farmC, String harvC, int idC){
 
+        Log.e("synchronizeStatus");
+
         ByteSerial recv = null;
         byte[] protocol = null;
 
@@ -270,7 +272,7 @@ public class Responder  extends ChannelHandlerAdapter {
 
         try {
             if (realtimePOJO.getOption_changed_setting_a() == ConstProtocol.TRUE) {
-                Log.i("Setting Change Detected");
+                Log.e("Setting Change Detected");
                 protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                 Log.i("READING SETTINGS - " + Arrays.toString(protocol));
 
@@ -297,7 +299,7 @@ public class Responder  extends ChannelHandlerAdapter {
                 toSend = true;
             }
             if (realtimePOJO.getOption_changed_timer_a() == ConstProtocol.TRUE) {
-                Log.i("Timer Change Detected");
+                Log.e("Timer Change Detected");
                 protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_TIMER.getHead(), ConstProtocol.RANGE_TIMER.getTail(), idC, farmC.getBytes(), harvC.getBytes());
                 Log.i(Arrays.toString(protocol));
 
@@ -312,37 +314,37 @@ public class Responder  extends ChannelHandlerAdapter {
                 toSend = true;
             }
             if (realtimePOJO.getOption_changed_crop1_a() == ConstProtocol.TRUE) {
-                Log.i("Crop[1] Change Detected");
+                Log.e("Crop[1] Change Detected");
                 readDailyAge(1, farmC, harvC, idC);
 
                 toSend = true;
             }
             if (realtimePOJO.getOption_changed_crop2_a() == ConstProtocol.TRUE) {
-                Log.i("Crop[2] Change Detected");
+                Log.e("Crop[2] Change Detected");
                 readDailyAge(2, farmC, harvC, idC);
 
                 toSend = true;
             }
             if (realtimePOJO.getOption_changed_crop3_a() == ConstProtocol.TRUE) {
-                Log.i("Crop[3] Change Detected");
+                Log.e("Crop[3] Change Detected");
                 readDailyAge(3, farmC, harvC, idC);
 
                 toSend = true;
             }
             if (realtimePOJO.getOption_changed_crop4_a() == ConstProtocol.TRUE) {
-                Log.i("Crop[4] Change Detected");
+                Log.e("Crop[4] Change Detected");
                 readDailyAge(4, farmC, harvC, idC);
 
                 toSend = true;
             }
             if (realtimePOJO.getOption_changed_crop5_a() == ConstProtocol.TRUE) {
-                Log.i("Crop[5] Change Detected");
+                Log.e("Crop[5] Change Detected");
                 readDailyAge(5, farmC, harvC, idC);
 
                 toSend = true;
             }
             if (realtimePOJO.getOption_changed_crop6_a() == ConstProtocol.TRUE) {
-                Log.i("Crop[6] Change Detected");
+                Log.e("Crop[6] Change Detected");
                 readDailyAge(6, farmC, harvC, idC);
 
                 toSend = true;
@@ -353,7 +355,7 @@ public class Responder  extends ChannelHandlerAdapter {
 
             if(toSend) {
                 ServiceProvider.getInstance().send(uniqueKey, ellaborated, ConstProtocol.RESPONSE_LEN_WRITE);
-                Log.i("Initiating Flag Bits");
+                Log.e("Initiating Flag Bits");
             }else{
 //                Log.i("Nothing Has been detected with changed-flags");
             }
