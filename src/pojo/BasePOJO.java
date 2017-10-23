@@ -189,22 +189,33 @@ public class BasePOJO implements Serializable{
         return total;
     }
 
-    public static int getBitAggregationWithHint(int hint, int... bits){
+    public static int getBitAggregationWithHint(int hint, boolean isHigherThan8, int... bits){
         int total = 0;
+        String[] binStr = new String[]{"0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"};
         try {
-            String[] binStr = Integer.toBinaryString(hint).replaceAll("", " ").trim().split(" ");
+            String[] binStr2 = Integer.toBinaryString(hint).replaceAll("", " ").trim().split(" ");
+
+            for(int q = 0; q < 16; q++){
+                if(q > binStr.length - binStr2.length - 1 && binStr2[binStr2.length - (binStr.length - q)].equals("1")) binStr[q] = "1";
+            }
 
             for (int e = 0; e < bits.length; e++) {
                 if (bits[e] != 0 && bits[e] != 1) {
-                    if (bits.length - e - 1 < binStr.length)
-                        total += Integer.parseInt(binStr[bits.length - e - 1]) << (bits.length - e - 1);
+                    if (bits.length - e - 1 < binStr.length) {
+                        if(isHigherThan8) {
+                            total += Integer.parseInt(binStr[8 - (8 - e - 1) - 1]) << (bits.length - e - 1);
+                        }else{
+                            total += Integer.parseInt(binStr[16 - (8 - e - 1) - 1]) << (bits.length - e - 1);
+                        }
+                    }
                     else total += 0 << (bits.length - e - 1);
                 }else {
                     total += bits[e] << (bits.length - e - 1);
                 }
             }
         }catch (Exception e){
-            Log.e("Error occurred on getBitAggregationWithHint(" + hint + ", " + Arrays.toString(bits) + ")");
+            e.printStackTrace();
+            Log.e("Error occurred on getBitAggregationWithHint(" + hint + ", " + Arrays.toString(bits) + ")  ::  " + Arrays.toString(binStr));
             return getBitAggregation(bits);
         }
 

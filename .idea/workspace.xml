@@ -12,10 +12,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/sohaTech_serial.jar" afterPath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/sohaTech_serial.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/BasePOJO.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/BasePOJO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/BasePOJO.java" afterPath="$PROJECT_DIR$/src/pojo/BasePOJO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" afterPath="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/SettingPOJO.java" afterPath="$PROJECT_DIR$/src/pojo/SettingPOJO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/TimerPOJO.java" afterPath="$PROJECT_DIR$/src/pojo/TimerPOJO.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -34,11 +34,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="AppMain.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="AppMain.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="549" column="28" lean-forward="true" selection-start-line="549" selection-start-column="28" selection-end-line="549" selection-end-column="28" />
+            <state relative-caret-position="66">
+              <caret line="560" column="0" lean-forward="true" selection-start-line="560" selection-start-column="0" selection-end-line="560" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -59,8 +59,8 @@
       <file leaf-file-name="RealtimePOJO.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/pojo/RealtimePOJO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="637" column="0" lean-forward="true" selection-start-line="637" selection-start-column="0" selection-end-line="637" selection-end-column="0" />
+            <state relative-caret-position="370">
+              <caret line="627" column="0" lean-forward="true" selection-start-line="627" selection-start-column="0" selection-end-line="627" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -76,11 +76,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BasePOJO.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BasePOJO.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/pojo/BasePOJO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="203" column="17" lean-forward="false" selection-start-line="203" selection-start-column="17" selection-end-line="203" selection-end-column="17" />
+            <state relative-caret-position="344">
+              <caret line="204" column="43" lean-forward="true" selection-start-line="204" selection-start-column="43" selection-end-line="204" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -89,8 +89,18 @@
       <file leaf-file-name="SettingPOJO.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/pojo/SettingPOJO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="301" column="18" lean-forward="true" selection-start-line="301" selection-start-column="18" selection-end-line="301" selection-end-column="18" />
+            <state relative-caret-position="408">
+              <caret line="261" column="42" lean-forward="true" selection-start-line="261" selection-start-column="42" selection-end-line="261" selection-end-column="42" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Responder.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/Responder.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="502">
+              <caret line="239" column="88" lean-forward="true" selection-start-line="239" selection-start-column="88" selection-end-line="239" selection-end-column="88" />
               <folding />
             </state>
           </provider>
@@ -109,8 +119,8 @@
       <file leaf-file-name="TimerPOJO.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/pojo/TimerPOJO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1757">
-              <caret line="143" column="27" lean-forward="true" selection-start-line="143" selection-start-column="27" selection-end-line="143" selection-end-column="27" />
+            <state relative-caret-position="123">
+              <caret line="126" column="43" lean-forward="true" selection-start-line="126" selection-start-column="43" selection-end-line="126" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -119,21 +129,11 @@
       <file leaf-file-name="ProtocolResponder.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="26" column="17" lean-forward="false" selection-start-line="26" selection-start-column="17" selection-end-line="26" selection-end-column="17" />
+            <state relative-caret-position="344">
+              <caret line="243" column="38" lean-forward="false" selection-start-line="243" selection-start-column="38" selection-end-line="243" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ServiceProvider.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/engine/ServiceProvider.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="836">
-              <caret line="89" column="25" lean-forward="false" selection-start-line="89" selection-start-column="25" selection-end-line="89" selection-end-column="25" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -150,10 +150,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>== 15</find>
-      <find>phones</find>
-      <find>phone</find>
-      <find>System.out.println(&quot;INFO ::</find>
       <find>::</find>
       <find>.length</find>
       <find>.length)</find>
@@ -180,6 +176,10 @@
       <find>farmName =</find>
       <find>hint</find>
       <find>main</find>
+      <find>alert_alarm_time_select_timeset</find>
+      <find>mcnctrl_web_order_main2</find>
+      <find>timer_ctrl_temp_off</find>
+      <find>sensor_selected_4</find>
     </findStrings>
     <replaceStrings>
       <replace>log.info</replace>
@@ -265,9 +265,9 @@
         <option value="$PROJECT_DIR$/src/constants/ConstProtocol.java" />
         <option value="$PROJECT_DIR$/src/server/engine/ServiceProvider.java" />
         <option value="$PROJECT_DIR$/src/server/ProtocolResponder.java" />
-        <option value="$PROJECT_DIR$/src/pojo/TimerPOJO.java" />
         <option value="$PROJECT_DIR$/src/pojo/SettingPOJO.java" />
         <option value="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" />
+        <option value="$PROJECT_DIR$/src/pojo/TimerPOJO.java" />
         <option value="$PROJECT_DIR$/src/pojo/BasePOJO.java" />
       </list>
     </option>
@@ -310,6 +310,24 @@
             <path>
               <item name="SOHATECH_TCP" type="b2602c69:ProjectViewProjectNode" />
               <item name="SOHATECH_TCP" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SOHATECH_TCP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SOHATECH_TCP" type="462c0819:PsiDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SOHATECH_TCP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SOHATECH_TCP" type="462c0819:PsiDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SOHATECH_TCP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SOHATECH_TCP" type="462c0819:PsiDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
+              <item name="sohaTech_serial_jar" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SOHATECH_TCP" type="b2602c69:ProjectViewProjectNode" />
@@ -774,7 +792,7 @@
       <workItem from="1508202735687" duration="8000" />
       <workItem from="1508202777462" duration="18000" />
       <workItem from="1508302690928" duration="681000" />
-      <workItem from="1508732644572" duration="3681000" />
+      <workItem from="1508732644572" duration="9001000" />
     </task>
     <task id="LOCAL-00011" summary="Design Description added on README">
       <created>1496130276017</created>
@@ -1123,7 +1141,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4388000" />
+    <option name="totallyTimeSpent" value="9708000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1398,8 +1416,8 @@
         <state relative-caret-position="266">
           <caret line="21" column="26" lean-forward="false" selection-start-line="21" selection-start-column="26" selection-end-line="21" selection-end-column="26" />
           <folding>
-            <element signature="e#492#493#0" expanded="true" />
-            <element signature="e#560#561#0" expanded="true" />
+            <element signature="e#492#493#0" expanded="false" />
+            <element signature="e#560#561#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1421,14 +1439,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/Responder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/agent/AlertAgent.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2071">
@@ -1445,16 +1455,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="26" column="17" lean-forward="false" selection-start-line="26" selection-start-column="17" selection-end-line="26" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/pojo/CropDayDetailPOJO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-361">
@@ -1468,16 +1468,6 @@
         <state relative-caret-position="104">
           <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="549" column="28" lean-forward="true" selection-start-line="549" selection-start-column="28" selection-end-line="549" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1529,30 +1519,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pojo/TimerPOJO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1757">
-          <caret line="143" column="27" lean-forward="true" selection-start-line="143" selection-start-column="27" selection-end-line="143" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pojo/SettingPOJO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="301" column="18" lean-forward="true" selection-start-line="301" selection-start-column="18" selection-end-line="301" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pojo/RealtimePOJO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="637" column="0" lean-forward="true" selection-start-line="637" selection-start-column="0" selection-end-line="637" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/databases/DBConnectionPool.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
@@ -1561,11 +1527,63 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/ProtocolResponder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="344">
+          <caret line="243" column="38" lean-forward="false" selection-start-line="243" selection-start-column="38" selection-end-line="243" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/Responder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="502">
+          <caret line="239" column="88" lean-forward="true" selection-start-line="239" selection-start-column="88" selection-end-line="239" selection-end-column="88" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pojo/RealtimePOJO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="627" column="0" lean-forward="true" selection-start-line="627" selection-start-column="0" selection-end-line="627" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pojo/TimerPOJO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="126" column="43" lean-forward="true" selection-start-line="126" selection-start-column="43" selection-end-line="126" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pojo/SettingPOJO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="261" column="42" lean-forward="true" selection-start-line="261" selection-start-column="42" selection-end-line="261" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/pojo/BasePOJO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="203" column="17" lean-forward="false" selection-start-line="203" selection-start-column="17" selection-end-line="203" selection-end-column="17" />
+        <state relative-caret-position="344">
+          <caret line="204" column="43" lean-forward="true" selection-start-line="204" selection-start-column="43" selection-end-line="204" selection-end-column="43" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/AppMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="560" column="0" lean-forward="true" selection-start-line="560" selection-start-column="0" selection-end-line="560" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

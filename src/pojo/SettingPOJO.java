@@ -254,6 +254,7 @@ public class SettingPOJO extends BasePOJO {
         int bitAggr_sr =
                 getBitAggregationWithHint(
                         sensor_quantity_and_selection_aggr,
+                        true,
                         -1,
                         -1,
                         -1,
@@ -287,10 +288,10 @@ public class SettingPOJO extends BasePOJO {
                         getBitRhsFromDual(cthi_ctrl_stat_co2_ctrl)
                 );
 
-        // TODO
         int bitAggr_alt =
                 getBitAggregationWithHint(
                         alert_alarm_time_select_aggr,
+                        false,
                         -1,
                         -1,
                         -1,

@@ -122,6 +122,7 @@ public class TimerPOJO extends BasePOJO{
         int bitAggr_timerctrl_1 =
                 getBitAggregationWithHint(
                         timer_ctrl_aggr,
+                        true,
                         timer_ctrl_ilum_off,
                         timer_ctrl_ilum_on,
                         -1,
@@ -135,6 +136,7 @@ public class TimerPOJO extends BasePOJO{
         int bitAggr_timerctrl_2 =
                 getBitAggregationWithHint(
                         timer_ctrl_aggr,
+                        false,
                         timer_ctrl_temp_off,
                         timer_ctrl_temp_on,
                         -1,
