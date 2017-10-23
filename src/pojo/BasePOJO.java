@@ -179,7 +179,13 @@ public class BasePOJO implements Serializable{
 
     public static int getBitAggregation(int... bits){
         int total = 0;
-        for(int e = 0; e < bits.length; e++) total += bits[e] << (bits.length - e - 1);
+        for(int e = 0; e < bits.length; e++) {
+            if (bits[e] != 0 && bits[e] != 1) {
+                total += 0 << (bits.length - e - 1);
+            } else {
+                total += bits[e] << (bits.length - e - 1);
+            }
+        }
         return total;
     }
 
@@ -190,9 +196,10 @@ public class BasePOJO implements Serializable{
 
             for (int e = 0; e < bits.length; e++) {
                 if (bits[e] != 0 && bits[e] != 1) {
-                    if(bits.length - e - 1 < binStr.length) total += Integer.parseInt(binStr[bits.length - e - 1]) << (bits.length - e - 1);
+                    if (bits.length - e - 1 < binStr.length)
+                        total += Integer.parseInt(binStr[bits.length - e - 1]) << (bits.length - e - 1);
                     else total += 0 << (bits.length - e - 1);
-                } else {
+                }else {
                     total += bits[e] << (bits.length - e - 1);
                 }
             }

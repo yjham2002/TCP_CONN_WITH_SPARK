@@ -12,6 +12,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/sohaTech_serial.jar" afterPath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/sohaTech_serial.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/BasePOJO.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/BasePOJO.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/BasePOJO.java" afterPath="$PROJECT_DIR$/src/pojo/BasePOJO.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -76,8 +79,8 @@
       <file leaf-file-name="BasePOJO.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/pojo/BasePOJO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="515">
-              <caret line="203" column="152" lean-forward="false" selection-start-line="203" selection-start-column="152" selection-end-line="203" selection-end-column="152" />
+            <state relative-caret-position="475">
+              <caret line="203" column="17" lean-forward="false" selection-start-line="203" selection-start-column="17" selection-end-line="203" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -771,7 +774,7 @@
       <workItem from="1508202735687" duration="8000" />
       <workItem from="1508202777462" duration="18000" />
       <workItem from="1508302690928" duration="681000" />
-      <workItem from="1508732644572" duration="3113000" />
+      <workItem from="1508732644572" duration="3681000" />
     </task>
     <task id="LOCAL-00011" summary="Design Description added on README">
       <created>1496130276017</created>
@@ -1120,7 +1123,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3820000" />
+    <option name="totallyTimeSpent" value="4388000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1560,8 +1563,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/pojo/BasePOJO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="515">
-          <caret line="203" column="152" lean-forward="false" selection-start-line="203" selection-start-column="152" selection-end-line="203" selection-end-column="152" />
+        <state relative-caret-position="475">
+          <caret line="203" column="17" lean-forward="false" selection-start-line="203" selection-start-column="17" selection-end-line="203" selection-end-column="17" />
           <folding />
         </state>
       </provider>
