@@ -12,17 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="208537ff-9e1b-46dc-94b0-8d29fdc70e26" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/backup/sohaTech_serial.jar" afterPath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/backup/sohaTech_serial.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/sohaTech_serial.jar" afterPath="$PROJECT_DIR$/out/artifacts/sohaTech_serial_jar/sohaTech_serial.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/BasePOJO.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/BasePOJO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/RealtimePOJO.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/RealtimePOJO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/SettingPOJO.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/SettingPOJO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/TimerPOJO.class" afterPath="$PROJECT_DIR$/out/production/sohaTech_serial/pojo/TimerPOJO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/BasePOJO.java" afterPath="$PROJECT_DIR$/src/pojo/BasePOJO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" afterPath="$PROJECT_DIR$/src/pojo/RealtimePOJO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/SettingPOJO.java" afterPath="$PROJECT_DIR$/src/pojo/SettingPOJO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pojo/TimerPOJO.java" afterPath="$PROJECT_DIR$/src/pojo/TimerPOJO.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -86,8 +76,8 @@
       <file leaf-file-name="BasePOJO.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/pojo/BasePOJO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="190" column="51" lean-forward="true" selection-start-line="190" selection-start-column="51" selection-end-line="190" selection-end-column="51" />
+            <state relative-caret-position="161">
+              <caret line="184" column="0" lean-forward="true" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -781,7 +771,7 @@
       <workItem from="1508202735687" duration="8000" />
       <workItem from="1508202777462" duration="18000" />
       <workItem from="1508302690928" duration="681000" />
-      <workItem from="1508732644572" duration="2390000" />
+      <workItem from="1508732644572" duration="2738000" />
     </task>
     <task id="LOCAL-00011" summary="Design Description added on README">
       <created>1496130276017</created>
@@ -1130,7 +1120,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3097000" />
+    <option name="totallyTimeSpent" value="3445000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1570,8 +1560,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/pojo/BasePOJO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="190" column="51" lean-forward="true" selection-start-line="190" selection-start-column="51" selection-end-line="190" selection-end-column="51" />
+        <state relative-caret-position="161">
+          <caret line="184" column="0" lean-forward="true" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
           <folding />
         </state>
       </provider>
