@@ -47,7 +47,7 @@ public class ProtocolResponder extends Responder{
                     else idleState = 0;
                     final long idleTime =  Calendar.getInstance().getTimeInMillis() - idleState;
 
-                    if(idleState != 0) Log.e("Current Idle Time : " + idleTime);
+//                    if(idleState != 0) Log.e("Current Idle Time : " + idleTime);
 
                     if(idleState != 0 && idleTime > 300000){
                         sendDisconnectionSMS();
@@ -237,6 +237,8 @@ public class ProtocolResponder extends Responder{
                      */
                     WrappedPOJO wrappedPOJO = new WrappedPOJO(realtimePOJO, farmString, harvString);
                     AlertAgent.getInstance().getBlockingQueue().put(wrappedPOJO);
+
+                    Log.e("Option Changed Flag bits : " + Integer.toBinaryString(realtimePOJO.getOption_changed_aggr()));
 
                     Thread synchronizer = new Thread(() -> {
                         semaphore = true;

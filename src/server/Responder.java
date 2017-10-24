@@ -187,7 +187,7 @@ public class Responder  extends ChannelHandlerAdapter {
 
     protected void synchronizeStatus(RealtimePOJO realtimePOJO, String farmC, String harvC, int idC){
 
-        Log.e("synchronizeStatus");
+//        Log.e("synchronizeStatus");
 
         ByteSerial recv = null;
         byte[] protocol = null;
@@ -271,6 +271,7 @@ public class Responder  extends ChannelHandlerAdapter {
         boolean toSend = false;
 
         try {
+
             if (realtimePOJO.getOption_changed_setting_a() == ConstProtocol.TRUE) {
                 Log.e("Setting Change Detected");
                 protocol = SohaProtocolUtil.makeReadProtocol(ConstProtocol.RANGE_SETTING.getHead(), ConstProtocol.RANGE_SETTING.getTail(), idC, farmC.getBytes(), harvC.getBytes());

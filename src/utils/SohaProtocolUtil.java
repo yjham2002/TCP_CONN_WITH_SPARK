@@ -269,7 +269,7 @@ public class SohaProtocolUtil {
                 break;
         }
 
-        Log.e("Setting interval : " + interval + " / " + farmInit);
+//        Log.e("Setting interval : " + interval + " / " + farmInit);
 
         ByteSerial init = new ByteSerial
                 (
