@@ -9,8 +9,8 @@ public class DBConnectionPool {
 
     public static final String CONNECTOR = "jdbc";
     public static final String DBMS = "mysql";
-//    public static final String HOST = "192.168.0.37";
-    public static final String HOST = "1.201.140.247";
+    public static final String HOST = "192.168.0.37";
+//    public static final String HOST = "1.201.140.247";
     public static final String PORT = "3306";
     public static final String DBNAME = "sohatechfarmdb";
     public static final String USERNAME = "sohatechfarmdb";
