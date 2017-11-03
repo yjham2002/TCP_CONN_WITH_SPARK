@@ -10,6 +10,7 @@ import models.Pair;
 import models.RestProcessor;
 import mysql.Cache;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.eclipse.jetty.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.*;
@@ -17,7 +18,10 @@ import server.engine.ServiceProvider;
 import server.response.Response;
 import server.response.ResponseConst;
 import spark.Spark;
+import spark.embeddedserver.EmbeddedServers;
+import spark.embeddedserver.jetty.EmbeddedJettyFactory;
 import utils.DataMapValidationUtil;
+import utils.ExcelGenerator;
 import utils.Log;
 import utils.SohaProtocolUtil;
 import java.util.*;
@@ -34,7 +38,6 @@ public class AppMain{
     private static AlertAgent alertAgent;
 
     public static void main(String... args){
-
         /**
          * 로거 초기화
          */
@@ -50,6 +53,12 @@ public class AppMain{
         alertAgent.start(20);
         serviceProvider.start(); // 인스턴스 시동
 
+        EmbeddedServers.add(EmbeddedServers.Identifiers.JETTY, new EmbeddedJettyFactory((i, j, k) -> {
+            Server server = new Server();
+            server.setAttribute("org.eclipse.jetty.server.Request.maxFormContentSize", 5000000);
+            return server;
+        }));
+
         /**
          * Spark Framework Implementation
          * 스파크 프레임워크를 이용하여 경량 REST를 이용함으로써 WAS와 연동하도록 함
@@ -59,6 +68,17 @@ public class AppMain{
         Spark.get(ConstRest.REST_CACHE, (req, res) -> {
             Cache.getInstance().recache();
             return RestProcessor.makeResultJson(1, "Cache Done.");
+        });
+
+        Spark.get("/excel", (req, res) -> {
+            final DataMap map = RestProcessor.makeProcessData(req.raw());
+
+            final String startDate = map.getString("startDate");
+            final String endDate = map.getString("endDate");
+            final String farmCode = map.getString("farmCode");
+            final String harvCode = map.getString("harvCode");
+
+            return RestProcessor.makeResultJson(1, "Generating Done.", ExcelGenerator.genAndGetName(farmCode, harvCode, startDate, endDate));
         });
 
         Spark.get(ConstRest.REST_CONNECT_TEST, (req, res) -> {
