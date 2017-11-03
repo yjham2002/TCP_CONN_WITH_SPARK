@@ -96,7 +96,23 @@ public class ExcelGenerator {
                 "  A.mcnctrl_mv510_stat_alarm, " +
                 "  A.redisTime, " +
                 "  A.growth_progress_dt, " +
-                "  A.growth_progress_total " +
+                "  A.growth_progress_total, " +
+                "  A.errdata_internal_co2 AS err1, " +
+                "  A.errdata_internal_temp AS err2, " +
+                "  A.errdata_internal_humid AS err3, " +
+                "  A.errdata_internal_ilum AS err4, " +
+                "  A.errdata_vent_relay AS err5, " +
+                "  A.errdata_raisetemp_relay AS err6, " +
+                "  A.errdata_raisecool_relay AS err7, " +
+                "  A.errdata_humidify_relay AS err8, " +
+                "  A.errdata_dehumidify_relay AS err9, " +
+                "  A.errdata_ilum_output AS err10, " +
+                "  A.errdata_crop_data AS err11, " +
+                "  A.errdata_device_connection AS err12, " +
+                "  A.errdata_network1 AS err13, " +
+                "  A.errdata_network2 AS err14, " +
+                "  A.errdata_network3 AS err15, " +
+                "  A.errdata_network4 AS err16 " +
                 "FROM tblRealTimeData A " +
                 "JOIN tblSettingData S ON A.farmCode = S.farmCode AND A.dongCode = S.dongCode " +
                 "WHERE A.farmCode='" + farmCode + "' AND A.dongCode = '" + harvCode + "' AND redisTime >= '" + startDate + "' AND redisTime <= '" + endDate + "' " +
@@ -162,6 +178,16 @@ public class ExcelGenerator {
 
                 final String cropDays = cropDaysString(growth_progress_dt, growth_progress_total, runningState);
 
+                String alarmState = "정지";
+
+                alarmDetect:
+                for(int q = 1; q <= 16; q++){
+                    if(data.getInt("err" + q) == 1){
+                        alarmState = "작동";
+                        break alarmDetect;
+                    }
+                }
+
                 final String cell01 = (i + 1) + "";
                 final String cell02 = forCell02(data.getString("mcnctrl_mv510_pause"), data.getString("mcnctrl_mv510_order_main1"));
                 final String cell03 = plantName;
@@ -181,7 +207,7 @@ public class ExcelGenerator {
                 final String cell17 = relayString(data.getInt("relay_output_humidity"));
                 final String cell18 = relayString(data.getInt("relay_output_dehumidity"));
                 final String cell19 = relayString(data.getInt("relay_output_ilum"));
-                final String cell20 = relayString(data.getInt("mcnctrl_mv510_stat_alarm"));
+                final String cell20 = alarmState;
                 final String cell21 = recvTime;
 
                 final String[] cells = new String[]{cell01, cell02, cell03, cell04, cell05, cell06, cell07, cell08, cell09, cell10, cell11, cell12, cell13, cell14, cell15, cell16, cell17, cell18, cell19, cell20, cell21};

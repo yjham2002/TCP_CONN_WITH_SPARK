@@ -78,7 +78,12 @@ public class AppMain{
             final String farmCode = map.getString("farmCode");
             final String harvCode = map.getString("harvCode");
 
-            return RestProcessor.makeResultJson(1, "Generating Done.", ExcelGenerator.genAndGetName(farmCode, harvCode, startDate, endDate));
+            try {
+                final String retVal = ExcelGenerator.genAndGetName(farmCode, harvCode, startDate, endDate);
+                return RestProcessor.makeResultJson(1, "Generating Done.", retVal);
+            }catch (Exception e){
+                return RestProcessor.makeResultJson(0, "Exception Thrown.", e.getStackTrace());
+            }
         });
 
         Spark.get(ConstRest.REST_CONNECT_TEST, (req, res) -> {
