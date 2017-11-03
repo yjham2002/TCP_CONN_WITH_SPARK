@@ -34,6 +34,16 @@ public class ExcelGenerator {
         return style;
     }
 
+    private static CellStyle createStyleWithColor(Workbook wb, boolean bold, short indexedColor){
+        CellStyle style = createBorderedStyle(wb);
+        Font headerFont = wb.createFont();
+        if(bold) headerFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        headerFont.setColor(indexedColor);
+        style.setFont(headerFont);
+
+        return style;
+    }
+
     private static Cell cell(Workbook wb, Row row, CellStyle style, int idx){
         Cell cell = row.createCell(idx);
         cell.setCellStyle(style);
@@ -128,10 +138,15 @@ public class ExcelGenerator {
         HSSFRow rowhead = sheet.createRow((short)0);
 
         CellStyle cellStyle = createBorderedStyle(workbook);
+        Font font = workbook.createFont();
+        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        cellStyle.setFont(font);
         cellStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
         cellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
 
         CellStyle border = createBorderedStyle(workbook);
+        CellStyle blueFont = createStyleWithColor(workbook, false, IndexedColors.BLUE.getIndex());
+        CellStyle redFont = createStyleWithColor(workbook, false, IndexedColors.RED.getIndex());
 
         for(int e = 0; e < 21; e++) {
             Cell cell = rowhead.createCell(e);
@@ -213,7 +228,13 @@ public class ExcelGenerator {
                 final String[] cells = new String[]{cell01, cell02, cell03, cell04, cell05, cell06, cell07, cell08, cell09, cell10, cell11, cell12, cell13, cell14, cell15, cell16, cell17, cell18, cell19, cell20, cell21};
 
                 for (int k = 0; k < 21; k++) {
-                    cell(workbook, row, border, k).setCellValue(String.format("      %s      ", cells[k]));
+                    if(cells[k].equals("작동")){
+                        cell(workbook, row, blueFont, k).setCellValue(String.format("      %s      ", cells[k]));
+                    }else if(cells[k].equals("정지")){
+                        cell(workbook, row, redFont, k).setCellValue(String.format("      %s      ", cells[k]));
+                    }else{
+                        cell(workbook, row, border, k).setCellValue(String.format("      %s      ", cells[k]));
+                    }
                 }
             }catch (Exception e){
                 for (int k = 0; k < 21; k++) {
